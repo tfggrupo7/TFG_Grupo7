@@ -1,0 +1,97 @@
+@host = http://localhost:3000
+
+GET {{host}}/api/employees
+
+###
+GET {{host}}/api/tasks
+
+###
+
+GET {{host}}/api/employees/2
+
+###
+GET {{host}}/api/tasks/3
+
+###
+
+GET {{host}}/api/employees/tasks
+###
+GET {{host}}/api/tasks/employee/1
+
+###
+
+POST {{host}}/api/employees
+Content-Type: application/json
+
+{
+  "name": "Manuel Perez",
+  "email": "m.perez@gmail.com",
+  "username": "ManuelP23",
+  "password": "234874",
+  "position": "camarero"
+}
+
+###
+POST {{host}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Barrer Suelo",
+  "description": "Limpiar suelo los martes",
+  "status": "todo",
+  "due_date": "2025-10-18",
+  "employee_id":2
+}
+
+###
+
+PUT {{host}}/api/employees/1
+Content-Type: application/json
+
+{
+  "name": "dave meta",
+  "email": "dave@gmail.com",
+  "username": "daveme",
+  "password": "123456",
+  "position": "camarero"
+}
+
+###
+PUT {{host}}/api/tasks/1
+Content-Type: application/json
+
+{
+  "title": "los truenos",
+  "description": "Los truenos mas peligrosos",
+  "status": "ciencia",
+  "due_date": "2025-10-20",
+  "employee_id":1
+}
+
+###
+DELETE {{host}}/api/employees/2
+
+###
+
+DELETE {{host}}/api/tasks/2
+
+
+### envio pdf con todas las tareas
+GET {{host}}/api/tasks/export/pdf
+
+### envio email con todas las tareas
+POST {{host}}/api/tasks/send/pdf
+Content-Type: application/json
+
+{ "email": "waltra@gmail.com" }
+
+### envio pdf con las tareas de un empleado
+GET {{host}}/api/tasks/employee/1/tasks/export/pdf
+
+
+
+### envio email con las tareas de un empleado
+POST {{host}}/api/tasks/employee/1/tasks/send/pdf
+Content-Type: application/json
+
+{ "email": "waltra@gmail.com" }
