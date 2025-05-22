@@ -1,0 +1,80 @@
+<!-- landing.component.html -->
+<header class="flex justify-between items-center px-8 py-4 shadow-md">
+  <img src="src\assets\logo\logoSVG.svg" alt="ChefDesk Logo" class="h-10">
+  <nav class="space-x-6">
+    <a href="#" class="text-[#556B2F] font-medium">Características</a>
+    <a href="#" class="text-[#556B2F] font-medium">Testimonios</a>
+    <a href="#" class="text-[#556B2F] font-medium">Partners</a>
+    <a href="#" class="text-[#556B2F] font-medium">Contacto</a>
+  </nav>
+  <div class="space-x-4">
+    <button routerLink="/login" class="text-[#556B2F]">Iniciar Sesión</button>
+    <button class="bg-[#556B2F] text-white px-4 py-2 rounded">Regístrate</button>
+  </div>
+</header>
+
+<section class="flex flex-col md:flex-row items-center justify-between px-8 py-16">
+  <div class="max-w-xl">
+    <span class="bg-gray-100 text-[#556B2F] px-2 py-1 rounded-full text-sm">Plataforma Todo-en-Uno</span>
+    <h1 class="text-4xl md:text-5xl font-bold text-[#556B2F] mt-4">Gestión Inteligente para Cocinas Modernas</h1>
+    <p class="mt-4 text-gray-600">Optimiza tus operaciones culinarias con ChefDesk, la plataforma todo en uno para gestionar inventario, personal, turnos y finanzas.</p>
+    <button class="mt-6 bg-[#556B2F] text-white px-6 py-2 rounded">Regístrate</button>
+    <p class="mt-4 text-sm text-gray-500">Más de <span class="font-semibold text-[#556B2F]">1,000+</span> restaurantes confían en nosotros</p>
+  </div>
+  <div class="mt-12 md:mt-0 md:w-1/2">
+    <div class="w-full h-64 bg-gray-100 flex items-center justify-center rounded shadow-inner">
+      <span class="text-gray-400">[Imagen de plataforma]</span>
+    </div>
+  </div>
+</section>
+
+<section class="bg-gray-50 px-8 py-16">
+  <h2 class="text-2xl font-semibold text-center text-[#556B2F] mb-6">Todo lo que necesitas para tu cocina</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+    <div class="bg-white shadow-md p-6 rounded">
+      <h3 class="text-[#556B2F] font-semibold">Inventario</h3>
+      <p class="text-gray-600 mt-2">Controla ingredientes y stock, recibe alertas.</p>
+    </div>
+    <div class="bg-white shadow-md p-6 rounded">
+      <h3 class="text-[#556B2F] font-semibold">Turnos</h3>
+      <p class="text-gray-600 mt-2">Gestiona horarios y planificación.</p>
+    </div>
+    <div class="bg-white shadow-md p-6 rounded">
+      <h3 class="text-[#556B2F] font-semibold">Empleados</h3>
+      <p class="text-gray-600 mt-2">Administra perfiles y roles.</p>
+    </div>
+    <div class="bg-white shadow-md p-6 rounded">
+      <h3 class="text-[#556B2F] font-semibold">Reportes</h3>
+      <p class="text-gray-600 mt-2">Analiza costos y rendimiento.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-[#556B2F] text-white px-8 py-12">
+  <div class="flex flex-col md:flex-row justify-between">
+    <div>
+      <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-8 mb-4">
+      <p class="text-sm">© 2025 ChefDesk. Todos los derechos reservados.</p>
+    </div>
+    <div class="grid grid-cols-2 gap-6 mt-6 md:mt-0">
+      <div>
+        <h4 class="font-semibold">Producto</h4>
+        <ul class="text-sm space-y-1 mt-2">
+          <li><a href="#">Características</a></li>
+          <li><a href="#">Partners</a></li>
+          <li><a href="#">Integraciones</a></li>
+          <li><a href="#">Novedades</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold">Empresa</h4>
+        <ul class="text-sm space-y-1 mt-2">
+          <li><a href="#">Sobre Nosotros</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Carreras</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
