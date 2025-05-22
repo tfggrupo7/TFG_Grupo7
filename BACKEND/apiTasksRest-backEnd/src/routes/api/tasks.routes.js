@@ -33,5 +33,5 @@ router.post('/employee/:employeeId/tasks/send/pdf', sendAllTaskEmployeePDF);
 router.put("/:taskId", checktaskId,checkdataTask,updateTask);
 router.delete("/:taskId",checktaskId, removeTask);
 
-console.log('Tasks router cargado');
+
 module.exports = router;

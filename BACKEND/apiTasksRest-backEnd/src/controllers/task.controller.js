@@ -219,7 +219,7 @@ const sendTaskPDF = async (req, res) => {
 const sendAllTaskEmployeePDF = async (req, res) => {
   console.log('Enviando PDF por email');
   const { email } = req.body;
-  const  employeeId  =Number(req.params.employeeId);
+  const  employeeId = Number(req.params.employeeId);
 
   try {
     const tasks = await Task.selectAllTasksAndEmployeeRaw(employeeId);

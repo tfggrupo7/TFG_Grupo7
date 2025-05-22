@@ -127,4 +127,20 @@ Json
 
 ]
 
+### Registrar usuarios
+Method: POST
+Url : /api/usuarios/registro
+Headers: XXX
+Body: username, email , password
+
+Response: Los datos del nuevo usuario creado
+
+### Login usuarios
+Method: POST
+Url : /api/usuarios/login
+Headers: XXX
+Body: username, password
+
+Response: Login correcto
+
 

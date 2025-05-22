@@ -95,3 +95,25 @@ POST {{host}}/api/tasks/employee/1/tasks/send/pdf
 Content-Type: application/json
 
 { "email": "waltra@gmail.com" }
+##############
+## USUARIOS ##
+##############
+
+
+### Registrar usuarios
+POST {{host}}/api/usuarios/registro
+Content-Type: application/json
+
+{
+  "username": "waltra",
+  "email": "dave@gmail.com",
+  "password": "123456"
+}
+### Login usuarios
+POST {{host}}/api/usuarios/login
+Content-Type: application/json
+
+{
+  "email": "dave@gmail.com",
+  "password": "123456"
+}
