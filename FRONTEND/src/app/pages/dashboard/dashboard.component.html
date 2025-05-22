@@ -1,0 +1,36 @@
+<!-- dashboard.component.html -->
+<div class="flex h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-[#556B2F] text-white flex flex-col p-6">
+    <img src="src\assets\logo\logoSVG.svg" alt="ChefDesk Logo" class="h-10 mb-10">
+    <nav class="space-y-4">
+      <a href="#" class="block py-2 px-4 rounded hover:bg-[#D4AF37] hover:text-black">Inicio</a>
+      <a href="#" class="block py-2 px-4 rounded hover:bg-[#D4AF37] hover:text-black">Inventario</a>
+      <a href="#" class="block py-2 px-4 rounded hover:bg-[#D4AF37] hover:text-black">Turnos</a>
+      <a href="#" class="block py-2 px-4 rounded hover:bg-[#D4AF37] hover:text-black">Personal</a>
+      <a href="#" class="block py-2 px-4 rounded hover:bg-[#D4AF37] hover:text-black">Reportes</a>
+    </nav>
+    <div class="mt-auto pt-6 border-t border-[#D4AF37]">
+      <a href="#" class="block py-2 px-4 text-sm hover:underline">Cerrar sesión</a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-10 bg-gray-50 overflow-y-auto">
+    <h1 class="text-3xl font-bold text-[#556B2F] mb-6">Panel de Control</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-lg font-semibold text-[#556B2F]">Inventario</h2>
+        <p class="text-sm text-gray-600">Gestión de stock y alertas.</p>
+      </div>
+      <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-lg font-semibold text-[#556B2F]">Empleados</h2>
+        <p class="text-sm text-gray-600">Turnos y roles del personal.</p>
+      </div>
+      <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-lg font-semibold text-[#556B2F]">Reportes</h2>
+        <p class="text-sm text-gray-600">Resumen financiero y eficiencia.</p>
+      </div>
+    </div>
+  </main>
+</div>
