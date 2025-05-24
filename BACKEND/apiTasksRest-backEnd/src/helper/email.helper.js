@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-async function sendTasksEmail(to, subject, text, attachmentPath) {
+async function sendTareasEmail(to, subject, text, attachmentPath) {
   // Configura tu transporte SMTP
   const transporter = nodemailer.createTransport({
     service: 'gmail', // O el servicio que uses
@@ -29,4 +29,4 @@ async function sendTasksEmail(to, subject, text, attachmentPath) {
   return transporter.sendMail(mailOptions);
 }
 
-module.exports = { sendTasksEmail };
+module.exports = { sendTareasEmail };
