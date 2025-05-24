@@ -1,80 +1,583 @@
 <!-- landing.component.html -->
-<header class="flex justify-between items-center px-8 py-4 shadow-md">
-  <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-10">
-  <nav class="space-x-6">
-    <a href="#" class="text-[#556B2F] font-medium">Características</a>
-    <a href="#" class="text-[#556B2F] font-medium">Testimonios</a>
-    <a href="#" class="text-[#556B2F] font-medium">Partners</a>
-    <a href="#" class="text-[#556B2F] font-medium">Contacto</a>
-  </nav>
-  <div class="space-x-4">
-    <button [routerLink]="['/login']" class="text-[#556B2F]">Iniciar Sesión</button>
-    <button [routerLink]="['/login']" class="bg-[#556B2F] text-white px-4 py-2 rounded">Regístrate</button>
-  </div>
-</header>
-
-<section class="flex flex-col md:flex-row items-center justify-between px-8 py-16">
-  <div class="max-w-xl">
-    <span class="bg-gray-100 text-[#556B2F] px-2 py-1 rounded-full text-sm">Plataforma Todo-en-Uno</span>
-    <h1 class="text-4xl md:text-5xl font-bold text-[#556B2F] mt-4">Gestión Inteligente para Cocinas Modernas</h1>
-    <p class="mt-4 text-gray-600">Optimiza tus operaciones culinarias con ChefDesk, la plataforma todo en uno para gestionar inventario, personal, turnos y finanzas.</p>
-    <button class="mt-6 bg-[#556B2F] text-white px-6 py-2 rounded">Regístrate</button>
-    <p class="mt-4 text-sm text-gray-500">Más de <span class="font-semibold text-[#556B2F]">1,000+</span> restaurantes confían en nosotros</p>
-  </div>
-  <div class="mt-12 md:mt-0 md:w-1/2">
-    <div class="w-full h-64 bg-gray-100 flex items-center justify-center rounded shadow-inner">
-      <span class="text-gray-400">[Imagen de plataforma]</span>
-    </div>
-  </div>
-</section>
-
-<section class="bg-gray-50 px-8 py-16">
-  <h2 class="text-2xl font-semibold text-center text-[#556B2F] mb-6">Todo lo que necesitas para tu cocina</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-    <div class="bg-white shadow-md p-6 rounded">
-      <h3 class="text-[#556B2F] font-semibold">Inventario</h3>
-      <p class="text-gray-600 mt-2">Controla ingredientes y stock, recibe alertas.</p>
-    </div>
-    <div class="bg-white shadow-md p-6 rounded">
-      <h3 class="text-[#556B2F] font-semibold">Turnos</h3>
-      <p class="text-gray-600 mt-2">Gestiona horarios y planificación.</p>
-    </div>
-    <div class="bg-white shadow-md p-6 rounded">
-      <h3 class="text-[#556B2F] font-semibold">Empleados</h3>
-      <p class="text-gray-600 mt-2">Administra perfiles y roles.</p>
-    </div>
-    <div class="bg-white shadow-md p-6 rounded">
-      <h3 class="text-[#556B2F] font-semibold">Reportes</h3>
-      <p class="text-gray-600 mt-2">Analiza costos y rendimiento.</p>
-    </div>
-  </div>
-</section>
-
-<footer class="bg-[#556B2F] text-white px-8 py-12">
-  <div class="flex flex-col md:flex-row justify-between">
-    <div>
-      <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-8 mb-4">
-      <p class="text-sm">© 2025 ChefDesk. Todos los derechos reservados.</p>
-    </div>
-    <div class="grid grid-cols-2 gap-6 mt-6 md:mt-0">
-      <div>
-        <h4 class="font-semibold">Producto</h4>
-        <ul class="text-sm space-y-1 mt-2">
-          <li><a href="#">Características</a></li>
-          <li><a href="#">Partners</a></li>
-          <li><a href="#">Integraciones</a></li>
-          <li><a href="#">Novedades</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-semibold">Empresa</h4>
-        <ul class="text-sm space-y-1 mt-2">
-          <li><a href="#">Sobre Nosotros</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Carreras</a></li>
-          <li><a href="#">Contacto</a></li>
-        </ul>
+<div class="flex flex-col min-h-screen bg-[#FDFBF8]">
+  <header
+    class="sticky top-0 z-40 w-full border-b transition-all duration-200 border-[#D4AF37]/10 bg-[#FDFBF8]/95 backdrop-blur-sm shadow-sm">
+    <div class="container flex h-16 items-center justify-between py-4">
+      <a [routerLink]="['/']" class="flex items-center gap-2 z-10">
+        <img alt="ChefDesk Logo" loading="lazy" width="40" height="40" decoding="async" src="/assets/logo/logoSVG.svg"
+          style="color: transparent" />
+        <span class="font-bold text-xl text-[#1C1C1C]">ChefDesk</span>
+      </a>
+      <nav class="hidden md:flex gap-6">
+        <a href="#features" class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors">Características</a>
+        <a href="#testimonials" class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors">Testimonios</a>
+        <a href="#partners" class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors">Partners</a>
+        <a href="#contact" class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors">Contacto</a>
+      </nav>
+      <div class="flex items-center gap-4">
+        <a [routerLink]="['/login']"
+          class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors hidden sm:block">Iniciar
+          Sesión</a>
+        <button
+          class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white hidden sm:inline-flex">
+          <a [routerLink]="['/login']">Regístrate</a>
+        </button>
+        <button (click)="mobileMenuOpen = !mobileMenuOpen"
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:bg-[#556B2F]/10 hover:text-[#556B2F] h-10 w-10 md:hidden text-[#556B2F]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-menu h-6 w-6">
+            <line x1="4" x2="20" y1="12" y2="12"></line>
+            <line x1="4" x2="20" y1="6" y2="6"></line>
+            <line x1="4" x2="20" y1="18" y2="18"></line>
+          </svg>
+          <span class="sr-only">Abrir menú</span>
+        </button>
       </div>
     </div>
-  </div>
-</footer>
+
+    @if (mobileMenuOpen) {
+      <div class="md:hidden bg-[#FDFBF8] border-b border-[#D4AF37]/10 absolute top-16 left-0 right-0 z-30">
+        <nav class="flex flex-col p-4 gap-4">
+          <a href="#features"
+            class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Características</a>
+          <a href="#testimonials"
+            class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Testimonios</a>
+          <a href="#partners"
+            class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Partners</a>
+          <a href="#contact"
+            class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Contacto</a>
+          <div class="border-t border-[#D4AF37]/10 pt-4 mt-2 flex flex-col gap-3">
+            <a [routerLink]="['/login']"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Iniciar Sesión</a>
+            <button
+              class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full">
+              <a [routerLink]="['/login']">Regístrate</a>
+            </button>
+          </div>
+        </nav>
+      </div>
+    }
+  </header>
+  <main class="flex-1">
+    <section class="relative overflow-hidden bg-[#FDFBF8] py-12 md:py-20">
+      <div class="container relative px-4 md:px-6">
+        <div class="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+          <div class="space-y-4 md:space-y-6 text-center lg:text-left">
+            <div
+              class="inline-flex items-center rounded-full border border-[#556B2F]/30 bg-[#556B2F]/10 px-4 py-1 text-sm font-medium text-[#556B2F]">
+              Plataforma Todo-en-Uno
+            </div>
+            <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-[#1C1C1C]">
+              Gestión Inteligente para Cocinas Modernas
+            </h1>
+            <p class="max-w-[600px] mx-auto lg:mx-0 text-[#1C1C1C]/80 text-base md:text-xl">
+              Optimiza tus operaciones culinarias con ChefDesk, la plataforma
+              todo en uno para gestionar inventario, personal, turnos y
+              finanzas.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <button
+                class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-12 px-8 text-base bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto">
+                <a [routerLink]="['/login']">Regístrate</a>
+              </button>
+            </div>
+            <div class="flex items-center gap-4 pt-4 justify-center lg:justify-start">
+              <div class="flex -space-x-2">
+                <img alt="Usuario" loading="lazy" width="32" height="32" decoding="async" data-nimg="1"
+                  class="rounded-full border-2 border-white" src="./Test_files/placeholder.svg"
+                  style="color: transparent" /><img alt="Usuario" loading="lazy" width="32" height="32" decoding="async"
+                  data-nimg="1" class="rounded-full border-2 border-white" src="./Test_files/placeholder.svg"
+                  style="color: transparent" /><img alt="Usuario" loading="lazy" width="32" height="32" decoding="async"
+                  data-nimg="1" class="rounded-full border-2 border-white" src="./Test_files/placeholder.svg"
+                  style="color: transparent" />
+              </div>
+              <p class="text-sm text-[#1C1C1C]/70">
+                Más de
+                <span class="font-bold text-[#556B2F]">1,000+</span>
+                restaurantes confían en nosotros
+              </p>
+            </div>
+          </div>
+          
+          <!-- Aquí está el cambio importante: agregamos overflow-hidden en móvil y overflow-visible desde sm -->
+          <div class="relative mx-auto w-full max-w-md lg:max-w-xl overflow-hidden sm:overflow-visible">
+            <div class="aspect-video relative rounded-xl bg-[#556B2F]/5 p-2 shadow-lg lg:p-6">
+              <div class="absolute inset-0 bg-gradient-to-br from-[#D4AF37]/20 to-[#556B2F]/20 rounded-lg"></div>
+              <img alt="ChefDesk Dashboard Preview" loading="lazy" width="800" height="450" decoding="async"
+                data-nimg="1" class="rounded-lg shadow-md" src="./Test_files/placeholder(1).svg"
+                style="color: transparent" />
+              <!-- Ajuste posiciones negativas a 0 en móvil -->
+              <div class="absolute bottom-0 right-0 sm:-bottom-4 sm:-right-4 rounded-lg bg-white p-4 shadow-lg hidden sm:block">
+                <div class="flex items-center gap-2">
+                  <div class="h-3 w-3 rounded-full bg-[#556B2F]"></div>
+                  <p class="text-sm font-medium">Inventario en tiempo real</p>
+                </div>
+              </div>
+            </div>
+            <div class="absolute bottom-0 left-0 md:-bottom-6 md:-left-6 rounded-lg bg-[#556B2F] p-4 shadow-lg hidden md:block">
+              <div class="flex items-center gap-2 text-white">
+                <div class="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83">
+                    </path>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm font-medium">100% Gratuito</p>
+                  <p class="text-xs opacity-80">Sin costes ocultos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <section id="features" class="py-16 md:py-20 bg-[#556B2F]/5">
+      <div class="container px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-4 text-center">
+          <div class="space-y-2 max-w-3xl">
+            <div class="inline-block rounded-lg bg-[#556B2F]/10 px-3 py-1 text-sm text-[#556B2F]">
+              Características
+            </div>
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tighter text-[#556B2F]">
+              Todo lo que necesitas para tu cocina
+            </h2>
+            <p class="max-w-[900px] text-[#1C1C1C]/80 text-base md:text-lg mx-auto">
+              ChefDesk integra todas las herramientas necesarias para gestionar
+              eficientemente tu cocina profesional.
+            </p>
+          </div>
+        </div>
+        <div class="mx-auto grid max-w-5xl items-center gap-8 py-12 md:grid-cols-2 lg:gap-12">
+          <div class="grid gap-6">
+            <div
+              class="flex flex-col sm:flex-row gap-4 items-start p-6 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200">
+              <div class="rounded-lg bg-[#556B2F]/10 p-3 mb-2 sm:mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-clipboard-list h-6 w-6 text-[#556B2F]">
+                  <rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect>
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                  <path d="M12 11h4"></path>
+                  <path d="M12 16h4"></path>
+                  <path d="M8 11h.01"></path>
+                  <path d="M8 16h.01"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-[#1C1C1C] mb-2">
+                  Inventario
+                </h3>
+                <p class="text-[#1C1C1C]/80">
+                  Gestiona ingredientes, controla stock y recibe alertas de
+                  reposición automáticas.
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex flex-col sm:flex-row gap-4 items-start p-6 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200">
+              <div class="rounded-lg bg-[#556B2F]/10 p-3 mb-2 sm:mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-users h-6 w-6 text-[#556B2F]">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-[#1C1C1C] mb-2">Empleados</h3>
+                <p class="text-[#1C1C1C]/80">
+                  Administra perfiles, roles y permisos de tu equipo de cocina.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="grid gap-6">
+            <div
+              class="flex flex-col sm:flex-row gap-4 items-start p-6 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200">
+              <div class="rounded-lg bg-[#556B2F]/10 p-3 mb-2 sm:mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-clock h-6 w-6 text-[#556B2F]">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-[#1C1C1C] mb-2">Turnos</h3>
+                <p class="text-[#1C1C1C]/80">
+                  Organiza horarios, gestiona disponibilidad y optimiza la
+                  planificación.
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex flex-col sm:flex-row gap-4 items-start p-6 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200">
+              <div class="rounded-lg bg-[#556B2F]/10 p-3 mb-2 sm:mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-bar-chart3 h-6 w-6 text-[#556B2F]">
+                  <path d="M3 3v18h18"></path>
+                  <path d="M18 17V9"></path>
+                  <path d="M13 17V5"></path>
+                  <path d="M8 17v-3"></path>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-[#1C1C1C] mb-2">Reportes</h3>
+                <p class="text-[#1C1C1C]/80">
+                  Analiza costos, ventas y rendimiento con informes detallados.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="testimonials" class="py-16 md:py-20">
+      <div class="container px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-4 text-center">
+          <div class="space-y-2 max-w-3xl">
+            <div class="inline-block rounded-lg bg-[#D4AF37]/10 px-3 py-1 text-sm text-[#D4AF37]">
+              Testimonios
+            </div>
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tighter text-[#1C1C1C]">
+              Lo que dicen nuestros clientes
+            </h2>
+            <p class="max-w-[900px] text-[#1C1C1C]/80 text-base md:text-lg mx-auto">
+              Descubre cómo ChefDesk ha transformado la gestión de cocinas
+              profesionales.
+            </p>
+          </div>
+        </div>
+        <div class="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 hover:border-[#556B2F]/30 transition-all duration-200"
+            data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+              <div class="flex items-center gap-4">
+                <div class="rounded-full overflow-hidden h-12 w-12 flex-shrink-0 border-2 border-[#556B2F]/20">
+                  <img alt="Chef María Rodríguez" loading="lazy" width="48" height="48" decoding="async" data-nimg="1"
+                    class="object-cover" src="./Test_files/placeholder.svg" style="color: transparent" />
+                </div>
+                <div>
+                  <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">
+                    Chef María Rodríguez
+                  </h3>
+                  <p class="text-sm text-muted-foreground">
+                    Restaurante El Olivo
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="p-6 pt-0">
+              <p class="text-[#1C1C1C]/80 italic">
+                ChefDesk ha revolucionado nuestra cocina. El control de
+                inventario es impecable y hemos reducido el desperdicio en un
+                30%.
+              </p>
+            </div>
+          </div>
+          <div
+            class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 hover:border-[#556B2F]/30 transition-all duration-200"
+            data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+              <div class="flex items-center gap-4">
+                <div class="rounded-full overflow-hidden h-12 w-12 flex-shrink-0 border-2 border-[#556B2F]/20">
+                  <img alt="Carlos Méndez" loading="lazy" width="48" height="48" decoding="async" data-nimg="1"
+                    class="object-cover" src="./Test_files/placeholder.svg" style="color: transparent" />
+                </div>
+                <div>
+                  <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">
+                    Carlos Méndez
+                  </h3>
+                  <p class="text-sm text-muted-foreground">
+                    Gerente, Sabores del Mar
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="p-6 pt-0">
+              <p class="text-[#1C1C1C]/80 italic">
+                La gestión de turnos es excelente. Hemos mejorado la
+                comunicación con el personal y optimizado los horarios.
+              </p>
+            </div>
+          </div>
+          <div
+            class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 hover:border-[#556B2F]/30 transition-all duration-200 md:col-span-2 lg:col-span-1 md:max-w-md md:mx-auto lg:max-w-none"
+            data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+              <div class="flex items-center gap-4">
+                <div class="rounded-full overflow-hidden h-12 w-12 flex-shrink-0 border-2 border-[#556B2F]/20">
+                  <img alt="Ana Gutiérrez" loading="lazy" width="48" height="48" decoding="async" data-nimg="1"
+                    class="object-cover" src="./Test_files/placeholder.svg" style="color: transparent" />
+                </div>
+                <div>
+                  <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">
+                    Ana Gutiérrez
+                  </h3>
+                  <p class="text-sm text-muted-foreground">
+                    Chef Ejecutiva, Grupo Gourmet
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="p-6 pt-0">
+              <p class="text-[#1C1C1C]/80 italic">
+                Los reportes me dan visibilidad total sobre costos y
+                rendimiento. Una herramienta indispensable.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="partners" class="py-16 md:py-20 bg-[#556B2F]/5">
+      <div class="container px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-4 text-center">
+          <div class="space-y-2 max-w-3xl">
+            <div class="inline-block rounded-lg bg-[#D4AF37]/10 px-3 py-1 text-sm text-[#D4AF37]">
+              Partners
+            </div>
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tighter text-[#556B2F]">
+              Colaboramos con los mejores
+            </h2>
+            <p class="max-w-[900px] text-[#1C1C1C]/80 text-base md:text-lg mx-auto">
+              Trabajamos con empresas líderes en el sector gastronómico para
+              ofrecerte la mejor experiencia.
+            </p>
+          </div>
+        </div>
+        <div class="mx-auto mt-12 grid max-w-5xl gap-8 py-8 grid-cols-2 md:grid-cols-3">
+          <div
+            class="flex flex-col items-center justify-center space-y-4 group hover:scale-105 transition-transform duration-200">
+            <div
+              class="relative h-16 w-full max-w-[160px] overflow-hidden rounded-lg bg-white p-2 shadow-sm border border-[#D4AF37]/10 group-hover:border-[#556B2F]/30 group-hover:shadow-md transition-all duration-200">
+              <img alt="Restaurant Supply Co." loading="lazy" decoding="async" data-nimg="fill"
+                class="object-contain p-2" src="./Test_files/placeholder(2).svg" style="
+                  position: absolute;
+                  height: 100%;
+                  width: 100%;
+                  inset: 0px;
+                  color: transparent;
+                " />
+            </div>
+            <p class="text-sm font-medium text-[#1C1C1C] group-hover:text-[#556B2F] transition-colors duration-200">
+              Restaurant Supply Co.
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center space-y-4 group hover:scale-105 transition-transform duration-200">
+            <div
+              class="relative h-16 w-full max-w-[160px] overflow-hidden rounded-lg bg-white p-2 shadow-sm border border-[#D4AF37]/10 group-hover:border-[#556B2F]/30 group-hover:shadow-md transition-all duration-200">
+              <img alt="Food Distributors Inc." loading="lazy" decoding="async" data-nimg="fill"
+                class="object-contain p-2" src="./Test_files/placeholder(2).svg" style="
+                  position: absolute;
+                  height: 100%;
+                  width: 100%;
+                  inset: 0px;
+                  color: transparent;
+                " />
+            </div>
+            <p class="text-sm font-medium text-[#1C1C1C] group-hover:text-[#556B2F] transition-colors duration-200">
+              Food Distributors Inc.
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center space-y-4 group hover:scale-105 transition-transform duration-200">
+            <div
+              class="relative h-16 w-full max-w-[160px] overflow-hidden rounded-lg bg-white p-2 shadow-sm border border-[#D4AF37]/10 group-hover:border-[#556B2F]/30 group-hover:shadow-md transition-all duration-200">
+              <img alt="Chef Academy" loading="lazy" decoding="async" data-nimg="fill" class="object-contain p-2"
+                src="./Test_files/placeholder(2).svg" style="
+                  position: absolute;
+                  height: 100%;
+                  width: 100%;
+                  inset: 0px;
+                  color: transparent;
+                " />
+            </div>
+            <p class="text-sm font-medium text-[#1C1C1C] group-hover:text-[#556B2F] transition-colors duration-200">
+              Chef Academy
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center space-y-4 group hover:scale-105 transition-transform duration-200">
+            <div
+              class="relative h-16 w-full max-w-[160px] overflow-hidden rounded-lg bg-white p-2 shadow-sm border border-[#D4AF37]/10 group-hover:border-[#556B2F]/30 group-hover:shadow-md transition-all duration-200">
+              <img alt="Culinary Institute" loading="lazy" decoding="async" data-nimg="fill" class="object-contain p-2"
+                src="./Test_files/placeholder(2).svg" style="
+                  position: absolute;
+                  height: 100%;
+                  width: 100%;
+                  inset: 0px;
+                  color: transparent;
+                " />
+            </div>
+            <p class="text-sm font-medium text-[#1C1C1C] group-hover:text-[#556B2F] transition-colors duration-200">
+              Culinary Institute
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center space-y-4 group hover:scale-105 transition-transform duration-200">
+            <div
+              class="relative h-16 w-full max-w-[160px] overflow-hidden rounded-lg bg-white p-2 shadow-sm border border-[#D4AF37]/10 group-hover:border-[#556B2F]/30 group-hover:shadow-md transition-all duration-200">
+              <img alt="Restaurant Association" loading="lazy" decoding="async" data-nimg="fill"
+                class="object-contain p-2" src="./Test_files/placeholder(2).svg" style="
+                  position: absolute;
+                  height: 100%;
+                  width: 100%;
+                  inset: 0px;
+                  color: transparent;
+                " />
+            </div>
+            <p class="text-sm font-medium text-[#1C1C1C] group-hover:text-[#556B2F] transition-colors duration-200">
+              Restaurant Association
+            </p>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center space-y-4 group hover:scale-105 transition-transform duration-200">
+            <div
+              class="relative h-16 w-full max-w-[160px] overflow-hidden rounded-lg bg-white p-2 shadow-sm border border-[#D4AF37]/10 group-hover:border-[#556B2F]/30 group-hover:shadow-md transition-all duration-200">
+              <img alt="Hospitality Group" loading="lazy" decoding="async" data-nimg="fill" class="object-contain p-2"
+                src="./Test_files/placeholder(2).svg" style="
+                  position: absolute;
+                  height: 100%;
+                  width: 100%;
+                  inset: 0px;
+                  color: transparent;
+                " />
+            </div>
+            <p class="text-sm font-medium text-[#1C1C1C] group-hover:text-[#556B2F] transition-colors duration-200">
+              Hospitality Group
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-16 md:py-20 bg-[#556B2F]">
+      <div class="container px-4 md:px-6">
+        <div class="flex flex-col items-center justify-center space-y-4 text-center">
+          <div class="space-y-2 max-w-3xl">
+            <div
+              class="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-1 text-sm font-medium text-white mb-4">
+              Comienza Hoy
+            </div>
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tighter text-white">
+              Optimiza la gestión de tu cocina con ChefDesk
+            </h2>
+            <p class="max-w-[600px] mx-auto text-white/90 text-base md:text-xl">
+              Únete a miles de restaurantes que ya están mejorando su eficiencia
+              operativa.
+            </p>
+          </div>
+          <div class="mt-6">
+            <button
+              class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none bg-white h-12 px-8 text-base w-full sm:w-auto text-[#556B2F] hover:bg-white/90">
+              <a [routerLink]="['/login']">Regístrate</a>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer id="contact" class="bg-[#1C1C1C] py-12 text-white">
+    <div class="container px-4 md:px-6">
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <img alt="ChefDesk Logo" loading="lazy" width="40" height="40" decoding="async" data-nimg="1"
+              src="/assets/logo/logoSVG.svg" style="color: transparent" /><span
+              class="font-bold text-xl text-white">ChefDesk</span>
+          </div>
+          <p class="text-sm text-white/70">
+            Plataforma de gestión inteligente para cocinas profesionales.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-lg font-medium mb-4 text-[#D4AF37]">Producto</h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="/#features"
+                class="text-sm text-white/70 hover:text-[#D4AF37] transition-colors">Características</a>
+            </li>
+            <li>
+              <a href="/#partners" class="text-sm text-white/70 hover:text-[#D4AF37] transition-colors">Partners</a>
+            </li>
+            <li>
+              <a href="#" class="text-sm text-white/70 hover:text-[#D4AF37] transition-colors">Integraciones</a>
+            </li>
+            <li>
+              <a href="/#" class="text-sm text-white/70 hover:text-[#D4AF37] transition-colors">Novedades</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-medium mb-4 text-[#D4AF37]">Empresa</h3>
+          <ul class="space-y-3">
+            <li>
+              <a href="#" class="text-sm text-white/70 hover:text-[#D4AF37] transition-colors">Sobre Nosotros</a>
+            </li>
+            <li>
+              <a href="#" class="text-sm text-white/70 hover:text-[#D4AF37] transition-colors">Blog</a>
+            </li>
+            <li>
+              <a href="#" class="text-sm text-white/70 hover:text-[#D4AF37] transition-colors">Carreras</a>
+            </li>
+            <li>
+              <a href="#" class="text-sm text-white/70 hover:text-[#D4AF37] transition-colors">Contacto</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-medium mb-4 text-[#D4AF37]">Contacto</h3>
+          <ul class="space-y-3">
+            <li class="text-sm text-white/70">info&#64;chefdesk.com</li>
+            <li class="text-sm text-white/70">+34 912 345 678</li>
+            <li class="text-sm text-white/70">
+              Calle Gran Vía 123, Madrid, España
+            </li>
+          </ul>
+          <div class="flex gap-4 mt-4">
+            <a href="#"
+              class="text-white/70 hover:text-[#556B2F] transition-colors p-2 bg-white/5 rounded-full hover:bg-white/10"><svg
+                xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg><span class="sr-only">Facebook</span></a><a href="#"
+              class="text-white/70 hover:text-[#556B2F] transition-colors p-2 bg-white/5 rounded-full hover:bg-white/10"><svg
+                xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <path
+                  d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z">
+                </path>
+              </svg><span class="sr-only">Twitter</span></a><a href="#"
+              class="text-white/70 hover:text-[#556B2F] transition-colors p-2 bg-white/5 rounded-full hover:bg-white/10"><svg
+                xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg><span class="sr-only">Instagram</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-xs text-white/60">
+          © 2025 ChefDesk. Todos los derechos reservados.
+        </p>
+        <div class="flex gap-4 mt-4 md:mt-0 flex-wrap justify-center">
+          <a href="#" class="text-xs text-white/60 hover:text-[#D4AF37] transition-colors">Términos de Servicio</a>
+          <a href="#" class="text-xs text-white/60 hover:text-[#D4AF37] transition-colors">Política de Privacidad</a>
+          <a href="#" class="text-xs text-white/60 hover:text-[#D4AF37] transition-colors">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
