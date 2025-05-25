@@ -1,5 +1,10 @@
 const router = require('express').Router();
 
-// Define your routes here
+const { getAll, create} = require('../../controllers/platosIngredientes.controller');
+
+
+router.get("/", getAll);
+router.post("/", create);
+
 
 module.exports = router;

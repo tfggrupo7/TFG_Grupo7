@@ -367,3 +367,60 @@ Content-Type: application/json
 
 ### Eliminar turnos
 DELETE {{host}}/api/turnos/4
+
+##################
+## MENUS_PLATOS ##
+##################
+
+### Insertar menus_platos
+POST {{host}}/api/menusPlatos
+Content-Type: application/json
+
+{
+  "menu_id": 1,
+  "plato_id": 2  
+}
+
+### Obtener menusPlatos
+GET {{host}}/api/menusPlatos
+
+### Eliminar menusPlatos
+DELETE {{host}}/api/menusPlatos/menus/1
+
+#########################
+## PLATOS_INGREDIENTES ##
+#########################
+
+### Insertar platos_ingredientes
+POST {{host}}/api/platosIngredientes
+Content-Type: application/json
+
+{
+  "plato_id": 1,
+  "ingrediente_id": 2,
+  "cantidad": 3.5
+}
+
+### Obtener platos_ingredientes
+GET {{host}}/api/platosIngredientes
+
+
+#####################
+## PEDIDOS_DETALLE ##
+#####################
+
+### Insertar pedidos_detalle
+POST {{host}}/api/pedidosDetalle
+Content-Type: application/json
+
+{
+  "pedido_id": 1,
+  "ingrediente_id": 2,
+  "cantidad": 3.5
+}
+
+### Obtener pedidos_detalle
+GET {{host}}/api/pedidosDetalle
+
+### Eliminar pedidos_detalle
+DELETE {{host}}/api/pedidosDetalle/pedido/1

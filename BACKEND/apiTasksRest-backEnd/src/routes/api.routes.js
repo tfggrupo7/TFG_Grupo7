@@ -11,6 +11,8 @@ router.use('/pedidos', require('./api/pedidos.routes'));
 router.use('/platos', require('./api/platos.routes'));
 router.use('/roles', require('./api/roles.routes'));
 router.use('/turnos', require('./api/turnos.routes'));
-
+router.use('/menusPlatos', require('./api/menusPlatos.routes'))
+router.use('/platosIngredientes', require('./api/platosIngredientes.routes'))
+router.use('/pedidosDetalle', require('./api/pedidosDetalle.routes'))
 
 module.exports = router;
