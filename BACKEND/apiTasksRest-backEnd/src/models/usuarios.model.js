@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
 const insert = async ({ contraseña, email, usuario}) => {
-const [result] = await db.query('insert into usuarios (contraseña, email, usuario) values (?, ?, ?)', [contraseña, email, usuario])
+const [result] = await db.query('insert into usuarios (contraseña, email, usuario, empleado_id) values (?, ?, ?, ?)', [contraseña, email, usuario, empleado_id])
 return result;
 }
 

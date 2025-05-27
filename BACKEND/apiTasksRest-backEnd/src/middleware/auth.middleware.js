@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const Usuario = require("../models/usuarios.model");
 
-const checkToken = (req, res, next) => {
+const checkToken = async (req, res, next) => {
   if (!req.headers["authorization"]) {
     return res.status(403).json({ message: " No tienes autorizacion " });
   }
@@ -11,22 +11,35 @@ const checkToken = (req, res, next) => {
   let payload;
   try {
     payload = jwt.verify(token, process.env.JWT_SECRET);
-  } catch {
+  } catch (error) {
     return res.status(403).json({ message: "Token invalido" });
   }
   
-  const usuario = Usuario.getById(payload.usuario_id);
+  const usuario = await Usuario.getById(payload.usuario_id);
   if(!usuario) {
     return res.status(403).json({ message: ' Usuario no existe' });
   }
-  
+  console.log(usuario)
   req.user = usuario;
 
   next();
 };
- const checkAdmin = (req, res, next) => {
 
+ const checkAdmin = (req, res, next) => {
+  if (req.usuario.role !== "admin") {
+    return res.status(403).json({ message: " No tienes permisos de administrador " });
+  }
+  
+  next();
  }
 
+ const checkRole = (role) => {
+    return (req, res, next) => {
+        if (req.user.role !== role) {
+            return res.status(403).json({ message: `Solo pueden pasar los usuarios con role ${role}` });
+        }
+        next();
+    }
+}
 
-module.exports = { checkToken , checkAdmin};
+module.exports = { checkToken , checkAdmin, checkRole};

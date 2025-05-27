@@ -4,6 +4,6 @@ const { getAll, create, remove} = require('../../controllers/menusPlatos.control
 
 router.get("/", getAll);
 router.post("/", create);
-router.delete("/menus/:menuId", remove)
+router.delete("/menusPlatos/:menuId/:platoId", remove)
 
 module.exports = router;
