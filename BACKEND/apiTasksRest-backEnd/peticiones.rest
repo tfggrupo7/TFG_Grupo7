@@ -1,58 +1,31 @@
 @host = http://localhost:3000
 
-@token = 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo0LCJpYXQiOjE3NDgzMzQ0MjksImV4cCI6MTc0ODMzODAyOX0.FwTCpmj6VK3aNwyyisy1JkQhdS0hAdaczrIf-SwyPUM
+###############
+## EMPLEADOS ##
+###############
+### Pedir todos los empleados
 GET {{host}}/api/empleados?page=1&limit=10
 
 ### Pedir todos los empleados con autorizacion de cabecera
 GET {{host}}/api/empleados?page=1&limit=10
 Authorization:{{token}} 
 
-###
-GET {{host}}/api/tareas
-
-###
-
-GET {{host}}/api/empleados/1
-
-### Pedir un empleado con id 2 con autorizacion de cabecera
-GET {{host}}/api/empleados/8
-Authorization:{{token}}
-
-###
-GET {{host}}/api/tareas/1
-
-###
-
-GET {{host}}/api/empleados/tareas
-###
-GET {{host}}/api/tareas/empleado/1
-
-###
+### crear un empleado
 
 POST {{host}}/api/empleados
 Content-Type: application/json
 
 {
-  "nombre": "Patricia Gamez",
-  "pass": "000124",
-  "email": "patricia.g@gmail.com",
+  "nombre": "Patricia Gomez",
+  "pass": "000123",
+  "email": "patricia@gmail.com",
   "telefono": "678965423",
   "rol_id":3
  
 }
 
-###
-POST {{host}}/api/tareas
-Content-Type: application/json
-
-{
-  "descripcion": "Limpiar suelo los martes",
-  "empleado_id": 1,
-  "menu_id": "",
-  "fecha":"2025-10-18"
-}
-
-###
+### Actualizar empleados por id
 
 PUT {{host}}/api/empleados/1
 Content-Type: application/json
@@ -65,37 +38,81 @@ Content-Type: application/json
   "rol_id": 3
 }
 
-###
-PUT {{host}}/api/tareas/1
+### Pedir un empleado con id 8 con autorizacion de cabecera
+GET {{host}}/api/empleados/4
+Authorization:{{token}}
+
+### Eliminar un empleado por id
+DELETE {{host}}/api/empleados/2
+
+############
+## TAREAS ##
+############
+
+### Pedir todas las tareas
+GET {{host}}/api/tareas
+
+### Pedir todas las tareas de un empleado con id 1
+
+GET {{host}}/api/empleados/1
+
+### Pedir una tarea con id 1
+GET {{host}}/api/tareas/1
+
+### pedir todas las tareas de un empleado
+
+GET {{host}}/api/empleados/tareas
+
+### Pedir todas las tareas de un empleado con id 1
+GET {{host}}/api/tareas/empleado/1
+
+### crear una tarea
+POST {{host}}/api/tareas
 Content-Type: application/json
 
 {
   "descripcion": "Limpiar suelo los martes",
   "empleado_id": 1,
-  "menu_id": 2,
+  "menu_id": 3,
   "fecha":"2025-10-18"
 }
 
-###
-DELETE {{host}}/api/empleados/2
 
-###
+### Actualizar tareas por id
+PUT {{host}}/api/tareas/7
+Content-Type: application/json
+Authorization: {{token}}
 
+{
+  "descripcion": "Limpiar suelo los martes",
+  "empleado_id": 1,
+  "menu_id": 3,
+  "fecha":"2025-10-18"
+}
+
+### Eliminar una tarea por id
 DELETE {{host}}/api/tareas/2
 
+######################################
+## Fichero pdf con las tareas ##
+######################################
 
 ### envio pdf con todas las tareas
 GET {{host}}/api/tareas/export/pdf
+
+### envio pdf con las tareas de un empleado
+GET {{host}}/api/tareas/empleado/1/tareas/export/pdf
+
+
+################################
+## Envio email con las tareas ##
+################################
 
 ### envio email con todas las tareas
 POST {{host}}/api/tareas/send/pdf
 Content-Type: application/json
 
 { "email": "waltra@gmail.com" }
-
-### envio pdf con las tareas de un empleado
-GET {{host}}/api/tareas/empleado/1/tareas/export/pdf
-
 
 
 ### envio email con las tareas de un empleado
@@ -114,23 +131,24 @@ POST {{host}}/api/usuarios/registro
 Content-Type: application/json
 
 {
-  "usuario": "waltra3",
-  "email": "dave3@gmail.com",
+  "usuario": "waltra4",
+  "email": "dave4@gmail.com",
   "contraseña": "123456",
-  "empleado_id": 2
+  "empleado_id": 13
 }
 ### Login usuarios
 POST {{host}}/api/usuarios/login
 Content-Type: application/json
 
 {
-  "email": "dave3@gmail.com",
+  "email": "dave4@gmail.com",
   "contraseña": "123456"
 }
 
-###
+### Perfil de usuario por token
 GET {{host}}/api/usuarios/perfil
 Authorization: {{token}}
+
 
 ##################
 ## INGREDIENTES ##
@@ -230,7 +248,7 @@ Content-Type: application/json
 
 
 ### Eliminar menus
-DELETE {{host}}/api/menus/1
+DELETE {{host}}/api/menus/2
 
 #############
 ## PEDIDOS ##
@@ -377,15 +395,13 @@ POST {{host}}/api/menusPlatos
 Content-Type: application/json
 
 {
-  "menu_id": 1,
+  "menu_id": 2,
   "plato_id": 2  
 }
 
 ### Obtener menusPlatos
 GET {{host}}/api/menusPlatos
 
-### Eliminar menusPlatos
-DELETE {{host}}/api/menusPlatos/menus/1
 
 #########################
 ## PLATOS_INGREDIENTES ##

@@ -6,7 +6,7 @@ const getAll = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const offset = (page - 1) * limit;
   const empleado = await Empleado.selectAll(Number(page), Number(limit));
-  res.json({
+    res.json({
     page: Number(page),
     limit: Number(limit),
     total: empleado.length,

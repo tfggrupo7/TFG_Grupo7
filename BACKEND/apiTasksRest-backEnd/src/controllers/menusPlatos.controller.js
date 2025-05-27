@@ -20,9 +20,9 @@ res.json({
 };
 
 const remove = async (req, res) => {
-  const { menu_id, plato_id } = req.body || {};
+  const { menu_id, plato_id } = req.body;
   if (!menu_id || !plato_id) {
-    return res.status(400).json({ error: "pedido_id e ingrediente_id y cantidad son requeridos" });
+    return res.status(400).json({ error: "menu_id y plato_id son requeridos" });
   }
 
   await Menu_Plato.remove({ menu_id, plato_id });

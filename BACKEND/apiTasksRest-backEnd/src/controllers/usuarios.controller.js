@@ -27,6 +27,7 @@ const login = async (req, res) => {
 }
 
 const perfil = async (req, res) => {
+    
     res.json(req.user);
 }
 
