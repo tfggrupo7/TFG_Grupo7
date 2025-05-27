@@ -1,0 +1,97 @@
+<!-- shifts.component.html -->
+<div class="container mx-auto p-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-[#556B2F]">Gestión de Turnos</h1>
+    <div class="flex gap-2">
+      <button class="bg-[#556B2F] text-white px-4 py-2 rounded hover:bg-[#4A5F2A]">
+        <i class="fas fa-plus mr-2"></i>Nuevo Turno
+      </button>
+      <button class="border border-[#556B2F] text-[#556B2F] px-4 py-2 rounded hover:bg-gray-50">
+        <i class="fas fa-filter mr-2"></i>Filtrar
+      </button>
+    </div>
+  </div>
+
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <div class="view-controls">
+        <button (click)="previousPeriod()">Anterior</button>
+        <span>{{ currentDate | date:'MMMM yyyy' }}</span>
+        <button (click)="nextPeriod()">Siguiente</button>
+      </div>
+      <div class="view-type">
+        <button [class.active]="currentView === 'day'" (click)="setView('day')">Día</button>
+        <button [class.active]="currentView === 'week'" (click)="setView('week')">Semana</button>
+        <button [class.active]="currentView === 'month'" (click)="setView('month')">Mes</button>
+      </div>
+    </div>
+
+    <div class="calendar-grid">
+      <!-- Columna de horas -->
+      <div class="time-column">
+        <div class="time-header"></div>
+        <div class="time-slots">
+          <div class="time-slot" *ngFor="let hour of hours">
+            <span class="time-label" *ngIf="!isHalfHour(hour)">{{ formatHour(hour) }}</span>
+            <span class="half-hour-label" *ngIf="isHalfHour(hour)">{{ formatHour(hour) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenedor de días -->
+      <div class="days-container">
+        <!-- Encabezado de días -->
+        <div class="days-header">
+          <div class="day-header" *ngFor="let day of calendarDays">
+            <div class="day-name">{{ day.dayOfWeek }}</div>
+            <div class="day-date">{{ day.date }}</div>
+          </div>
+        </div>
+
+        <!-- Grid de días -->
+        <div class="days-grid">
+          <div class="day-column" *ngFor="let day of calendarDays">
+            <div class="day-content">
+              <!-- Marcadores de hora -->
+              <div class="hour-markers">
+                <div class="hour-marker" *ngFor="let hour of hours">
+                  <div class="half-hour-marker"></div>
+                </div>
+              </div>
+
+              <!-- Contenedor de turnos -->
+              <div class="shifts-container">
+                <div class="shift" *ngFor="let shift of day.shifts"
+                     cdkDrag
+                     [cdkDragData]="shift"
+                     [ngClass]="shift.type"
+                     [style.top.px]="(shift.startHour - 0) * 60"
+                     [style.height.px]="(shift.endHour - shift.startHour) * 60"
+                     (click)="openShiftDialog(day, shift)">
+                  <div class="shift-content">
+                    <div class="shift-employee">{{ shift.employee || 'Sin asignar' }}</div>
+                    <div class="shift-time">{{ shift.time }}</div>
+                    <div class="shift-task">{{ shift.task || 'Sin tarea' }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Franjas horarias para drop y click -->
+              <div class="hour-slots">
+                <div class="hour-slot" *ngFor="let hour of hours"
+                     cdkDropList
+                     [cdkDropListData]="{ day, hour }"
+                     (cdkDropListDropped)="onDrop($event, day, hour)"
+                     [cdkDropListConnectedTo]="getConnectedLists()"
+                     (click)="openShiftDialog(day, hour)"
+                     [class.half-hour]="isHalfHour(hour)">
+                  <div class="time-indicator">{{ formatHour(hour) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>{{ data.isEdit ? 'Editar Turno' : 'Crear Nuevo Turno' }}</h2>
+<mat-dialog-content>
+  <form #shiftForm="ngForm">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Empleado</mat-label>
+      <mat-select [(ngModel)]="data.employee" name="employee" required>
+        <mat-option *ngFor="let employee of availableEmployees" [value]="employee">
+          {{employee}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Hora de Inicio</mat-label>
+      <mat-select [(ngModel)]="data.startTime" name="startTime" required>
+        <mat-option *ngFor="let hour of getHours()" [value]="formatHour(hour)">
+          {{formatHour(hour)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Hora de Fin</mat-label>
+      <mat-select [(ngModel)]="data.endTime" name="endTime" required>
+        <mat-option *ngFor="let hour of getHours()" [value]="formatHour(hour)">
+          {{formatHour(hour)}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Tarea</mat-label>
+      <input matInput [(ngModel)]="data.task" name="task" required>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" *ngIf="data.isEdit" (click)="onDelete()">Eliminar</button>
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!shiftForm.form.valid">
+    Guardar
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,76 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+mat-dialog-content {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+mat-form-field {
+  display: block;
+  width: 100%;
+}
+
+mat-dialog-actions {
+  padding: 16px 20px;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+button {
+  margin: 0;
+}
+
+mat-dialog-title {
+  margin-bottom: 20px;
+  color: #556B2F;
+  font-weight: 500;
+  padding: 20px 20px 0;
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  max-width: 100vw !important;
+  width: 100% !important;
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+::ng-deep .mat-mdc-select-panel {
+  background-color: white !important;
+}
+
+::ng-deep .mat-mdc-option {
+  color: #374151 !important;
+}
+
+::ng-deep .mat-mdc-option:hover:not(.mat-mdc-option-disabled) {
+  background-color: #f3f4f6 !important;
+}
+
+::ng-deep .mat-mdc-option.mat-mdc-selected {
+  background-color: #e5e7eb !important;
+  color: #556B2F !important;
+}
+
+@media (max-width: 600px) {
+  mat-dialog-content {
+    padding: 16px;
+  }
+
+  mat-dialog-title {
+    padding: 16px 16px 0;
+  }
+
+  mat-dialog-actions {
+    padding: 16px;
+  }
+}
