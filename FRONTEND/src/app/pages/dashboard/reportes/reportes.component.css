@@ -1,0 +1,118 @@
+/* Estilos generales */
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Estilos para las tarjetas de métricas */
+.metric-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Estilos para las barras de progreso */
+.progress-bar {
+  transition: width 0.3s ease-in-out;
+}
+
+/* Estilos para los botones */
+.btn-primary {
+  background-color: #556B2F;
+  color: white;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: rgba(85, 107, 47, 0.9);
+}
+
+.btn-outline {
+  border: 1px solid #556B2F;
+  color: #556B2F;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-outline:hover {
+  background-color: rgba(85, 107, 47, 0.1);
+}
+
+/* Estilos para las tarjetas de gráficos */
+.chart-card {
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Estilos para los iconos */
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 9999px;
+}
+
+/* Estilos para los textos */
+.text-primary {
+  color: #556B2F;
+}
+
+.text-secondary {
+  color: #D4AF37;
+}
+
+.text-muted {
+  color: rgba(28, 28, 28, 0.7);
+}
+
+/* Estilos para las categorías */
+.category-item {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.category-item:hover {
+  background-color: rgba(85, 107, 47, 0.05);
+}
+
+/* Estilos para los indicadores de tendencia */
+.trend-up {
+  color: #556B2F;
+}
+
+.trend-down {
+  color: #D4AF37;
+}
+
+/* Estilos responsivos */
+@media (max-width: 640px) {
+  .metric-card {
+    padding: 1rem;
+  }
+
+  .chart-card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
