@@ -1,0 +1,225 @@
+/* Estilos específicos para el componente de personal */
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Estilos para las tarjetas de estadísticas */
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.md\:p-6 {
+  padding: 1.5rem;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+.duration-200 {
+  transition-duration: 200ms;
+}
+
+.hover\:shadow-md:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Estilos para los botones */
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+/* Estilos para la barra de búsqueda */
+.relative {
+  position: relative;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.sm\:w-80 {
+  width: 20rem;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.left-2 {
+  left: 0.5rem;
+}
+
+.top-1\/2 {
+  top: 50%;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.-translate-y-1\/2 {
+  transform: translateY(-50%);
+}
+
+/* Estilos para las tarjetas de empleados */
+.space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+.grid {
+  display: grid;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.md\:grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lg\:grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Estilos para los estados de los empleados */
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.px-2\.5 {
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+}
+
+.py-0\.5 {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+/* Estilos para los iconos y elementos interactivos */
+.h-12 {
+  height: 3rem;
+}
+
+.w-12 {
+  width: 3rem;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.border-2 {
+  border-width: 2px;
+}
+
+/* Estilos para los textos */
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+/* Estilos para los colores específicos */
+.text-\[\#556B2F\] {
+  color: #556B2F;
+}
+
+.bg-\[\#556B2F\]\/5 {
+  background-color: rgb(85 107 47 / 0.05);
+}
+
+.border-\[\#556B2F\] {
+  border-color: #556B2F;
+}
+
+.text-\[\#1C1C1C\]\/70 {
+  color: rgb(28 28 28 / 0.7);
+}
+
+/* Estilos para los botones de acción */
+.h-8 {
+  height: 2rem;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.hover\:bg-\[\#556B2F\]\/10:hover {
+  background-color: rgb(85 107 47 / 0.1);
+}
+
+.hover\:bg-red-50:hover {
+  background-color: rgb(254 242 242);
+}

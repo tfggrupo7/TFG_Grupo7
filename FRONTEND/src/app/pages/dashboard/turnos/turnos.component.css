@@ -1,0 +1,5 @@
+/* Estilos específicos para el componente de turnos */
+:host {
+  display: block;
+  width: 100%;
+}
