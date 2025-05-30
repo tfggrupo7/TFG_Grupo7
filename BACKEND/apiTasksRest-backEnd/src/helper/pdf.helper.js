@@ -1,7 +1,7 @@
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
-function generateTasksPDF(tasks, filePath) {
+function generateTareasPDF(tasks, filePath) {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument();
     const stream = fs.createWriteStream(filePath);
@@ -31,4 +31,4 @@ function generateTasksPDF(tasks, filePath) {
   });
 }
 
-module.exports = { generateTasksPDF };
+module.exports = { generateTareasPDF };

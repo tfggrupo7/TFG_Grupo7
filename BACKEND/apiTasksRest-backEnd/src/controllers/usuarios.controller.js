@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuarios.model');
 
 const registro = async (req, res) => {
-    req.body.password = bcrypt.hashSync(req.body.password, 10);
+    req.body.contraseña = bcrypt.hashSync(req.body.contraseña, 10);
     const result = await Usuario.insert(req.body);
     const usuario = await Usuario.getById(result.insertId);
 
@@ -11,12 +11,12 @@ res.json(usuario);
 }
 
 const login = async (req, res) => { 
-    const { email, password } = req.body;
+    const { email, contraseña } = req.body;
     const usuario = await Usuario.getByEmail(email);
     if (!usuario) {
         return res.status(401).json({ message: 'Usuario y/o contraseña incorrectos'});
     }
-    const validPassword = bcrypt.compareSync(password, usuario.password);
+    const validPassword = bcrypt.compareSync(contraseña, usuario.contraseña);
     if (!validPassword) {
         return res.status(401).json({ message: 'Usuario y/o contraseña incorrectos'});
     }
@@ -26,4 +26,8 @@ const login = async (req, res) => {
     );
 }
 
-module.exports = { registro, login}
+const perfil = async (req, res) => {
+    res.json(req.user);
+}
+
+module.exports = { registro, login, perfil }

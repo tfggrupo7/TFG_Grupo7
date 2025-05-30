@@ -1,11 +1,11 @@
 ## API taskrest
 
-### EMPLOYEES
+### EMPLEADOS
 
 ## Recupera todos los empleados
 
 Method: GET
-Url : /api/employees
+Url : /api/empleados
 Headers: XXX
 Body: XXX
 
@@ -14,7 +14,7 @@ Response: Un array con todos los empleados
 ## Recupera un empleado a partir de su ID
 
 METHOD: GET
-Url: /api/employees/<EMPLOYEEID>
+Url: /api/empleados/<EMPLEADOID>
 Headers: XXX
 Body: XXX
 
@@ -24,25 +24,25 @@ Error Response: status404 + mensaje
 ## Crear un nuevo empleado
 
 METHOD: POST
-Url: /api/employee
+Url: /api/empleado
 Headers: XXX
-Body: name, email, username, password, position
+Body: nombre, pass, email, rol_id
 
 Response: El objeto creado con los datos del nuevo empleado
 
 ## Actualizacion completa de un empleado
 
 METHOD: PUT
-Url: /api/empleados/<EMPLOYEEID>
+Url: /api/empleados/<EMPLEADOID>
 Header: XXX
-Body:name ,email, username, password, position
+Body:nombre, pass, email, rol_id
 
 Response: Un objeto con los datos del empleado actualizados
 
 ### Borrado de un empleado
 
 METHOD: DELETE
-Url: /api/employees<EMPLOYEEID>
+Url: /api/empleados<EMPLEADOID>
 Headers: XXX
 Body: XXX
 
@@ -51,25 +51,25 @@ Response: Un array con los empleados actualizados
 ### Recuperar todos los empleados con sus tareas
 
 Method: GET
-Url: /api/employees/tasks
+Url: /api/empleados/tareas
 Headers: XXX
 Body: XXX
 
 Response: 
 Json
 [
-    { "id":1 , "name": "juan", "tasks":[{ "name":  , "description": }]},
-    { "id":2 , "name": "pedro", "tasks":[{ "name":  , "description": }]},
+    { "id":1 , "nombre": "juan", "tareas":[{ "descripcion": }]},
+    { "id":2 , "nombre": "pedro", "tareas":[{ "descripcion": }]},
 
 
 ]
 
-### TASKS
+### TAREAS
 
 ## Recupera todos las tareas
 
 Method: GET
-Url : /api/tasks
+Url : /api/tareas
 Headers: XXX
 Body: XXX
 
@@ -78,7 +78,7 @@ Response: Un array con todas las tareas
 ## Recupera una tarea a partir de su ID
 
 METHOD: GET
-Url: /api/tasks/<TASKID>
+Url: /api/tareas/<TAREAID>
 Headers: XXX
 Body: XXX
 
@@ -88,25 +88,25 @@ Error Response: status404 + mensaje
 ## Crear una nueva tarea
 
 METHOD: POST
-Url: /api/task
+Url: /api/tareas
 Headers: XXX
-Body: title, description, status, due_date, employee_id
+Body: descripcion, empleado_id, menu_id, fecha, empleado_id
 
 Response: El objeto creado con los datos de la nueva tarea
 
 ## Actualizacion completa de una tarea
 
 METHOD: PUT
-Url: /api/empleados/<TASKID>
+Url: /api/empleados/<TAREAID>
 Header: XXX
-Body: title, description, status, due_date, employee_id
+Body: descripcion, empleado_id, menu_id, fecha, employee_id
 
 Response: Un objeto con los datos del empleado actualizados
 
 ### Borrado de una tarea
 
 METHOD: DELETE
-Url: /api/tasks<TASKEID>
+Url: /api/tareas<TAREAID>
 Headers: XXX
 Body: XXX
 
@@ -115,17 +115,21 @@ Response: Un array con las tareas actualizadas
 ### Recuperar todos las tareas y el empleado a quien pertenece
 
 Method: GET
-Url: /api/tasks/employee/<EMPLOYEEID>
+Url: /api/tareas/empleado/<EMPLEADOID>
 Headers: XXX
 Body: XXX
 
 Response: 
 Json
 [
-    { "name":  , "description": , "employeeId":[{ "id":  , "name": , "email": }]},
-    { "name":  , "description": , "employeeId":[{ "id":  , "name": , "email": }]}
+    { "descripcion": , "empleadoId":[{ "id":  , "nombre": , "email": }]},
+    { "descripcion": , "empleadoId":[{ "id":  , "nombre": , "email": }]}
 
 ]
+
+##############
+## USUARIOS ##
+##############
 
 ### Registrar usuarios
 Method: POST
@@ -142,5 +146,17 @@ Headers: XXX
 Body: username, password
 
 Response: Login correcto
+
+## Recupera todos los empleados con token
+Method: GET
+Url: /api/employee
+Headers: [authorization]
+Body: ###
+
+### Recuperar el perfil de usuario
+Method: GET
+Url: /api/usuarios/perfil
+Headers: [authorization] -> TOKEN
+Body: XXX
 
 
