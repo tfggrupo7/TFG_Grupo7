@@ -446,7 +446,7 @@ CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: restaurante
+-- Host: localhost    Database: restaurante
 -- ------------------------------------------------------
 -- Server version	8.0.41
 
@@ -470,13 +470,13 @@ DROP TABLE IF EXISTS `usuarios`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuarios` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `contraseña` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `usuario` varchar(255) NOT NULL,
-  `empleado_id` int DEFAULT NULL,
+  `contraseña` varchar(255) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `apellidos` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `email_UNIQUE` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -485,7 +485,6 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'$2b$10$c1whqqd./I4rsXYUoB.G2uail/EBo18/3VDMy9y3Fq4mDizbtSg0.','dave2@gmail.com','waltra2',1),(3,'$2b$10$93b3AMLrkUVKEIq4FV6XmOh65h36y61rmCYG7vqedJKdKME8XKlz6','dave3@gmail.com','waltra3',2);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -498,7 +497,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-25 12:05:08
+-- Dump completed on 2025-05-31 14:44:26
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
