@@ -1,6 +1,6 @@
 @host = http://localhost:3000
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo0LCJpYXQiOjE3NDgzMzQ0MjksImV4cCI6MTc0ODMzODAyOX0.FwTCpmj6VK3aNwyyisy1JkQhdS0hAdaczrIf-SwyPUM
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjozLCJpYXQiOjE3NDg3MDUxOTMsImV4cCI6MTc0ODcwODc5M30.vUFHT9skPzWRwQ-m_oibrLWpd6jLYbwZHafNLumb5Yw
 ###############
 ## EMPLEADOS ##
 ###############
@@ -131,18 +131,18 @@ POST {{host}}/api/usuarios/registro
 Content-Type: application/json
 
 {
-  "usuario": "waltra4",
   "email": "dave4@gmail.com",
   "contraseña": "123456",
-  "empleado_id": 13
+  "nombre": "David",
+  "apellidos": "diaz"
 }
 ### Login usuarios
 POST {{host}}/api/usuarios/login
 Content-Type: application/json
 
 {
-  "email": "dave4@gmail.com",
-  "contraseña": "123456"
+  "email": "waltra@gmail.com",
+  "contraseña": "123789"
 }
 
 ### Perfil de usuario por token
@@ -440,3 +440,21 @@ GET {{host}}/api/pedidosDetalle
 
 ### Eliminar pedidos_detalle
 DELETE {{host}}/api/pedidosDetalle/pedido/1
+
+### recuperar contraseña
+POST {{host}}/api/usuarios/recuperar-contrasena
+Content-Type: application/json
+
+{
+  "email": "waltra@gmail.com"
+}
+
+### Cambiar contraseña
+POST {{host}}/api/usuarios/restablecer-contrasena/76f37120fb0627cae274315d89e6311ba9c6baa6ca0176d84d7cae3f5312bf1a
+Content-Type: application/json
+
+{
+  "nuevaContrasena": "001234"
+}
+
+

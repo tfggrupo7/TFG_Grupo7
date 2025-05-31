@@ -3,14 +3,14 @@ import { FormBuilder, Validators, FormGroup, ReactiveFormsModule, FormControl } 
 import { IUsuario } from '../../interfaces/iusuario.interfaces';
 import { UsuarioService } from '../../services/usuario.service';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Ilogin } from '../../interfaces/ilogin.interfaces';
 import { toast } from 'ngx-sonner';
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -52,9 +52,8 @@ initializeLoginFormWithUsuario() {
 
 
   async ingresar() {
-    console.log('loginForm.value:', this.loginForm.value);
-    if (this.loginForm.invalid) {
-      toast.info('Por favor, completa todos los campos correctamente.');
+     if (this.loginForm.invalid) {
+      toast.info('Error en email o contraseña');
       return;
     }
     const usuario: IUsuario = {
@@ -63,15 +62,22 @@ initializeLoginFormWithUsuario() {
       email: this.loginForm.value.email,
       contraseña: this.loginForm.value.contraseña
     };
-    try {
-      await this.usuarioService.login(usuario);
-      toast.success("Login Exitoso");
-      setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 3000); 
-    } catch (error) {
-      alert('Error al iniciar sesión.');
-    }
+try {
+  const response = await this.usuarioService.login(usuario);
+  // Suponiendo que el token viene en response.token
+  const token = response.token;
+  if (token) {
+    localStorage.setItem('token', token);
+    toast.success("Login Exitoso");
+    setTimeout(() => {
+      this.router.navigate(['/dashboard']);
+    }, 3000); 
+  } else {
+    toast.error('No se recibió token de autenticación.');
+  }
+} catch (error) {
+  toast.error('Error al iniciar sesión.');
+}
 }
 
 initializeRegisterFormWithUsuario() {
@@ -84,9 +90,8 @@ initializeRegisterFormWithUsuario() {
 }
 
 async registrar() {
-console.log('registerForm.value:', this.registerForm.value);
-    if (this.registerForm.invalid) {
-      alert('Por favor, completa todos los campos correctamente.');
+  if (this.registerForm.invalid) {
+      toast.info('Por favor, completa todos los campos correctamente.');
       return;
     }
     const usuario = this.registerForm.value;
@@ -97,7 +102,11 @@ console.log('registerForm.value:', this.registerForm.value);
           this.router.navigate(['/']);
         }, 3000); 
     } catch (error) {
-      alert('Error al registrar usuario.');
+      toast.error('Error al registrar usuario.');
     }
+  }
+
+  enviarClave() {
+    toast.info('Funcionalidad no implementada aún.');
   }
 }

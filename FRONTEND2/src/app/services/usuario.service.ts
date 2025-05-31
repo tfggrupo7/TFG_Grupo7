@@ -18,10 +18,22 @@ export class UsuarioService {
   httpClient = inject(HttpClient);
 
  
-  login(usuario:IUsuario): Promise<ILogin> {
-    return lastValueFrom(this.httpClient.post<IUsuario>('http://localhost:3000/api/usuarios/login',usuario));
+  login(usuario: IUsuario): Promise<IUsuario> {
+    return lastValueFrom(
+      this.httpClient.post<IUsuario>('http://localhost:3000/api/usuarios/login', usuario, { observe: 'response' })
+    ).then(response => response.body as IUsuario);
   }
   register(usuario:IUsuario): Promise<IUsuario> {
     return lastValueFrom(this.httpClient.post<IUsuario>('http://localhost:3000/api/usuarios/registro', usuario));
   }
-}
+  recuperarContrasena(email: string): Promise<void> {
+    return lastValueFrom(this.httpClient.post<void>('http://localhost:3000/api/usuarios/recuperar-contrasena', { email }));
+  }
+  actualizarContrasena(token: string, nuevaContrasena: string): Promise<void> {
+    const url = `http://localhost:3000/api/usuarios/restablecer-contrasena/${token}`;
+    return lastValueFrom(
+      this.httpClient.post<void>(url, { nuevaContrasena })
+    );
+  }
+
+  }
