@@ -1,3 +1,4 @@
+const db = require('../config/db')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuarios.model');
@@ -41,16 +42,27 @@ const perfil = async (req, res) => {
 
 const recuperarContraseña = async (req, res) => {
   try {
-    const token = crypto.randomBytes(32).toString('hex');
     const { email } = req.body;
-    const usuario = await Usuario.recuperarContraseña(email);
-    if (!usuario) {
-      return res.status(200).json({ message: 'Si el correo existe, se enviará un enlace de recuperación.' });
+    if (!email) {
+      return res.status(400).json({ message: 'El correo es obligatorio.' });
     }
-    // Aquí deberías enviar el correo con el enlace de recuperación
-    const resetUrl = `http://localhost:4200/restablecer-contrasena/${token}`;
 
-    // Envía el email
+    // 1. Genera el token plano
+    const token = crypto.randomBytes(32).toString('hex');
+    // 2. Hashea el token
+    const tokenHash = bcrypt.hashSync(token, 10);
+    // 3. Fecha de expiración (1 hora desde ahora)
+    const expires = new Date(Date.now() + 3600 * 1000)
+      .toISOString().slice(0, 19).replace('T', ' ');
+
+    // 4. Guarda el hash y la fecha en la base de datos
+    await db.query(
+      'UPDATE usuarios SET reset_password_token = ?, reset_password_expires = ? WHERE email = ?',
+      [tokenHash, expires, email]
+    );
+
+    // 5. Envía el email con el token plano
+    const resetUrl = `http://localhost:4200/restablecer-contrasena/${token}`;
     await sendEmail(email, 'Recupera tu contraseña', `
       Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetUrl}
       Este enlace expirará en 1 hora.
@@ -61,7 +73,7 @@ const recuperarContraseña = async (req, res) => {
     console.error('Error al recuperar contraseña:', err);
     res.status(500).json({ message: 'Error en el servidor.' });
   }
-}
+};
 
 const actualizarContraseña = async (req, res) => {
   const { nuevaContrasena } = req.body;
@@ -85,5 +97,27 @@ const actualizarContraseña = async (req, res) => {
     res.status(500).json({ message: 'Error interno del servidor.' });
   }
 };
+const restablecerContraseña = async (req, res) => {
+  const { nuevaContrasena } = req.body;
+  const token = req.params.token;
 
-module.exports = { registro, login, perfil ,recuperarContraseña, actualizarContraseña };
+  if (!nuevaContrasena || typeof nuevaContrasena !== 'string') {
+    return res.status(400).json({ message: 'La nueva contraseña es obligatoria.' });
+  }
+  if (!token) {
+    return res.status(400).json({ message: 'Token de recuperación no proporcionado.' });
+  }
+
+  try {
+    const usuario = await updateContraseñaPorToken(token, nuevaContrasena);
+    if (!usuario) {
+      return res.status(400).json({ message: 'Token inválido o expirado.' });
+    }
+    res.json({ message: 'Contraseña actualizada exitosamente.' });
+  } catch (error) {
+    console.error('Error al actualizar la contraseña:', error);
+    res.status(500).json({ message: 'Error interno del servidor.' });
+  }
+};
+
+module.exports = { registro, login, perfil ,recuperarContraseña, actualizarContraseña, restablecerContraseña }

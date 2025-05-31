@@ -474,9 +474,11 @@ CREATE TABLE `usuarios` (
   `contraseña` varchar(255) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `apellidos` varchar(255) NOT NULL,
+  `reset_password_token` varchar(255) DEFAULT NULL,
+  `reset_password_expires` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -485,6 +487,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES (1,'d.donoso@mail.com','$2b$10$514xTF7S7RzyAoCKf5Mm3uKE9LfLGWGhaiYbFijHfS/WnTl23hatq','David','Donoso','1234','2025-10-10 00:00:00'),(2,'waltra@gmail.com','$2b$10$Lb81E2hNqUScZVzWixgYdOAj7a9ri4UsN/RUprXHS3H3znKtMaxJa','david','donoso','$2b$10$5Bvjwl38scUr5FXmm.50I.yU/Q6p28nX399Q3Vc97yox6oOmON68e','2025-05-31 20:30:32'),(3,'dave4@gmail.com','$2b$10$REeNFx/k/Pym9EmAzr67cOBOMglYvxtF.xJiX83JLD.Vrr7r87uZu','David','diaz','7765746','2025-10-10 00:00:00'),(4,'m.perez@mail.com','$2b$10$Xs5E/gR4kaLMlCDdS7mCO.mFFw9I950T5W/iDE/8u5qdCZznSfLaW','matias','perez','46464','2025-10-10 00:00:00');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -497,7 +500,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-31 14:44:26
+-- Dump completed on 2025-05-31 21:34:51
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
