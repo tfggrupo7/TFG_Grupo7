@@ -26,6 +26,27 @@ npm start
 The server will start and listen on the port defined in your `.env` file, or
 default to port 3000 if not specified.
 
+
+#### Database Setup
+
+Cargar en MySQL Workbench el fichero ChefDeskBD.sql que se encuentra en la carpeta BACKEND.
+
+Ejecutamos npm install en la consola , siempre dentro de la carpeta BACKEND , para instalar las dependencias
+y despues ejecutamos el comando npm run dev para iniciar el servidor.
+
+
+Creacion del FICHERO ENV
+
+PORT=3000
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=1234/root o tu constraseña de mySQL
+DB_NAME=restaurante
+DB_PORT=3306
+
+JWT_SECRET=Master25
+
 #### Development mode
 
 To start the server in development mode with `nodemon`, which will automatically
