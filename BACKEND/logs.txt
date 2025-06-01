@@ -1,2 +1,0 @@
-2025-06-01 17:01:03 POST /api/empleados ::ffff:127.0.0.1
-2025-06-01 18:31:37 POST /api/usuarios/login ::1
