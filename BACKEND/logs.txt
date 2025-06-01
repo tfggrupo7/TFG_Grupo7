@@ -212,3 +212,5 @@
 2025-06-01 12:36:30 POST /api/usuarios/restablecer-contrasena/a420430bbace3481d3d5201e880316291314fd0f2bca49e583f89d39762d95c2 ::1
 2025-06-01 12:36:41 POST /api/usuarios/recuperar-contrasena ::1
 2025-06-01 12:37:12 POST /api/usuarios/restablecer-contrasena/519a502e7e6a073fb3200b40d5822ed15434424615e9cbf1a6a0e0be067aa73f ::1
+2025-06-01 17:24:16 POST /api/usuarios/login ::1
+2025-06-01 17:24:19 POST /api/usuarios/login ::1
