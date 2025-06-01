@@ -18,28 +18,34 @@ const selectById = async (empleadoId) => {
   return result[0];
 };
 const selectByEmpleadoId = async (empleadoId) => {
-  const [result] = await db.query("select * from tareas where empleado_id = ?", [
-    Number(empleadoId),
-  ]);
+  const [result] = await db.query(
+    "select * from tareas where empleado_id = ?",
+    [Number(empleadoId)]
+  );
   return result;
 };
 const selectByTareaId = async (tareaId) => {
-  const [result] = await db.query("select * from tareas where id = ?", [tareaId]);
+  const [result] = await db.query("select * from tareas where id = ?", [
+    tareaId,
+  ]);
   return result;
 };
 
-const insert = async ({ nombre, pass, email, telefono , rol_id}) => {
+const insert = async ({ nombre, pass, email, telefono, rol_id, usuario_id }) => {
   const [result] = await db.query(
-    "insert into empleados (nombre, pass, email, telefono, rol_id ) values (?, ?, ?, ?, ?)",
-    [nombre, pass, email, telefono, rol_id]
+    "insert into empleados (nombre, pass, email, telefono, rol_id, usuario_id ) values (?, ?, ?, ?, ?, ?)",
+    [nombre, pass, email, telefono, rol_id], usuario_id
   );
   return result;
 };
 
-const update = async (empleadoId, { nombre, pass, email, telefono, rol_id }) => {
+const update = async (
+  empleadoId,
+  { nombre, pass, email, telefono, rol_id, usuario_id }
+) => {
   const [result] = await db.query(
-    "update empleados set nombre = ?, pass = ?, email = ?, telefono = ? , rol_id= ? where id = ?",
-    [nombre, pass, email, telefono, rol_id, empleadoId]
+    "update empleados set nombre = ?, pass = ?, email = ?, telefono = ? , rol_id= ? , usuario_id = ? where id = ?",
+    [nombre, pass, email, telefono, rol_id, usuario_id,empleadoId]
   );
   return result;
 };

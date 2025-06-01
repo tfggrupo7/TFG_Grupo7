@@ -25,7 +25,7 @@ const getById = async (req, res) => {
 const getEmpleadosAndTarea = async (req, res) => {
   const empleados = await Empleado.selectAll(1, 500);
 
-  for (let empleado of empleados) {
+  for (const empleado of empleados) {
     const tareas = await Tarea.selectByEmpleadoId(empleado.id);
     empleado.tareas = tareas;
   }
@@ -35,7 +35,7 @@ const getEmpleadosAndTarea = async (req, res) => {
 
 const create = async (req, res) => {
   const result = await Empleado.insert(req.body);
-  const { nombre, pass, email, telefono, rol_id } = req.body;
+  const { nombre, pass, email, telefono, rol_id, usuario_id } = req.body;
   const empleado = await Empleado.selectById(result.insertId);
 
   res.json(empleado);
@@ -44,7 +44,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   const { empleadoId } = req.params;
   const result = await Empleado.update(empleadoId, req.body);
-  const { nombre, pass, email, telefono } = req.body;
+  const { nombre, pass, email, telefono , rol_id } = req.body;
   const empleado = await Empleado.selectById(empleadoId);
 
   res.json(empleado);
