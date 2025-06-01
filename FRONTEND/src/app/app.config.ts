@@ -1,14 +1,13 @@
-import { ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
-
-export const appConfig: ApplicationConfig = {
+export const appConfig = {
   providers: [
-    provideRouter(routes),
-    provideClientHydration(),
-    provideAnimations()
+    provideRouter(routes,withComponentInputBinding()),
+    provideHttpClient(
+      withInterceptors([AuthInterceptor])
+    )
   ],
 };
