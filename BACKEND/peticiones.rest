@@ -450,7 +450,7 @@ Content-Type: application/json
 }
 
 ### Cambiar contraseña
-POST {{host}}/api/usuarios/restablecer-contrasena/76f37120fb0627cae274315d89e6311ba9c6baa6ca0176d84d7cae3f5312bf1a
+POST {{host}}/api/usuarios/restablecer-contrasena/
 Content-Type: application/json
 
 {

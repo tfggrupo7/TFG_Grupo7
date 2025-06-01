@@ -22,13 +22,11 @@ const getByEmail = async (email) => {
   return result[0];
 }
 
-
 const guardarTokenRecuperacion = async (email, tokenHash, expires) => {
   const [result] = await db.query(
     'UPDATE usuarios SET reset_password_token = ?, reset_password_expires = ? WHERE email = ?',
     [tokenHash, expires, email]
   );
-  // Devuelve true si se actualizó alguna fila
   return result.affectedRows > 0;
 };
 
@@ -49,27 +47,25 @@ const recuperarContraseña = async (email, token, expires) => {
 };
 
 const updateContraseñaPorToken = async (tokenPlano, nuevaContraseña) => {
-  // Busca todos los usuarios con token de recuperación válido
   const [rows] = await db.query(
     'SELECT id, reset_password_token FROM usuarios WHERE reset_password_token IS NOT NULL AND reset_password_expires > NOW()'
   );
 
   let usuario = null;
   for (const row of rows) {
-    if (bcrypt.compareSync(tokenPlano, row.reset_password_token)) {
+   
+    if (await bcrypt.compareSync(tokenPlano, row.reset_password_token)) {
       usuario = row;
       break;
     }
   }
 
   if (!usuario) {
-    // Token inválido o expirado
     return null;
   }
 
-  const hashedPassword = bcrypt.hashSync(nuevaContraseña, 10);
+  const hashedPassword = await bcrypt.hashSync(nuevaContraseña, 10);
 
-  // Actualiza la contraseña y limpia el token y la expiración
   await db.query(
     'UPDATE usuarios SET contraseña = ?, reset_password_token = NULL, reset_password_expires = NULL WHERE id = ?',
     [hashedPassword, usuario.id]
@@ -77,5 +73,6 @@ const updateContraseñaPorToken = async (tokenPlano, nuevaContraseña) => {
 
   return usuario;
 };
+
 module.exports = { insert, getById, getByEmail, recuperarContraseña, guardarTokenRecuperacion ,updateContraseñaPorToken };
 

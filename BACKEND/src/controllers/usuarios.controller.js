@@ -38,8 +38,7 @@ const perfil = async (req, res) => {
     res.json(req.user);
 }
 
- // Asegúrate de requerir crypto al inicio del archivo si no está
-
+ 
 const recuperarContraseña = async (req, res) => {
   try {
     const { email } = req.body;
@@ -49,17 +48,17 @@ const recuperarContraseña = async (req, res) => {
 
     // 1. Genera el token plano
     const token = crypto.randomBytes(32).toString('hex');
-    // 2. Hashea el token
-    const tokenHash = bcrypt.hashSync(token, 10);
-    // 3. Fecha de expiración (1 hora desde ahora)
-    const expires = new Date(Date.now() + 3600 * 1000)
-      .toISOString().slice(0, 19).replace('T', ' ');
-
-    // 4. Guarda el hash y la fecha en la base de datos
-    await db.query(
-      'UPDATE usuarios SET reset_password_token = ?, reset_password_expires = ? WHERE email = ?',
-      [tokenHash, expires, email]
-    );
+    // 2. Hashea el token (usa await)
+    const tokenHash = await bcrypt.hash(token, 10);
+    // 3. Fecha de expiración (1 hora desde ahora, formato compatible con MySQL DATETIME)
+    const now = new Date();
+    const expires = new Date(now.getTime() + 3600 * 1000); 
+    
+    // 4. Usa la función del modelo para guardar el token
+    const guardado = await Usuario.guardarTokenRecuperacion(email, tokenHash, expires);
+    if (!guardado) {
+      return res.status(400).json({ message: 'No se pudo guardar el token.' });
+    }
 
     // 5. Envía el email con el token plano
     const resetUrl = `http://localhost:4200/restablecer-contrasena/${token}`;
@@ -75,7 +74,21 @@ const recuperarContraseña = async (req, res) => {
   }
 };
 
-const actualizarContraseña = async (req, res) => {
+const generarYGuardarToken = async (email) => {
+  const tokenPlano = require('crypto').randomBytes(32).toString('hex');
+  const tokenHash = await bcrypt.hash(tokenPlano, 10);
+ const expires = new Date(now.getTime() + 3600 * 1000);
+
+  const guardado = await guardarTokenRecuperacion(email, tokenHash, expires);
+  if (guardado) {
+    // Aquí deberías enviar el tokenPlano al usuario por email
+    return tokenPlano;
+  }
+  throw new Error('No se pudo guardar el token');
+};
+
+
+const restablecerContraseña = async (req, res) => {
   const { nuevaContrasena } = req.body;
   const token = req.params.token;
 
@@ -93,31 +106,9 @@ const actualizarContraseña = async (req, res) => {
     }
     res.json({ message: 'Contraseña actualizada exitosamente.' });
   } catch (error) {
-    console.error('Error al actualizar la contraseña:', error); // <-- Esto es clave
-    res.status(500).json({ message: 'Error interno del servidor.' });
-  }
-};
-const restablecerContraseña = async (req, res) => {
-  const { nuevaContrasena } = req.body;
-  const token = req.params.token;
-
-  if (!nuevaContrasena || typeof nuevaContrasena !== 'string') {
-    return res.status(400).json({ message: 'La nueva contraseña es obligatoria.' });
-  }
-  if (!token) {
-    return res.status(400).json({ message: 'Token de recuperación no proporcionado.' });
-  }
-
-  try {
-    const usuario = await updateContraseñaPorToken(token, nuevaContrasena);
-    if (!usuario) {
-      return res.status(400).json({ message: 'Token inválido o expirado.' });
-    }
-    res.json({ message: 'Contraseña actualizada exitosamente.' });
-  } catch (error) {
     console.error('Error al actualizar la contraseña:', error);
     res.status(500).json({ message: 'Error interno del servidor.' });
   }
 };
 
-module.exports = { registro, login, perfil ,recuperarContraseña, actualizarContraseña, restablecerContraseña }
+module.exports = { registro, login, perfil ,recuperarContraseña, restablecerContraseña, generarYGuardarToken }
