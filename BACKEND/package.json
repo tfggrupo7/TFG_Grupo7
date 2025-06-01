@@ -1,0 +1,38 @@
+{
+  "name": "express-init-template",
+  "version": "1.5.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "biome lint",
+    "format": "biome check --write"
+  },
+  "keywords": [
+    "express",
+    "init",
+    "template"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.3.1",
+    "express": "^5.0.0",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.14.1",
+    "nodemailer": "^7.0.3",
+    "path": "^0.12.7",
+    "pdfkit": "^0.17.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.0.1"
+  }
+}
