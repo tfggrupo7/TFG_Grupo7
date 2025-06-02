@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 
 @Component({
@@ -11,6 +12,11 @@ import { RouterModule } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
 
+export class DashboardComponent {
+  authService = inject(AuthService);
+
+  cerrarSesion() {
+    this.authService.logout();
+  }
 }

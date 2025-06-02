@@ -9,3 +9,7 @@
 2025-06-02 09:59:10 POST /api/usuarios/recuperar-contrasena ::1
 2025-06-02 10:00:00 POST /api/usuarios/restablecer-contrasena/3d13d3b118827bf816c02754507c3c3168a98412a29f2adfaa8d69fc69d8cad5 ::1
 2025-06-02 10:00:16 POST /api/usuarios/login ::1
+2025-06-02 20:08:23 POST /api/usuarios/login ::1
+2025-06-02 20:12:04 POST /api/usuarios/login ::1
+2025-06-02 20:46:23 POST /api/usuarios/login ::1
+2025-06-02 20:54:22 POST /api/usuarios/login ::1

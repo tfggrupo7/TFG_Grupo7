@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
-  //TODO: Este servicio puede usarse para manejar todo lo que tenga que ver con la gestion del token por ejemplo,
-  // como almacenarlo en el sessionStorage, recuperarlo, obtener el tipo de rol...
-  constructor() { }
+   constructor(private router: Router) { }
 
   //Ejemplo
   setToken = (token: string) => {
@@ -16,11 +17,11 @@ export class AuthService {
   getToken = () => {
     return sessionStorage.getItem("token")
   }
-  isAuthenticated(): boolean {
-  return !!localStorage.getItem('token');
-}
-
+  
   logout(): void {
-    localStorage.removeItem('token');
-  }
+  localStorage.removeItem('token'); 
+  localStorage.clear(); 
+
+  this.router.navigate(['/login']);
+}
 }
