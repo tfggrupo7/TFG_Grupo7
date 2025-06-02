@@ -26,7 +26,7 @@ const getAllTareas = async (req, res) => {
 const getTareasAndEmpleado = async (req, res) => {
   const tareas = await Task.selectAllTareas(1, 500);
 
-  for (let tarea of tareas) {
+  for (const tarea of tareas) {
     const empleado = await Empleado.selectById(tarea.empleado_id);
     if (empleado) {
       tarea.empleado = {
@@ -52,7 +52,7 @@ const getTareasAndEmpleadoById = async (req, res) => {
     return res.status(404).send("No se encontraron las tareas para este empleado");
   }
 
-  for (let tarea of tareas) {
+  for (const tarea of tareas) {
     tarea.empleado= {
         nombre: empleado.nombre,
         pass: empleado.pass,
@@ -65,6 +65,10 @@ const getTareasAndEmpleadoById = async (req, res) => {
 }
 const createTarea = async (req, res) => {
   const { description,empleado_id,menu_id,fecha } = req.body;
+  const empleado = await Empleado.selectById(empleado_id);
+  if (!empleado) {
+    return res.status(404).json({ error: "El usuario no existe" });
+  }
   const result= await Tarea.insert(description,empleado_id,menu_id,fecha);
   const tarea = await Tarea.selectByTareaId(result.insertId);
 
@@ -124,33 +128,7 @@ const exportTareasPDF = async (req, res) => {
 const getAllTareasEmpleadoRaw = async (empleadoId) => {
   return await Tarea.selectAllTareasAndEmpleadoRaw(empleadoId);
 };
-/*const exportTareasEmpleadoPDF = async (req, res) => {
-  console.log('Entrando a exportTareasEmpleadoPDF');
-  const { empleadoId } = req.params;
-  try {
-    const tareas = await Tarea.selectAllTareasAndEmpleadoRaw (empleadoId);
-    const pdfDir = path.join(__dirname, 'pdfs');
-    const filePath = path.join(pdfDir, 'tareas.pdf');
-    if (!fs.existsSync(pdfDir)) {
-      fs.mkdirSync(pdfDir);
-    }
-    // Generar el PDF
-    console.log('Generando PDF en:', filePath);
-    await generateTareasPDF(tareas, filePath);
-    console.log('PDF generado');
-    res.download(filePath, 'tareas.pdf', (err) => {
-      if (err) {
-        console.error('Error al enviar el PDF:', err);
-      }
-      fs.unlink(filePath, (err) => {
-        if (err) console.error('Error al borrar el PDF:', err);
-      });
-    });
-  } catch (err) {
-    console.error('Error al generar el PDF:', err);
-    res.status(500).json({ error: 'Error al generar el PDF', details: err.message });
-  }
-};*/
+
 const exportTareasEmpleadoPDF = async (req, res) => {
   console.log('Entrando a exportTareasEmpleadoPDF');
   const { empleadoId } = req.params;

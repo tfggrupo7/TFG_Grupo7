@@ -4,7 +4,7 @@ import { IUsuario } from '../../interfaces/iusuario.interfaces';
 import { UsuarioService } from '../../core/services/usuario.service';
 import { inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { Ilogin } from '../../interfaces/ilogin.interfaces';
+import { ILogin } from '../../interfaces/ilogin.interfaces';
 import { toast } from 'ngx-sonner';
 
 
@@ -18,7 +18,7 @@ import { toast } from 'ngx-sonner';
 export class LoginComponent {
   rightPanelActive = false;
   usuario!: IUsuario;
-  user!:Ilogin;
+  user!:ILogin;
   usuarioService = inject (UsuarioService);
   router = inject(Router);
 
