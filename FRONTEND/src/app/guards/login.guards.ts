@@ -6,7 +6,7 @@ export const loginGuard: CanActivateFn = (route, state) => {
   //redux, stagejs son librerias que trabajan de manera similar al localstorage
   let token = localStorage.getItem('token') || null
   if (!token) {
-    router.navigate(['/login'])
+    router.navigate(['/dashboard'])
     return false;
   }
   return true;

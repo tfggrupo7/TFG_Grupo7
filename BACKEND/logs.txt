@@ -1,2 +1,11 @@
 2025-06-01 17:01:03 POST /api/empleados ::ffff:127.0.0.1
 2025-06-01 18:31:37 POST /api/usuarios/login ::1
+2025-06-02 09:53:42 POST /api/usuarios/login ::1
+2025-06-02 09:54:19 POST /api/usuarios/login ::1
+2025-06-02 09:54:32 POST /api/usuarios/login ::1
+2025-06-02 09:55:18 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-02 09:57:32 POST /api/usuarios/login ::1
+2025-06-02 09:58:52 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-02 09:59:10 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-02 10:00:00 POST /api/usuarios/restablecer-contrasena/3d13d3b118827bf816c02754507c3c3168a98412a29f2adfaa8d69fc69d8cad5 ::1
+2025-06-02 10:00:16 POST /api/usuarios/login ::1
