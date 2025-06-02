@@ -16,4 +16,11 @@ export class AuthService {
   getToken = () => {
     return sessionStorage.getItem("token")
   }
+  isAuthenticated(): boolean {
+  return !!localStorage.getItem('token');
+}
+
+  logout(): void {
+    localStorage.removeItem('token');
+  }
 }

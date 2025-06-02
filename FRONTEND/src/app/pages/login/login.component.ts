@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { IUsuario } from '../../interfaces/iusuario.interfaces';
-import { UsuarioService } from '../../services/usuario.service';
+import { UsuarioService } from '../../core/services/usuario.service';
 import { inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Ilogin } from '../../interfaces/ilogin.interfaces';
