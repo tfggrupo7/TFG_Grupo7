@@ -106,7 +106,6 @@ async registrar() {
     }
   }
 
-  enviarClave() {
-    toast.info('Funcionalidad no implementada aún.');
-  }
+  
 }
+
