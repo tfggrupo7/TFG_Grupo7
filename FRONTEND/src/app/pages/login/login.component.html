@@ -1,4 +1,10 @@
-<div class="container" id="container" [class.right-panel-active]="rightPanelActive">
+  <header>
+    <a routerLink="/">
+      <img src="../../../assets/logo/logoSVG.svg" alt="logo" class="logo h-10 md:h-20 mx-auto mt-2" />
+    </a>
+  </header>
+<section class="mt-4 md:mt-8 mx-auto">
+  <div class="container" id="container" [class.right-panel-active]="rightPanelActive">
   <!-- Sign Up Form -->
   <div class="form-container sign-up-container">
     <div class="flex flex-col justify-center items-center px-8 my-8">
@@ -112,3 +118,4 @@
     </div>
   </div>
 </div>
+</section>
