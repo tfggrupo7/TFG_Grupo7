@@ -1,9 +1,20 @@
-  <header>
+  <header class="active">
     <a routerLink="/">
       <img src="../../../assets/logo/logoSVG.svg" alt="logo" class="logo h-10 md:h-20 mx-auto mt-2" />
     </a>
   </header>
-<section class="mt-4 md:mt-8 mx-auto">
+ <nav class="bg-white shadow-md p-4 flex justify-between items-center hidden">
+  <ul class="flex justify-center space-x-4 mt-4 mx-auto">
+    <li>
+      <a href="#" id="register" class="text-[#556B2F] hover:text-green-600" (click)="mostrarRegistro($event)">Iniciar Sesión</a>
+    </li>
+    <li>
+      <a href="#" id="login" class=" text-[#556B2F] hover:text-green-600" (click)="mostrarLogin($event)">Registrarse</a>
+    </li>
+  </ul>
+</nav>
+
+  <section class="mt-4 md:mt-8 mx-auto">
   <div class="container" id="container" [class.right-panel-active]="rightPanelActive">
   <!-- Sign Up Form -->
   <div class="form-container sign-up-container">
@@ -30,7 +41,7 @@
   </div>
 
   <!-- Sign In Form -->
-  <div class="form-container sign-in-container mt-20">
+  <div #login class="form-container sign-in-container mt-20">
     <div class="flex flex-col justify-center items-center px-8 mt-8 md:mt-0">
       <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-10 mb-4 md:hidden" />
       <h1 class="text-xl font-bold text-[#556B2F] mb-2">Iniciar Sesión</h1>
@@ -56,7 +67,7 @@
   </div>
 
   <!-- Overlay -->
-  <div class="overlay-container">
+  <div class="overlay-container active">
     <div class="overlay">
       <div class="overlay-panel overlay-left">
         <h2>¡Bienvenido de nuevo!</h2>

@@ -1,5 +1,4 @@
 
-
 .container {
   position: relative;
   width: 1000px;
@@ -105,6 +104,9 @@
   transform: translateX(20%);
 }
 @media (max-width: 768px) {
+  .hidden {
+    display: block;
+  }
   .container {
     display: flex;
     flex-direction: column;
@@ -126,6 +128,9 @@
     box-shadow: none;
     transition: none;
     padding: 0;
+  }
+  .active {
+    display: none;
   }
   .sign-in-container,
   .sign-up-container,

@@ -43,6 +43,15 @@ constructor(private fb: FormBuilder){
   this.initializeLoginFormWithUsuario();
   this.initializeRegisterFormWithUsuario();
 }
+mostrarLogin(event: Event) {
+  event.preventDefault();
+  this.rightPanelActive = false;
+}
+
+mostrarRegistro(event: Event) {
+  event.preventDefault();
+  this.rightPanelActive = true;
+}
 
 initializeLoginFormWithUsuario() {
   this.loginForm = new FormGroup({
