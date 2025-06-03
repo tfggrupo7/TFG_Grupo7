@@ -9,10 +9,10 @@ export interface IEmpleados {
     salario: number;
     status: string
     activo: boolean;
-    role: IRoles[];
+    role: IRol[];
 }
 
-export interface IRoles {
-    id: number;
-    nombre: string;
+export interface IRol {
+  id: number;
+  nombre: string;
 }

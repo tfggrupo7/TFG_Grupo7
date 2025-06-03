@@ -2,10 +2,8 @@ const db = require('../config/db');
 
 
 const selectAll = async (page, limit) => {
-  const [result] = await db.query("select * from roles limit ? offset ?", [
-    limit,
-    (page - 1) * limit,
-  ]);
+  const [result] = await db.query("select * from roles")
+    
   return result;
 };
 

@@ -21,18 +21,21 @@ export class PersonalComponent {
   arrEmpleados: IEmpleados []=[];
   currentPage: number = 1;
   totalPages: number = 1;
-  roles:IRoles[] = [];
+  arrRoles:IRoles[] = [];
   modalEmpleadoAbierto = false;
   userForm: FormGroup = new FormGroup({},[]);
   empleadosFiltrados: IEmpleados[] = []; 
   busqueda = new FormControl('');
+  objetos:any[]=[];
   
   constructor(private empleadoService: EmpleadosService, private rolesService: RolesService, private router: Router){}
 
 
   async ngOnInit() {
     this.cargarEmpleados();
-    this.cargarRoles();
+    this.arrRoles = await this.rolesService.getRoles();
+    
+    
 
     this.userForm = new FormGroup({
       id: new FormControl(null, []),
@@ -59,37 +62,36 @@ export class PersonalComponent {
    
 
    filtrarEmpleados(valor: string) {
-    console.log('Filtrando empleados con valor:', valor);
-    if (!Array.isArray(this.empleados)) {
+   if (!Array.isArray(this.empleados)) {
     this.empleadosFiltrados = [];
     return;
   }
-    const texto = (valor || '').toLowerCase();
-    if (!texto) {
-      this.empleadosFiltrados = this.empleados;
-      return;
-    }
-    this.empleadosFiltrados = this.empleados.filter(emp =>
-      emp.nombre.toLowerCase().includes(texto) ||
-      emp.email.toLowerCase().includes(texto)
-      
-    );
-    
+  const texto = (valor || '').toLowerCase();
+  if (!texto) {
+    // Si no hay texto de búsqueda, no mostramos nada
+    this.empleadosFiltrados = [];
+    return;
   }
+  this.empleadosFiltrados = this.empleados.filter(emp =>
+    emp.nombre.toLowerCase().includes(texto) ||
+    emp.email.toLowerCase().includes(texto)
+  );
+}
 
-
-
-  async cargarEmpleados(page: number = 1) {
+  async cargarEmpleados() {
     try {
-      const response = await this.empleadoService.cargarEmpleados(page);
-      if (response) {
-        this.arrEmpleados = response.data;
-        this.currentPage = response.page;
-        
-      }
-    } catch (msg: any) {
-      toast.error(msg.error || 'Error al cargar usuarios');
+      this.arrEmpleados = await this.empleadoService.getEmpleados();
+      console.log('Empleados cargados:', this.arrEmpleados);
+    } catch (error: any) {
+      console.log('Error al cargar empleados:', error);
+      toast.error(error?.error || 'Error al cargar empleados');
     }
+  }
+  getNombreRol(rol_id: number): string {
+    console.log('Buscando nombre de rol para rol_id:', rol_id);
+    const rol = this.arrRoles.find(r => r.id === rol_id);
+    console.log('Rol encontrado:', rol);
+    return rol ? rol.nombre : 'Sin rol';
   }
   get totalActivos(): number {
   return this.arrEmpleados.filter(e => e.activo).length;
@@ -108,20 +110,9 @@ esActivo(empleado: any): string {
   esEnVacaciones(empleado: any): string {
     return empleado.status === 'vacaciones' ? 'EN VACACIONES' : "";
   }
-async cargarRoles(): Promise<void> {
-    try {
-      this.roles = await this.rolesService.getRoles();
-    } catch (error) {
-      toast.error('Error al cargar roles');
-    }
-}
-
-  empleadoYroles(empleado: IEmpleados): string {
-    const roles = empleado.role.map(role => role.nombre).join(', ');
-    return roles;
-}
+ 
   
-  async gotoNext() {
+  /*async gotoNext() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       await this.cargarEmpleados(this.currentPage);
@@ -133,7 +124,7 @@ async cargarRoles(): Promise<void> {
       this.currentPage--;
       await this.cargarEmpleados(this.currentPage);
     }
-  }
+  }*/
 
 
 

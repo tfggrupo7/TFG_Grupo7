@@ -4,6 +4,8 @@ import { IEmpleados } from '../../interfaces/iempleados.interfaces';
 import { lastValueFrom } from 'rxjs';
 import { IResponse } from '../../interfaces/iresponse.interfaces';
 import { HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +21,15 @@ export class EmpleadosService {
 
 
   getEmpleados(): Promise<IEmpleados[]> {
-    return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url));
+    
+    const token = localStorage.getItem('token'); // Recupera el token del localStorage
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    });
+    
+    return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url, { headers}));
   }
   
   async cargarEmpleados(page: number): Promise<IResponse> {
@@ -61,14 +71,18 @@ export class EmpleadosService {
     return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
   }
   
-  getEmpleadoYrolesById(id: number): Promise<IEmpleados> {
-    return lastValueFrom(this.httpClient.get<IEmpleados>(`${this.url}/role/${id}`));
+  obtenerRoles(id: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.url}/role/${id}`);
+  }
+  
+  /*getEmpleadoYroles(): Promise<IEmpleados> {
+    return lastValueFrom(this.httpClient.get<IEmpleados>(`${this.url}/role`));
   }
   
   
   
   
-  /*async gotoNext(): Promise<IResponse | null> {
+  async gotoNext(): Promise<IResponse | null> {
     if (this.currentPage < this.totalPages) {
       const nextPage = this.currentPage + 1;
       try {

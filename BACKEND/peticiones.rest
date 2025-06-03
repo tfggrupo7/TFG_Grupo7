@@ -459,5 +459,5 @@ Content-Type: application/json
 }
 
 ###
-GET {{host}}/api/empleados/role/2
+GET {{host}}/api/empleados/role
 

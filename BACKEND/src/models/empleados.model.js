@@ -1,12 +1,16 @@
 const db = require("../config/db");
 
 const selectAll = async (page, limit) => {
+  const [result] = await db.query("select * from empleados ");
+  return result;
+};
+/*const selectAll = async (page, limit) => {
   const [result] = await db.query("select * from empleados limit ? offset ?", [
     limit,
     (page - 1) * limit,
   ]);
   return result;
-};
+};*/
 
 const selectById = async (empleadoId) => {
   const [result] = await db.query("select * from empleados where id = ?", [
@@ -57,12 +61,17 @@ const remove = async (empleadoId) => {
   return result;
 };
 
-const empleadoYrole = async (empleadoId) => {
-  const [result] = await db.query(
-    "select e.*, r.nombre as rol from empleados e join roles r on e.rol_id = r.id where e.id = ?",
-    [empleadoId]
-  );
-  return result[0];
+const empleadosYroles = async () => {
+  let { limit, offset } = req.query;
+
+// Convierte a número y pon valores por defecto si no están definidos
+limit = Number(limit) || 10;    // Por ejemplo, 10 por defecto
+offset = Number(offset) || 0;   // 0 por defecto
+
+const [result] = await db.query(
+  "SELECT e.*, r.nombre AS rol FROM empleados e JOIN roles r ON e.rol_id = r.id LIMIT ? OFFSET ?",
+  [limit, offset]
+);
 };
 
 module.exports = {
@@ -73,5 +82,5 @@ module.exports = {
   insert,
   update,
   remove,
-  empleadoYrole
+  empleadosYroles
 };
