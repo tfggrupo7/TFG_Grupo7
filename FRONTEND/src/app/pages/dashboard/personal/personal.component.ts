@@ -23,10 +23,11 @@ export class PersonalComponent {
   totalPages: number = 1;
   arrRoles:IRoles[] = [];
   modalEmpleadoAbierto = false;
+  modalUpdateEmpleadoAbierto = false;
   userForm: FormGroup = new FormGroup({},[]);
   empleadosFiltrados: IEmpleados[] = []; 
   busqueda = new FormControl('');
-  objetos:any[]=[];
+  empleadoId!: number;
   
   constructor(private empleadoService: EmpleadosService, private rolesService: RolesService, private router: Router){}
 
@@ -36,17 +37,16 @@ export class PersonalComponent {
     this.arrRoles = await this.rolesService.getRoles();
     
     
-
-    this.userForm = new FormGroup({
-      id: new FormControl(null, []),
-      nombre: new FormControl("", Validators.required),
-      rol_id: new FormControl<number | null>(null, Validators.required),
-      telefono: new FormControl("", [Validators.required, Validators.pattern('^[0-9]+$')]),
-      email: new FormControl("", [Validators.required, Validators.email]),
-      fecha_inicio: new FormControl("", Validators.required),
-      salario: new FormControl("", Validators.required),
-      activo: new FormControl("", Validators.required)
-    });
+this.userForm = new FormGroup({
+  id: new FormControl(null, []),
+  nombre: new FormControl("", Validators.required),
+  rol_id: new FormControl<number | null>(null, Validators.required),
+  telefono: new FormControl("", [Validators.required, Validators.pattern('^[0-9]+$')]),
+  email: new FormControl("", [Validators.required, Validators.email]),
+  fecha_inicio: new FormControl("", Validators.required),
+  salario: new FormControl("", Validators.required),
+  activo: new FormControl("", Validators.required)
+});
 
     this.empleados = await this.empleadoService.getEmpleados();
   this.empleadosFiltrados = this.empleados;
@@ -81,16 +81,14 @@ export class PersonalComponent {
   async cargarEmpleados() {
     try {
       this.arrEmpleados = await this.empleadoService.getEmpleados();
-      console.log('Empleados cargados:', this.arrEmpleados);
+      
     } catch (error: any) {
-      console.log('Error al cargar empleados:', error);
       toast.error(error?.error || 'Error al cargar empleados');
     }
   }
   getNombreRol(rol_id: number): string {
-    console.log('Buscando nombre de rol para rol_id:', rol_id);
+    
     const rol = this.arrRoles.find(r => r.id === rol_id);
-    console.log('Rol encontrado:', rol);
     return rol ? rol.nombre : 'Sin rol';
   }
   get totalActivos(): number {
@@ -138,16 +136,65 @@ cerrarModal() {
 async getDataForm() {
   let response: IEmpleados | any;
   try {
-    console.log('Form values:', this.userForm.value);
+    
     response = await this.empleadoService.createEmpleado(this.userForm.value);
-    console.log('API response:', response);
-    toast.success("Usuario registrado correctamente");
+    
+    toast.success("Empleado registrado correctamente");
     setTimeout(() => {
       this.router.navigate(['/dashboard']);
     }, 3000); 
   } catch (msg: any) {
-    console.log('Error:', msg);
-    toast.error("El usuario que intentas editar no existe");
+   
+    toast.error("Fallo en el registro");
   }
 }
+
+async updateDataForm() {
+  let response: IEmpleados | any;
+  try {
+    const empleadoActualizado: IEmpleados = { ...this.userForm.value, id: this.empleadoId };
+    response = await this.empleadoService.updateEmpleado(empleadoActualizado);
+    toast.success("Empleado Actualizado correctamente");
+    setTimeout(() => {
+      this.router.navigate(['/dashboard']);
+    }, 3000);
+  } catch (msg: any) {
+    toast.error("Fallo al actualizar el empleado");
+  }
+}
+
+async delete(id: number) {
+  // Buscar el empleado por id para mostrar el nombre
+  const empleado = this.arrEmpleados.find(e => e.id === id);
+  const nombreEmpleado = empleado ? empleado.nombre : 'Empleado';
+
+  console.log(`Intentando borrar al empleado con id: ${id}, nombre: ${nombreEmpleado}`);
+
+  toast(`¿Deseas Borrar al Empleado ${nombreEmpleado}?`, {
+    action: {
+      label: 'Aceptar',
+      onClick: async () => {
+        try {
+          console.log(`Confirmado: eliminando empleado con id: ${id}`);
+          await this.empleadoService.deleteEmpleado(id);
+          toast.success('Empleado eliminado con éxito', {
+            duration: 2000
+          });
+          console.log('Empleado eliminado correctamente');
+          this.router.navigate(['/dashboard']);
+        } catch (error: any) {
+          console.log('Error al eliminar el usuario:', error);
+          toast.error('Error al eliminar el usuario');
+        }
+      }
+    }
+  });
+}
+deleteEmpleado(id: number) {
+  this.arrEmpleados = this.arrEmpleados.filter(empleado => empleado.id !== id);
+  toast.success('Empleado eliminado con éxito');
+}
+
+  
+
 }

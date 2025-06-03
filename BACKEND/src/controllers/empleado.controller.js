@@ -80,15 +80,5 @@ const getEmpleadosYRoles = async (req, res) => {
   }
 };
 
-/*const getEmpleadoYrole = async (req, res) => {
-  const { empleadoId } = req.params;
-  const empleado = await Empleado.selectById(empleadoId);
-  if (!empleado) {
-    return res.status(404).json({ message: "Empleado no encontrado" });
-  }
-  const role = await Role.selectById(empleado.rol_id);
-  empleado.role = role;
-  res.json(empleado);
-};*/
 
 module.exports = { getAll, getById, create, getEmpleadosAndTarea, update, remove, getEmpleadosYRoles };

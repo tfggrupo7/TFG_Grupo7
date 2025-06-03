@@ -18,8 +18,6 @@ export class EmpleadosService {
   private totalPages: number = 2;
 
 
-
-
   getEmpleados(): Promise<IEmpleados[]> {
     
     const token = localStorage.getItem('token'); // Recupera el token del localStorage
@@ -62,9 +60,10 @@ export class EmpleadosService {
   });
     return lastValueFrom(this.httpClient.post<IEmpleados>(this.url, empleado));
   }
-  updateEmpleado(id: number, empleado: IEmpleados): Promise<IEmpleados> {
+  updateEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
+    let { id,...empleadoBody} = empleado;
     return lastValueFrom(
-      this.httpClient.put<IEmpleados>(`${this.url}/${id}`, empleado)
+      this.httpClient.put<IEmpleados>(`${this.url}/${empleado.id}`, empleadoBody)
     );
   }
   deleteEmpleado(id: number): Promise<void> {
@@ -74,13 +73,7 @@ export class EmpleadosService {
   obtenerRoles(id: number): Observable<any[]> {
     return this.httpClient.get<any[]>(`${this.url}/role/${id}`);
   }
-  
-  /*getEmpleadoYroles(): Promise<IEmpleados> {
-    return lastValueFrom(this.httpClient.get<IEmpleados>(`${this.url}/role`));
-  }
-  
-  
-  
+    
   
   async gotoNext(): Promise<IResponse | null> {
     if (this.currentPage < this.totalPages) {
@@ -112,5 +105,5 @@ export class EmpleadosService {
       }
     }
     return null;
-  }*/
+  }
 }
