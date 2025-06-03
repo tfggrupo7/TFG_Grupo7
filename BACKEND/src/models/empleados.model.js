@@ -31,21 +31,21 @@ const selectByTareaId = async (tareaId) => {
   return result;
 };
 
-const insert = async ({ nombre, pass, email, telefono, rol_id, usuario_id }) => {
+const insert = async ({ nombre, email, telefono, rol_id, usuario_id, salario, status, activo, fecha_inicio }) => {
   const [result] = await db.query(
-    "insert into empleados (nombre, pass, email, telefono, rol_id, usuario_id ) values (?, ?, ?, ?, ?, ?)",
-    [nombre, pass, email, telefono, rol_id], usuario_id
+    "insert into empleados (nombre, email, telefono, rol_id, usuario_id, salario, status, activo, fecha_inicio ) values (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [nombre, email, telefono, rol_id, usuario_id, salario, status, activo, fecha_inicio]
   );
   return result;
 };
 
 const update = async (
   empleadoId,
-  { nombre, pass, email, telefono, rol_id, usuario_id }
+  { nombre, email, telefono, rol_id, usuario_id, salario,status,activo, fecha_inicio }
 ) => {
   const [result] = await db.query(
-    "update empleados set nombre = ?, pass = ?, email = ?, telefono = ? , rol_id= ? , usuario_id = ? where id = ?",
-    [nombre, pass, email, telefono, rol_id, usuario_id,empleadoId]
+    "update empleados set nombre = ?, pass = ?, email = ?, telefono = ? , rol_id= ? , usuario_id = ? , salario = ?, status = ?, activo = ?, fecha_inicio = ? where id = ?",
+    [nombre, email, telefono, rol_id, usuario_id, salario,status,activo, fecha_inicio,empleadoId]
   );
   return result;
 };
@@ -57,6 +57,14 @@ const remove = async (empleadoId) => {
   return result;
 };
 
+const empleadoYrole = async (empleadoId) => {
+  const [result] = await db.query(
+    "select e.*, r.nombre as rol from empleados e join roles r on e.rol_id = r.id where e.id = ?",
+    [empleadoId]
+  );
+  return result[0];
+};
+
 module.exports = {
   selectAll,
   selectById,
@@ -65,4 +73,5 @@ module.exports = {
   insert,
   update,
   remove,
+  empleadoYrole
 };

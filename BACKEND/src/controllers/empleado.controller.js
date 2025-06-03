@@ -1,5 +1,6 @@
 const Empleado = require("../models/empleados.model");
 const Tarea = require("../models/tareas.model");
+const Role = require("../models/rol.model");
 
 // Autor Controller
 const getAll = async (req, res) => {
@@ -35,7 +36,7 @@ const getEmpleadosAndTarea = async (req, res) => {
 
 const create = async (req, res) => {
   const result = await Empleado.insert(req.body);
-  const { nombre, pass, email, telefono, rol_id, usuario_id } = req.body;
+  const { nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio } = req.body;
   const empleado = await Empleado.selectById(result.insertId);
 
   res.json(empleado);
@@ -44,7 +45,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   const { empleadoId } = req.params;
   const result = await Empleado.update(empleadoId, req.body);
-  const { nombre, pass, email, telefono , rol_id } = req.body;
+  const { nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio } = req.body;
   const empleado = await Empleado.selectById(empleadoId);
 
   res.json(empleado);
@@ -58,4 +59,15 @@ const remove = async (req, res) => {
   res.json({ message: "Empleado eliminado", data: empleados });
 };
 
-module.exports = { getAll, getById, create, getEmpleadosAndTarea, update, remove };
+const getEmpleadoYrole = async (req, res) => {
+  const { empleadoId } = req.params;
+  const empleado = await Empleado.selectById(empleadoId);
+  if (!empleado) {
+    return res.status(404).json({ message: "Empleado no encontrado" });
+  }
+  const role = await Role.selectById(empleado.rol_id);
+  empleado.role = role;
+  res.json(empleado);
+};
+
+module.exports = { getAll, getById, create, getEmpleadosAndTarea, update, remove, getEmpleadoYrole };

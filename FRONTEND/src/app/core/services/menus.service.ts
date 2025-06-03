@@ -8,7 +8,7 @@ import { IMenus } from '../../interfaces/imenus.interfaces';
 export class MenusService {
 
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/menus';
+  private url: string = 'http://localhost:3000/api/menus';
 
   getMenus(): Promise<IMenus[]> {
     return lastValueFrom(this.httpClient.get<IMenus[]>(this.url));

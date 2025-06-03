@@ -9,7 +9,7 @@ import { IRoles } from '../../interfaces/iroles.interfaces';
 export class RolesService {
 
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/roles';
+  private url: string = 'http://localhost:3000/api/roles';
 
   getRoles(): Promise<IRoles[]> {
     return lastValueFrom(this.httpClient.get<IRoles[]>(this.url));

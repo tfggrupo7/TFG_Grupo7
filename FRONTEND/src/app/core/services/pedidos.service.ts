@@ -8,7 +8,7 @@ import { IPedidos } from '../../interfaces/ipedidos.interfaces';
 export class PedidosService {
 
   httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/pedidos';
+  private url: string = 'http://localhost:3000/api/pedidos';
 
   getPedidos(): Promise<IPedidos[]> {
     return lastValueFrom(this.httpClient.get<IPedidos[]>(this.url));

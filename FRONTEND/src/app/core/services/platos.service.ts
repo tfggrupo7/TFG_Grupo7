@@ -9,7 +9,7 @@ import { lastValueFrom } from 'rxjs';
 export class PlatosService {
 
  private httpClient = inject(HttpClient);
- private url: string = 'http://localhost:3000/platos';
+ private url: string = 'http://localhost:3000/api/platos';
 
   getPlatos(): Promise<IPlatos[]> {
     return lastValueFrom(this.httpClient.get<IPlatos[]>(this.url));

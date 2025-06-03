@@ -1,5 +1,10 @@
 export interface IRoles {
-    id: number;
-    nombre: string;
-    
+    page: number;
+    limit: number;
+    total: number;
+    data: {
+        id: number;
+        nombre: string;
+    }
 }
+

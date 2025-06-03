@@ -9,7 +9,7 @@ import { lastValueFrom } from 'rxjs';
 export class TurnosService {
 
  private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/turnos';
+  private url: string = 'http://localhost:3000/api/turnos';
 
   getTurnos(): Promise<ITurnos[]> {
     return lastValueFrom(this.httpClient.get<ITurnos[]>(this.url));

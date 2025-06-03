@@ -7,7 +7,7 @@ import { lastValueFrom } from 'rxjs';
 })
 export class InventariosService {
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/inventarios';
+  private url: string = 'http://localhost:3000/api/inventarios';
 
   getInventarios(): Promise<IInventarios[]> {
     return lastValueFrom(this.httpClient.get<IInventarios[]>(this.url));

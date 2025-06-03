@@ -9,7 +9,7 @@ import { lastValueFrom } from 'rxjs';
 export class TareasService {
 
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/tareas';
+  private url: string = 'http://localhost:3000/api/tareas';
 
   getTareas(): Promise<ITareas[]> {
     return lastValueFrom(this.httpClient.get<ITareas[]>(this.url));

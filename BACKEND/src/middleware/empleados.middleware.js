@@ -18,19 +18,16 @@ const checkempleadosId = async (req, res, next) => {
 };
 
 const checkdataEmpleado = (req, res, next) => {
-  const { nombre, pass, email, telefono } = req.body;
+  const { nombre, email, telefono, rol_id, salario,  activo, fecha_inicio } = req.body;
 
-  if (!nombre || !pass || !email || !telefono ) {
+  if (!nombre || !email || !telefono || !rol_id || !salario || !activo || !fecha_inicio ) {
     return res
       .status(400)
-      .send("El nombre, pass, email y telefono son obligatorios");
+      .send("El nombre, email ,telefono, rol_id, salario, activo y fecha_inicio son obligatorios");
   }
 
   if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
     return res.status(400).send("El email no es válido");
-  }
-  if (pass.length < 6) {
-    return res.status(400).send("El password debe tener al menos 6 caracteres");
   }
   next();
 };

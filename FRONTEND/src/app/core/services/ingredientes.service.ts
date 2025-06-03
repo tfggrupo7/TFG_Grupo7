@@ -8,7 +8,7 @@ import { lastValueFrom } from 'rxjs';
 export class IngredientesService {
 
  private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/ingredientes';
+  private url: string = 'http://localhost:3000/api/ingredientes';
 
   getIngredientes(): Promise<IIngredientes[]> {
     return lastValueFrom(this.httpClient.get<IIngredientes[]>(this.url));
