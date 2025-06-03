@@ -1,0 +1,70 @@
+<div *ngIf="isOpen" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+  <div role="dialog" class="bg-white fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg sm:max-w-[600px] border-[#D4AF37]/30">
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="font-semibold tracking-tight text-[#556B2F] text-xl">{{isEditMode ? 'Editar Turno' : 'Programar Turno'}}</h2>
+    </div>
+    <form [formGroup]="shiftForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="employeeName">
+            Empleado
+          </label>
+          <select id="employeeName" formControlName="employeeName" class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]" required>
+            <option value="">Seleccionar empleado</option>
+            <option *ngFor="let employee of employees" [value]="employee.value">{{employee.label}}</option>
+          </select>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="role">
+            Cargo
+          </label>
+          <select id="role" formControlName="role" class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]" required>
+            <option value="">Seleccionar cargo</option>
+            <option *ngFor="let role of roles" [value]="role.value">{{role.label}}</option>
+          </select>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="date">
+            Fecha
+          </label>
+          <input type="date" id="date" formControlName="date" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" required>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="status">
+            Estado
+          </label>
+          <select id="status" formControlName="status" class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]" required>
+            <option *ngFor="let status of statuses" [value]="status.value">{{status.label}}</option>
+          </select>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="startTime">
+            Hora de inicio
+          </label>
+          <input type="time" id="startTime" formControlName="startTime" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" required>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="endTime">
+            Hora de fin
+          </label>
+          <input type="time" id="endTime" formControlName="endTime" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" required>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-4">
+        <button type="button" (click)="onClose()" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-10 py-2 px-4 border-[#556B2F] text-[#556B2F]">
+          Cancelar
+        </button>
+        <button type="submit" [disabled]="!shiftForm.valid" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 bg-[#D4AF37] hover:bg-[#EBCB64]">
+          {{isEditMode ? 'Guardar Cambios' : 'Programar Turno'}}
+        </button>
+      </div>
+    </form>
+    <button type="button" (click)="onClose()" class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+      <span class="sr-only">Close</span>
+    </button>
+  </div>
+</div>

@@ -17,7 +17,7 @@ import { Error404Component } from './pages/error404/error404.component';
 export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent,canActivate: [loginGuard], children: [
+  { path: 'dashboard', component: DashboardComponent, children: [
       { path: '', component: ResumenComponent },
       { path: 'inventory', component: InventarioComponent },
       { path: 'personal', component: PersonalComponent },
