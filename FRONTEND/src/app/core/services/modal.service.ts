@@ -1,14 +1,13 @@
-import { Injectable, ApplicationRef, ComponentRef, EnvironmentInjector, createComponent, Type } from '@angular/core';
+import { Injectable, ApplicationRef, ComponentRef, EnvironmentInjector, createComponent, Type, inject } from '@angular/core';
 import { ModalComponent } from './../../shared/components/modal/modal.component';
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
   private modalRef?: ComponentRef<ModalComponent>;
+  appRef = inject(ApplicationRef)
+  injector = inject(EnvironmentInjector)
 
-  constructor(
-    private appRef: ApplicationRef,
-    private injector: EnvironmentInjector
-  ) {}
+  constructor( ) {}
 
   open<T>(component: Type<T>) {
     if (this.modalRef) return;
