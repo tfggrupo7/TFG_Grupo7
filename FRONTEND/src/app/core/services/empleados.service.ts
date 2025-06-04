@@ -18,16 +18,8 @@ export class EmpleadosService {
   private totalPages: number = 2;
 
 
-  getEmpleados(): Promise<IEmpleados[]> {
-    
-    const token = localStorage.getItem('token'); // Recupera el token del localStorage
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-    });
-    
-    return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url, { headers}));
+  getEmpleados(): Promise<IEmpleados[]> {      
+    return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url,));
   }
   
   async cargarEmpleados(page: number): Promise<IResponse> {
@@ -44,33 +36,24 @@ export class EmpleadosService {
     );
 }
 
-  /*async cargarEmpleados(page: number): Promise<IResponse> {
-    const url = `${this.url}?page=${page}&limit=${this.limit}`;
-    return lastValueFrom(this.httpClient.get<IResponse>(url));
-  }*/
   getEmpledosAndTareas(): Promise<IEmpleados[]> {
     return lastValueFrom(this.httpClient.get<IEmpleados[]>(`${this.url}/tareas`));
   }
   getEmpleadoById(id: number): Promise<IEmpleados> {
+    const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  });
     return lastValueFrom(this.httpClient.get<IEmpleados>(`${this.url}/${id}`));
   }
   createEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
-  return lastValueFrom(this.httpClient.post<IEmpleados>(this.url, empleado, { headers }));
+  return lastValueFrom(this.httpClient.post<IEmpleados>(this.url, empleado));
   }
   updateEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
   let { id, ...empleadoBody } = empleado;
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
-  return lastValueFrom(
-    this.httpClient.put<IEmpleados>(`${this.url}/${empleado.id}`, empleadoBody, { headers })
+   return lastValueFrom(
+    this.httpClient.put<IEmpleados>(`${this.url}/${empleado.id}`, empleadoBody)
   );
   }
   deleteEmpleado(id: number): Promise<void> {
