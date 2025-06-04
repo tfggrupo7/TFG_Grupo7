@@ -1,0 +1,80 @@
+<div id="modal-producto" data-modal-content="producto">
+  <div role="dialog" id="radix-«r8q»" aria-describedby="radix-«r8s»" aria-labelledby="radix-«r8r»" data-state="closed"
+    class="bg-white fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg sm:max-w-[600px] border-[#D4AF37]/30"
+    tabindex="-1" style="pointer-events: auto;">
+
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 id="radix-«r8r»" class="font-semibold tracking-tight text-[#556B2F] text-xl">Añadir producto</h2>
+    </div>
+    <form [formGroup]="productForm" (ngSubmit)="getDataForm()" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="name">Nombre</label>
+          <input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="nombre" formControlName="nombre" placeholder="" required="" name="nombre">
+        </div>
+
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="categoria">Categoria</label>
+          <select id="categoria" formControlName="categoria" name="role" type=number
+              class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+              required="">
+            <option value="">Seleccionar categoria</option>
+            <option value="1">Frutas y verduras</option>
+            <option value="2">Carne</option>
+            <option value="3">Pescado</option>
+            <option value="4">Panaderia</option>
+            <option value="5">Otros</option>
+          </select>
+        </div>
+
+        <div class="space-y-2">
+          <label  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="cantidad">Cantidad</label>
+          <input class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="cantidad" formControlName="cantidad" required="" type="number" name="cantidad">
+        </div>
+
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="proveedor">Proveedor</label>
+          <input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="proveedor" formControlName="proveedor"  required="" name="proveedor">
+        </div>
+
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="estado">Estado</label>
+          <input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="estado" formControlName="estado" required="" type="text" name="estado">
+        </div>
+
+      </div>
+      <div class="flex justify-end gap-2 pt-4">
+        <button (click)="cerrarModal()"
+          class="close-modal inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-10 py-2 px-4 border-[#556B2F] text-[#556B2F]"
+          type="button">Cancelar</button><button
+          class="close-modal inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 bg-[#D4AF37] hover:bg-[#EBCB64]"
+          type="submit">Añadir Producto</button>
+      </div>
+    </form>
+    <button type="button" (click)="cerrarModal()"
+      class="close-modal absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"><svg
+        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg><span class="sr-only">Close</span></button>
+  </div>
+
+</div>
