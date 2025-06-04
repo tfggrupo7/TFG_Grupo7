@@ -48,6 +48,7 @@ this.userForm = new FormGroup({
   activo: new FormControl("", Validators.required)
 });
 
+
     this.empleados = await this.empleadoService.getEmpleados();
   this.empleadosFiltrados = this.empleados;
 
@@ -56,10 +57,11 @@ this.userForm = new FormGroup({
   });
     this.busqueda.setValue(''); // Inicializar el campo de búsqueda vacío
     this.userForm.valueChanges.subscribe(value => {
-      console.log('Form changes:', value);
+ 
     });
    }
    
+// Filtrado de empleados en barra de búsqueda
 
    filtrarEmpleados(valor: string) {
    if (!Array.isArray(this.empleados)) {
@@ -77,6 +79,7 @@ this.userForm = new FormGroup({
     emp.email.toLowerCase().includes(texto)
   );
 }
+// Cargar empleados desde el servicio
 
   async cargarEmpleados() {
     try {
@@ -101,6 +104,7 @@ this.userForm = new FormGroup({
   return this.arrEmpleados.reduce((total, empleado) => total + Number(empleado.salario),0);
   }
 
+// Funciones para mostrar el estado del empleado
 
 esActivo(empleado: any): string {
   return empleado.activo ? 'ACTIVO' : 'INACTIVO';
@@ -124,7 +128,7 @@ esActivo(empleado: any): string {
     }
   }*/
 
-
+// Funcionalidad de Modales
 
 abrirModal() {
   this.modalEmpleadoAbierto = true;
@@ -151,6 +155,8 @@ abrirModalUpdate(empleado: IEmpleados) {
   });
 }
 
+// CRUD Empleados
+
 async getDataForm() {
   let response: IEmpleados | any;
   try {
@@ -159,11 +165,17 @@ async getDataForm() {
     
     toast.success("Empleado registrado correctamente");
     setTimeout(() => {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/dashboard' , 'personal']).then(() => {
+        window.location.reload();
+        this.cerrarModal();
+      });
     }, 3000); 
   } catch (msg: any) {
-   
     toast.error("Fallo en el registro");
+  }
+  if (this.userForm.invalid) {
+  toast.error('Por favor, completa todos los campos obligatorios.');
+  return;
   }
 }
 
@@ -173,11 +185,18 @@ async updateDataForm() {
     const empleadoActualizado: IEmpleados = { ...this.userForm.value, id: this.empleadoId };
     response = await this.empleadoService.updateEmpleado(empleadoActualizado);
     toast.success("Empleado Actualizado correctamente");
-    setTimeout(() => {
-      this.router.navigate(['/dashboard']);
-    }, 3000);
+    this.router.navigate(['/dashboard', 'personal']).then(() => {
+      setTimeout(() => {
+        window.location.reload();
+        this.cerrarModalUpdate();
+      }, 3000);
+    });
   } catch (msg: any) {
     toast.error("Fallo al actualizar el empleado");
+  }
+  if (this.userForm.invalid) {
+  toast.error('Por favor, completa todos los campos obligatorios.');
+  return;
   }
 }
 
@@ -186,20 +205,23 @@ async delete(id: number) {
   const empleado = this.arrEmpleados.find(e => e.id === id);
   const nombreEmpleado = empleado ? empleado.nombre : 'Empleado';
 
-  console.log(`Intentando borrar al empleado con id: ${id}, nombre: ${nombreEmpleado}`);
-
-  toast(`¿Deseas Borrar al Empleado ${nombreEmpleado}?`, {
+ toast(`¿Deseas Borrar al Empleado ${nombreEmpleado}?`, {
     action: {
       label: 'Aceptar',
       onClick: async () => {
         try {
-          console.log(`Confirmado: eliminando empleado con id: ${id}`);
           await this.empleadoService.deleteEmpleado(id);
           toast.success('Empleado eliminado con éxito', {
             duration: 2000
           });
-          console.log('Empleado eliminado correctamente');
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/dashboard', 'personal']).then(() => {
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
+          });
+
+          
+          
         } catch (error: any) {
           console.log('Error al eliminar el usuario:', error);
           toast.error('Error al eliminar el usuario');

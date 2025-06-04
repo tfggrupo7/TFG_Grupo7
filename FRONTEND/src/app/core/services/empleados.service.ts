@@ -55,16 +55,23 @@ export class EmpleadosService {
     return lastValueFrom(this.httpClient.get<IEmpleados>(`${this.url}/${id}`));
   }
   createEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
-    const headers = new HttpHeaders({
-    'Content-Type': 'application/json'
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
   });
-    return lastValueFrom(this.httpClient.post<IEmpleados>(this.url, empleado));
+  return lastValueFrom(this.httpClient.post<IEmpleados>(this.url, empleado, { headers }));
   }
   updateEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
-    let { id,...empleadoBody} = empleado;
-    return lastValueFrom(
-      this.httpClient.put<IEmpleados>(`${this.url}/${empleado.id}`, empleadoBody)
-    );
+  let { id, ...empleadoBody } = empleado;
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  });
+  return lastValueFrom(
+    this.httpClient.put<IEmpleados>(`${this.url}/${empleado.id}`, empleadoBody, { headers })
+  );
   }
   deleteEmpleado(id: number): Promise<void> {
     return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
