@@ -133,6 +133,24 @@ abrirModal() {
 cerrarModal() {
   this.modalEmpleadoAbierto = false;
 }
+cerrarModalUpdate() {
+  this.modalUpdateEmpleadoAbierto = false;
+}
+abrirModalUpdate(empleado: IEmpleados) {
+  this.modalUpdateEmpleadoAbierto = true;
+  this.empleadoId = empleado.id;
+  this.userForm.patchValue({
+    id: empleado.id,
+    nombre: empleado.nombre,
+    rol_id: empleado.rol_id,
+    telefono: empleado.telefono,
+    email: empleado.email,
+    fecha_inicio: empleado.fecha_inicio,
+    salario: empleado.salario,
+    activo: empleado.activo
+  });
+}
+
 async getDataForm() {
   let response: IEmpleados | any;
   try {

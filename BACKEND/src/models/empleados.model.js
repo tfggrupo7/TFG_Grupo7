@@ -45,11 +45,11 @@ const insert = async ({ nombre, email, telefono, rol_id, usuario_id, salario, st
 
 const update = async (
   empleadoId,
-  { nombre, email, telefono, rol_id, usuario_id, salario,status,activo, fecha_inicio }
+  { nombre, email, telefono, rol_id, salario,status,activo, fecha_inicio }
 ) => {
   const [result] = await db.query(
-    "update empleados set nombre = ?, pass = ?, email = ?, telefono = ? , rol_id= ? , usuario_id = ? , salario = ?, status = ?, activo = ?, fecha_inicio = ? where id = ?",
-    [nombre, email, telefono, rol_id, usuario_id, salario,status,activo, fecha_inicio,empleadoId]
+    "update empleados set nombre = ?,  email = ?, telefono = ? , rol_id= ? , salario = ?, status = ?, activo = ?, fecha_inicio = ? where id = ?",
+    [nombre, email, telefono, rol_id, salario,status,activo, fecha_inicio,empleadoId]
   );
   return result;
 };
