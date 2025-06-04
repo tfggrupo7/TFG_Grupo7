@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 
+
 async function sendTareasEmail(to, subject, text, attachmentPath) {
   // Configura tu transporte SMTP
   const transporter = nodemailer.createTransport({

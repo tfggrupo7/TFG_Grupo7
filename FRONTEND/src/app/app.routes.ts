@@ -26,6 +26,6 @@ export const routes: Routes = [
       { path: 'ajustes', component: AjustesComponent }
     ] },
   { path: 'recuperacion-contrasena', component: RecuperarContrasenaComponent},
-  { path: 'restablecer-contrasena/:token', component: RestablecerContrasenaComponent , canActivate: [loginGuard] },
+  { path: 'restablecer-contrasena/:token', component: RestablecerContrasenaComponent  },
   { path: '**', component: Error404Component }
 ];

@@ -68,3 +68,15 @@
 2025-06-04 08:39:43 GET /api/empleados ::1
 2025-06-04 08:39:43 GET /api/roles ::1
 2025-06-04 08:39:43 GET /api/empleados ::1
+2025-06-04 10:17:03 POST /api/usuarios/login ::1
+2025-06-04 10:17:25 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:22:06 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:25:38 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:26:31 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:29:27 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:33:55 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:37:02 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:38:17 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:42:40 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:45:50 POST /api/usuarios/recuperar-contrasena ::1
+2025-06-04 10:46:57 POST /api/usuarios/recuperar-contrasena ::1
