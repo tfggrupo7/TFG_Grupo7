@@ -189,7 +189,7 @@ async updateDataForm() {
       setTimeout(() => {
         window.location.reload();
         this.cerrarModalUpdate();
-      }, 3000);
+      }, 1000);
     });
   } catch (msg: any) {
     toast.error("Fallo al actualizar el empleado");
@@ -217,7 +217,7 @@ async delete(id: number) {
           this.router.navigate(['/dashboard', 'personal']).then(() => {
             setTimeout(() => {
               window.location.reload();
-            }, 3000);
+            }, 1000);
           });
 
           

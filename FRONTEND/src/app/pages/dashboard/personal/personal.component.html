@@ -121,7 +121,7 @@
 </div>
  
   <!-- Lista de empleados -->
-  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+  <div class="grid gap-4 grid-cols-2 md:grid-cols-3">
     <!-- Tarjeta de empleado -->
     @for (empleado of arrEmpleados; track empleado.id) {
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 hover:border-[#556B2F]/30 transition-all duration-200"
@@ -170,8 +170,8 @@
         </div>
         <div class="flex justify-between items-center pt-2 border-t border-[#D4AF37]/10">
           <div class="text-sm">
-            <span class="text-[#1C1C1C]/70">Salario: </span>
-            <span class="font-medium text-[#556B2F]">{{empleado.salario}} €</span>
+            <span class="text-[#1C1C1C]/70 text-[0.8rem] md:text-base">Salario: </span>
+            <span class="font-medium text-[#556B2F] text-[0.7rem] md:text-base">{{empleado.salario}} €</span>
           </div>
           <div class="flex gap-2">
             <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:text-[#556B2F] h-8 px-3 text-xs text-[#556B2F] hover:bg-[#556B2F]/10">
