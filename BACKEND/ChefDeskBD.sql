@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: restaurante
+-- Host: localhost    Database: restaurante
 -- ------------------------------------------------------
 -- Server version	8.0.41
 
@@ -27,10 +27,14 @@ DROP TABLE IF EXISTS `empleados`;
 CREATE TABLE `empleados` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
-  `pass` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `telefono` varchar(20) NOT NULL,
   `rol_id` int NOT NULL,
+  `usuario_id` int DEFAULT NULL,
+  `salario` decimal(10,0) NOT NULL,
+  `status` enum('vacaciones','novacaciones') DEFAULT NULL,
+  `activo` enum('ACTIVO','INACTIVO') DEFAULT NULL,
+  `fecha_inicio` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `fk_empleados_roles` (`rol_id`)
@@ -43,7 +47,7 @@ CREATE TABLE `empleados` (
 
 LOCK TABLES `empleados` WRITE;
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-INSERT INTO `empleados` VALUES (1,'Manuel Perez','123456','ManuelP23@gmail.com','658789456',3),(8,'Maria angels','123456','Mariap@gmail.com','678965423',2),(9,'Patricia Gamez','000124','patricia.g@gmail.com','678965423',3);
+INSERT INTO `empleados` VALUES (1,'jose maria','jose.m@gmail.com','654123987',2,NULL,1300,'vacaciones','',NULL),(2,'David','david@gmail.com','654789321',1,NULL,1500,'novacaciones','ACTIVO',NULL),(8,'Maria angels','Mariap@gmail.com','678965423',2,NULL,1400,'novacaciones','',NULL),(9,'María del Carmen','mariadelcarmen.herreravillanueva@peticiones.online','65478921',1,NULL,1400,NULL,'ACTIVO','2025-06-25');
 /*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,7 +60,8 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-25 12:05:08
+-- Dump completed on 2025-06-03 14:42:15
+
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
@@ -478,7 +483,7 @@ CREATE TABLE `usuarios` (
   `reset_password_expires` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -487,7 +492,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'d.donoso@mail.com','$2b$10$514xTF7S7RzyAoCKf5Mm3uKE9LfLGWGhaiYbFijHfS/WnTl23hatq','David','Donoso','1234','2025-10-10 00:00:00'),(2,'waltra@gmail.com','$2b$10$Lb81E2hNqUScZVzWixgYdOAj7a9ri4UsN/RUprXHS3H3znKtMaxJa','david','donoso','$2b$10$5Bvjwl38scUr5FXmm.50I.yU/Q6p28nX399Q3Vc97yox6oOmON68e','2025-05-31 20:30:32'),(3,'dave4@gmail.com','$2b$10$REeNFx/k/Pym9EmAzr67cOBOMglYvxtF.xJiX83JLD.Vrr7r87uZu','David','diaz','7765746','2025-10-10 00:00:00'),(4,'m.perez@mail.com','$2b$10$Xs5E/gR4kaLMlCDdS7mCO.mFFw9I950T5W/iDE/8u5qdCZznSfLaW','matias','perez','46464','2025-10-10 00:00:00');
+INSERT INTO `usuarios` VALUES (5,'waltra@gmail.com','$2b$10$hK33t.LkhWzXQ.hrhr26LuYeiv77EDRttN.4pn4FIimMr/M0jP1BW','David','Donoso',NULL,NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -500,7 +505,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-31 21:34:51
+-- Dump completed on 2025-06-03 14:42:15
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)

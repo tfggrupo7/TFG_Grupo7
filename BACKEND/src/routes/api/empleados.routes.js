@@ -7,13 +7,15 @@ const {
   create,
   update,
   remove,
+  getEmpleadosYRoles,
 } = require("../../controllers/empleado.controller");
 
 const { checkempleadosId, checkdataEmpleado} = require("../../middleware/empleados.middleware");
-const { checkAdmin }=require('../../middleware/auth.middleware')
+
 
 router.get("/", getAll);
 router.get("/tareas", getEmpleadosAndTarea);
+router.get('/role', getEmpleadosYRoles); 
 router.get("/:empleadoId", checkempleadosId, getById);
 router.post("/", checkdataEmpleado, create);
 router.put("/:empleadoId",checkdataEmpleado, checkempleadosId, update);

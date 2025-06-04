@@ -24,13 +24,13 @@ const checkToken = async (req, res, next) => {
   next();
 };
 
- const checkAdmin = (req, res, next) => {
+ /*const checkAdmin = (req, res, next) => {
   if (req.usuario.role !== "admin") {
     return res.status(403).json({ message: "No tienes permisos de administrador"});
   }
   
   next();
- }
+ }*/
 
  const checkRole = (role) => {
     return (req, res, next) => {
@@ -41,4 +41,4 @@ const checkToken = async (req, res, next) => {
     }
 }
 
-module.exports = { checkToken , checkAdmin, checkRole};
+module.exports = { checkToken ,  checkRole};

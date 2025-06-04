@@ -1,15 +1,8 @@
 const Rol = require('../models/rol.model')
 
 const getAll = async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
-  const offset = (page - 1) * limit;
-  const rol = await Rol.selectAll(Number(page), Number(limit));
-  res.json({
-    page: Number(page),
-    limit: Number(limit),
-    total: rol.length,
-    data: rol,
-  });
+  const rol = await Rol.selectAll();
+  res.json(rol);
 };
 
 const getById = async (req, res) => {

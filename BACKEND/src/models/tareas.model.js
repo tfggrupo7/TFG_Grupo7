@@ -33,6 +33,8 @@ const insert = async (descripcion, empleado_id, menu_id, fecha) => {
     "insert into tareas (descripcion,empleado_id,menu_id,fecha) values (?, ?, ?, ?)",
     [descripcion,empleado_id,menu_id,fecha]
   );
+  
+    
   return result;
 };
 

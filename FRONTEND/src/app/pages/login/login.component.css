@@ -1,7 +1,7 @@
 
 .container {
   position: relative;
-  width: 900px;
+  width: 1000px;
   max-width: 100%;
   min-height: 600px;
   background: #fff;
@@ -102,4 +102,103 @@
 
 .container.right-panel-active .overlay-right {
   transform: translateX(20%);
+}
+@media (max-width: 768px) {
+  .hidden {
+    display: block;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    min-width: 0;
+    min-height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    position: static;
+    overflow: visible;
+  }
+  .form-container,
+  .overlay-container {
+    position: static;
+    width: 100%;
+    height: auto;
+    min-height: unset;
+    box-shadow: none;
+    transition: none;
+    padding: 0;
+  }
+  .active {
+    display: none;
+  }
+  .sign-in-container,
+  .sign-up-container,
+  .overlay-left,
+  .overlay-right {
+    display: none;
+  }
+
+  /* Estado inicial: overlay login arriba, registro abajo */
+  .overlay-left {
+    display: flex;
+    order: 1;
+  }
+  .sign-up-container {
+    display: block;
+    order: 2;
+  }
+
+  /* Al pulsar "Iniciar Sesión" (right-panel-active): overlay registro arriba, login abajo */
+  .container.right-panel-active .overlay-left {
+    display: none;
+  }
+  .container.right-panel-active .overlay-right {
+    display: flex;
+    order: 1;
+  }
+  .container.right-panel-active .sign-up-container {
+    display: none;
+  }
+  .container.right-panel-active .sign-in-container {
+    display: block;
+    order: 2;
+  }
+
+  .sign-in-container,
+  .sign-up-container {
+    width: 100%;
+    left: 0;
+    min-height: unset;
+    box-shadow: none;
+    position: static;
+    opacity: 1 !important;
+    z-index: 1;
+    transform: none !important;
+    transition: none;
+  }
+
+  .overlay {
+    width: 100%;
+    left: 0;
+    height: auto;
+    min-height: 0;
+    transform: none !important;
+    transition: none;
+    border-radius: 0;
+    padding: 0;
+    position: static;
+  }
+
+  .overlay-panel {
+    width: 100%;
+    left: 0 !important;
+    right: 0 !important;
+    padding: 24px 10px;
+    min-height: 0;
+    height: auto;
+    position: static;
+    transform: none !important;
+    transition: none;
+  }
 }

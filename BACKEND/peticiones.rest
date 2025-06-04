@@ -1,6 +1,6 @@
 @host = http://localhost:3000
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjozLCJpYXQiOjE3NDg3MDUxOTMsImV4cCI6MTc0ODcwODc5M30.vUFHT9skPzWRwQ-m_oibrLWpd6jLYbwZHafNLumb5Yw
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJpYXQiOjE3NDg5Mjg1MzMsImV4cCI6MTc0ODkzMjEzM30.Hwck22WkQgK7QegG4kMi5qz3eVkZGTE1xoWz7Bdj_Bc
 ###############
 ## EMPLEADOS ##
 ###############
@@ -143,7 +143,7 @@ Content-Type: application/json
 
 {
   "email": "waltra@gmail.com",
-  "contraseña": "123789"
+  "contraseña": "123456"
 }
 
 ### Perfil de usuario por token
@@ -337,7 +337,7 @@ Content-Type: application/json
 ### Obtener roles
 GET {{host}}/api/roles
 
-### Obtener pedidos por id
+### Obtener roles por id
 GET {{host}}/api/roles/1
 
 ### Actualizar roles
@@ -458,4 +458,6 @@ Content-Type: application/json
   "nuevaContrasena": "001234"
 }
 
+###
+GET {{host}}/api/empleados/role
 
