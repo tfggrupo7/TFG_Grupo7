@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,9 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
   styleUrl: './inventario-form.component.css'
 })
 export class InventarioFormComponent {
+
+  @Output() sendData = new EventEmitter<any>();
+  @Output() closeEvent = new EventEmitter<any>();
 
   productForm: FormGroup  = new FormGroup({},[]);
 
@@ -23,8 +26,11 @@ export class InventarioFormComponent {
 
 
   getDataForm() {
-
+    this.sendData.emit()
   }
 
-  cerrarModal(){}
+
+  cerrarModal(){
+    this.closeEvent.emit();
+  }
 }

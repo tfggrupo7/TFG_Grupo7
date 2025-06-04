@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { InventarioFormComponent } from './inventario-form/inventario-form.component';
+import { ModalComponent } from "../../../shared/components/modal/modal.component";
 
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, ModalComponent, InventarioFormComponent]
 })
 export class InventarioComponent implements OnInit {
   // Datos de ejemplo para las métricas
@@ -66,9 +68,22 @@ export class InventarioComponent implements OnInit {
   // Estado del filtro de búsqueda
   searchTerm: string = '';
 
+  modalAbierto: Boolean = false
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  abrirFormProduct(){
+    this.modalAbierto = true
+  }
+
+  closeModal(){
+    this.modalAbierto = false;
+  }
+
+  sendForm(data: any){
+    this.modalAbierto = false
   }
 
   // Método para añadir un nuevo producto

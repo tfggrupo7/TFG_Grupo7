@@ -4,7 +4,7 @@
                   <h1 class="text-2xl font-bold text-[#556B2F]">Inventario</h1>
                   <p class="text-[#1C1C1C]/70">Gestiona tus productos e ingredientes</p>
                 </div>
-                <button data-open-modal="producto"
+                <button (click)="abrirFormProduct()"
                   class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"><svg
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -521,3 +521,9 @@
                       </svg><span class="sr-only">Última página</span></button></div>
                 </div>
               </div>
+
+@if(modalAbierto){
+  <app-modal (closeEvent)="closeModal()">
+    <app-inventario-form (sendData)="sendForm($event)" (closeEvent)="closeModal()"></app-inventario-form>
+  </app-modal>
+}
