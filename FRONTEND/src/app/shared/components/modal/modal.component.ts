@@ -9,11 +9,17 @@ import { Component, Input, EventEmitter, Output} from '@angular/core';
 })
 export class ModalComponent {
 
+  @Input() showBtns: Boolean = false
   @Output() closeEvent = new EventEmitter<void>();
+  @Output() acceptEvent = new EventEmitter<Boolean>();
 
-  @Input() btnSendName: string = 'Enviar'
 
   close() {
     this.closeEvent.emit();
   }
+
+  accept(){
+    this.acceptEvent.emit(true);
+  }
+
 }
