@@ -37,7 +37,7 @@ export class PerfilComponent implements OnInit {
     this.datosForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      Apellidos: ['', [Validators.required]]
+      Apellidos: ['', [Validators.required, Validators.minLength(3)]]
     });
 
     this.passwordForm = this.fb.group({
@@ -47,11 +47,12 @@ export class PerfilComponent implements OnInit {
     }, { validators: [this.passwordsMatchValidator] });
 
     // Si tienes datos del usuario, puedes setearlos así:
-    // this.datosForm.patchValue({
-    //   nombre: this.usuario.nombre,
-    //   email: this.usuario.email,
-    //   rol: this.usuario.rol
-    // });
+    this.datosForm.patchValue({
+       nombre: this.usuario.nombre,
+       email: this.usuario.email,
+       apellidos: this.usuario.apellidos
+    });
+
   }
 
   // Validador de coincidencia de contraseñas
@@ -68,12 +69,10 @@ export class PerfilComponent implements OnInit {
     }
     try {
       const usuarioActualizado: IUsuario = { ...this.datosForm.value };
-      console.log('Actualizando usuario:', usuarioActualizado);
       await this.usuariosService.updateUsuario(usuarioActualizado);
       toast.success('Empleado actualizado correctamente');
       this.router.navigate(['/dashboard', 'personal']);
     } catch (error) {
-      console.log('Error al actualizar el empleado:', error);
       toast.error('Fallo al actualizar el empleado');
     }
   }
