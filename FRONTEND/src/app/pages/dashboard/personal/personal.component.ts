@@ -6,6 +6,7 @@ import { IRoles } from '../../../interfaces/iroles.interfaces';
 import { RolesService } from '../../../core/services/roles.service';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-personal',
@@ -20,37 +21,62 @@ export class PersonalComponent {
   empleadosFiltrados: IEmpleados[] = [];
   modalEmpleadoAbierto = false;
   modalUpdateEmpleadoAbierto = false;
-  userForm: FormGroup;
+  userForm!: FormGroup;
   busqueda = new FormControl('');
   empleadoId!: number;
 
   constructor(
     private empleadoService: EmpleadosService,
     private rolesService: RolesService,
-    private router: Router
-  ) {
-    this.userForm = new FormGroup({
-      id: new FormControl(null),
-      nombre: new FormControl('', Validators.required),
-      rol_id: new FormControl<number | null>(null, Validators.required),
-      telefono: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$')]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      fecha_inicio: new FormControl('', Validators.required),
-      salario: new FormControl('', Validators.required),
-      activo: new FormControl('', Validators.required)
-    });
-  }
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
-  async ngOnInit() {
-    await this.cargarEmpleados();
-    this.arrRoles = await this.rolesService.getRoles();
-    this.empleadosFiltrados = [...this.arrEmpleados];
+async ngOnInit() {
+  await this.cargarEmpleados();
+  this.arrRoles = await this.rolesService.getRoles();
+  this.empleadosFiltrados = [...this.arrEmpleados];
 
-    this.busqueda.valueChanges.subscribe(valor => {
-      this.filtrarEmpleados(valor || '');
-    });
-    this.busqueda.setValue('');
+  this.busqueda.valueChanges.subscribe(valor => {
+    this.filtrarEmpleados(valor || '');
+  });
+  this.busqueda.setValue('');
+
+const userId = this.getUserIdFromToken();
+console.log('userId:', userId); //
+const token = localStorage.getItem('token');
+if (token) {
+  const payload = token.split('.')[1];
+  console.log(JSON.parse(atob(payload)));
+} else {
+  console.log('No token found in localStorage.');
+}
+
+  // Inicializar el formulario con los campos necesarios
+  this.userForm = new FormGroup({
+    id: new FormControl(null),
+    nombre: new FormControl('', Validators.required),
+    rol_id: new FormControl<number | null>(null, Validators.required),
+    telefono: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$')]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    fecha_inicio: new FormControl('', Validators.required),
+    salario: new FormControl('', Validators.required),
+    usuario_id: new FormControl(userId),
+    activo: new FormControl('', Validators.required)
+  });
+
+
+}
+async ngOnSubmit() {
+  console.log(this.userForm.value); // Verifica los datos antes de enviar
+  try {
+    await this.empleadoService.createEmpleado(this.userForm.value);
+    // Puedes agregar lógica adicional aquí si es necesario
+  } catch (err: unknown) {
+    console.error('Error en el backend:', err);
   }
+}
+
 
   // Filtrado de empleados en barra de búsqueda
   filtrarEmpleados(valor: string) {
@@ -119,6 +145,20 @@ export class PersonalComponent {
     this.userForm.patchValue({ ...empleado });
   }
 
+  // Método para obtener el usuario ID actual desde el token
+  getUserIdFromToken(): string | null {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  const payload = token.split('.')[1];
+  if (!payload) return null;
+  try {
+    const decoded = JSON.parse(atob(payload));
+    return  decoded.usuario_id || null; // Ajusta según cómo venga el id en tu token
+  } catch (e) {
+    return null;
+  }
+}
+
   // CRUD Empleados
   async getDataForm() {
     if (this.userForm.invalid) {
@@ -137,6 +177,7 @@ export class PersonalComponent {
     } catch {
       toast.error('Fallo en el registro');
     }
+   
   }
 
   async updateDataForm() {
@@ -183,4 +224,6 @@ export class PersonalComponent {
       }
     });
   }
+
+  
 }

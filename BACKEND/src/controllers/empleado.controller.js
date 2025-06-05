@@ -34,7 +34,7 @@ const getEmpleadosAndTarea = async (req, res) => {
 
 const create = async (req, res) => {
   const result = await Empleado.insert(req.body);
-  const { nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio } = req.body;
+  const { nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio , usuario_id} = req.body;
   const empleado = await Empleado.selectById(result.insertId);
 
   res.json(empleado);

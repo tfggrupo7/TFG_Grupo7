@@ -24,4 +24,16 @@ export class AuthService {
 
   this.router.navigate(['/login']);
 }
+getCurrentUserIdFromToken(): string | null {
+  const token = localStorage.getItem('user');
+  if (!token) return null;
+  // JWT: header.payload.signature
+  const payload = token.split('.')[1];
+  if (!payload) return null;
+  try {
+    return JSON.parse(atob(payload));
+  } catch (e) {
+    return null;
+  }
+}
 }
