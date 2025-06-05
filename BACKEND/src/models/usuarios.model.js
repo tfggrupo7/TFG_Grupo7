@@ -38,6 +38,13 @@ const updateDatos = async (usuarioId, { nombre, apellidos, email }) => {
   return result;
 };
 
+const deleteUsuario = async (usuarioId) => {
+  const [result] = await db.query(
+    "delete from usuarios where id = ?",
+    [usuarioId]
+  );
+  return result;
+}
 
 
 const guardarTokenRecuperacion = async (email, tokenHash, expires) => {
@@ -92,6 +99,18 @@ const updateContraseñaPorToken = async (tokenPlano, nuevaContraseña) => {
   return usuario;
 };
 
+const cambiarContraseña = async (usuarioId, nuevaContraseña) => {
+ if (!nuevaContraseña || typeof nuevaContraseña !== "string") {
+    throw new Error("La nueva contraseña es obligatoria.");
+  }
+  const hashedPassword = await bcrypt.hash(nuevaContraseña, 10);
+  const [result] = await db.query(
+    "UPDATE usuarios SET contraseña = ? WHERE id = ?",
+    [hashedPassword, usuarioId]
+  );
+  return result;
+}
+
 module.exports = {
   insert,
   getById,
@@ -99,5 +118,6 @@ module.exports = {
   recuperarContraseña,
   guardarTokenRecuperacion,
   updateContraseñaPorToken,
-  updateDatos
+  updateDatos,cambiarContraseña,  
+  deleteUsuario
 };

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { IUsuario } from '../../../interfaces/iusuario.interfaces';
 import { toast } from 'ngx-sonner';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode'; // Asegúrate de tener jwt-decode instalado y configurado
 
 @Component({
   selector: 'app-perfil',
@@ -13,12 +14,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit {
-  usuario: IUsuario= {
+  usuario: IUsuario = {
     nombre: '',
     apellidos: '',
     email: '',
     contraseña: ''
-    
   }
 
   datosForm!: FormGroup;
@@ -37,13 +37,13 @@ export class PerfilComponent implements OnInit {
     this.datosForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      Apellidos: ['', [Validators.required, Validators.minLength(3)]]
+      apellidos: ['', [Validators.required, Validators.minLength(3)]]
     });
 
     this.passwordForm = this.fb.group({
-      passwordActual: ['', [Validators.required, Validators.minLength(6)]],
-      passwordNueva: ['', [Validators.required, Validators.minLength(6)]],
-      passwordRepetir: ['', [Validators.required, Validators.minLength(6)]]
+      contraseñaActual: ['', [Validators.required, Validators.minLength(6)]],
+      nuevaContraseña: ['', [Validators.required, Validators.minLength(6)]],
+      contraseñaRepetida: ['', [Validators.required, Validators.minLength(6)]]
     }, { validators: [this.passwordsMatchValidator] });
 
     // Si tienes datos del usuario, puedes setearlos así:
@@ -57,9 +57,10 @@ export class PerfilComponent implements OnInit {
 
   // Validador de coincidencia de contraseñas
   passwordsMatchValidator(form: FormGroup) {
-    const newPass = form.get('passwordNueva')?.value;
+    const contrasenaActual = form.get('passwordActual')?.value;
+    const nuevaContraseña = form.get('passwordNueva')?.value;
     const repeat = form.get('passwordRepetir')?.value;
-    return newPass === repeat ? null : { mismatch: true };
+    return nuevaContraseña === repeat ? null : { mismatch: true };
   }
 
   async actualizarDatos() {
@@ -78,29 +79,57 @@ export class PerfilComponent implements OnInit {
   }
 
   async cambiarPassword() {
-    if (this.passwordForm.invalid) {
-      toast.error('Por favor, completa correctamente el formulario de contraseña.');
-      return;
-    }
-    if (this.passwordForm.hasError('mismatch')) {
-      toast.error('Las nuevas contraseñas no coinciden.');
-      return;
-    }
-    const { passwordActual, passwordNueva } = this.passwordForm.value;
+    console.log('Valores del formulario:', this.passwordForm.value);
+  console.log('Formulario de contraseña:', this.passwordForm.value);
+
+  const { contraseñaActual, nuevaContraseña, contraseñaRepetida } = this.passwordForm.value;
+console.log('Nueva contraseña que se envía:', nuevaContraseña);
     try {
-      await this.usuariosService.actualizarContrasena(this.usuario.token || '', passwordNueva);
-      toast.success('Contraseña cambiada correctamente');
-      this.passwordForm.reset();
-    } catch (error) {
-      toast.error('Error al cambiar la contraseña. Verifica tu contraseña actual.');
+    console.log('Intentando cambiar contraseña para el usuario:', this.usuario);
+    // Debes obtener el token de alguna manera, por ejemplo desde localStorage o un servicio de autenticación
+    const token = localStorage.getItem('token'); // Ajusta esto según cómo almacenes el token
+
+    if (!token) {
+      toast.error('No se encontró el token de autenticación.');
+      return;
     }
+
+    await this.usuariosService.cambiarContraseña(token, this.passwordForm.value.nuevaContraseña);
+    toast.success('Contraseña cambiada correctamente');
+    this.passwordForm.reset();
+  } catch (error) {
+  console.log('Error al cambiar la contraseña:', error);
+  // Si quieres ver el mensaje exacto del backend:
+  if (typeof error === 'object' && error !== null && 'error' in error && typeof (error as any).error === 'object' && (error as any).error !== null && 'message' in (error as any).error) {
+    console.log('Mensaje del backend:', (error as any).error.message);
+  }
+  toast.error('Error al cambiar la contraseña. Verifica tu contraseña actual.');
+}
+  
+}
+
+eliminarUsuario() {
+  // Recupera el token y decodifica el id
+  const token = localStorage.getItem('token');
+  let usuarioId = null;
+  if (token) {
+    const payload: any = jwtDecode(token);
+    usuarioId = payload.usuario_id;
   }
 
-  eliminarUsuario() {
-    if (confirm('¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.')) {
-      // Aquí tu lógica para eliminar el usuario
+  // Modal de confirmación nativo
+  if (confirm('¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer y eliminará todos los empleados.')) {
+    this.usuariosService.deleteUsuario(usuarioId).then(() => {
       toast.success('Cuenta eliminada');
-      // Redirige o realiza otras acciones necesarias
-    }
+      this.router.navigate(['/login']).then(() => {
+        window.location.reload();
+      });
+    }).catch(() => {
+      toast.error('Error al eliminar la cuenta. Inténtalo de nuevo más tarde.');
+    });
+  } else {
+    toast.info('Eliminación cancelada');
   }
+}
+
 }

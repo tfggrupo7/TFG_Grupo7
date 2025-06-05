@@ -21,7 +21,7 @@
     </div>
     <div>
       <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Apellidos</label>
-      <input type="text" formControlName="Apellidos"  value="{{usuario.apellidos}}" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+      <input type="text" formControlName="apellidos"  value="{{usuario.apellidos}}" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
     @if (datosForm.get('apellidos')?.touched && datosForm.get('apellidos')?.invalid) {
       <div class="text-red-600 text-xs mt-1">
         El apellidos es obligatorio y máximo 50 caracteres.
@@ -45,7 +45,7 @@
     <h3 class="text-lg font-semibold text-[#1C1C1C] mb-2">Cambiar contraseña</h3>
     <div>
       <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Contraseña actual</label>
-      <input type="password" formControlName="passwordActual" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+      <input type="password" formControlName="contraseñaActual" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
     @if (passwordForm.get('passwordActual')?.touched && passwordForm.get('passwordActual')?.invalid) {
       <div class="text-red-600 text-xs mt-1">
         Campo obligatorio.
@@ -54,7 +54,7 @@
     </div>
     <div>
       <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Nueva contraseña</label>
-      <input type="password" formControlName="passwordNueva" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+      <input type="password" formControlName="nuevaContraseña" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
     @if (passwordForm.get('passwordNueva')?.touched && passwordForm.get('passwordNueva')?.invalid) {
       <div class="text-red-600 text-xs mt-1">
         Mínimo 6 caracteres.
@@ -63,7 +63,7 @@
     </div>
     <div>
       <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Repetir nueva contraseña</label>
-      <input type="password" formControlName="passwordRepetir" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+      <input type="password" formControlName="contraseñaRepetida" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
     @if (passwordForm.hasError('noCoincide') && passwordForm.get('passwordRepetir')?.touched) {
       <div class="text-red-600 text-xs mt-1">
         Las contraseñas no coinciden.
