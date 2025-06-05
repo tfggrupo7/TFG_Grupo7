@@ -2,7 +2,7 @@
   class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
   <div>
     <h1 class="text-2xl font-bold text-[#556B2F]">Inventario</h1>
-    <p class="text-[#1C1C1C]/70">Gestiona tus productos e ingredientes</p>
+    <p class="text-[#1C1C1C]/70">Gestiona tus ingredientes</p>
   </div>
   <button (click)="abrirModal()" data-open-modal="ingrediente"
     class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"><svg
@@ -18,7 +18,7 @@
     class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#D4AF37] bg-[#D4AF37]/5">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-sm font-medium text-[#1C1C1C]/70">Total Productos</p>
+        <p class="text-sm font-medium text-[#1C1C1C]/70">Total Ingredientes</p>
         <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">15</h3>
       </div>
       <div class="rounded-full p-2 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -38,7 +38,7 @@
     class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#556B2F] bg-[#556B2F]/5">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-sm font-medium text-[#1C1C1C]/70">Productos Bajo Stock</p>
+        <p class="text-sm font-medium text-[#1C1C1C]/70">Ingredientes Bajo Stock</p>
         <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">6</h3>
       </div>
       <div class="rounded-full p-2 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -131,7 +131,7 @@
         <path d="m21 21-4.3-4.3"></path>
       </svg><input
         class="flex rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 h-9 w-full pl-8 pr-4 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
-        placeholder="Buscar productos..." type="search" value=""></div><button
+        placeholder="Buscar ingredientes..." type="search" value=""></div><button
       class="rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border h-8 px-3 text-xs flex items-center gap-2 border-[#556B2F] text-[#556B2F] hover:bg-[#556B2F]/10 w-full sm:w-auto justify-center"><svg
         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-filter h-4 w-4">
@@ -192,7 +192,7 @@
         </tr>
         
         }@empty {
-          <h2 class="text-center text-muted">NO HAY PRODUCTOS</h2>
+          <h2 class="text-center text-muted">NO HAY INGREDIENTES</h2>
         }
       </tbody>
     </table>
