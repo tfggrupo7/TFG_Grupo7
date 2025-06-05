@@ -30,15 +30,17 @@ CREATE TABLE `empleados` (
   `email` varchar(100) NOT NULL,
   `telefono` varchar(20) NOT NULL,
   `rol_id` int NOT NULL,
-  `usuario_id` int DEFAULT NULL,
   `salario` decimal(10,0) NOT NULL,
   `status` enum('vacaciones','novacaciones') DEFAULT NULL,
   `activo` enum('ACTIVO','INACTIVO') DEFAULT NULL,
   `fecha_inicio` date DEFAULT NULL,
+  `usuario_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
-  KEY `fk_empleados_roles` (`rol_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_empleados_roles` (`rol_id`),
+  KEY `fk_usuario_id` (`usuario_id`),
+  CONSTRAINT `fk_usuario_id` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +49,7 @@ CREATE TABLE `empleados` (
 
 LOCK TABLES `empleados` WRITE;
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-INSERT INTO `empleados` VALUES (1,'jose maria','jose.m@gmail.com','654123987',2,NULL,1300,'vacaciones','',NULL),(2,'David','david@gmail.com','654789321',1,NULL,1500,'novacaciones','ACTIVO',NULL),(8,'Maria angels','Mariap@gmail.com','678965423',2,NULL,1400,'novacaciones','',NULL),(9,'María del Carmen','mariadelcarmen.herreravillanueva@peticiones.online','65478921',1,NULL,1400,NULL,'ACTIVO','2025-06-25');
+INSERT INTO `empleados` VALUES (1,'jose maria','jose.m@gmail.com','654123987',2,1300,NULL,'ACTIVO','2025-06-25',5),(2,'David','david@gmail.com','654789321',1,1800,NULL,'INACTIVO','2025-06-17',5),(8,'Maria angels','Mariap@gmail.com','678965423',2,1400,'novacaciones','',NULL,5),(10,'hicham zahir','hicham@mail.com','00124567',3,1800,NULL,'ACTIVO','2025-06-18',5),(13,'pedro garcia','pedro@mail.com','987654321',3,1600,NULL,'ACTIVO','2025-06-04',5),(14,'María del Carmen perez','m.carmen@mail.com','654213578',3,1890,NULL,'ACTIVO','2025-06-18',5),(17,'Marisol','marisol.venegasjurado@peticiones.online','5469871',3,1250,NULL,'INACTIVO','2025-06-18',5);
 /*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,7 +62,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-03 14:42:15
+-- Dump completed on 2025-06-05 13:31:55
 
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
