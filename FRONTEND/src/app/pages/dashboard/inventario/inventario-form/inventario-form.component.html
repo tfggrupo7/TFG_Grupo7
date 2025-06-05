@@ -1,0 +1,66 @@
+<div class="flex flex-col space-y-1.5 text-center sm:text-left">
+  <h2 id="radix-«r8r»" class="font-semibold tracking-tight text-[#556B2F] text-xl">Añadir producto</h2>
+</div>
+<form [formGroup]="productForm" (ngSubmit)="getDataForm()" class="space-y-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <div class="space-y-2">
+      <label
+        class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        for="name">Nombre</label>
+      <input
+        class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+        id="nombre" formControlName="nombre" placeholder="" required="" name="nombre">
+    </div>
+
+    <div class="space-y-2">
+      <label
+        class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        for="categoria">Categoria</label>
+      <select id="categoria" formControlName="categoria" name="role" type=number
+          class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+          required="">
+        <option value="">Seleccionar categoria</option>
+        <option value="1">Frutas y verduras</option>
+        <option value="2">Carne</option>
+        <option value="3">Pescado</option>
+        <option value="4">Panaderia</option>
+        <option value="5">Otros</option>
+      </select>
+    </div>
+
+    <div class="space-y-2">
+      <label  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        for="cantidad">Cantidad</label>
+      <input class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+        id="cantidad" formControlName="cantidad" required="" type="number" name="cantidad">
+    </div>
+
+    <div class="space-y-2">
+      <label
+        class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        for="proveedor">Proveedor</label>
+      <input
+        class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+        id="proveedor" formControlName="proveedor"  required="" name="proveedor">
+    </div>
+
+    <div class="space-y-2">
+      <label
+        class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        for="estado">Estado</label>
+      <input
+        class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+        id="estado" formControlName="estado" required="" type="text" name="estado">
+    </div>
+
+  </div>
+  <div class="flex justify-end gap-2 pt-4">
+    <button (click)="cerrarModal()"
+      class="close-modal inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-10 py-2 px-4 border-[#556B2F] text-[#556B2F]"
+      type="button">Cancelar</button>
+    <button
+      class="close-modal inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 bg-[#D4AF37] hover:bg-[#EBCB64]"
+      type="submit">Añadir Producto</button>
+  </div>
+</form>

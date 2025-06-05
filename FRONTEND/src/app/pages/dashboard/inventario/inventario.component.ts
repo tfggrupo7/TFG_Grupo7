@@ -1,16 +1,26 @@
 import { Component, OnInit } from '@angular/core';
+<<<<<<< HEAD
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IIngredientes } from '../../../interfaces/iingredientes.interfaces';
 import { IngredientesService } from '../../../core/services/ingredientes.service';
 import { toast } from 'ngx-sonner';
 import { Router } from '@angular/router';
+=======
+import { CommonModule } from '@angular/common';
+import { InventarioFormComponent } from './inventario-form/inventario-form.component';
+import { ModalComponent } from "../../../shared/components/modal/modal.component";
+>>>>>>> origin/SCRUM-45-seccion-inventario
 
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
   standalone: true,
+<<<<<<< HEAD
   imports: [ReactiveFormsModule]
+=======
+  imports: [CommonModule, ModalComponent, InventarioFormComponent]
+>>>>>>> origin/SCRUM-45-seccion-inventario
 })
 export class InventarioComponent implements OnInit {
   ingredientes: IIngredientes[] = [];
@@ -60,6 +70,7 @@ export class InventarioComponent implements OnInit {
       return;
     }
 
+<<<<<<< HEAD
     this.ingredientesFiltrados = this.ingredientes.filter(ing =>
       ing.nombre.toLowerCase().includes(texto) ||
       ing.alergenos.toLowerCase().includes(texto)
@@ -68,6 +79,33 @@ export class InventarioComponent implements OnInit {
 
   abrirModal() {
     this.modalIngredienteAbierto = true;
+=======
+  // Estado del filtro de búsqueda
+  searchTerm: string = '';
+
+  modalAbierto: Boolean = false
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+  abrirFormProduct(){
+    this.modalAbierto = true
+  }
+
+  closeModal(){
+    this.modalAbierto = false;
+  }
+
+  sendForm(data: any){
+    this.modalAbierto = false
+  }
+
+  // Método para añadir un nuevo producto
+  agregarProducto(): void {
+    // Implementar lógica para añadir producto
+    console.log('Añadiendo nuevo producto...');
+>>>>>>> origin/SCRUM-45-seccion-inventario
   }
 
   cerrarModal() {
