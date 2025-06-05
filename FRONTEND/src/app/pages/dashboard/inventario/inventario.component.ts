@@ -143,7 +143,7 @@ export class InventarioComponent implements OnInit {
     });
   }
 
-  // CRUD Empleados
+  // CRUD Ingredientes
   
   async getDataForm() {
     let response: IIngredientes | any;
@@ -204,7 +204,7 @@ export class InventarioComponent implements OnInit {
             toast.success('Ingrediente eliminado con éxito', {
               duration: 2000
             });
-            this.router.navigate(['/dashboard', 'personal']).then(() => {
+            this.router.navigate(['/dashboard', 'inventory']).then(() => {
               setTimeout(() => {
                 window.location.reload();
               }, 1000);
@@ -213,8 +213,8 @@ export class InventarioComponent implements OnInit {
             
             
           } catch (error: any) {
-            console.log('Error al eliminar el usuario:', error);
-            toast.error('Error al eliminar el usuario');
+            console.log('Error al eliminar el ingrediente:', error);
+            toast.error('Error al eliminar el ingrediente');
           }
         }
       }
