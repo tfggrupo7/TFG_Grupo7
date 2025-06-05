@@ -461,3 +461,12 @@ Content-Type: application/json
 ###
 GET {{host}}/api/empleados/role
 
+###
+POST {{host}}/api/usuarios
+Content-Type: application/json
+
+{
+  "nombre":"Manuel",
+  "apellidos":"Perez",
+  "email":"waltra@gmail.com"
+}

@@ -43,15 +43,13 @@ async ngOnInit() {
   this.busqueda.setValue('');
 
 const userId = this.getUserIdFromToken();
-console.log('userId:', userId); //
 const token = localStorage.getItem('token');
 if (token) {
   const payload = token.split('.')[1];
   console.log(JSON.parse(atob(payload)));
 } else {
-  console.log('No token found in localStorage.');
+  toast.error('No token found in localStorage.');
 }
-
   // Inicializar el formulario con los campos necesarios
   this.userForm = new FormGroup({
     id: new FormControl(null),
@@ -68,7 +66,7 @@ if (token) {
 
 }
 async ngOnSubmit() {
-  console.log(this.userForm.value); // Verifica los datos antes de enviar
+ 
   try {
     await this.empleadoService.createEmpleado(this.userForm.value);
     // Puedes agregar lógica adicional aquí si es necesario
@@ -97,10 +95,10 @@ async ngOnSubmit() {
     const userId = this.getUserIdFromToken();
     const empleados = await this.empleadoService.getEmpleados();
     this.arrEmpleados = empleados.filter((emp: any) => emp.usuario_id === userId);
-  } catch (error: any) {
+  }catch (error: any) {
     toast.error(error?.error || 'Error al cargar empleados');
   }
-}
+  }
 
   getNombreRol(rol_id: number): string {
     const rol = this.arrRoles.find(r => r.id === rol_id);
@@ -226,6 +224,7 @@ async ngOnSubmit() {
       }
     });
   }
-
+ 
   
+
 }

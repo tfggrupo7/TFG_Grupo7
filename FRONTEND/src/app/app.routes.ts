@@ -13,6 +13,7 @@ import { ReportesComponent } from './pages/dashboard/reportes/reportes.component
 import { AjustesComponent } from './pages/dashboard/ajustes/ajustes.component';
 import { loginGuard } from './core/guards/login.guards';
 import { Error404Component } from './pages/error404/error404.component';
+import { PerfilComponent } from './pages/dashboard/perfil/perfil.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -23,7 +24,8 @@ export const routes: Routes = [
       { path: 'personal', component: PersonalComponent },
       { path: 'turnos', component: TurnosComponent },
       { path: 'reportes', component: ReportesComponent },
-      { path: 'ajustes', component: AjustesComponent }
+      { path: 'ajustes', component: AjustesComponent },
+      { path: 'perfil', component: PerfilComponent}
     ] },
   { path: 'recuperacion-contrasena', component: RecuperarContrasenaComponent},
   { path: 'restablecer-contrasena/:token', component: RestablecerContrasenaComponent  },

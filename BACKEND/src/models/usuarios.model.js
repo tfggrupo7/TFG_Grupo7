@@ -30,6 +30,16 @@ const getByEmail = async (email) => {
   return result[0];
 };
 
+const updateDatos = async (usuarioId, { nombre, apellidos, email }) => {
+  const [result] = await db.query(
+    "update usuarios set nombre = ?, apellidos = ? , email = ? where id = ?",
+    [nombre, apellidos, email, usuarioId]
+    );
+  return result;
+};
+
+
+
 const guardarTokenRecuperacion = async (email, tokenHash, expires) => {
   const [result] = await db.query(
     "UPDATE usuarios SET reset_password_token = ?, reset_password_expires = ? WHERE email = ?",
@@ -89,4 +99,5 @@ module.exports = {
   recuperarContraseña,
   guardarTokenRecuperacion,
   updateContraseñaPorToken,
+  updateDatos
 };

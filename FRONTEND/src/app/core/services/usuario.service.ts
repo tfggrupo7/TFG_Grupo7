@@ -42,5 +42,18 @@ export class UsuarioService {
   });
   return lastValueFrom(this.httpClient.post(`http://localhost:3000/api/usuarios/restablecer-contrasena/${token}`, { nuevaContrasena }, { headers }));
 }
-
-  }
+updateUsuario(usuario: IUsuario): Promise<IUsuario> {
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `${token}` } : {})
+    });
+  return lastValueFrom(
+    this.httpClient.put<IUsuario>(
+      'http://localhost:3000/api/usuarios',
+      usuario,
+      { headers }
+    )
+  );
+}
+}

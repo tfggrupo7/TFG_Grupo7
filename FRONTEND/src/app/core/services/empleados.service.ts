@@ -18,8 +18,13 @@ export class EmpleadosService {
   private totalPages: number = 2;
 
 
-  getEmpleados(): Promise<IEmpleados[]> {      
-    return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url,));
+  getEmpleados(): Promise<IEmpleados[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `${token}` } : {})
+    });
+    return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url, { headers }));
   }
   
   async cargarEmpleados(page: number): Promise<IResponse> {
@@ -65,35 +70,4 @@ export class EmpleadosService {
   }
     
   
-  async gotoNext(): Promise<IResponse | null> {
-    if (this.currentPage < this.totalPages) {
-      const nextPage = this.currentPage + 1;
-      try {
-        const response = await this.cargarEmpleados(nextPage);
-        if (response) {
-          this.currentPage = response.page;
-          return response;
-        }
-      } catch (error) {
-        console.error("Error al cargar la siguiente página", error);
-      }
-    }
-    return null;
   }
-
-  async gotoPrev(): Promise<IResponse | null> {
-    if (this.currentPage > 1) {
-      const prevPage = this.currentPage - 1;
-      try {
-        const response = await this.cargarEmpleados(prevPage);
-        if (response) {
-          this.currentPage = response.page;
-          return response;
-        }
-      } catch (error) {
-        console.error("Error al cargar la página anterior", error);
-      }
-    }
-    return null;
-  }
-}

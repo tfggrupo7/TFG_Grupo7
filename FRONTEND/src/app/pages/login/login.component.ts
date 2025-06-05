@@ -62,32 +62,33 @@ initializeLoginFormWithUsuario() {
 
 
   async ingresar() {
-     if (this.loginForm.invalid) {
-      toast.info('Error en email o contraseña');
-      return;
-    }
-    const usuario: IUsuario = {
-      nombre: '',
-      apellidos: '',
-      email: this.loginForm.value.email,
-      contraseña: this.loginForm.value.contraseña
-    };
-try {
-  const response = await this.usuarioService.login(usuario);
-  // Suponiendo que el token viene en response.token
-  const token = response.token;
-  if (token) {
-    localStorage.setItem('token', token);
-    toast.success("Login Exitoso");
-    setTimeout(() => {
-      this.router.navigate(['/dashboard']);
-    }, 3000); 
-  } else {
-    toast.error('No se recibió token de autenticación.');
+  if (this.loginForm.invalid) {
+    toast.info('Error en email o contraseña');
+    return;
   }
-} catch (error) {
-  toast.error('Error al iniciar sesión.');
+  const usuario: IUsuario = {
+    nombre: '',
+    apellidos: '',
+    email: this.loginForm.value.email,
+    contraseña: this.loginForm.value.contraseña
+  };
+  try {
+     // Suponiendo que el backend responde { token: '...', usuario: {...} }
+    const response = await this.usuarioService.login(usuario);
+    console.log('Respuesta del backend:', response); // <-- AQUÍ
+    const token = response.token;
+if (token) {
+  localStorage.setItem('token', token);
+  toast.success("Login Exitoso");
+  setTimeout(() => {
+    this.router.navigate(['/dashboard']);
+  }, 1000);
+} else {
+  toast.error('No se recibió token de autenticación.');
 }
+  } catch (error) {
+    toast.error('Error al iniciar sesión.');
+  }
 }
 
 initializeRegisterFormWithUsuario() {

@@ -16,6 +16,26 @@ import { AuthService } from '../../core/services/auth.service';
 export class DashboardComponent {
   authService = inject(AuthService);
   
+  
+showProfileMenu = false;
+
+usuario = {
+  nombre: 'Chef Martínez',
+  rol: 'Administrador',
+  avatar: '../../../assets/avatar.avif'
+};
+
+toggleProfileMenu() {
+  this.showProfileMenu = !this.showProfileMenu;
+}
+
+closeProfileMenu() {
+  this.showProfileMenu = false;
+}
+
+logout() {
+  this.authService.logout();
+}
 
   cerrarSesion() {
     this.authService.logout();

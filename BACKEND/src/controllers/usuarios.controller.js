@@ -184,11 +184,32 @@ const restablecerContraseña = async (req, res) => {
   }
 };
 
+const actualizarDatos = async (req, res) => {
+  const { nombre, apellidos, email } = req.body;
+  const usuarioId = req.user.id;
+
+  try {
+    const result = await Usuario.updateDatos(usuarioId, {
+      nombre,
+      apellidos,
+      email,
+    });
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.json({ message: "Datos actualizados correctamente" });
+      } catch (error) {
+      console.error("Error al actualizar los datos del usuario:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  };
+  
+
 module.exports = {
   registro,
   login,
   perfil,
   recuperarContraseña,
   restablecerContraseña,
-  generarYGuardarToken,
+  generarYGuardarToken,actualizarDatos
 };
