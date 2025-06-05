@@ -93,12 +93,14 @@ async ngOnSubmit() {
 
   // Cargar empleados desde el servicio
   async cargarEmpleados() {
-    try {
-      this.arrEmpleados = await this.empleadoService.getEmpleados();
-    } catch (error: any) {
-      toast.error(error?.error || 'Error al cargar empleados');
-    }
+  try {
+    const userId = this.getUserIdFromToken();
+    const empleados = await this.empleadoService.getEmpleados();
+    this.arrEmpleados = empleados.filter((emp: any) => emp.usuario_id === userId);
+  } catch (error: any) {
+    toast.error(error?.error || 'Error al cargar empleados');
   }
+}
 
   getNombreRol(rol_id: number): string {
     const rol = this.arrRoles.find(r => r.id === rol_id);
