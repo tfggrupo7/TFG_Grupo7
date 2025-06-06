@@ -17,23 +17,35 @@ import { PerfilComponent } from './pages/dashboard/perfil/perfil.component';
 import { LoginEmpleadosComponent } from './login-empleados/login-empleados.component';
 import { RecuperacionContrasenaEmpleadosComponent } from './pages/recuperacion-contrasena-empleados/recuperacion-contrasena-empleados.component';
 import { RestablecerContrasenaEmpleadosComponent } from './pages/restablecer-contrasena-empleados/restablecer-contrasena-empleados.component';
+import { DashboardEmpleadosComponent } from './pages/dashboard-empleados/dashboard-empleados.component';
+import { InventarioEmpleadosComponent } from './pages/dashboard-empleados/inventario-empleados/inventario-empleados.component';
+import { TurnosEmpleadosComponent } from './pages/dashboard-empleados/turnos-empleados/turnos-empleados.component';
+import { PerfilEmpleadosComponent } from './pages/dashboard-empleados/perfil-empleados/perfil-empleados.component';
+import { ResumenEmpleadosComponent } from './pages/dashboard-empleados/resumen-empleados/resumen-empleados.component';
+
+
 
 export const routes: Routes = [
-  { path: '', component: LandingComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent,canActivate: [loginGuard], children: [
-      { path: '', component: ResumenComponent },
-      { path: 'inventory', component: InventarioComponent },
-      { path: 'personal', component: PersonalComponent },
-      { path: 'turnos', component: TurnosComponent },
-      { path: 'reportes', component: ReportesComponent },
-      { path: 'ajustes', component: AjustesComponent },
-      { path: 'perfil', component: PerfilComponent}
-    ] },
+{ path: '', component: LandingComponent },
+{ path: 'login', component: LoginComponent },
+{ path: 'dashboard', component: DashboardComponent,canActivate: [loginGuard], children: [
+    { path: '', component: ResumenComponent },
+    { path: 'inventory', component: InventarioComponent },
+    { path: 'personal', component: PersonalComponent },
+    { path: 'turnos', component: TurnosComponent },
+    { path: 'reportes', component: ReportesComponent },
+    { path: 'ajustes', component: AjustesComponent },
+    { path: 'perfil', component: PerfilComponent}
+  ] },
+{ path:'dashboard-empleados',component:DashboardEmpleadosComponent,children: [
+    { path: '', component: ResumenEmpleadosComponent },
+    { path: 'inventario-empleados', component: InventarioEmpleadosComponent },
+    { path: 'turnos-empleados', component: TurnosEmpleadosComponent },
+    { path: 'perfil-empleados', component: PerfilEmpleadosComponent}
+  ]},
   { path:'empleados/login',component:LoginEmpleadosComponent},
   { path:'empleados/recuperacion-contrasena',component: RecuperacionContrasenaEmpleadosComponent},
   { path:'empleados/restablecer-contrasena/:token',component: RestablecerContrasenaEmpleadosComponent},
-  { path: 'login', component: LoginComponent},
   { path: 'recuperacion-contrasena', component: RecuperarContrasenaComponent},
   { path: 'restablecer-contrasena/:token', component: RestablecerContrasenaComponent  },
   { path: '**', component: Error404Component }

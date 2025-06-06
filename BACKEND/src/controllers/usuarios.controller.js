@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Usuario = require("../models/usuarios.model");
 const CryptoJS = require("crypto-js");
-
 const sendEmail = require("../sendEmail");
 
 const registro = async (req, res) => {

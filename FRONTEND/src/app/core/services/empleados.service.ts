@@ -57,10 +57,24 @@ export class EmpleadosService {
   }
   updateEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
   let { id, ...empleadoBody } = empleado;
-   return lastValueFrom(
-    this.httpClient.put<IEmpleados>(`${this.url}/${empleado.id}`, empleadoBody)
+  id = Number(id);
+  if (!id || isNaN(id)) {
+    return Promise.reject('ID de empleado inválido');
+  }
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  });
+  return lastValueFrom(
+    this.httpClient.put<IEmpleados>(
+      `${this.url}/updateEmpleado/${id}`,
+      empleadoBody,
+      { headers }
+    )
   );
   }
+
   deleteEmpleado(id: number): Promise<void> {
     return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
   }
@@ -68,6 +82,9 @@ export class EmpleadosService {
   obtenerRoles(id: number): Observable<any[]> {
     return this.httpClient.get<any[]>(`${this.url}/role/${id}`);
   }
-    
+  
+  cambiarContraseña(empleadoId: number, nuevaContraseña: string): Promise<any> {
+    return lastValueFrom(this.httpClient.post(`http://localhost:3000/api/empleados/cambiar-contrasena/${empleadoId}`, { nuevaContraseña }));
+  }
   
   }

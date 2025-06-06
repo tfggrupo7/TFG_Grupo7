@@ -48,24 +48,37 @@ const selectByTareaId = async (tareaId) => {
   return result;
 };
 
-const insert = async ({ nombre, email, telefono, rol_id, usuario_id, salario, status, activo, fecha_inicio }) => {
+const insert = async ({ nombre, email, telefono, rol_id, usuario_id, salario, status, activo, fecha_inicio, apellidos }) => {
   const [result] = await db.query(
-    "insert into empleados (nombre, email, telefono, rol_id, usuario_id, salario, status, activo, fecha_inicio ) values (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    [nombre, email, telefono, rol_id, usuario_id, salario, status, activo, fecha_inicio]
+    "insert into empleados (nombre, email, telefono, rol_id, usuario_id, salario, status, activo, fecha_inicio, apellidos ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [nombre, email, telefono, rol_id, usuario_id, salario, status, activo, fecha_inicio, apellidos]
   );
   return result;
 };
 
 const update = async (
   empleadoId,
-  { nombre, email, telefono, rol_id, salario,status,activo, fecha_inicio }
+  { nombre, email, telefono, rol_id, salario,status,activo, fecha_inicio, apellidos }
 ) => {
   const [result] = await db.query(
-    "update empleados set nombre = ?,  email = ?, telefono = ? , rol_id= ? , salario = ?, status = ?, activo = ?, fecha_inicio = ? where id = ?",
-    [nombre, email, telefono, rol_id, salario,status,activo, fecha_inicio,empleadoId]
+    "update empleados set nombre = ?,  email = ?, telefono = ? , rol_id= ? , salario = ?, status = ?, activo = ?, fecha_inicio = ?, apellidos =? where id = ?",
+    [nombre, email, telefono, rol_id, salario,status,activo, fecha_inicio, apellidos,empleadoId]
   );
   return result;
 };
+
+const updateEmpleadoPerfil = async (
+  empleadoId,
+  { nombre, email, apellidos }
+) => {
+    const [result] = await db.query(
+      "update empleados set nombre = ?,  email = ?, apellidos =? where id = ?",
+      [nombre, email, apellidos,empleadoId]
+    );
+    return result;
+  };
+
+
 
 const remove = async (empleadoId) => {
   const [result] = await db.query("delete from empleados where id = ?", [
@@ -143,6 +156,17 @@ console.log(rows.map(r => ({
 
   return empleado;
 };
+const cambiarContraseña = async (empleadoId, nuevaContraseña) => {
+ if (!nuevaContraseña || typeof nuevaContraseña !== "string") {
+    throw new Error("La nueva contraseña es obligatoria.");
+  }
+  const hashedPassword = await bcrypt.hash(nuevaContraseña, 10);
+  const [result] = await db.query(
+    "UPDATE empleados SET password = ? WHERE id = ?",
+    [hashedPassword, empleadoId]
+  );
+  return result;
+}
 
 module.exports = {
   selectAll,
@@ -157,4 +181,6 @@ module.exports = {
   recuperarContraseña,
   updateContraseñaPorToken,
   getByEmail,
+  updateEmpleadoPerfil,
+  cambiarContraseña
 };

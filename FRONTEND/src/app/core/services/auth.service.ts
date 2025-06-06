@@ -4,6 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { IEmpleados } from '../../interfaces/iempleados.interfaces';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { LoginResponse } from '../../interfaces/login-response.interfaces';
 
 
 @Injectable({
@@ -22,11 +23,12 @@ export class AuthService {
     return sessionStorage.getItem("token")
   }
 
-  login(email: string, password: string): Promise<IEmpleados | null> {
+  async login(email: string, password: string): Promise<LoginResponse> {
     const body = { email, password };
-    return lastValueFrom(
-      this.httpClient.post<IEmpleados>('http://localhost:3000/api/empleados/login', body, { observe: 'response' })
-    ).then((response: any) => response.body as IEmpleados || null);
+    const response = await lastValueFrom(
+      this.httpClient.post<LoginResponse>('http://localhost:3000/api/empleados/login', body, { observe: 'response' })
+    );
+    return response.body as LoginResponse;
   }
   recuperarContrasena(email: string): Promise<void> {
     return lastValueFrom(this.httpClient.post<void>('http://localhost:3000/api/empleados/recuperar-contrasena', { email }));

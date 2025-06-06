@@ -222,6 +222,48 @@ const update = async (req, res) => {
   res.json(empleado);
 };
 
+const updateEmpleado = async (req, res) => {
+  const { empleadoId } = req.params;
+  const { nombre, email, apellidos } = req.body;
+
+  // Actualizar el empleado
+  const result = await Empleado.updateEmpleadoPerfil(empleadoId, {
+    nombre,
+    email,
+    apellidos,
+  });
+
+  if (result.affectedRows === 0) {
+    return res.status(404).json({ message: "Empleado no encontrado" });
+  }
+
+  // Obtener el empleado actualizado
+  const empleado = await Empleado.selectById(empleadoId);
+
+  res.json(empleado);
+};
+const cambiarContraseña = async (req, res) => {
+  const { nuevaContraseña } = req.body;
+  const empleadoId = req.params.id
+console.log('Intentando cambiar contraseña para empleadoId:', empleadoId)
+  if (!nuevaContraseña || typeof nuevaContraseña !== "string") {
+    return res
+      .status(400)
+      .json({ message: "La nueva contraseña es obligatoria." });
+  }
+
+  try {
+    const result = await Empleado.cambiarContraseña(empleadoId, nuevaContraseña);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.json({ message: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    console.error("Error al cambiar la contraseña:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
 const remove = async (req, res) => {
   const { empleadoId } = req.params;
   const result = await Empleado.remove(empleadoId);
@@ -254,4 +296,4 @@ const getEmpleadosYRoles = async (req, res) => {
 };
 
 
-module.exports = { getAll, getById, create, getEmpleadosAndTarea, update, remove, getEmpleadosYRoles, login, recuperarContraseña, restablecerContraseña, generarYGuardarToken };
+module.exports = { getAll, getById, create, getEmpleadosAndTarea, update, updateEmpleado,remove, getEmpleadosYRoles, login, recuperarContraseña, restablecerContraseña, generarYGuardarToken, cambiarContraseña };

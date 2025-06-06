@@ -29,26 +29,28 @@ constructor(private fb: FormBuilder, private router: Router, private authService
 }
 
   async ingresar() {
-    if (this.loginForm.invalid) {
-      toast.info('Error en email o contraseña');
-      return;
-    }
-    const email: string = this.loginForm.get('email')?.value;
-    const password: string = this.loginForm.get('password')?.value;
-    try {
-      const response = await this.authService.login(email, password);
-      console.log('Respuesta del backend:', response);
-      if (response) {
-        toast.success("Login Exitoso");
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 1000);
-      } else {
-        toast.error('Email o contraseña incorrectos.');
-      }
-    } catch (error) {
-      console.log('Error al iniciar sesión:', error);
-      toast.error('Error al iniciar sesión.');
-    }
+  if (this.loginForm.invalid) {
+    toast.info('Error en email o contraseña');
+    return;
   }
+  const email: string = this.loginForm.get('email')?.value;
+  const password: string = this.loginForm.get('password')?.value;
+  try {
+    const response = await this.authService.login(email, password);
+    console.log('Respuesta del backend:', response);
+    if (response && response.token) {
+      // Guarda el token en localStorage
+      localStorage.setItem('token', response.token);
+
+      toast.success("Login Exitoso");
+      setTimeout(() => {
+        this.router.navigate(['/dashboard-empleados']);
+      }, 1000);
+    } else {
+      toast.error('Email o contraseña incorrectos.');
+    }
+  } catch (error) {
+    toast.error('Error al iniciar sesión.');
+  }
+}
 }
