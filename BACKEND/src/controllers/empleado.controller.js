@@ -244,7 +244,10 @@ const updateEmpleado = async (req, res) => {
 };
 const cambiarContraseña = async (req, res) => {
   const { nuevaContraseña } = req.body;
-  const empleadoId = req.params.id
+  const empleadoId = req.params.empleadoId;
+  if (!empleadoId || isNaN(empleadoId)) {
+    return res.status(400).json({ message: "Empleado no encontrado" });
+  }
 console.log('Intentando cambiar contraseña para empleadoId:', empleadoId)
   if (!nuevaContraseña || typeof nuevaContraseña !== "string") {
     return res

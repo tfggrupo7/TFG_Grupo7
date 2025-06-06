@@ -54,6 +54,7 @@ if (token) {
   this.userForm = new FormGroup({
     id: new FormControl(null),
     nombre: new FormControl('', Validators.required),
+    apellidos: new FormControl('', Validators.required),
     rol_id: new FormControl<number | null>(null, Validators.required),
     telefono: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$')]),
     email: new FormControl('', [Validators.required, Validators.email]),
