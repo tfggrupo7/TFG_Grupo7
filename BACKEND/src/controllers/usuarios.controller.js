@@ -31,7 +31,7 @@ const login = async (req, res) => {
   res.json({
     message: "Login exitoso",
     token: jwt.sign(
-      { usuario_id: usuario.id, role: usuario.role, email: usuario.email, nombre: usuario.nombre, apellidos: usuario.apellidos },
+      { usuario_id: usuario.id, role: usuario.role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     ),
@@ -229,7 +229,7 @@ const actualizarDatos = async (req, res) => {
   const eliminarUsuario = async (req, res) => {
   const { id } = req.params;  
   const usuarioId = req.user.id;
-  if (usuarioId !== parseInt(id)) {
+  if (usuarioId !== Number.parseInt(id)) {
     return res.status(403).json({ message: "No tienes permiso para eliminar este usuario." });
   }
   try {

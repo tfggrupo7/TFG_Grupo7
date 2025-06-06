@@ -14,6 +14,9 @@ import { AjustesComponent } from './pages/dashboard/ajustes/ajustes.component';
 import { loginGuard } from './core/guards/login.guards';
 import { Error404Component } from './pages/error404/error404.component';
 import { PerfilComponent } from './pages/dashboard/perfil/perfil.component';
+import { LoginEmpleadosComponent } from './login-empleados/login-empleados.component';
+import { RecuperacionContrasenaEmpleadosComponent } from './pages/recuperacion-contrasena-empleados/recuperacion-contrasena-empleados.component';
+import { RestablecerContrasenaEmpleadosComponent } from './pages/restablecer-contrasena-empleados/restablecer-contrasena-empleados.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -27,6 +30,10 @@ export const routes: Routes = [
       { path: 'ajustes', component: AjustesComponent },
       { path: 'perfil', component: PerfilComponent}
     ] },
+  { path:'empleados/login',component:LoginEmpleadosComponent},
+  { path:'empleados/recuperacion-contrasena',component: RecuperacionContrasenaEmpleadosComponent},
+  { path:'empleados/restablecer-contrasena/:token',component: RestablecerContrasenaEmpleadosComponent},
+  { path: 'login', component: LoginComponent},
   { path: 'recuperacion-contrasena', component: RecuperarContrasenaComponent},
   { path: 'restablecer-contrasena/:token', component: RestablecerContrasenaComponent  },
   { path: '**', component: Error404Component }

@@ -1,4 +1,7 @@
 const db = require("../config/db");
+const bcrypt = require("bcryptjs");
+
+
 
 const selectAll = async (page, limit) => {
   const [result] = await db.query("select * from empleados ");
@@ -11,6 +14,16 @@ const selectAll = async (page, limit) => {
   ]);
   return result;
 };*/
+const getByEmail = async (email) => {
+  const [result] = await db.query(
+    "select * from empleados where TRIM(LOWER(email)) = TRIM(LOWER(?))",
+    [email]
+  );
+
+  if (result.length === 0) return null;
+
+  return result[0];
+};
 
 const selectById = async (empleadoId) => {
   const [result] = await db.query("select * from empleados where id = ?", [
@@ -73,6 +86,63 @@ const [result] = await db.query(
   [limit, offset]
 );
 };
+const guardarTokenRecuperacion = async (email, tokenHash, expires) => {
+  const [result] = await db.query(
+    "UPDATE empleados SET reset_password_token = ?, reset_password_expires = ? WHERE email = ?",
+    [tokenHash, expires, email]
+  );
+  return result.affectedRows > 0;
+};
+
+const recuperarContraseña = async (email, token, expires) => {
+  console.log("Intentando guardar token para:", email, token, expires);
+  const [result] = await db.query("SELECT * FROM empleados WHERE email = ?", [
+    email,
+  ]);
+  if (result.length === 0) {
+    console.log("No existe empleado con ese email");
+    return null;
+  }
+  const updateResult = await db.query(
+    "UPDATE  empleados SET reset_password_token = ?, reset_password_expires = ? WHERE email = ?",
+    [token, expires, email]
+  );
+  console.log("Resultado del UPDATE:", updateResult);
+  return true;
+};
+
+const updateContraseñaPorToken = async (tokenPlano, nuevaContraseña) => {
+  const [rows] = await db.query(
+    "SELECT id, reset_password_token FROM empleados WHERE reset_password_token IS NOT NULL AND reset_password_expires > NOW()"
+  );
+console.log(rows.map(r => ({
+  id: r.id,
+  expires: r.reset_password_expires
+})));
+  let empleado = null;
+  for (const row of rows) {
+    console.log('Comparando token:', tokenPlano, 'con hash:', row.reset_password_token);
+    const match = await bcrypt.compareSync(tokenPlano, row.reset_password_token);
+    console.log('Resultado de la comparación:', match);
+    if (match)  {
+      empleado = row;
+      break;
+    }
+  }
+
+  if (!empleado) {
+    return null;
+  }
+
+  const hashedPassword = await bcrypt.hashSync(nuevaContraseña, 10);
+
+  await db.query(
+    "UPDATE empleados SET password = ?, reset_password_token = NULL, reset_password_expires = NULL WHERE id = ?",
+    [hashedPassword, empleado.id]
+  );
+
+  return empleado;
+};
 
 module.exports = {
   selectAll,
@@ -82,5 +152,9 @@ module.exports = {
   insert,
   update,
   remove,
-  empleadosYroles
+  empleadosYroles,
+  guardarTokenRecuperacion,
+  recuperarContraseña,
+  updateContraseñaPorToken,
+  getByEmail,
 };
