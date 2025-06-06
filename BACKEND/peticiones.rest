@@ -470,3 +470,11 @@ Content-Type: application/json
   "apellidos":"Perez",
   "email":"waltra@gmail.com"
 }
+
+###
+POST {{host}}/api/usuarios/cambiar-contrasena/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJpYXQiOjE3NDkxNDMwNDIsImV4cCI6MTc0OTE0NjY0Mn0.Ng4Axbetg9GLE2k7JzIXpbNmRN3bDSPBBNVidTWpufE
+Content-Type: application/json
+
+{
+  "nuevaContraseña": "123456" 
+}

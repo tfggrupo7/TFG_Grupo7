@@ -18,9 +18,9 @@ const checkempleadosId = async (req, res, next) => {
 };
 
 const checkdataEmpleado = (req, res, next) => {
-  const { nombre, email, telefono, rol_id, salario,  activo, fecha_inicio } = req.body;
+  const { nombre, email, telefono, rol_id, salario,  activo, fecha_inicio, apellidos } = req.body;
 
-  if (!nombre || !email || !telefono || !rol_id || !salario || !activo || !fecha_inicio ) {
+  if (!nombre || !email || !telefono || !rol_id || !salario || !activo || !fecha_inicio || !apellidos) {
     return res
       .status(400)
       .send("El nombre, email ,telefono, rol_id, salario, activo y fecha_inicio son obligatorios");

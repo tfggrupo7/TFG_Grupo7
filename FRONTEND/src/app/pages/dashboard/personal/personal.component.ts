@@ -107,15 +107,21 @@ async ngOnSubmit() {
   }
 
   get totalActivos(): number {
-    return this.arrEmpleados.filter(e => e.activo).length;
+    const activos = this.arrEmpleados.filter(e => e.activo);
+    
+    return activos.length;
   }
 
   get totalEnVacaciones(): number {
-    return this.arrEmpleados.filter(e => e.status === 'vacaciones').length;
+    const enVacaciones = this.arrEmpleados.filter(e => e.status === 'vacaciones');
+    
+    return enVacaciones.length;
   }
 
   get totalSalario(): number {
-    return this.arrEmpleados.reduce((total, empleado) => total + Number(empleado.salario), 0);
+    const total = this.arrEmpleados.reduce((total, empleado) => total + Number(empleado.salario), 0);
+    
+    return total;
   }
 
   // Funciones para mostrar el estado del empleado
@@ -188,7 +194,8 @@ async ngOnSubmit() {
     }
     try {
       const empleadoActualizado: IEmpleados = { ...this.userForm.value, id: this.empleadoId };
-      await this.empleadoService.updateEmpleado(empleadoActualizado);
+      console.log('Empleado a actualizar:', empleadoActualizado);
+      await this.empleadoService.updateEmpleadoPerfil(empleadoActualizado);
       toast.success('Empleado Actualizado correctamente');
       this.router.navigate(['/dashboard', 'personal']).then(() => {
         setTimeout(() => {

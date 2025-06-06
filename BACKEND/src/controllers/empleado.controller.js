@@ -216,7 +216,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   const { empleadoId } = req.params;
   const result = await Empleado.update(empleadoId, req.body);
-  const { nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio } = req.body;
+  const { nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio, apellidos } = req.body;
   const empleado = await Empleado.selectById(empleadoId);
 
   res.json(empleado);

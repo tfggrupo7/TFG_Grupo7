@@ -1,3 +1,4 @@
+
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
@@ -31,20 +32,20 @@ CREATE TABLE `empleados` (
   `telefono` varchar(20) NOT NULL,
   `rol_id` int NOT NULL,
   `salario` decimal(10,0) NOT NULL,
-  `status` enum('vacaciones','novacaciones') DEFAULT NULL,
-  `activo` enum('ACTIVO','INACTIVO') DEFAULT NULL,
+  `status` enum('ACTIVO','INACTIVO') DEFAULT NULL,
   `fecha_inicio` date DEFAULT NULL,
   `usuario_id` int DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `reset_password_token` varchar(255) DEFAULT NULL,
   `reset_password_expires` varchar(255) DEFAULT NULL,
   `apellidos` varchar(255) NOT NULL,
+  `activo` enum('ACTIVO','INACTIVO') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `fk_empleados_roles` (`rol_id`),
   KEY `fk_usuario_id` (`usuario_id`),
   CONSTRAINT `fk_usuario_id` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,7 +54,7 @@ CREATE TABLE `empleados` (
 
 LOCK TABLES `empleados` WRITE;
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-INSERT INTO `empleados` VALUES (1,'jose maria','jose.m@gmail.com','654123987',2,1300,NULL,'ACTIVO','2025-06-25',6,'',NULL,NULL,''),(2,'David','waltra@gmail.com','654789321',1,1800,NULL,'INACTIVO','2025-06-17',6,'$2b$10$XqCup4phSf65jMCe8pOX8eOwyT8g9s6YcU8LH6XFVgtbbVVRNTnKu',NULL,NULL,'Donoso'),(8,'Maria angels','Mariap@gmail.com','678965423',2,1400,'novacaciones','',NULL,6,'',NULL,NULL,''),(10,'hicham zahir','hicham@mail.com','00124567',3,1800,NULL,'ACTIVO','2025-06-18',6,'',NULL,NULL,''),(19,'David','waltra@mail.com','621457852',1,1500,NULL,'ACTIVO','2025-06-11',6,NULL,NULL,NULL,'Donoso'),(20,'Daniela','daniel@mail.com','5445565464',2,1500,NULL,'ACTIVO','2025-06-03',6,NULL,NULL,NULL,'Griego Solorio'),(21,'rodirigo','rodrigosendinosanz@gmail.com','56545645456',3,1800,NULL,'ACTIVO','2025-06-06',NULL,NULL,NULL,NULL,'sendino');
+INSERT INTO `empleados` VALUES (2,'David','waltra@gmail.com','654789321',1,2500,NULL,'2025-06-12',6,'$2b$10$XqCup4phSf65jMCe8pOX8eOwyT8g9s6YcU8LH6XFVgtbbVVRNTnKu','$2b$10$CNX3FFhzCZQ3EXVgECU3XeGJwCEGhg6at0JXAtFhgLKbu.yf3yary','2025-06-06 18:02:21.256','Donoso','ACTIVO'),(10,'hicham zahir','hicham@mail.com','00124567',3,2000,NULL,'2025-06-10',6,'',NULL,NULL,'garcia','INACTIVO'),(20,'Daniela','daniel@mail.com','5445565464',2,1500,NULL,'2025-06-03',6,NULL,NULL,NULL,'Griego Solorio','ACTIVO'),(21,'rodirigo','rodrigosendinosanz@gmail.com','56545645456',3,1500,NULL,'2025-06-10',6,NULL,NULL,NULL,'sendino','INACTIVO'),(22,'Daniela','mariadelcarmen.herreravillanueva@peticiones.online','00124567',2,1250,NULL,'2025-06-11',6,NULL,NULL,NULL,'Griego Solorio','ACTIVO');
 /*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -66,8 +67,64 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-06 16:58:26
+-- Dump completed on 2025-06-06 20:38:46
+CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `restaurante`;
+-- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: restaurante
+-- ------------------------------------------------------
+-- Server version	8.0.41
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `turnos`
+--
+
+DROP TABLE IF EXISTS `turnos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `turnos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `empleado_id` int DEFAULT NULL,
+  `fecha` date NOT NULL,
+  `hora_inicio` time NOT NULL,
+  `hora_fin` time NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `turnos_ibfk_1` (`empleado_id`),
+  CONSTRAINT `turnos_ibfk_1` FOREIGN KEY (`empleado_id`) REFERENCES `empleados` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `turnos`
+--
+
+LOCK TABLES `turnos` WRITE;
+/*!40000 ALTER TABLE `turnos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `turnos` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-06-06 20:38:46
 
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
@@ -396,64 +453,7 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-05-25 12:05:08
-CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `restaurante`;
--- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
---
--- Host: 127.0.0.1    Database: restaurante
--- ------------------------------------------------------
--- Server version	8.0.41
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `turnos`
---
-
-DROP TABLE IF EXISTS `turnos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `turnos` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `empleado_id` int DEFAULT NULL,
-  `fecha` date NOT NULL,
-  `hora_inicio` time NOT NULL,
-  `hora_fin` time NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `empleado_id` (`empleado_id`),
-  CONSTRAINT `turnos_ibfk_1` FOREIGN KEY (`empleado_id`) REFERENCES `empleados` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `turnos`
---
-
-LOCK TABLES `turnos` WRITE;
-/*!40000 ALTER TABLE `turnos` DISABLE KEYS */;
-INSERT INTO `turnos` VALUES (2,1,'2025-05-25','11:00:00','19:00:00');
-/*!40000 ALTER TABLE `turnos` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2025-05-25 12:05:08
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)

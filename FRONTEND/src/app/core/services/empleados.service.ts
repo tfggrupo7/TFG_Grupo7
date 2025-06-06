@@ -55,6 +55,27 @@ export class EmpleadosService {
   createEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
   return lastValueFrom(this.httpClient.post<IEmpleados>(this.url, empleado));
   }
+  
+  updateEmpleadoPerfil(empleado: IEmpleados): Promise<IEmpleados> {
+  let { id, ...empleadoBody } = empleado;
+  id = Number(id);
+  if (!id || isNaN(id)) {
+    return Promise.reject('ID de empleado inválido');
+  }
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  });
+  return lastValueFrom(
+    this.httpClient.put<IEmpleados>(
+      `${this.url}/${id}`,
+      empleadoBody,
+      { headers }
+    )
+  );
+  }
+  
   updateEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
   let { id, ...empleadoBody } = empleado;
   id = Number(id);
