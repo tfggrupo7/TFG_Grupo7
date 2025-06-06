@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
 --
--- Host: localhost    Database: restaurante
+-- Host: 127.0.0.1    Database: restaurante
 -- ------------------------------------------------------
 -- Server version	8.0.41
 
@@ -35,7 +35,7 @@ CREATE TABLE `empleados` (
   `activo` enum('ACTIVO','INACTIVO') DEFAULT NULL,
   `fecha_inicio` date DEFAULT NULL,
   `usuario_id` int DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `reset_password_token` varchar(255) DEFAULT NULL,
   `reset_password_expires` varchar(255) DEFAULT NULL,
   `apellidos` varchar(255) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE `empleados` (
   KEY `fk_empleados_roles` (`rol_id`),
   KEY `fk_usuario_id` (`usuario_id`),
   CONSTRAINT `fk_usuario_id` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,7 +53,7 @@ CREATE TABLE `empleados` (
 
 LOCK TABLES `empleados` WRITE;
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-INSERT INTO `empleados` VALUES (1,'jose maria','jose.m@gmail.com','654123987',2,1300,NULL,'ACTIVO','2025-06-25',5,'',NULL,NULL,''),(2,'David','waltra@gmail.com','654789321',1,1800,NULL,'INACTIVO','2025-06-17',5,'$2b$10$GSpSlyyRrOlJ6t609WtFke9Wt.j7Jsxeo7kBp3/3Z5L71CjsslqO.',NULL,NULL,'Donoso'),(8,'Maria angels','Mariap@gmail.com','678965423',2,1400,'novacaciones','',NULL,5,'',NULL,NULL,''),(10,'hicham zahir','hicham@mail.com','00124567',3,1800,NULL,'ACTIVO','2025-06-18',5,'',NULL,NULL,''),(13,'pedro garcia','pedro@mail.com','987654321',3,1600,NULL,'ACTIVO','2025-06-04',5,'',NULL,NULL,''),(14,'María del Carmen perez','m.carmen@mail.com','654213578',3,1890,NULL,'ACTIVO','2025-06-18',5,'',NULL,NULL,''),(17,'Marisol','marisol.venegasjurado@peticiones.online','5469871',3,1250,NULL,'INACTIVO','2025-06-18',5,'',NULL,NULL,'');
+INSERT INTO `empleados` VALUES (1,'jose maria','jose.m@gmail.com','654123987',2,1300,NULL,'ACTIVO','2025-06-25',6,'',NULL,NULL,''),(2,'David','waltra@gmail.com','654789321',1,1800,NULL,'INACTIVO','2025-06-17',6,'$2b$10$XqCup4phSf65jMCe8pOX8eOwyT8g9s6YcU8LH6XFVgtbbVVRNTnKu',NULL,NULL,'Donoso'),(8,'Maria angels','Mariap@gmail.com','678965423',2,1400,'novacaciones','',NULL,6,'',NULL,NULL,''),(10,'hicham zahir','hicham@mail.com','00124567',3,1800,NULL,'ACTIVO','2025-06-18',6,'',NULL,NULL,''),(19,'David','waltra@mail.com','621457852',1,1500,NULL,'ACTIVO','2025-06-11',6,NULL,NULL,NULL,'Donoso'),(20,'Daniela','daniel@mail.com','5445565464',2,1500,NULL,'ACTIVO','2025-06-03',6,NULL,NULL,NULL,'Griego Solorio'),(21,'rodirigo','rodrigosendinosanz@gmail.com','56545645456',3,1800,NULL,'ACTIVO','2025-06-06',NULL,NULL,NULL,NULL,'sendino');
 /*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -66,7 +66,8 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-06 14:43:44
+-- Dump completed on 2025-06-06 16:58:26
+
 
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
