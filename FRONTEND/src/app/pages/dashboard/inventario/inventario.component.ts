@@ -1,26 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IIngredientes } from '../../../interfaces/iingredientes.interfaces';
 import { IngredientesService } from '../../../core/services/ingredientes.service';
 import { toast } from 'ngx-sonner';
 import { Router } from '@angular/router';
-=======
-import { CommonModule } from '@angular/common';
-import { InventarioFormComponent } from './inventario-form/inventario-form.component';
-import { ModalComponent } from "../../../shared/components/modal/modal.component";
->>>>>>> origin/SCRUM-45-seccion-inventario
 
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
   standalone: true,
-<<<<<<< HEAD
   imports: [ReactiveFormsModule]
-=======
-  imports: [CommonModule, ModalComponent, InventarioFormComponent]
->>>>>>> origin/SCRUM-45-seccion-inventario
 })
 export class InventarioComponent implements OnInit {
   ingredientes: IIngredientes[] = [];
@@ -70,7 +60,6 @@ export class InventarioComponent implements OnInit {
       return;
     }
 
-<<<<<<< HEAD
     this.ingredientesFiltrados = this.ingredientes.filter(ing =>
       ing.nombre.toLowerCase().includes(texto) ||
       ing.alergenos.toLowerCase().includes(texto)
@@ -79,33 +68,6 @@ export class InventarioComponent implements OnInit {
 
   abrirModal() {
     this.modalIngredienteAbierto = true;
-=======
-  // Estado del filtro de búsqueda
-  searchTerm: string = '';
-
-  modalAbierto: Boolean = false
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-  abrirFormProduct(){
-    this.modalAbierto = true
-  }
-
-  closeModal(){
-    this.modalAbierto = false;
-  }
-
-  sendForm(data: any){
-    this.modalAbierto = false
-  }
-
-  // Método para añadir un nuevo producto
-  agregarProducto(): void {
-    // Implementar lógica para añadir producto
-    console.log('Añadiendo nuevo producto...');
->>>>>>> origin/SCRUM-45-seccion-inventario
   }
 
   cerrarModal() {
@@ -182,22 +144,22 @@ export class InventarioComponent implements OnInit {
   }
 
   // CRUD Ingredientes
-  
+
   async getDataForm() {
     let response: IIngredientes | any;
     try {
-      
+
       response = await this.ingredientesService.createIngrediente(
         this.ingredienteForm.value
       );
-      
+
       toast.success("Ingrediente registrado correctamente");
       setTimeout(() => {
         this.router.navigate(['/dashboard' , 'inventory']).then(() => {
           window.location.reload();
           this.cerrarModal();
         });
-      }, 3000); 
+      }, 3000);
     } catch (msg: any) {
       toast.error("Fallo en el registro");
     }
@@ -206,7 +168,7 @@ export class InventarioComponent implements OnInit {
     return;
     }
   }
-  
+
   async updateDataForm() {
     let response: IIngredientes | any;
     try {
@@ -227,7 +189,7 @@ export class InventarioComponent implements OnInit {
     return;
     }
   }
-  
+
   async delete(id: number) {
     // Buscar el ingrediente por id para mostrar el nombre
     const ingrediente = this.ingredientes.find(e => e.id === id);
@@ -247,9 +209,9 @@ export class InventarioComponent implements OnInit {
                 window.location.reload();
               }, 1000);
             });
-  
-            
-            
+
+
+
           } catch (error: any) {
             console.log('Error al eliminar el ingrediente:', error);
             toast.error('Error al eliminar el ingrediente');
