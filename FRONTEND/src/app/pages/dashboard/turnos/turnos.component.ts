@@ -125,12 +125,22 @@ export class TurnosComponent {
     event.preventDefault();
   }
 
+
   onDrop(event: DragEvent, dayIndex: number, hour: number) {
     event.preventDefault();
     if (this.draggedShift) {
+      // Actualiza el día y la hora
       this.draggedShift.day = this.daysOfWeek[dayIndex];
       this.draggedShift.hour = hour;
+
+      // Recalcula startTime y endTime en formato HH:mm
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      this.draggedShift.startTime = `${pad(hour)}:00`;
+      const endHour = hour + this.draggedShift.duration;
+      this.draggedShift.endTime = `${pad(endHour)}:00`;
+
       this.draggedShift = null;
     }
   }
+
 }
