@@ -169,5 +169,25 @@ setCurrentWeekDates() {
     this.draggedShift = null;
   }
 }
+deleteShift() {
+  if (this.selectedShift) {
+    this.shifts = this.shifts.filter(shift => shift !== this.selectedShift);
+    this.selectedShift = null;
+    this.isModalOpen = false;
+  }
+}
+
+get todayShifts(): Shift[] {
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+  return this.shifts.filter(shift => shift.date === todayStr);
+}
+
+get todayFormatted(): string {
+  const hoy = new Date();
+  const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  return `${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]} ${hoy.getFullYear()}`;
+}
 
 }

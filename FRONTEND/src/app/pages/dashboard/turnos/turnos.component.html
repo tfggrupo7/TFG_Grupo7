@@ -4,15 +4,17 @@
       <h1 class="text-2xl font-bold text-[#556B2F]">Gestión de Turnos</h1>
       <p class="text-[#1C1C1C]/70">Organiza los horarios de tu equipo</p>
     </div>
-    <button data-open-modal="turno"
-      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="lucide lucide-plus h-4 w-4">
-        <path d="M5 12h14"></path>
-        <path d="M12 5v14"></path>
-      </svg>Programar Turno
-    </button>
+    <button
+  class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
+  (click)="openModal(0, 8)">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+    class="lucide lucide-plus h-4 w-4">
+    <path d="M5 12h14"></path>
+    <path d="M12 5v14"></path>
+  </svg>
+  Programar Turno
+</button>
   </div>
 
   <!-- Tarjetas de estadísticas -->
@@ -97,60 +99,48 @@
       <div class="flex items-center justify-between">
         <div>
           <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">Turnos de Hoy</h3>
-          <p class="text-sm text-muted-foreground">Jueves, 18 de Mayo 2023</p>
+          <p class="text-sm text-muted-foreground">{{ todayFormatted }}</p>
         </div>
-        <div class="flex items-center gap-2">
-          <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-8 px-3 text-xs border-[#556B2F] text-[#556B2F]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-chevron-left h-4 w-4">
-              <path d="m15 18-6-6 6-6"></path>
-            </svg>
-          </button>
-          <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-8 px-3 text-xs border-[#556B2F] text-[#556B2F]">Hoy</button>
-          <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-8 px-3 text-xs border-[#556B2F] text-[#556B2F]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-chevron-right h-4 w-4">
-              <path d="m9 18 6-6-6-6"></path>
-            </svg>
-          </button>
-        </div>
+
       </div>
     </div>
     <div class="p-6 pt-0">
       <div class="space-y-3">
         <!-- Aquí irán los turnos individuales -->
-        <div class="flex items-center justify-between p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10">
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-full bg-[#556B2F]/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-users h-6 w-6 text-[#556B2F]">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
+                <div class="space-y-3">
+          <ng-container *ngIf="todayShifts.length; else noShifts">
+            <div *ngFor="let shift of todayShifts" class="flex items-center justify-between p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-[#556B2F]/10 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-users h-6 w-6 text-[#556B2F]">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-medium text-[#1C1C1C]">{{ shift.employeeName | titlecase }}</h3>
+<p class="text-sm text-[#1C1C1C]/70">{{ shift.role | titlecase }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="text-right">
+                  <p class="font-medium text-[#556B2F]">{{ shift.startTime }} - {{ shift.endTime }}</p>
+                  <p class="text-sm text-[#1C1C1C]/70">{{ shift.duration }} horas</p>
+                </div>
+                <div class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
+                  {{ shift.status | titlecase }}
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 class="font-medium text-[#1C1C1C]">Ana García</h3>
-              <p class="text-sm text-[#1C1C1C]/70">Chef Ejecutivo</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="text-right">
-              <p class="font-medium text-[#556B2F]">08:00 - 16:00</p>
-              <p class="text-sm text-[#1C1C1C]/70">8 horas</p>
-            </div>
-            <div class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
-              En curso
-            </div>
-          </div>
+          </ng-container>
+          <ng-template #noShifts>
+            <div class="text-center text-[#1C1C1C]/60 py-8">No hay turnos programados para hoy.</div>
+          </ng-template>
         </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Vista semanal -->
   <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20" data-v0-t="card">
@@ -200,17 +190,15 @@
             <ng-container *ngFor="let shift of shifts">
               <div *ngIf="shift.day === day"
   class="absolute bg-[#D4AF37] text-white p-2 rounded cursor-move shift-card"
-                   [style.top.px]="shift.hour * 60"
-                   [style.height.px]="shift.duration * 60"
-                   draggable="true"
-                   (dragstart)="onDragStart(shift)"
-                   (click)="onShiftClick(shift)">
-                <div class="text-sm font-medium">{{shift.title}}</div>
-                <div class="text-xs">{{shift.startTime}} - {{shift.endTime}}</div>
-                <div class="text-xs">{{shift.employeeName}}</div>
-                <div class="text-xs">{{shift.role}}</div>
-                <div class="text-xs">{{shift.status}}</div>
-              </div>
+  [style.top.px]="shift.hour * 60"
+  [style.height.px]="shift.duration * 60"
+  draggable="true"
+  (dragstart)="onDragStart(shift)"
+  (click)="onShiftClick(shift)">
+  <div class="text-sm font-medium">{{shift.title | titlecase}}</div>
+  <div class="text-xs">{{shift.startTime}} - {{shift.endTime}}</div>
+  <div class="text-xs">{{shift.status  | titlecase}}</div>
+</div>
             </ng-container>
           </div>
         </div>
@@ -228,5 +216,6 @@
   [currentWeekDates]="currentWeekDates"
   (close)="closeModal()"
   (create)="createShift($event)"
-  (update)="updateShift($event)">
+  (update)="updateShift($event)"
+  (delete)="deleteShift()">
 </app-turnos-modal>

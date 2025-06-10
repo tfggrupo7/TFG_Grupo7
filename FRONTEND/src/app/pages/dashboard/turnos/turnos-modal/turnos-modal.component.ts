@@ -30,6 +30,7 @@ export class TurnosModalComponent implements OnInit {
   @Input() shiftToEdit: Shift | null = null;
   @Input() selectedDayIndex = 0
   @Input() currentWeekDates: string[] = [];
+  @Output() delete = new EventEmitter<void>();
   @Output() close = new EventEmitter<void>();
   @Output() create = new EventEmitter<{
   employeeName: string;
@@ -92,6 +93,12 @@ export class TurnosModalComponent implements OnInit {
       this.setFormForEdit();
     }
   }
+
+  onDelete() {
+  this.delete.emit();
+  this.shiftForm.reset();
+  this.isEditMode = false;
+}
 
 
   setFormForEdit() {
