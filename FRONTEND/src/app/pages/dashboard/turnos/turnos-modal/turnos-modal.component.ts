@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
@@ -27,23 +28,29 @@ export class TurnosModalComponent implements OnInit {
   @Input() selectedDay = '';
   @Input() selectedHour = 0;
   @Input() shiftToEdit: Shift | null = null;
+  @Input() selectedDayIndex = 0
+  @Input() currentWeekDates: string[] = [];
   @Output() close = new EventEmitter<void>();
   @Output() create = new EventEmitter<{
-    employeeName: string;
-    role: string;
-    date: string;
-    status: string;
-    startTime: string;
-    endTime: string;
-  }>();
-  @Output() update = new EventEmitter<{
-    employeeName: string;
-    role: string;
-    date: string;
-    status: string;
-    startTime: string;
-    endTime: string;
-  }>();
+  employeeName: string;
+  role: string;
+  date: string;
+  status: string;
+  startTime: string;
+  endTime: string;
+  dayIndex: number;
+  hour: number;
+}>();
+@Output() update = new EventEmitter<{
+  employeeName: string;
+  role: string;
+  date: string;
+  status: string;
+  startTime: string;
+  endTime: string;
+  dayIndex: number;
+  hour: number;
+}>();
 
   shiftForm: FormGroup;
   isEditMode = false;
@@ -78,6 +85,16 @@ export class TurnosModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setFormForEdit();
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['shiftToEdit']) {
+      this.setFormForEdit();
+    }
+  }
+
+
+  setFormForEdit() {
     if (this.shiftToEdit) {
       this.isEditMode = true;
       this.shiftForm.patchValue({
@@ -88,20 +105,39 @@ export class TurnosModalComponent implements OnInit {
         startTime: this.shiftToEdit.startTime,
         endTime: this.shiftToEdit.endTime
       });
+    } else {
+      this.isEditMode = false;
+      this.shiftForm.reset();
     }
   }
 
+
   onSubmit() {
-    if (this.shiftForm.valid) {
-      if (this.isEditMode) {
-        this.update.emit(this.shiftForm.value);
-      } else {
-        this.create.emit(this.shiftForm.value);
-      }
-      this.shiftForm.reset();
-      this.isEditMode = false;
+  if (this.shiftForm.valid) {
+    const formValue = { ...this.shiftForm.value };
+
+    // Calcular hour a partir de startTime
+    const hour = parseInt(formValue.startTime.split(':')[0], 10);
+
+    // Calcular dayIndex a partir de la fecha seleccionada
+    let dayIndex = 0;
+    if (this.currentWeekDates && Array.isArray(this.currentWeekDates)) {
+      dayIndex = this.currentWeekDates.indexOf(formValue.date);
     }
+    if (dayIndex === -1) {
+      alert('La fecha seleccionada no pertenece a la semana actual.');
+      return;
+    }
+
+    if (this.isEditMode) {
+      this.update.emit({ ...formValue, dayIndex, hour });
+    } else {
+      this.create.emit({ ...formValue, dayIndex, hour });
+    }
+    this.shiftForm.reset();
+    this.isEditMode = false;
   }
+}
 
   onClose() {
     this.shiftForm.reset();

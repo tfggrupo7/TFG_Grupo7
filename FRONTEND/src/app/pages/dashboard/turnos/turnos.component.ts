@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TurnosModalComponent } from './turnos-modal/turnos-modal.component';
 
@@ -23,6 +23,8 @@ interface Shift {
   styleUrls: ['./turnos.component.css']
 })
 export class TurnosComponent {
+  @ViewChild(TurnosModalComponent) modalRef!: TurnosModalComponent;
+
   daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   hours = Array.from({ length: 24 }, (_, i) => i); // 0 a 23
 
@@ -41,34 +43,61 @@ export class TurnosComponent {
   selectedHour = 0;
   selectedShift: Shift | null = null;
 
+  currentWeekDates: string[] = []; // Array de fechas (YYYY-MM-DD) para cada día de la semana
+
+ngOnInit() {
+  this.setCurrentWeekDates();
+}
+
+setCurrentWeekDates() {
+  const today = new Date();
+  const firstDayOfWeek = new Date(today);
+  firstDayOfWeek.setDate(today.getDate() - today.getDay() + 1); // Lunes
+  this.currentWeekDates = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(firstDayOfWeek);
+    d.setDate(firstDayOfWeek.getDate() + i);
+    return d.toISOString().slice(0, 10); // 'YYYY-MM-DD'
+  });
+}
+
+
   openModal(dayIndex: number, hour: number) {
-    this.selectedDayIndex = dayIndex;
-    this.selectedHour = hour;
-    this.selectedShift = null;
-    this.isModalOpen = true;
-  }
+  this.selectedDayIndex = dayIndex;
+  this.selectedHour = hour;
+  this.selectedShift = null;
+  this.isModalOpen = true;
+  setTimeout(() => {
+    // Si usas ViewChild para el modal:
+    this.modalRef?.shiftForm.patchValue({
+      date: this.currentWeekDates[dayIndex],
+      startTime: `${hour.toString().padStart(2, '0')}:00`
+    });
+  });
+}
 
   closeModal() {
     this.isModalOpen = false;
     this.selectedShift = null;
   }
 
-  createShift(shiftData: {
+    createShift(shiftData: {
     employeeName: string;
     role: string;
     date: string;
     status: string;
     startTime: string;
     endTime: string;
+    dayIndex: number;
+    hour: number;
   }) {
     const newShift: Shift = {
-      day: this.daysOfWeek[this.selectedDayIndex],
-      hour: this.selectedHour,
+      day: this.daysOfWeek[shiftData.dayIndex],
+      hour: shiftData.hour,
       title: `${shiftData.employeeName} - ${shiftData.role}`,
       duration: this.calculateDuration(shiftData.startTime, shiftData.endTime),
       employeeName: shiftData.employeeName,
       role: shiftData.role,
-      date: shiftData.date,
+      date: this.currentWeekDates[shiftData.dayIndex],
       status: shiftData.status,
       startTime: shiftData.startTime,
       endTime: shiftData.endTime
@@ -76,7 +105,6 @@ export class TurnosComponent {
     this.shifts.push(newShift);
     this.closeModal();
   }
-
   updateShift(shiftData: {
     employeeName: string;
     role: string;
@@ -127,20 +155,19 @@ export class TurnosComponent {
 
 
   onDrop(event: DragEvent, dayIndex: number, hour: number) {
-    event.preventDefault();
-    if (this.draggedShift) {
-      // Actualiza el día y la hora
-      this.draggedShift.day = this.daysOfWeek[dayIndex];
-      this.draggedShift.hour = hour;
+  event.preventDefault();
+  if (this.draggedShift) {
+    this.draggedShift.day = this.daysOfWeek[dayIndex];
+    this.draggedShift.hour = hour;
+    this.draggedShift.date = this.currentWeekDates[dayIndex]; // <-- Actualiza la fecha
 
-      // Recalcula startTime y endTime en formato HH:mm
-      const pad = (n: number) => n.toString().padStart(2, '0');
-      this.draggedShift.startTime = `${pad(hour)}:00`;
-      const endHour = hour + this.draggedShift.duration;
-      this.draggedShift.endTime = `${pad(endHour)}:00`;
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    this.draggedShift.startTime = `${pad(hour)}:00`;
+    const endHour = hour + this.draggedShift.duration;
+    this.draggedShift.endTime = `${pad(endHour)}:00`;
 
-      this.draggedShift = null;
-    }
+    this.draggedShift = null;
   }
+}
 
 }
