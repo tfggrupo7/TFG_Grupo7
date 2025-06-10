@@ -199,7 +199,7 @@
             <!-- Turnos para este día -->
             <ng-container *ngFor="let shift of shifts">
               <div *ngIf="shift.day === day"
-                   class="absolute bg-[#D4AF37] text-white p-2 rounded cursor-move"
+  class="absolute bg-[#D4AF37] text-white p-2 rounded cursor-move shift-card"
                    [style.top.px]="shift.hour * 60"
                    [style.height.px]="shift.duration * 60"
                    draggable="true"

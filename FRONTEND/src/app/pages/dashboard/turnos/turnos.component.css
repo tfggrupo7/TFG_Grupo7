@@ -34,3 +34,9 @@
   cursor: grab;
   margin: 2px 0;
 }
+.shift-card {
+  opacity: 0.8;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+}
