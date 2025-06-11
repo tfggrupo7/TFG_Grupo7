@@ -7,6 +7,7 @@ import { RolesService } from '../../../core/services/roles.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormGroup , FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoaderService } from '../../../core/services/loader.service';
 
 
 @Component({
@@ -25,18 +26,19 @@ export class PersonalComponent {
   modalEmpleadoAbierto = false;
   modalUpdateEmpleadoAbierto = false;
   userForm: FormGroup = new FormGroup({},[]);
-  empleadosFiltrados: IEmpleados[] = []; 
+  empleadosFiltrados: IEmpleados[] = [];
   busqueda = new FormControl('');
   empleadoId!: number;
-  
+  loaderService = inject(LoaderService)
+
   constructor(private empleadoService: EmpleadosService, private rolesService: RolesService, private router: Router){}
 
 
   async ngOnInit() {
     this.cargarEmpleados();
     this.arrRoles = await this.rolesService.getRoles();
-    
-    
+
+
 this.userForm = new FormGroup({
   id: new FormControl(null, []),
   nombre: new FormControl("", Validators.required),
@@ -57,10 +59,10 @@ this.userForm = new FormGroup({
   });
     this.busqueda.setValue(''); // Inicializar el campo de búsqueda vacío
     this.userForm.valueChanges.subscribe(value => {
- 
+
     });
    }
-   
+
 // Filtrado de empleados en barra de búsqueda
 
    filtrarEmpleados(valor: string) {
@@ -84,13 +86,11 @@ this.userForm = new FormGroup({
   async cargarEmpleados() {
     try {
       this.arrEmpleados = await this.empleadoService.getEmpleados();
-      
     } catch (error: any) {
       toast.error(error?.error || 'Error al cargar empleados');
     }
   }
   getNombreRol(rol_id: number): string {
-    
     const rol = this.arrRoles.find(r => r.id === rol_id);
     return rol ? rol.nombre : 'Sin rol';
   }
@@ -112,8 +112,8 @@ esActivo(empleado: any): string {
   esEnVacaciones(empleado: any): string {
     return empleado.status === 'vacaciones' ? 'EN VACACIONES' : "";
   }
- 
-  
+
+
   /*async gotoNext() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
@@ -160,16 +160,16 @@ abrirModalUpdate(empleado: IEmpleados) {
 async getDataForm() {
   let response: IEmpleados | any;
   try {
-    
+
     response = await this.empleadoService.createEmpleado(this.userForm.value);
-    
+
     toast.success("Empleado registrado correctamente");
     setTimeout(() => {
       this.router.navigate(['/dashboard' , 'personal']).then(() => {
         window.location.reload();
         this.cerrarModal();
       });
-    }, 3000); 
+    }, 3000);
   } catch (msg: any) {
     toast.error("Fallo en el registro");
   }
@@ -220,8 +220,8 @@ async delete(id: number) {
             }, 1000);
           });
 
-          
-          
+
+
         } catch (error: any) {
           console.log('Error al eliminar el usuario:', error);
           toast.error('Error al eliminar el usuario');
@@ -235,6 +235,6 @@ deleteEmpleado(id: number) {
   toast.success('Empleado eliminado con éxito');
 }
 
-  
+
 
 }

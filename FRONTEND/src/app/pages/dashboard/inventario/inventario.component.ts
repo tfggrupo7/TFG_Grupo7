@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LoaderService } from '../../../core/services/loader.service';
 
 @Component({
   selector: 'app-inventario',
@@ -9,6 +10,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule]
 })
 export class InventarioComponent implements OnInit {
+  loaderService = inject(LoaderService)
   // Datos de ejemplo para las métricas
   metrics = {
     totalProductos: {
