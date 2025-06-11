@@ -416,6 +416,20 @@ DROP TABLE IF EXISTS `turnos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `turnos` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `empleado_id` INT DEFAULT NULL,
+  `roles` INT NOT NULL,
+  `fecha` DATE NOT NULL,
+  `hora_inicio` TIME NOT NULL,
+  `hora_fin` TIME NOT NULL,
+  `estado` ENUM('pendiente','confirmado','completado') NOT NULL DEFAULT 'pendiente',
+  PRIMARY KEY (`id`),
+  KEY `empleado_id` (`empleado_id`),
+  KEY `idx_turnos_roles` (`roles`),
+  CONSTRAINT `turnos_ibfk_1`
+    FOREIGN KEY (`empleado_id`) REFERENCES `empleados` (`id`),
+  CONSTRAINT `turnos_ibfk_2`
+    FOREIGN KEY (`roles`) REFERENCES `roles` (`id`)
   `id` int NOT NULL AUTO_INCREMENT,
   `empleado_id` int DEFAULT NULL,
   `fecha` date NOT NULL,

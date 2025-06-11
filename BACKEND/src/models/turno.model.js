@@ -1,50 +1,48 @@
+// BACKEND/src/models/turnos.model.js
 const db = require('../config/db');
 
-
 const selectAll = async (page, limit) => {
-  const [result] = await db.query("select * from turnos limit ? offset ?", [
-    limit,
-    (page - 1) * limit,
-  ]);
-  return result;
+  const [rows] = await db.query(
+    "SELECT * FROM turnos ORDER BY fecha, hora_inicio LIMIT ? OFFSET ?",
+    [limit, (page - 1) * limit]
+  );
+  return rows;
 };
 
 const selectById = async (turnoId) => {
-  const [result] = await db.query("select * from turnos where id = ?", [
-    Number(turnoId),
-  ]);
-  if (result.length === 0) {
-    return null;
-  }
-  return result[0];
+  const [rows] = await db.query(
+    "SELECT * FROM turnos WHERE id = ?",
+    [Number(turnoId)]
+  );
+  return rows[0] || null;
 };
-const insert = async ({ empleado_id, fecha, hora_inicio, hora_fin}) => {
+
+const insert = async ({ empleado_id, roles, fecha, hora_inicio, hora_fin, estado }) => {
   const [result] = await db.query(
-    "insert into turnos (empleado_id, fecha, hora_inicio, hora_fin ) values (?, ?, ?, ?)",
-    [empleado_id, fecha, hora_inicio, hora_fin]
+    `INSERT INTO turnos
+     (empleado_id, roles, fecha, hora_inicio, hora_fin, estado)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+    [empleado_id, roles, fecha, hora_inicio, hora_fin, estado]
   );
   return result;
 };
 
-const update = async (turnoId, { empleado_id, fecha, hora_inicio, hora_fin}) => {
+const update = async (turnoId, { empleado_id, roles, fecha, hora_inicio, hora_fin, estado }) => {
   const [result] = await db.query(
-    "update turnos set empleado_id = ?, fecha = ? , hora_inicio = ? , hora_fin = ?  where id = ?",
-    [empleado_id, fecha, hora_inicio, hora_fin, turnoId]
+    `UPDATE turnos SET
+       empleado_id = ?, roles = ?, fecha = ?, hora_inicio = ?, hora_fin = ?, estado = ?
+     WHERE id = ?`,
+    [empleado_id, roles, fecha, hora_inicio, hora_fin, estado, turnoId]
   );
   return result;
 };
 
 const remove = async (turnoId) => {
-  const [result] = await db.query("delete from turnos where id = ?", [
-    turnoId,
-  ]);
+  const [result] = await db.query(
+    "DELETE FROM turnos WHERE id = ?",
+    [turnoId]
+  );
   return result;
 };
 
-module.exports = {
-  selectAll,
-  selectById,
-  insert,
-  update,
-  remove,
-};
+module.exports = { selectAll, selectById, insert, update, remove };
