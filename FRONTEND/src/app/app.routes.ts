@@ -22,6 +22,7 @@ import { InventarioEmpleadosComponent } from './pages/dashboard-empleados/invent
 import { TurnosEmpleadosComponent } from './pages/dashboard-empleados/turnos-empleados/turnos-empleados.component';
 import { PerfilEmpleadosComponent } from './pages/dashboard-empleados/perfil-empleados/perfil-empleados.component';
 import { ResumenEmpleadosComponent } from './pages/dashboard-empleados/resumen-empleados/resumen-empleados.component';
+import { TareasComponent } from './pages/dashboard/tareas/tareas.component';
 
 
 
@@ -35,13 +36,15 @@ export const routes: Routes = [
     { path: 'turnos', component: TurnosComponent },
     { path: 'reportes', component: ReportesComponent },
     { path: 'ajustes', component: AjustesComponent },
-    { path: 'perfil', component: PerfilComponent}
+    { path: 'perfil', component: PerfilComponent},
+    { path: 'tareas', component: TareasComponent}
   ] },
 { path:'dashboard-empleados',component:DashboardEmpleadosComponent,children: [
     { path: '', component: ResumenEmpleadosComponent },
     { path: 'inventario-empleados', component: InventarioEmpleadosComponent },
     { path: 'turnos-empleados', component: TurnosEmpleadosComponent },
-    { path: 'perfil-empleados', component: PerfilEmpleadosComponent}
+    { path: 'perfil-empleados', component: PerfilEmpleadosComponent},
+    { path: 'tareas-empleados', component: TareasComponent }
   ]},
   { path:'empleados/login',component:LoginEmpleadosComponent},
   { path:'empleados/recuperacion-contrasena',component: RecuperacionContrasenaEmpleadosComponent},

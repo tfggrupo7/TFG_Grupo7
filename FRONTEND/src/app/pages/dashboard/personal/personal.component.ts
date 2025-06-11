@@ -194,7 +194,7 @@ async ngOnSubmit() {
     }
     try {
       const empleadoActualizado: IEmpleados = { ...this.userForm.value, id: this.empleadoId };
-      console.log('Empleado a actualizar:', empleadoActualizado);
+    
       await this.empleadoService.updateEmpleadoPerfil(empleadoActualizado);
       toast.success('Empleado Actualizado correctamente');
       this.router.navigate(['/dashboard', 'personal']).then(() => {
@@ -225,7 +225,7 @@ async ngOnSubmit() {
               }, 1000);
             });
           } catch (error: any) {
-            console.log('Error al eliminar el usuario:', error);
+            
             toast.error('Error al eliminar el usuario');
           }
         }

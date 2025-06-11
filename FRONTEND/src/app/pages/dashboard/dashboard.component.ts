@@ -1,6 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
+import { Input } from '@angular/core';
+import { IUsuario } from '../../interfaces/iusuario.interfaces';
 
 
 @Component({
@@ -15,13 +18,14 @@ import { AuthService } from '../../core/services/auth.service';
 
 export class DashboardComponent {
   authService = inject(AuthService);
+  router = inject(Router);
+  @Input() usuario!: IUsuario;
   
   
 showProfileMenu = false;
 
-usuario = {
-  nombre: 'Chef Martínez',
-  rol: 'Administrador',
+avatar = {
+  rol: "Administrador",
   avatar: '../../../assets/avatar.avif'
 };
 
@@ -35,9 +39,11 @@ closeProfileMenu() {
 
 logout() {
   this.authService.logout();
+  this.router.navigate(['/']);
 }
 
   cerrarSesion() {
     this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

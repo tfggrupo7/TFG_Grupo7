@@ -1,7 +1,10 @@
 export interface ITareas {
     id: number;
+    titulo: string;
     descripcion: string;
     empleado_id: number;
-    menu_id: number;
-    fecha: string;
+   fecha_inicio: string;
+   fecha_finalizacion: string;
+   estado: string; 
+    
 }

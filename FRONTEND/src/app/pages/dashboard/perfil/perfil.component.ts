@@ -4,11 +4,11 @@ import { UsuarioService } from '../../../core/services/usuario.service';
 import { IUsuario } from '../../../interfaces/iusuario.interfaces';
 import { toast } from 'ngx-sonner';
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode'; // Asegúrate de tener jwt-decode instalado y configurado
+import { jwtDecode } from 'jwt-decode'; 
 
 @Component({
   selector: 'app-perfil',
-  standalone: true, // Si usas standalone components, si no, quítalo
+  standalone: true, 
   imports: [ReactiveFormsModule],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css']
@@ -31,8 +31,7 @@ export class PerfilComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Inicializa el usuario antes de usarlo (puedes cargarlo desde un servicio si lo necesitas)
-    // this.usuario = ...;
+    
 
     this.datosForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
@@ -79,13 +78,12 @@ export class PerfilComponent implements OnInit {
   }
 
   async cambiarPassword() {
-    console.log('Valores del formulario:', this.passwordForm.value);
-  console.log('Formulario de contraseña:', this.passwordForm.value);
+    ;
 
   const { contraseñaActual, nuevaContraseña, contraseñaRepetida } = this.passwordForm.value;
-console.log('Nueva contraseña que se envía:', nuevaContraseña);
+
     try {
-    console.log('Intentando cambiar contraseña para el usuario:', this.usuario);
+    
     // Debes obtener el token de alguna manera, por ejemplo desde localStorage o un servicio de autenticación
     const token = localStorage.getItem('token'); // Ajusta esto según cómo almacenes el token
 
@@ -98,10 +96,10 @@ console.log('Nueva contraseña que se envía:', nuevaContraseña);
     toast.success('Contraseña cambiada correctamente');
     this.passwordForm.reset();
   } catch (error) {
-  console.log('Error al cambiar la contraseña:', error);
+  
   // Si quieres ver el mensaje exacto del backend:
   if (typeof error === 'object' && error !== null && 'error' in error && typeof (error as any).error === 'object' && (error as any).error !== null && 'message' in (error as any).error) {
-    console.log('Mensaje del backend:', (error as any).error.message);
+    
   }
   toast.error('Error al cambiar la contraseña. Verifica tu contraseña actual.');
 }

@@ -1,0 +1,15 @@
+2025-06-10 18:48:44 POST /api/empleados/login ::1
+2025-06-10 18:54:24 POST /api/usuarios/login ::1
+2025-06-10 18:57:02 POST /api/usuarios/login ::1
+2025-06-10 19:00:26 POST /api/usuarios/login ::1
+2025-06-10 19:27:52 POST /api/usuarios/login ::1
+2025-06-10 19:54:48 POST /api/usuarios/login ::1
+2025-06-10 20:01:19 GET /api/empleados ::1
+2025-06-10 20:01:19 GET /api/roles ::1
+2025-06-10 20:16:43 GET /api/empleados ::1
+2025-06-10 20:16:43 GET /api/roles ::1
+2025-06-10 20:17:20 GET /api/empleados ::1
+2025-06-10 20:17:20 GET /api/roles ::1
+2025-06-11 10:28:27 POST /api/usuarios/login ::1
+2025-06-11 10:29:15 GET /api/empleados ::1
+2025-06-11 10:29:15 GET /api/roles ::1
