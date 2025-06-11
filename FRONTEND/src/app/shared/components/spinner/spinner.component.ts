@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { LoaderService } from '../../../core/services/loader.service';
 
 @Component({
@@ -11,7 +11,8 @@ export class SpinnerComponent {
 
   loaderService = inject(LoaderService)
 
-  isActive: boolean = false
+  @Input() isActive: boolean = true
+  visible: boolean = false
 
   ngOnInit() {
     this.loaderService.register(this);

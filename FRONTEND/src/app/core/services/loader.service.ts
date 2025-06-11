@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class LoaderService {
-  private component: { isActive: boolean } | null = null;
+  private component: { visible: boolean } | null = null;
   private count = 0;
 
-  register(component: { isActive: boolean }) {
+  register(component: { visible: boolean }) {
     this.component = component;
     this.update();
   }
@@ -22,7 +22,7 @@ export class LoaderService {
 
   private update() {
     if (this.component) {
-      this.component.isActive = this.count > 0;
+      this.component.visible = this.count > 0;
     }
   }
 }
