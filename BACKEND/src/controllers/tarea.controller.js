@@ -24,16 +24,18 @@ const getAllTareas = async (req, res) => {
 };
 
 const getTareasAndEmpleado = async (req, res) => {
-  const tareas = await Task.selectAllTareas(1, 500);
+  const tareas = await Tarea.selectAllTareas(1, 500);
 
   for (const tarea of tareas) {
     const empleado = await Empleado.selectById(tarea.empleado_id);
     if (empleado) {
       tarea.empleado = {
         nombre: empleado.nombre,
-        pass: empleado.pass,
+        apellidos: empleado.apellidos,
         email: empleado.email,
         telefono: empleado.telefono,
+        activo: empleado.activo,
+        
       };
     } else {
       tarea.empleado = null;
@@ -55,21 +57,23 @@ const getTareasAndEmpleadoById = async (req, res) => {
   for (const tarea of tareas) {
     tarea.empleado= {
         nombre: empleado.nombre,
-        pass: empleado.pass,
+        apellidos: empleado.apellidos,
         email: empleado.email,
         telefono: empleado.telefono,
+        activo: empleado.activo,
+        
     };
   }
 
   res.json(tareas);
 }
 const createTarea = async (req, res) => {
-  const { description,empleado_id,menu_id,fecha } = req.body;
+  const { descripcion,empleado_id,fecha_finalizacion,fecha_inicio,estado,titulo,hora_inicio,hora_finalizacion } = req.body;
   const empleado = await Empleado.selectById(empleado_id);
   if (!empleado) {
     return res.status(404).json({ error: "El usuario no existe" });
   }
-  const result= await Tarea.insert(description,empleado_id,menu_id,fecha);
+  const result= await Tarea.insert(descripcion,empleado_id,fecha_finalizacion,fecha_inicio,estado,titulo,hora_inicio,hora_finalizacion);
   const tarea = await Tarea.selectByTareaId(result.insertId);
 
   res.json(tarea);
@@ -78,7 +82,7 @@ const createTarea = async (req, res) => {
 const updateTarea = async (req, res) => {
   const { tareaId } = req.params;
   const result = await Tarea.update(tareaId, req.body);
-  const { description,empleado_id,menu_id,fecha } = req.body;
+  const { descripcion,empleado_id,fecha_finalizacion,fecha_inicio,estado,titulo,hora_inicio,hora_finalizacion } = req.body;
   const tarea = await Tarea.selectByTareaId(tareaId);
 
     res.json(tarea);
@@ -87,14 +91,14 @@ const updateTarea = async (req, res) => {
 const removeTarea = async (req, res) => {
   const { tareaId } = req.params;
   const result = await Tarea.remove(tareaId);
-  const tareas = await Post.selectAllTareas(1, 1000);
+  const tareas = await Tarea.selectAllTareas(1, 1000);
 
   res.json({ message: "Tarea eliminada ", data: tareas });
 };
 
 // tareas para el pdf
 const getAllTareasRaw = async () => {
-  return await Task.selectAllTareasRaw();
+  return await Tarea.selectAllTareasRaw();
 };
 
 const exportTareasPDF = async (req, res) => {
@@ -170,8 +174,10 @@ const exportTareasEmpleadoPDF = async (req, res) => {
 
 // Envio de todas las tareas por email
 const sendTareaPDF = async (req, res) => {
+  console.log('BODY RECIBIDO:', req.body);
   console.log('Enviando PDF por email');
-  const { email } = req.body;
+  const email = req.user?.email || req.body.email; 
+  console.log('req.user:', req.user);
   if (!email) return res.status(400).json({ error: 'Email requerido' });
 
   try {
@@ -179,9 +185,9 @@ const sendTareaPDF = async (req, res) => {
     console.log('Tareas obtenidas:', tareas.length);
     const filePath = path.join(__dirname, 'tareas.pdf');
     console.log('PDF generado en:', filePath);
-    await generateTareasPDF(tareas, filePath);
-    await sendTareasEmail(email, 'Lista de Tareas', 'Adjunto encontrarás el PDF con las tareas.', filePath);
-    console.log('Email enviado a:', email);
+  await generateTareasPDF(tareas, filePath);
+  await sendTareasEmail(email, 'Lista de Tareas', 'Adjunto encontrarás el PDF con las tareas.', filePath);
+  console.log('Email enviado a:', email);
 
     fs.unlinkSync(filePath);
     res.json({ message: 'Email enviado correctamente' });
@@ -229,6 +235,7 @@ const sendAllTareaEmpleadoPDF = async (req, res) => {
 
 
 
+
 module.exports = {
   getTareasById,
   getAllTareas,
@@ -238,6 +245,8 @@ module.exports = {
   getTareasAndEmpleado,
   getTareasAndEmpleadoById,
   getAllTareasRaw,exportTareasPDF,sendTareaPDF,sendAllTareaEmpleadoPDF,
-  getAllTareasEmpleadoRaw,exportTareasEmpleadoPDF
+  getAllTareasEmpleadoRaw,exportTareasEmpleadoPDF,
   
 };
+
+

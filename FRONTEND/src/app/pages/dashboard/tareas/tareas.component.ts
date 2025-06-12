@@ -1,57 +1,120 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ITareas } from '../../../interfaces/itareas.interfaces';
-
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { TareasService } from '../../../core/services/tareas.service';
+import { inject } from '@angular/core';
+import { toast } from 'ngx-sonner';
+import { IUsuario } from '../../../interfaces/iusuario.interfaces';
 
 @Component({
   selector: 'app-tareas',
   templateUrl: './tareas.component.html',
   styleUrls: ['./tareas.component.css'],
-  imports:[FormsModule, CommonModule],
+  imports:[FormsModule, CommonModule,ReactiveFormsModule],
 })
 export class TareasComponent {
   showModal = false;
   tareas: ITareas[] = [];
-  newTask: Partial<ITareas> = {};
+  tareasForm!: FormGroup;
+ tareasService = inject(TareasService);
+ usuario: IUsuario = {
+   nombre: '',
+   apellidos: '',
+   email: '',
+   contraseña: ''
+ };
 
+  constructor(private fb: FormBuilder) {}
+
+ngOnInit() {
+  this.tareasForm = this.fb.group({
+    titulo: ['', Validators.required],
+    descripcion: ['', Validators.required],
+    fecha_inicio: ['', Validators.required],
+    fecha_finalizacion: ['', Validators.required],
+    hora_inicio: ['', Validators.required],
+    hora_finalizacion: ['', Validators.required],
+    estado: ['', Validators.required],
+    empleado_id: ['', Validators.required]
+  });
+
+  this.obtenerTareas();
+}
   openModal() {
     this.showModal = true;
-    this.newTask = {};
+    
   }
 
   closeModal() {
     this.showModal = false;
   }
 
-  assignTask() {
-    if (
-      this.newTask.titulo &&
-      this.newTask.descripcion &&
-      this.newTask.fecha_inicio &&
-      this.newTask.fecha_finalizacion &&
-      this.newTask.empleado_id
-    ) {
-      this.tareas.push({
-        id: Date.now(),
-        titulo: this.newTask.titulo!,
-        descripcion: this.newTask.descripcion!,
-        empleado_id: this.newTask.empleado_id!,
-        fecha_inicio: this.newTask.fecha_inicio!,
-        fecha_finalizacion: this.newTask.fecha_finalizacion!,
-        estado: 'pendiente' // o el valor por defecto que corresponda
-      });
+obtenerTareas() {
+  this.tareasService.getTareas().then((respuesta: any) => {  
+    
+    this.tareas = respuesta.data; 
+  });
+}
+
+  async insertarTarea() {
+    try {
+      console.log('Insertando tarea:', this.tareasForm.value);
+      await this.tareasService.createTarea(this.tareasForm.value);
       this.closeModal();
+      this.obtenerTareas();
+    } catch (err: unknown) {
+      console.log('Error al insertar la tarea:', err);
+      toast.error('Error al insertar la tarea');
     }
   }
 
-  getTasksByEmployee() {
-    const grouped: { [key: string]: ITareas[] } = {};
-    this.tareas.forEach((tarea) => {
-      if (!grouped[tarea.empleado_id]) grouped[tarea.empleado_id] = [];
-      grouped[tarea.empleado_id].push(tarea);
+getTareasPorEmpleado() {
+ 
+  if (!this.tareas) return {};
+  return this.tareas.reduce((acc, tarea) => {
+    if (!acc[tarea.empleado_id]) {
+      acc[tarea.empleado_id] = [];
+    }
+    acc[tarea.empleado_id].push(tarea);
+    return acc;
+  }, {} as { [empleado_id: number]: ITareas[] });
+}
+
+eliminarTarea(tareaId: number) {
+  if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
+    this.tareasService.deleteTarea(tareaId).then(() => {
+      this.obtenerTareas();
+      toast.success('Tarea eliminada correctamente');
+    }).catch((err: unknown) => {
+      toast.error('Error al eliminar la tarea');
     });
-    return grouped;
-  }
+
+}
+}
+enviarTareasPorEmail() {
+  this.tareasService.sendTareasByEmail(this.tareas).then(() => {
+    toast.success('Tareas enviadas por correo electrónico correctamente');
+  }).catch((err: unknown) => {
+    console.error('Error al enviar las tareas por correo electrónico:', err);
+    toast.error('Error al enviar las tareas por correo electrónico');
+  });
+}
+descargarTareas() {
+  this.tareasService.downloadTareas().then((respuesta: any) => {
+    const blob = new Blob([respuesta], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tareas.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }).catch((err: unknown) => {
+    
+    toast.error('Error al descargar las tareas');
+  });     
+}
 }

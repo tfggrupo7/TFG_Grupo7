@@ -22,8 +22,8 @@ import { InventarioEmpleadosComponent } from './pages/dashboard-empleados/invent
 import { TurnosEmpleadosComponent } from './pages/dashboard-empleados/turnos-empleados/turnos-empleados.component';
 import { PerfilEmpleadosComponent } from './pages/dashboard-empleados/perfil-empleados/perfil-empleados.component';
 import { ResumenEmpleadosComponent } from './pages/dashboard-empleados/resumen-empleados/resumen-empleados.component';
+import { TareasEmpleadosComponent } from './pages/dashboard-empleados/tareas-empleados/tareas-empleados.component';
 import { TareasComponent } from './pages/dashboard/tareas/tareas.component';
-
 
 
 export const routes: Routes = [
@@ -44,7 +44,7 @@ export const routes: Routes = [
     { path: 'inventario-empleados', component: InventarioEmpleadosComponent },
     { path: 'turnos-empleados', component: TurnosEmpleadosComponent },
     { path: 'perfil-empleados', component: PerfilEmpleadosComponent},
-    { path: 'tareas-empleados', component: TareasComponent }
+    { path: 'tareas-empleados', component: TareasEmpleadosComponent }
   ]},
   { path:'empleados/login',component:LoginEmpleadosComponent},
   { path:'empleados/recuperacion-contrasena',component: RecuperacionContrasenaEmpleadosComponent},

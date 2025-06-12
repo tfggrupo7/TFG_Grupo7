@@ -16,7 +16,7 @@ const {
 } = require("../../controllers/tarea.controller");
 
 
-const { checktareaId, checkdataTarea } = require("../../middleware/tareas.middleware");
+const { checktareaId, checkdataTarea, auth } = require("../../middleware/tareas.middleware");
 
 
 router.get("/", getAllTareas);
@@ -28,7 +28,7 @@ router.get("/tarea/:tareaId", getTareasAndEmpleado);
 router.get("/empleado/:empleadoId", getTareasAndEmpleadoById);
 router.get("/:tareaId",checktareaId,getTareasById);
 router.post("/",checkdataTarea, createTarea);
-router.post('/send/pdf', sendTareaPDF);
+router.post('/send/pdf',auth, sendTareaPDF);
 router.post('/empleado/:empleadoId/tareas/send/pdf', sendAllTareaEmpleadoPDF);
 router.put("/:tareaId", checktareaId,checkdataTarea,updateTarea);
 router.delete("/:tareaId",checktareaId, removeTarea);

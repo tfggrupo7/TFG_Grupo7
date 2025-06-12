@@ -1,0 +1,29 @@
+<div class="mt-8">
+  <h2 class="text-xl font-bold text-[#4b6b1c] mb-4">Lista de Tareas del Empleado</h2>
+  <table class="min-w-full bg-white border border-[#d9dbc7] rounded-xl shadow">
+    <thead class="bg-[#e9ebdd]">
+      <tr>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Título</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Descripción</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Fecha Inicio</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Fecha Finalización</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Hora Inicio</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Hora Finalización</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (tarea of tareas; track tarea.id) {
+        <tr class="hover:bg-[#f3f3ec]">
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.titulo }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.descripcion }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.fecha_inicio | date:'dd-MM-yyyy'}}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.fecha_finalizacion | date:'dd-MM-yyyy' }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.hora_inicio }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.hora_finalizacion }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.estado }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

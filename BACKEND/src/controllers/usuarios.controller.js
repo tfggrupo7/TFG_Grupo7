@@ -30,7 +30,7 @@ const login = async (req, res) => {
   res.json({
     message: "Login exitoso",
     token: jwt.sign(
-      { usuario_id: usuario.id, role: usuario.role },
+      { usuario_id: usuario.id, role: usuario.role, email: usuario.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     ),

@@ -1,10 +1,13 @@
 const nodemailer = require('nodemailer');
 
 
+// Ahora la función espera un array de tareas, no de empleados
 async function sendTareasEmail(to, subject, text, attachmentPath) {
+
+
   // Configura tu transporte SMTP
   const transporter = nodemailer.createTransport({
-    service: 'gmail', // O el servicio que uses
+    service: 'gmail',
     auth: {
       user: 'waltra2@gmail.com',
       pass: 'fafs oorf tncb hgeu'
@@ -15,13 +18,14 @@ async function sendTareasEmail(to, subject, text, attachmentPath) {
   });
 
   const mailOptions = {
-    from: 'waltra2@gmail.com',
+    from: 'ChefDesk',
     to,
     subject,
     text,
+    
     attachments: [
       {
-        filename: 'tasks.pdf',
+        filename: 'tareas.pdf',
         path: attachmentPath
       }
     ]
