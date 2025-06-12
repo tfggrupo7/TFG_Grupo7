@@ -60,11 +60,21 @@ const selectAllTareasRaw = async () => {
 };
 
 const selectAllTareasAndEmpleadoRaw = async (empleadoId) => {
+  
   const [result] = await db.query(
-    `SELECT tarea_id, tareas.titulo, tareas.descripcion, tareas.hora_inicio, tareas.hora_finalizacion, tareas.estado,tareas.empleado_id, empleados.nombre as empleado_nombre
-     FROM tareas
-     INNER JOIN empleados ON tareas.empleado_id = empleados_id
-     WHERE tareas.empleado_id = ?`,
+    `SELECT 
+  tareas.titulo, 
+  tareas.descripcion, 
+  tareas.hora_inicio, 
+  tareas.hora_finalizacion,
+  tareas.fecha_inicio,
+  tareas.fecha_finalizacion, 
+  tareas.estado,
+  tareas.empleado_id, 
+  empleados.nombre AS empleado_nombre
+FROM tareas
+INNER JOIN empleados ON tareas.empleado_id = empleados.id
+WHERE tareas.empleado_id = ?`,
     [empleadoId]
   );
   return result;

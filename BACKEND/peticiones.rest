@@ -55,7 +55,7 @@ GET {{host}}/api/tareas
 
 ### Pedir todas las tareas de un empleado con id 1
 
-GET {{host}}/api/empleados/1
+GET {{host}}/api/empleados/2
 
 ### Pedir una tarea con id 1
 GET {{host}}/api/tareas/1
@@ -65,7 +65,7 @@ GET {{host}}/api/tareas/1
 GET {{host}}/api/empleados/tareas
 
 ### Pedir todas las tareas de un empleado con id 1
-GET {{host}}/api/tareas/empleado/1
+GET {{host}}/api/tareas/empleado/2
 
 ### crear una tarea
 POST {{host}}/api/tareas

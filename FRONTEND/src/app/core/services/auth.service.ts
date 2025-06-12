@@ -59,4 +59,15 @@ export class AuthService {
       return null;
     }
   }
+  getRolEmpleado(): string {
+    const token = localStorage.getItem('token');
+    if (!token) return '';
+    try {
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      return decodedToken.rol || '';
+    } catch (e) {
+      console.error('Error decoding token:', e);
+      return '';
+    }
+  } 
 }

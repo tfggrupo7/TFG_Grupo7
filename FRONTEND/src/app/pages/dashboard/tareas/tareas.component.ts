@@ -51,6 +51,23 @@ ngOnInit() {
     this.showModal = false;
   }
 
+  getEstadoTarea(tarea: any): string {
+  const ahora = new Date();
+
+  // Combina fecha y hora para comparar correctamente
+  const fechaInicio = new Date(`${tarea.fecha_inicio}T${tarea.hora_inicio}`);
+  const fechaFin = new Date(`${tarea.fecha_finalizacion}T${tarea.hora_finalizacion}`);
+
+  if (ahora < fechaInicio) {
+    return 'Pendiente';
+  } else if (ahora >= fechaInicio && ahora <= fechaFin) {
+    return 'En Curso';
+  } else if (ahora > fechaFin) {
+    return 'Completada';
+  }
+  return tarea.estado || 'Pendiente';
+}
+
 obtenerTareas() {
   this.tareasService.getTareas().then((respuesta: any) => {  
     
