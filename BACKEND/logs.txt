@@ -221,3 +221,8 @@
 2025-06-04 13:39:26 GET /api/empleados ::1
 2025-06-04 13:39:26 GET /api/roles ::1
 2025-06-04 13:39:26 GET /api/empleados ::1
+2025-06-10 22:25:55 POST /api/usuarios/login ::1
+2025-06-10 22:26:05 GET /api/empleados ::1
+2025-06-10 22:26:05 GET /api/roles ::1
+2025-06-10 22:26:05 GET /api/empleados ::1
+2025-06-10 22:28:32 POST /api/usuarios/login ::1
