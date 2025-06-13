@@ -18,7 +18,3 @@ export const appConfig = {
           })
   ],
 };
-      withInterceptors([AuthInterceptor, SpinnerInterceptor])
-    )
-  ]
-};
