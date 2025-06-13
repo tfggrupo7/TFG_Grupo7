@@ -79,9 +79,7 @@ export class PerfilEmpleadosComponent {
     }
 
     const token = localStorage.getItem('token');
-
     const payload = this.recogerToken(token || '');
-
     const empleadoId = payload?.id || payload?.empleado_id;
 
     if (!empleadoId) {
@@ -108,9 +106,7 @@ export class PerfilEmpleadosComponent {
     try {
       // Debes obtener el token de alguna manera, por ejemplo desde localStorage o un servicio de autenticación
       const token = localStorage.getItem('token') || '';
-
       const payload = this.recogerToken(token);
-
       const empleadoId = payload?.id || payload?.empleado_id;
 
       if (!empleadoId) {

@@ -30,7 +30,7 @@
     </button>
     
     <!-- Botón de asignar tarea (ya existente) -->
-    @if( role.includes('Encargado')) {
+    @if(isEncargado) {
     <button
       class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow"
       (click)="openModal()"
@@ -143,6 +143,13 @@
       </tr>
     </thead>
     <tbody>
+      @if (tareas.length === 0) {
+    <tr>
+      <td colspan="7" class="text-center py-4 text-gray-500 font-semibold">
+        NO HAY TAREAS PARA ESTE EMPLEADO
+      </td>
+    </tr>
+  }
       @for (tarea of tareas; track tarea.id) {
         <tr class="hover:bg-[#f3f3ec]">
           <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.titulo }}</td>

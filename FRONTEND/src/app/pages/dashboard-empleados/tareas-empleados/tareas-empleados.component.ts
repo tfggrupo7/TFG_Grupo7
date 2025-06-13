@@ -45,6 +45,7 @@ constructor(private fb: FormBuilder) {}
     empleado_id: ['', Validators.required]
   });
 // Obtener el rol del empleado desde el token
+this.getRolEmpleado();
   }
 
   openModal() {
@@ -72,6 +73,29 @@ getEstadoTarea(tarea: any): string {
   return tarea.estado || 'Pendiente';
 }
 
+getRolEmpleado() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('No se pudo obtener el token del empleado');
+      return;
+    }
+    try {
+  const decoded: any = jwtDecode(token);
+let roles = decoded.role || [];
+if (typeof roles === 'string') {
+  roles = [roles];
+}
+this.role = roles;
+console.log('Rol del empleado:', this.role);
+    } catch (e) {
+      console.error('Error al decodificar el token:', e);
+      toast.error('Error al obtener el rol del empleado');
+    }
+  }
+
+  get isEncargado(): boolean {
+    return this.role.includes('encargado');
+  }
 async insertarTarea() {
     try {
       console.log('Insertando tarea:', this.tareasForm.value);

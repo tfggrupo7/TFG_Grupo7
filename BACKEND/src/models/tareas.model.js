@@ -1,14 +1,17 @@
 const db = require("../config/db");
 
 const selectByEmpleadoId = async (empleadoId) => {
-  const [result] = await db.query("select * from tareas where empleado_id = ?", [
-    empleadoId,
-  ]);
+  const [result] = await db.query(
+    "select * from tareas where empleado_id = ?",
+    [empleadoId]
+  );
   return result;
 };
 
 const selectByTareaId = async (tareaId) => {
-  const [result] = await db.query("select * from tareas where id = ?", [tareaId]);
+  const [result] = await db.query("select * from tareas where id = ?", [
+    tareaId,
+  ]);
   return result;
 };
 
@@ -26,22 +29,61 @@ const selectAllTareasAndEmpleado = async (page, limit) => {
     [limit, (page - 1) * limit]
   );
   return result;
-}
+};
 
-const insert = async (descripcion,empleado_id,fecha_finalizacion,fecha_inicio,estado,titulo,hora_inicio,hora_finalizacion) => {
+const insert = async (
+  descripcion,
+  empleado_id,
+  fecha_finalizacion,
+  fecha_inicio,
+  estado,
+  titulo,
+  hora_inicio,
+  hora_finalizacion
+) => {
   const [result] = await db.query(
     "insert into tareas (descripcion,empleado_id,fecha_finalizacion,fecha_inicio,estado,titulo,hora_inicio,hora_finalizacion) values (?, ?, ?, ?,?,?,?,?)",
-    [descripcion,empleado_id,fecha_finalizacion,fecha_inicio,estado,titulo,hora_inicio,hora_finalizacion]
+    [
+      descripcion,
+      empleado_id,
+      fecha_finalizacion,
+      fecha_inicio,
+      estado,
+      titulo,
+      hora_inicio,
+      hora_finalizacion,
+    ]
   );
-  
-    
+
   return result;
 };
 
-const update = async (tareaId, { descripcion,empleado_id,fecha_finalizacion,fecha_inicio,estado,titulo,hora_inicio,hora_finalizacion}) => {
+const update = async (
+  tareaId,
+  {
+    descripcion,
+    empleado_id,
+    fecha_finalizacion,
+    fecha_inicio,
+    estado,
+    titulo,
+    hora_inicio,
+    hora_finalizacion,
+  }
+) => {
   const [result] = await db.query(
     "update tareas set descripcion = ?, empleado_id = ?,fecha_finalizacion =?, fehca_inicio=?, estado=?, titulo=?, hora_inicio=?, hora_finalizacion=? where id = ?",
-    [descripcion,empleado_id,fecha_finalizacion,fecha_inicio,estado,titulo,hora_inicio,hora_finalizacion, tareaId]
+    [
+      descripcion,
+      empleado_id,
+      fecha_finalizacion,
+      fecha_inicio,
+      estado,
+      titulo,
+      hora_inicio,
+      hora_finalizacion,
+      tareaId,
+    ]
   );
   return result;
 };
@@ -60,7 +102,6 @@ const selectAllTareasRaw = async () => {
 };
 
 const selectAllTareasAndEmpleadoRaw = async (empleadoId) => {
-  
   const [result] = await db.query(
     `SELECT 
   tareas.titulo, 
@@ -79,7 +120,6 @@ WHERE tareas.empleado_id = ?`,
   );
   return result;
 };
-
 
 module.exports = {
   selectByEmpleadoId,

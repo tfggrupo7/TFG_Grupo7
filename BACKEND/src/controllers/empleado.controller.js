@@ -6,27 +6,34 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../sendEmail");
 
-
-// Login 
+// Login
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const empleado = await Empleado.getByEmail(email); 
+  console.log("Intentando login con email:", email);
+  const empleado = await Empleado.getByEmail(email);
   if (!empleado) {
+    console.log("Empleado no encontrado para email:", email);
     return res
       .status(401)
       .json({ message: "Usuario y/o contraseña incorrectos" });
   }
   const validPassword = bcrypt.compareSync(password, empleado.password);
   if (!validPassword) {
+    console.log("Contraseña incorrecta para email:", email);
     return res
       .status(401)
       .json({ message: "Usuario y/o contraseña incorrectos" });
   }
+
+  // Obtener el nombre del rol
+  const rol = await Role.selectById(empleado.rol_id); // Ajusta esto según tu modelo
+  console.log("Login exitoso para empleado:", empleado.id, "rol:", rol.nombre);
+
   res.json({
     message: "Login exitoso",
     token: jwt.sign(
-      { id: empleado.id, role: empleado.role, email: empleado.email },
+      { id: empleado.id, role: rol.nombre, email: empleado.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     ),
@@ -63,7 +70,7 @@ const recuperarContraseña = async (req, res) => {
 
     // 5. Envía el email con el token plano
     const resetUrl = `http://localhost:4200/empleados/restablecer-contrasena/${token}`;
-const htmlTemplate = `
+    const htmlTemplate = `
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -112,17 +119,15 @@ const htmlTemplate = `
 </html>
 `;
 
-await sendEmail(
-  email,
-  "Recupera tu contraseña",
-  `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetUrl}\nEste enlace expirará en 1 hora.`,
-  htmlTemplate
-);
-    res
-      .status(200)
-      .json({
-        message: "Si el correo existe, se enviará un enlace de recuperación.",
-      });
+    await sendEmail(
+      email,
+      "Recupera tu contraseña",
+      `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetUrl}\nEste enlace expirará en 1 hora.`,
+      htmlTemplate
+    );
+    res.status(200).json({
+      message: "Si el correo existe, se enviará un enlace de recuperación.",
+    });
   } catch (err) {
     console.error("Error al recuperar contraseña:", err);
     res.status(500).json({ message: "Error en el servidor." });
@@ -180,10 +185,7 @@ const getAll = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const offset = (page - 1) * limit;
   const empleado = await Empleado.selectAll();
-    res.json(
-    
-    empleado
-  );
+  res.json(empleado);
 };
 
 const getById = async (req, res) => {
@@ -207,7 +209,17 @@ const getEmpleadosAndTarea = async (req, res) => {
 
 const create = async (req, res) => {
   const result = await Empleado.insert(req.body);
-  const { nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio , usuario_id} = req.body;
+  const {
+    nombre,
+    email,
+    telefono,
+    rol_id,
+    salario,
+    status,
+    activo,
+    fecha_inicio,
+    usuario_id,
+  } = req.body;
   const empleado = await Empleado.selectById(result.insertId);
 
   res.json(empleado);
@@ -216,7 +228,17 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   const { empleadoId } = req.params;
   const result = await Empleado.update(empleadoId, req.body);
-  const { nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio, apellidos } = req.body;
+  const {
+    nombre,
+    email,
+    telefono,
+    rol_id,
+    salario,
+    status,
+    activo,
+    fecha_inicio,
+    apellidos,
+  } = req.body;
   const empleado = await Empleado.selectById(empleadoId);
 
   res.json(empleado);
@@ -248,7 +270,7 @@ const cambiarContraseña = async (req, res) => {
   if (!empleadoId || isNaN(empleadoId)) {
     return res.status(400).json({ message: "Empleado no encontrado" });
   }
-console.log('Intentando cambiar contraseña para empleadoId:', empleadoId)
+  console.log("Intentando cambiar contraseña para empleadoId:", empleadoId);
   if (!nuevaContraseña || typeof nuevaContraseña !== "string") {
     return res
       .status(400)
@@ -256,7 +278,10 @@ console.log('Intentando cambiar contraseña para empleadoId:', empleadoId)
   }
 
   try {
-    const result = await Empleado.cambiarContraseña(empleadoId, nuevaContraseña);
+    const result = await Empleado.cambiarContraseña(
+      empleadoId,
+      nuevaContraseña
+    );
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
@@ -286,7 +311,7 @@ const getEmpleadosYRoles = async (req, res) => {
         const role = await Role.selectById(empleado.rol_id);
         return {
           ...empleado,
-          role: role
+          role: role,
         };
       })
     );
@@ -294,9 +319,24 @@ const getEmpleadosYRoles = async (req, res) => {
     // 3. Devolver el array de empleados con su rol
     res.json(empleadosConRol);
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener empleados y roles", error });
+    res
+      .status(500)
+      .json({ message: "Error al obtener empleados y roles", error });
   }
 };
 
-
-module.exports = { getAll, getById, create, getEmpleadosAndTarea, update, updateEmpleado,remove, getEmpleadosYRoles, login, recuperarContraseña, restablecerContraseña, generarYGuardarToken, cambiarContraseña };
+module.exports = {
+  getAll,
+  getById,
+  create,
+  getEmpleadosAndTarea,
+  update,
+  updateEmpleado,
+  remove,
+  getEmpleadosYRoles,
+  login,
+  recuperarContraseña,
+  restablecerContraseña,
+  generarYGuardarToken,
+  cambiarContraseña,
+};
