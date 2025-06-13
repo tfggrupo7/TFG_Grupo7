@@ -43,4 +43,35 @@ export class UsuarioService {
   return lastValueFrom(this.httpClient.post(`http://localhost:3000/api/usuarios/restablecer-contrasena/${token}`, { nuevaContrasena }, { headers }));
 }
 
+cambiarContraseña (token: string, nuevaContraseña: string): Promise<any> {
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json'
+  });
+  return lastValueFrom(this.httpClient.post(`http://localhost:3000/api/usuarios/cambiar-contrasena/${token}`, { nuevaContraseña }, { headers }));
+}
+
+updateUsuario(usuario: IUsuario): Promise<IUsuario> {
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `${token}` } : {})
+    });
+  return lastValueFrom(
+    this.httpClient.put<IUsuario>(
+      'http://localhost:3000/api/usuarios',
+      usuario,
+      { headers }
+    )
+  );
+}
+deleteUsuario(id: string): Promise<void> {
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',   
+    ...(token ? { 'Authorization': `${token}` } : {})
+  });
+  return lastValueFrom(
+    this.httpClient.delete<void>(`http://localhost:3000/api/usuarios/${id}`, { headers })
+  );
   }
+}

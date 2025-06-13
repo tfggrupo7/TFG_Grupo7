@@ -55,7 +55,7 @@ GET {{host}}/api/tareas
 
 ### Pedir todas las tareas de un empleado con id 1
 
-GET {{host}}/api/empleados/1
+GET {{host}}/api/empleados/2
 
 ### Pedir una tarea con id 1
 GET {{host}}/api/tareas/1
@@ -65,7 +65,7 @@ GET {{host}}/api/tareas/1
 GET {{host}}/api/empleados/tareas
 
 ### Pedir todas las tareas de un empleado con id 1
-GET {{host}}/api/tareas/empleado/1
+GET {{host}}/api/tareas/empleado/2
 
 ### crear una tarea
 POST {{host}}/api/tareas
@@ -461,3 +461,20 @@ Content-Type: application/json
 ###
 GET {{host}}/api/empleados/role
 
+###
+POST {{host}}/api/usuarios
+Content-Type: application/json
+
+{
+  "nombre":"Manuel",
+  "apellidos":"Perez",
+  "email":"waltra@gmail.com"
+}
+
+###
+POST {{host}}/api/usuarios/cambiar-contrasena/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJpYXQiOjE3NDkxNDMwNDIsImV4cCI6MTc0OTE0NjY0Mn0.Ng4Axbetg9GLE2k7JzIXpbNmRN3bDSPBBNVidTWpufE
+Content-Type: application/json
+
+{
+  "nuevaContraseña": "123456" 
+}

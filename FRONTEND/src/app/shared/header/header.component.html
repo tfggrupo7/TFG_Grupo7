@@ -20,6 +20,10 @@
           class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white hidden sm:inline-flex">
           <a [routerLink]="['/login']">Regístrate</a>
         </button>
+        <button
+          class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#00AAE4] hover:bg-[#00AAE4]/90 text-white hidden sm:inline-flex">
+          <a [routerLink]="['/empleados', 'login']">Area Empleados</a>
+        </button>
         <button (click)="mobileMenuOpen = !mobileMenuOpen"
           class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:bg-[#556B2F]/10 hover:text-[#556B2F] h-10 w-10 md:hidden text-[#556B2F]">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"

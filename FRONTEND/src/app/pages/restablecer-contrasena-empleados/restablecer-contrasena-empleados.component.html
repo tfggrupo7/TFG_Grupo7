@@ -1,0 +1,31 @@
+<!-- restablecer-contrasena.component.html -->
+<app-header></app-header>
+
+<section>
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-4 text-[#556B2F]">Restablecer contraseña</h2>
+    <form [formGroup]="form" (ngSubmit)="enviar()">
+      <label class="block text-sm font-medium text-gray-700 mb-1">Nueva contraseña</label>
+      <input type="password" formControlName="nuevaContrasena" class="w-full p-2 border rounded mb-2" placeholder="Nueva contraseña" />
+      <label class="block text-sm font-medium text-gray-700 mb-1">Repetir contraseña</label>
+      <input type="password" formControlName="repetirContrasena" class="w-full p-2 border rounded mb-2" placeholder="Repite la contraseña" />
+      @if (form.errors?.['mismatch'] && (form.get('repetirContrasena')?.touched || form.get('repetirContrasena')?.dirty)) {
+        <div class="text-red-600 text-sm mb-2">
+          Las contraseñas no coinciden.
+        </div>
+      }
+      <button type="submit" class="w-full bg-[#556B2F] text-white py-2 rounded" [disabled]="form.invalid">
+        Cambiar contraseña
+      </button>
+    </form>
+    @if (mensaje) {
+      <div class="mt-4 text-green-600">{{ mensaje }}</div>
+    }
+    @if (error) {
+      <div class="mt-4 text-red-600">{{ error }}</div>
+    }
+  </div>
+</div>
+
+</section>

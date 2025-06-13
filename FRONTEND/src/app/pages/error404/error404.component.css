@@ -1,0 +1,12 @@
+@media (max-width: 768px) {
+  .resize {
+    width: 40%;
+    margin: 0 auto;
+  }
+}
+@media (min-width: 769px) {
+  .resize {
+    width: 55%;
+    margin: 0 auto;
+  }
+}

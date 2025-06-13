@@ -1,6 +1,8 @@
 export interface IEmpleados {
     id: number;
     nombre: string;
+    apellidos: string;
+    password?: string;
     email: string;
     rol_id: number;
     fecha_inicio: string;
