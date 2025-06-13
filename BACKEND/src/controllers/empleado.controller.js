@@ -28,7 +28,7 @@ const login = async (req, res) => {
 
   // Obtener el nombre del rol
   const rol = await Role.selectById(empleado.rol_id); // Ajusta esto según tu modelo
-  console.log("Login exitoso para empleado:", empleado.id, "rol:", rol.nombre);
+ 
 
   res.json({
     message: "Login exitoso",

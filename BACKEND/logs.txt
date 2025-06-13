@@ -263,3 +263,12 @@
 2025-06-13 10:12:37 POST /api/empleados/login ::1
 >>>>>>> optimizacioncodigopersonal
 2025-06-13 17:47:52 POST /api/empleados/login ::1
+2025-06-13 18:18:16 POST /api/usuarios/login ::1
+2025-06-13 18:29:00 POST /api/empleados/login ::1
+2025-06-13 18:29:27 POST /api/usuarios/login ::1
+2025-06-13 18:29:33 GET /api/empleados ::1
+2025-06-13 18:29:33 GET /api/roles ::1
+2025-06-13 18:29:59 POST /api/empleados ::1
+2025-06-13 18:30:02 GET /api/empleados ::1
+2025-06-13 18:30:02 GET /api/roles ::1
+2025-06-13 18:30:17 POST /api/empleados/recuperar-contrasena ::1
