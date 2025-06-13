@@ -262,3 +262,4 @@
 2025-06-13 10:12:32 POST /api/empleados/login ::1
 2025-06-13 10:12:37 POST /api/empleados/login ::1
 >>>>>>> optimizacioncodigopersonal
+2025-06-13 17:47:52 POST /api/empleados/login ::1

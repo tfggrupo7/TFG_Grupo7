@@ -10,6 +10,7 @@ export interface IEmpleados {
     salario: number;
     status: string
     activo: boolean;
+    usuario_id?: number;
     role: IRol[];
 }
 
