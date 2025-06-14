@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS `restaurante`;
+
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
@@ -91,7 +93,15 @@ DROP TABLE IF EXISTS `ingredientes`;
 CREATE TABLE `ingredientes` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
-  `alergeno` varchar(100) DEFAULT NULL,
+  `alergenos` varchar(100) DEFAULT NULL,
+  `categoria`   VARCHAR(100)      NOT NULL,
+  `cantidad`    DECIMAL(10,2)     NOT NULL DEFAULT 0,
+  `unidad`      ENUM('unidades','kg','g','l','ml','cajas','paquetes') NOT NULL DEFAULT 'unidades',
+  `proveedor`   VARCHAR(100)      DEFAULT NULL,
+  `estado`      ENUM('En stock','Bajo stock','Sin stock') NOT NULL DEFAULT 'En stock',
+  `created_at`  DATETIME          NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`  DATETIME          NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                        ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -102,7 +112,20 @@ CREATE TABLE `ingredientes` (
 
 LOCK TABLES `ingredientes` WRITE;
 /*!40000 ALTER TABLE `ingredientes` DISABLE KEYS */;
-INSERT INTO `ingredientes` VALUES (2,'Huevo','lecitina'),(3,'Leche','Lactosa');
+INSERT INTO `ingredientes`
+  (`id`, `nombre`, `alergenos`, `categoria`, `cantidad`, `unidad`,
+   `proveedor`, `estado`)
+VALUES
+  (1, 'Tomate',          NULL,        'Frutas y Verduras', 25.00, 'kg',        'Huerta Orgánica S.L.',     'En stock'),
+  (2, 'Huevo',           'Lecitina',  'Lácteos',           360,   'unidades',  'Granja La Pinta',          'Bajo stock'),
+  (3, 'Leche',           'Lactosa',   'Lácteos',           50,    'l',         'Lácteos Norte S.A.',       'En stock'),
+  (4, 'Pechuga de Pollo',NULL,        'Carnes',            20,    'kg',        'Carnes Selectas Iberia',   'En stock'),
+  (5, 'Merluza',         NULL,        'Pescados',          15,    'kg',        'Pescados del Cantábrico',  'Sin stock'),
+  (6, 'Harina de Trigo', 'Gluten',    'Panadería',        100,    'kg',        'Molinos del Sur',          'En stock'),
+  (7, 'Azúcar',          NULL,        'Otros',             80,    'kg',        'Distribuciones Dulce',     'En stock'),
+  (8, 'Pimienta Negra',  NULL,        'Especias',           2,    'kg',        'Especias del Mundo',       'Bajo stock'),
+  (9, 'Vino Tinto',      NULL,        'Bebidas',           24,    'l',         'Bodegas Solaris',          'En stock'),
+ (10, 'Queso Manchego',  'Lactosa',   'Lácteos',           12,    'kg',        'Queserías La Mancha',      'En stock');
 /*!40000 ALTER TABLE `ingredientes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
