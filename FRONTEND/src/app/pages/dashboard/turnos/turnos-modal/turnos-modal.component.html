@@ -38,19 +38,35 @@
           </select>
         </div>
         <div class="space-y-2">
-          <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="startTime">
-            Hora de inicio
-          </label>
-          <input type="time" id="startTime" formControlName="startTime" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" required>
-        </div>
-        <div class="space-y-2">
-          <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="endTime">
-            Hora de fin
-          </label>
-          <input type="time" id="endTime" formControlName="endTime" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" required>
-        </div>
+  <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="startTime">
+    Hora de inicio
+  </label>
+  <select id="startTime" formControlName="startTime"
+    class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+    required>
+    <option *ngFor="let hour of halfHourOptions" [value]="hour">{{ hour }}</option>
+  </select>
+</div>
+<div class="space-y-2">
+  <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="endTime">
+    Hora de fin
+  </label>
+  <select id="endTime" formControlName="endTime"
+    class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+    required>
+    <option *ngFor="let hour of halfHourOptions" [value]="hour">{{ hour }}</option>
+  </select>
+</div>
       </div>
       <div class="flex justify-end gap-2 pt-4">
+        <button
+    *ngIf="isEditMode"
+    type="button"
+    class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-10 py-2 px-4 bg-red-600 hover:bg-red-700 text-white"
+    (click)="onDelete()"
+  >
+    Eliminar turno
+  </button>
         <button type="button" (click)="onClose()" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-10 py-2 px-4 border-[#556B2F] text-[#556B2F]">
           Cancelar
         </button>
@@ -59,14 +75,7 @@
         </button>
       </div>
     </form>
-    <button
-      *ngIf="isEditMode"
-      type="button"
-      class="mt-4 w-full rounded-md bg-red-600 hover:bg-red-700 text-white py-2 font-medium"
-      (click)="onDelete()"
-    >
-      Eliminar turno
-    </button>
+
     <button type="button" (click)="onClose()" class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">
         <path d="M18 6 6 18"></path>

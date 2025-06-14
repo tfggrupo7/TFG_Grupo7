@@ -13,6 +13,7 @@ interface Shift {
   status: string;
   startTime: string;
   endTime: string;
+  color?: string;
 }
 
 @Component({
@@ -26,6 +27,22 @@ export class TurnosComponent {
   @ViewChild(TurnosModalComponent) modalRef!: TurnosModalComponent;
 
   daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+  colors: string[] = [
+  'bg-[#D4AF37]/90', // dorado oscuro
+  'bg-[#B5B682]/90', // verde oliva oscuro
+  'bg-[#556B2F]/90', // verde oliva principal
+  'bg-[#A3A380]/90', // verde grisáceo oscuro
+  'bg-[#B7C68B]/90', // verde musgo
+  'bg-[#E8D8A6]/90', // dorado pálido oscuro
+  'bg-[#EBCB64]/90', // dorado tostado
+  'bg-[#C9D6B6]/90', // verde grisáceo medio
+  'bg-[#E5D9B6]/90', // beige verdoso oscuro
+  'bg-[#A3A380]/100', // verde grisáceo puro
+  'bg-[#556B2F]/100', // verde oliva puro
+  'bg-[#B5B682]/100', // verde oliva intenso
+];
+
   hours = Array.from({ length: 24 }, (_, i) => i);
 
   shifts: Shift[] = [];
@@ -76,30 +93,32 @@ setCurrentWeekDates() {
   }
 
     createShift(shiftData: {
-    employeeName: string;
-    role: string;
-    date: string;
-    status: string;
-    startTime: string;
-    endTime: string;
-    dayIndex: number;
-    hour: number;
-  }) {
-    const newShift: Shift = {
-      day: this.daysOfWeek[shiftData.dayIndex],
-      hour: shiftData.hour,
-      title: `${shiftData.employeeName} - ${shiftData.role}`,
-      duration: this.calculateDuration(shiftData.startTime, shiftData.endTime),
-      employeeName: shiftData.employeeName,
-      role: shiftData.role,
-      date: this.currentWeekDates[shiftData.dayIndex],
-      status: shiftData.status,
-      startTime: shiftData.startTime,
-      endTime: shiftData.endTime
-    };
-    this.shifts.push(newShift);
-    this.closeModal();
-  }
+  employeeName: string;
+  role: string;
+  date: string;
+  status: string;
+  startTime: string;
+  endTime: string;
+  dayIndex: number;
+  hour: number;
+}) {
+  const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+  const newShift: Shift = {
+    day: this.daysOfWeek[shiftData.dayIndex],
+    hour: shiftData.hour,
+    title: `${shiftData.employeeName} - ${shiftData.role}`,
+    duration: this.calculateDuration(shiftData.startTime, shiftData.endTime),
+    employeeName: shiftData.employeeName,
+    role: shiftData.role,
+    date: this.currentWeekDates[shiftData.dayIndex],
+    status: shiftData.status,
+    startTime: shiftData.startTime,
+    endTime: shiftData.endTime,
+    color
+  };
+  this.shifts.push(newShift);
+  this.closeModal();
+}
   updateShift(shiftData: {
     employeeName: string;
     role: string;
