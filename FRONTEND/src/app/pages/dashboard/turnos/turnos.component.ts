@@ -26,13 +26,9 @@ export class TurnosComponent {
   @ViewChild(TurnosModalComponent) modalRef!: TurnosModalComponent;
 
   daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-  hours = Array.from({ length: 24 }, (_, i) => i); // 0 a 23
+  hours = Array.from({ length: 24 }, (_, i) => i);
 
-  // Ejemplo de turnos
-  shifts: Shift[] = [
-    { day: 'Lunes', hour: 8, duration: 4, title: 'Turno A', employeeName: '', role: '', date: '', status: '', startTime: '8:00', endTime: '12:00' }, // Lunes 8:00-12:00
-    // Puedes añadir más turnos aquí
-  ];
+  shifts: Shift[] = [];
 
   // Drag and drop
   draggedShift: Shift | null = null;
@@ -43,8 +39,7 @@ export class TurnosComponent {
   selectedHour = 0;
   selectedShift: Shift | null = null;
 
-  currentWeekDates: string[] = []; // Array de fechas (YYYY-MM-DD) para cada día de la semana
-
+  currentWeekDates: string[] = [];
 ngOnInit() {
   this.setCurrentWeekDates();
 }
@@ -188,6 +183,32 @@ get todayFormatted(): string {
   const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
   const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   return `${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]} ${hoy.getFullYear()}`;
+}
+
+get activeShiftsCount(): number {
+  return this.shifts.filter(shift => shift.status?.toLowerCase() === 'confirmado').length;
+}
+
+get pendingShiftsCount(): number {
+  return this.shifts.filter(shift => shift.status?.toLowerCase() === 'pendiente').length;
+}
+
+get completedShiftsCount(): number {
+
+  const weekDates = this.currentWeekDates;
+  return this.shifts.filter(
+    shift =>
+      shift.status?.toLowerCase() === 'completado' &&
+      weekDates.includes(shift.date)
+  ).length;
+}
+get todayStaffCount(): number {
+  const today = new Date().toISOString().slice(0, 10);
+  const empleados = this.shifts
+    .filter(shift => shift.date === today && shift.employeeName)
+    .map(shift => shift.employeeName);
+  // Filtra nombres únicos
+  return Array.from(new Set(empleados)).length;
 }
 
 }
