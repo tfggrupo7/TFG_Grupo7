@@ -324,3 +324,11 @@
 2025-06-14 09:50:19 GET /api/roles ::1
 2025-06-14 09:51:42 GET /api/empleados ::1
 2025-06-14 09:51:42 GET /api/roles ::1
+2025-06-14 12:15:25 GET /api-docs ::1
+2025-06-14 12:15:25 GET /api-docs/ ::1
+2025-06-14 12:15:25 GET /api-docs/swagger-ui.css ::1
+2025-06-14 12:15:25 GET /api-docs/swagger-ui-bundle.js ::1
+2025-06-14 12:15:25 GET /api-docs/swagger-ui-standalone-preset.js ::1
+2025-06-14 12:15:25 GET /api-docs/swagger-ui-init.js ::1
+2025-06-14 12:15:25 GET /api-docs/favicon-32x32.png ::1
+2025-06-14 12:18:40 POST /api/roles ::1
