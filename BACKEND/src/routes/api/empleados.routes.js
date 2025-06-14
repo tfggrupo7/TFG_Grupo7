@@ -13,14 +13,14 @@ const {
 } = require("../../controllers/empleado.controller");
 
 
-const { checkempleadosId, checkdataEmpleado, checkdataEmpleadoUpdate, checkEmpleadoId} = require("../../middleware/empleados.middleware");
+const { checkempleadosId, checkdataEmpleado, checkdataEmpleadoUpdate} = require("../../middleware/empleados.middleware");
 
 
 router.get("/", getAll);
 router.get("/tareas", getEmpleadosAndTarea);
 router.get('/role', getEmpleadosYRoles); 
 router.get("/:empleadoId", checkempleadosId, getById);
-router.post("/", checkdataEmpleado, create);
+router.post("/", checkdataEmpleado,create);
 router.post('/login', login);
 router.post('/recuperar-contrasena', recuperarContraseña);
 router.post('/restablecer-contrasena/:token',restablecerContraseña);
