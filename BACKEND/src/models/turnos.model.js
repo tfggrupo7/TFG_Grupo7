@@ -17,22 +17,49 @@ const selectById = async (turnoId) => {
   return rows[0] || null;
 };
 
-const insert = async ({ empleado_id, roles, fecha, hora_inicio, hora_fin, estado }) => {
+const insert = async ({
+  dia,
+  hora,
+  duracion,
+  titulo,
+  empleado_id,
+  roles_id,
+  fecha,
+  estado,
+  hora_inicio,
+  hora_fin,
+  color
+}) => {
   const [result] = await db.query(
     `INSERT INTO turnos
-     (empleado_id, roles, fecha, hora_inicio, hora_fin, estado)
-     VALUES (?, ?, ?, ?, ?, ?)`,
-    [empleado_id, roles, fecha, hora_inicio, hora_fin, estado]
+     (dia, hora, duracion, titulo, empleado_id, rol_id, fecha, estado, hora_inicio, hora_fin, color)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [dia, hora, duracion, titulo, empleado_id, rol_id, fecha, estado, hora_inicio, hora_fin, color]
   );
   return result;
 };
 
-const update = async (turnoId, { empleado_id, roles, fecha, hora_inicio, hora_fin, estado }) => {
+const update = async (
+  turnoId,
+  {
+    dia,
+    hora,
+    duracion,
+    titulo,
+    empleado_id,
+    roles_id,
+    fecha,
+    estado,
+    hora_inicio,
+    hora_fin,
+    color
+  }
+) => {
   const [result] = await db.query(
     `UPDATE turnos SET
-       empleado_id = ?, roles = ?, fecha = ?, hora_inicio = ?, hora_fin = ?, estado = ?
+       dia = ?, hora = ?, duracion = ?, titulo = ?, empleado_id = ?, roles_id = ?, fecha = ?, estado = ?, hora_inicio = ?, hora_fin = ?, color = ?
      WHERE id = ?`,
-    [empleado_id, roles, fecha, hora_inicio, hora_fin, estado, turnoId]
+    [dia, hora, duracion, titulo, empleado_id, roles_id, fecha, estado, hora_inicio, hora_fin, color, turnoId]
   );
   return result;
 };

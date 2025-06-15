@@ -217,3 +217,4 @@
 2025-06-03 14:40:07 GET /api/empleados?page=1&limit=10 ::1
 2025-06-03 14:40:07 GET /api/roles ::1
 2025-06-03 14:40:07 GET /api/empleados ::1
+2025-06-15 11:53:40 POST /api/usuarios/login ::ffff:127.0.0.1

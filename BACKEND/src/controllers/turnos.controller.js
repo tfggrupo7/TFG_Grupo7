@@ -14,16 +14,66 @@ const getById = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const { empleado_id, roles, fecha, hora_inicio, hora_fin, estado } = req.body;
-  const result = await Turno.insert({ empleado_id, roles, fecha, hora_inicio, hora_fin, estado });
+  const {
+    dia,
+    hora,
+    duracion,
+    titulo,
+    empleado_id,
+    roles_id,
+    fecha,
+    estado,
+    hora_inicio,
+    hora_fin,
+    color
+  } = req.body;
+
+  const result = await Turno.insert({
+    dia,
+    hora,
+    duracion,
+    titulo,
+    empleado_id,
+    roles_id,
+    fecha,
+    estado,
+    hora_inicio,
+    hora_fin,
+    color
+  });
   const turno = await Turno.selectById(result.insertId);
   res.json(turno);
 };
 
 const update = async (req, res) => {
   const { turnoId } = req.params;
-  const { empleado_id, roles, fecha, hora_inicio, hora_fin, estado } = req.body;
-  await Turno.update(turnoId, { empleado_id, roles, fecha, hora_inicio, hora_fin, estado });
+  const {
+    dia,
+    hora,
+    duracion,
+    titulo,
+    empleado_id,
+    roles_id,
+    fecha,
+    estado,
+    hora_inicio,
+    hora_fin,
+    color
+  } = req.body;
+
+  await Turno.update(turnoId, {
+    dia,
+    hora,
+    duracion,
+    titulo,
+    empleado_id,
+    roles_id,
+    fecha,
+    estado,
+    hora_inicio,
+    hora_fin,
+    color
+  });
   const turno = await Turno.selectById(turnoId);
   res.json(turno);
 };
