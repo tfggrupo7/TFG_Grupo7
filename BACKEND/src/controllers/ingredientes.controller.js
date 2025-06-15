@@ -1,21 +1,19 @@
-const Ingrediente = require('../models/ingrediente.model')
+const Ingrediente = require("../models/ingrediente.model");
 
 const getAll = async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
-  const offset = (page - 1) * limit;
-  const ingrediente = await Ingrediente.selectAll(Number(page), Number(limit));
-  res.json({
-    page: Number(page),
-    limit: Number(limit),
-    total: ingrediente.length,
-    data: ingrediente,
-  });
+  const { page = 1, limit = 10, search = "" } = req.query;
+  const { rows, total } = await Ingrediente.selectAll(
+    Number(page),
+    Number(limit),
+    search
+  );
+  res.json({ page: Number(page), limit: Number(limit), total, data: rows });
 };
 
 const getById = async (req, res) => {
   const { ingredienteId } = req.params;
   const ingrediente = await Ingrediente.selectById(ingredienteId);
- 
+
   res.json(ingrediente);
   //res.json(req.ingredientes);
 };
@@ -44,4 +42,4 @@ const remove = async (req, res) => {
 
   res.json({ message: "Ingrediente eliminado", data: ingredientes });
 };
-module.exports = { getAll , getById, create, update, remove };
+module.exports = { getAll, getById, create, update, remove };
