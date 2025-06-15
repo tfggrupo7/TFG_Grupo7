@@ -6,11 +6,36 @@ const CryptoJS = require("crypto-js");
 const sendEmail = require("../sendEmail");
 
 const registro = async (req, res) => {
-  req.body.contraseña = bcrypt.hashSync(req.body.contraseña, 10);
-  const result = await Usuario.insert(req.body);
-  const usuario = await Usuario.getById(result.insertId);
-
-  res.json(usuario);
+  try {
+    const { email } = req.body;
+    
+    // Verificar si el email ya existe ANTES de insertar
+    const usuarioExistente = await Usuario.getByEmail(email);
+    
+    if (usuarioExistente) {
+      return res.status(400).json({ 
+        success: false,
+        message: "El email ya está registrado." 
+      });
+    }
+    
+    // Si no existe, proceder con el registro
+    req.body.contraseña = bcrypt.hashSync(req.body.contraseña, 10);
+    const result = await Usuario.insert(req.body);
+    const usuario = await Usuario.getById(result.insertId);
+    
+    res.status(201).json({
+      success: true,
+      usuario: usuario
+    });
+    
+  } catch (error) {
+    console.error('Error en registro:', error);
+    res.status(500).json({ 
+      success: false,
+      message: "Error interno del servidor" 
+    });
+  }
 };
 
 const login = async (req, res) => {

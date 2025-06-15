@@ -3,7 +3,7 @@
       <img src="../../../assets/logo/logoSVG.svg" alt="logo" class="logo h-10 md:h-20 mx-auto mt-2" />
     </a>
   </header>
- <nav class="bg-white shadow-md p-4 flex justify-between items-center hidden">
+ <nav class="bg-white shadow-md p-4  justify-between items-center hidden">
   <ul class="flex justify-center space-x-4 mt-4 mx-auto">
     <li>
       <a href="#" id="register" class="text-[#556B2F] hover:text-green-600" (click)="mostrarRegistro($event)">Iniciar Sesión</a>
@@ -27,12 +27,24 @@
       <form [formGroup]="registerForm" (ngSubmit)="registrar()"  class="w-full max-w-sm">
         <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
         <input type="text" formControlName="nombre" class="w-full p-2 border rounded mb-4" />
+        @if(registerForm.get('nombre')?.errors?.['minlength'] && registerForm.get('nombre')?.touched) {
+          <p class="text-red-500 text-sm">El nombre es obligatorio.</p>
+        }
         <label class="block text-sm font-medium text-gray-700 mb-1">Apellidos</label>
         <input type="text" formControlName="apellidos" class="w-full p-2 border rounded mb-4" />
+        @if(registerForm.get('apellidos')?.errors?.['minlength'] && registerForm.get('apellidos')?.touched) {
+          <p class="text-red-500 text-sm">Los apellidos son obligatorios.</p>
+        }
         <label class="block text-sm font-medium text-gray-700 mb-1" >Correo electrónico</label>
         <input type="email" placeholder="tu@email.com" formControlName="email" class="w-full p-2 border rounded mb-4" />
+        @if(registerForm.get('email')?.errors?.['email'] && registerForm.get('email')?.touched) {
+          <p class="text-red-500 text-sm">El correo electrónico no es válido.</p>
+        }
         <label class="block text-sm font-medium text-gray-700 mb-1" >Contraseña</label>
         <input type="password" formControlName="contraseña" class="w-full p-2 border rounded mb-4" />
+        @if(registerForm.get('contraseña')?.errors?.['minlength'] && registerForm.get('contraseña')?.touched) {
+          <p class="text-red-500 text-sm">La contraseña debe tener al menos 6 caracteres.</p>
+        }
         <button type="submit" class="w-full bg-[#556B2F] text-white py-2 rounded">
           Crear cuenta
         </button>

@@ -94,29 +94,37 @@ if (token) {
 initializeRegisterFormWithUsuario() {
   this.registerForm = new FormGroup({
     email: new FormControl(this.usuario ? this.usuario.email : '', [Validators.required, Validators.email]),
-    contraseña: new FormControl(this.usuario ? this.usuario.contraseña : '', Validators.required),
-    nombre: new FormControl(this.usuario ? this.usuario.nombre : '', Validators.required),
-    apellidos: new FormControl(this.usuario ? this.usuario.apellidos : '', Validators.required)
+    contraseña: new FormControl(this.usuario ? this.usuario.contraseña : '', [Validators.required, Validators.minLength(6)]),
+    nombre: new FormControl(this.usuario ? this.usuario.nombre : '', [Validators.required, Validators.minLength(3)]),
+    apellidos: new FormControl(this.usuario ? this.usuario.apellidos : '', [Validators.required, Validators.minLength(3)])
     });
 }
 
 async registrar() {
   if (this.registerForm.invalid) {
-      toast.info('Por favor, completa todos los campos correctamente.');
-      return;
-    }
-    const usuario = this.registerForm.value;
-    try {
-      await this.usuarioService.register(usuario);
-      toast.success("Usuario registrado correctamente");
-      setTimeout(() => {
-          this.router.navigate(['/']);
-        }, 3000); 
-    } catch (error) {
+    toast.info('Por favor, completa todos los campos correctamente.');
+    return;
+  }
+
+  const usuario = this.registerForm.value;
+  console.log('Datos de registro enviados:', usuario);
+
+  try {
+    const response = await this.usuarioService.register(usuario);
+    console.log('Respuesta del backend al registrar:', response);
+    toast.success("Usuario registrado correctamente");
+    setTimeout(() => {
+      this.router.navigate(['/']);
+    }, 3000);
+  } catch (error: any) {
+    console.error('Error al registrar usuario:', error);
+    if (error.error && error.error.message === 'El email ya está registrado.') {
+      toast.error('Este email ya está registrado. Por favor, utiliza otro.');
+    } else {
       toast.error('Error al registrar usuario.');
     }
   }
-
+}
   
 }
 

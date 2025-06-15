@@ -332,3 +332,12 @@
 2025-06-14 12:15:25 GET /api-docs/swagger-ui-init.js ::1
 2025-06-14 12:15:25 GET /api-docs/favicon-32x32.png ::1
 2025-06-14 12:18:40 POST /api/roles ::1
+2025-06-15 14:20:55 POST /api/usuarios/registro ::1
+2025-06-15 14:22:25 POST /api/usuarios/registro ::1
+2025-06-15 14:23:26 POST /api/usuarios/registro ::1
+2025-06-15 14:23:57 POST /api/usuarios/registro ::1
+2025-06-15 14:25:43 POST /api/usuarios/registro ::1
+2025-06-15 14:26:50 POST /api/usuarios/registro ::1
+2025-06-15 14:29:16 POST /api/usuarios/registro ::1
+2025-06-15 14:29:35 POST /api/usuarios/registro ::1
+2025-06-15 14:34:45 POST /api/usuarios/registro ::1
