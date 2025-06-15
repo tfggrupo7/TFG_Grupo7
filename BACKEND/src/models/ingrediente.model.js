@@ -1,24 +1,49 @@
-const db = require('../config/db');
+const db = require("../config/db");
 
+const selectAll = async (page = 1, limit = 10, search = "") => {
+  const offset = (page - 1) * limit;
+  const term = `%${search}%`;
 
-const selectAll = async (page, limit) => {
-  const [result] = await db.query("select * from ingredientes limit ? offset ?", [
-    limit,
-    (page - 1) * limit,
-  ]);
-  return result;
+  /* 1) datos paginados */
+  const [rows] = await db.query(
+    `SELECT id, nombre, alergenos, categoria, cantidad, unidad,
+            proveedor, estado,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+       FROM ingredientes
+      WHERE CONCAT_WS(' ', nombre, alergenos, categoria, cantidad,
+                           unidad, proveedor, estado) LIKE ?
+      ORDER BY nombre
+      LIMIT ? OFFSET ?`,
+    [term, limit, offset]
+  );
+
+  /* 2) total para la paginación */
+  const [[{ total }]] = await db.query(
+    `SELECT COUNT(*) AS total
+       FROM ingredientes
+      WHERE CONCAT_WS(' ', nombre, alergenos, categoria, cantidad,
+                           unidad, proveedor, estado) LIKE ?`,
+    [term]
+  );
+
+  return { rows, total };
 };
 
 const selectById = async (ingredienteId) => {
-  const [result] = await db.query("select * from ingredientes where id = ?", [
-    Number(ingredienteId),
-  ]);
-  if (result.length === 0) {
-    return null;
-  }
-  return result[0];
+  const [result] = await db.query(
+    `SELECT id, nombre, alergenos, categoria, cantidad, unidad,
+            proveedor, estado,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+       FROM ingredientes
+      WHERE id = ?`,
+    [Number(ingredienteId)]
+  );
+  return result[0] ?? null;
 };
-const insert = async ({ nombre, alergeno}) => {
+
+const insert = async ({ nombre, alergeno }) => {
   const [result] = await db.query(
     "insert into ingredientes (nombre,alergeno ) values (?, ?)",
     [nombre, alergeno]
