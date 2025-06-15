@@ -4,7 +4,12 @@ import { EmpleadosService } from '../../../core/services/empleados.service';
 import { toast } from 'ngx-sonner';
 import { IRoles } from '../../../interfaces/iroles.interfaces';
 import { RolesService } from '../../../core/services/roles.service';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoaderService } from '../../../core/services/loader.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -14,7 +19,7 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './personal.component.html',
-  styleUrls: ['./personal.component.css']
+  styleUrls: ['./personal.component.css'],
 })
 export class PersonalComponent {
   arrEmpleados: IEmpleados[] = [];
@@ -45,31 +50,33 @@ export class PersonalComponent {
       nombre: new FormControl('', Validators.required),
       apellidos: new FormControl('', Validators.required),
       rol_id: new FormControl<number | null>(null, Validators.required),
-      telefono: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$')]),
+      telefono: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]+$'),
+      ]),
       email: new FormControl('', [Validators.required, Validators.email]),
       fecha_inicio: new FormControl('', Validators.required),
       salario: new FormControl('', Validators.required),
       usuario_id: new FormControl(userId),
-      activo: new FormControl('', Validators.required)
+      activo: new FormControl('', Validators.required),
     });
 
-    this.empleadosFiltrados = this.arrEmpleados;
+    this.empleadosFiltrados = [];
 
-    this.busqueda.valueChanges.subscribe(valor => {
+    this.busqueda.valueChanges.subscribe((valor) => {
       this.filtrarEmpleados(valor || '');
     });
     this.busqueda.setValue(''); // Inicializar el campo de búsqueda vacío
   }
 
   filtrarEmpleados(valor: string) {
-    const texto = valor.toLowerCase();
+    const texto = valor.trim().toLowerCase();
     if (!texto) {
-      this.empleadosFiltrados = this.arrEmpleados;
+      this.empleadosFiltrados = []; // No mostrar ninguno si no hay búsqueda
       return;
     }
     this.empleadosFiltrados = this.arrEmpleados.filter((emp: IEmpleados) =>
-      emp.nombre.toLowerCase().includes(texto) ||
-      emp.email.toLowerCase().includes(texto)
+      emp.nombre.toLowerCase().includes(texto)
     );
   }
 
@@ -77,7 +84,9 @@ export class PersonalComponent {
     try {
       const userId = Number(this.getUserIdFromToken());
       const empleados = await this.empleadoService.getEmpleados();
-      this.arrEmpleados = empleados.filter((emp: IEmpleados) => emp.usuario_id === userId);
+      this.arrEmpleados = empleados.filter(
+        (emp: IEmpleados) => emp.usuario_id === userId
+      );
     } catch (error: any) {
       toast.error(error?.error || 'Error al cargar empleados');
     }
@@ -93,11 +102,16 @@ export class PersonalComponent {
   }
 
   get totalEnVacaciones(): number {
-    return this.arrEmpleados.filter((e: IEmpleados) => e.status === 'vacaciones').length;
+    return this.arrEmpleados.filter(
+      (e: IEmpleados) => e.status === 'vacaciones'
+    ).length;
   }
 
   get totalSalario(): number {
-    return this.arrEmpleados.reduce((total: number, empleado: IEmpleados) => total + Number(empleado.salario), 0);
+    return this.arrEmpleados.reduce(
+      (total: number, empleado: IEmpleados) => total + Number(empleado.salario),
+      0
+    );
   }
 
   esActivo(empleado: IEmpleados): string {
@@ -133,7 +147,7 @@ export class PersonalComponent {
       fecha_inicio: empleado.fecha_inicio,
       salario: empleado.salario,
       usuario_id: empleado.usuario_id,
-      activo: empleado.activo
+      activo: empleado.activo,
     });
   }
 
@@ -175,7 +189,10 @@ export class PersonalComponent {
       return;
     }
     try {
-      const empleadoActualizado: IEmpleados = { ...this.userForm.value, id: this.empleadoId };
+      const empleadoActualizado: IEmpleados = {
+        ...this.userForm.value,
+        id: this.empleadoId,
+      };
       await this.empleadoService.updateEmpleado(empleadoActualizado);
       toast.success('Empleado Actualizado correctamente');
       this.router.navigate(['/dashboard', 'personal']).then(() => {
@@ -190,7 +207,7 @@ export class PersonalComponent {
   }
 
   async delete(id: number) {
-    const empleado = this.arrEmpleados.find(e => e.id === id);
+    const empleado = this.arrEmpleados.find((e) => e.id === id);
     const nombreEmpleado = empleado ? empleado.nombre : 'Empleado';
 
     toast(`¿Deseas Borrar al Empleado ${nombreEmpleado}?`, {
@@ -208,13 +225,15 @@ export class PersonalComponent {
           } catch (error: any) {
             toast.error('Error al eliminar el usuario');
           }
-        }
-      }
+        },
+      },
     });
   }
 
   deleteEmpleado(id: number) {
-    this.arrEmpleados = this.arrEmpleados.filter(empleado => empleado.id !== id);
+    this.arrEmpleados = this.arrEmpleados.filter(
+      (empleado) => empleado.id !== id
+    );
     toast.success('Empleado eliminado con éxito');
   }
 }

@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("node:fs/promises");
 const dayjs = require("dayjs");
+const { swaggerUi, swaggerSpec } = require('../swagger');
 
 const app = express();
 app.use(express.json());
@@ -29,6 +30,8 @@ app.use(async (req, res, next) => {
 // Route configuration
 
 app.use("/api", require("./routes/api.routes"));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // 404 handler
 app.use((req, res, next) => {

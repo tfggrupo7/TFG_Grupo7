@@ -5,6 +5,9 @@ const CryptoJS = require("crypto-js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../sendEmail");
+const {sendHtmlEmail} = require("../helper/welcome-email");
+
+
 
 // Login
 
@@ -180,7 +183,7 @@ const restablecerContraseña = async (req, res) => {
   }
 };
 
-// Autor Controller
+
 const getAll = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const offset = (page - 1) * limit;
@@ -207,22 +210,59 @@ const getEmpleadosAndTarea = async (req, res) => {
   res.json(empleados);
 };
 
-const create = async (req, res) => {
-  const result = await Empleado.insert(req.body);
-  const {
-    nombre,
-    email,
-    telefono,
-    rol_id,
-    salario,
-    status,
-    activo,
-    fecha_inicio,
-    usuario_id,
-  } = req.body;
-  const empleado = await Empleado.selectById(result.insertId);
 
-  res.json(empleado);
+
+const create = async (req, res) => {
+  try {
+    // Crear el empleado en la base de datos
+    const result = await Empleado.insert(req.body);
+    const {
+      nombre,
+      email,
+      telefono,
+      rol_id,
+      salario,
+      status,
+      activo,
+      fecha_inicio,
+      usuario_id,
+    } = req.body;
+    
+    // Obtener el empleado recién creado
+    const empleado = await Empleado.selectById(result.insertId);
+
+    // Contenido HTML del email
+    const emailSubject = 'Bienvenido - Configura tu contraseña';
+    const emailHtml = `
+      <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6 border border-gray-200">
+  <h2 class="text-2xl font-bold text-green-600 mb-2">¡Bienvenido ${nombre}!</h2>
+  <p class="text-gray-700 mb-2">Has sido registrado en nuestro sistema.</p>
+  <p class="text-gray-700 mb-4">Para acceder, debes configurar tu contraseña:</p>
+  <ol class="list-decimal list-inside mb-4 text-gray-800">
+    <li>Ve a la página de login</li>
+    <li>Haz clic en <span class="font-semibold text-blue-600">"¿Olvidaste tu contraseña?"</span></li>
+    <li>Ingresa tu email: <span class="font-mono text-blue-700">${email}</span></li>
+    <li>Sigue las instrucciones para crear tu contraseña</li>
+  </ol>
+  <a href="http://localhost:4200/empleados/login"
+     class="inline-block bg-green-600 text-white font-semibold px-4 py-2 rounded shadow hover:bg-green-700 transition">
+    Ir a login
+  </a>
+</div>`;
+    
+    // Enviar email con HTML
+    await sendHtmlEmail(email, emailSubject, emailHtml);
+
+    // Responder con el empleado creado y confirmación del email
+    res.status(201).json({
+      empleado,
+      message: 'Empleado registrado. Email de bienvenida enviado.'
+    });
+
+  } catch (error) {
+    console.error('Error al crear empleado:', error);
+    res.status(500).json({ error: error.message });
+  }
 };
 
 const update = async (req, res) => {
@@ -339,4 +379,5 @@ module.exports = {
   restablecerContraseña,
   generarYGuardarToken,
   cambiarContraseña,
+  
 };

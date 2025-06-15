@@ -17,12 +17,17 @@ POST {{host}}/api/empleados
 Content-Type: application/json
 
 {
-  "nombre": "Patricia Gomez",
+  "nombre": "Patricia",
+  "apellidos": "Gomez",
   "pass": "000123",
-  "email": "patricia@gmail.com",
+  "email": "cinm4t1sm6@ibolinva.com",
   "telefono": "678965423",
   "rol_id":3,
-  "usuario_id": 1
+  "usuario_id": 6,
+  "fecha_inicio": "2025-10-18",
+  "salario": 1500.00,
+  "telefono": "678965423",
+  "activo": "activo"
  
 }
 
