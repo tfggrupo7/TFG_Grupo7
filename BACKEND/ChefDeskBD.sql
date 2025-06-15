@@ -112,20 +112,38 @@ CREATE TABLE `ingredientes` (
 
 LOCK TABLES `ingredientes` WRITE;
 /*!40000 ALTER TABLE `ingredientes` DISABLE KEYS */;
-INSERT INTO `ingredientes`
-  (`id`, `nombre`, `alergenos`, `categoria`, `cantidad`, `unidad`,
-   `proveedor`, `estado`)
+INSERT INTO ingredientes
+    (nombre, alergenos, categoria, cantidad, unidad, proveedor, estado)
 VALUES
-  (1, 'Tomate',          NULL,        'Frutas y Verduras', 25.00, 'kg',        'Huerta Orgánica S.L.',     'En stock'),
-  (2, 'Huevo',           'Lecitina',  'Lácteos',           360,   'unidades',  'Granja La Pinta',          'Bajo stock'),
-  (3, 'Leche',           'Lactosa',   'Lácteos',           50,    'l',         'Lácteos Norte S.A.',       'En stock'),
-  (4, 'Pechuga de Pollo',NULL,        'Carnes',            20,    'kg',        'Carnes Selectas Iberia',   'En stock'),
-  (5, 'Merluza',         NULL,        'Pescados',          15,    'kg',        'Pescados del Cantábrico',  'Sin stock'),
-  (6, 'Harina de Trigo', 'Gluten',    'Panadería',        100,    'kg',        'Molinos del Sur',          'En stock'),
-  (7, 'Azúcar',          NULL,        'Otros',             80,    'kg',        'Distribuciones Dulce',     'En stock'),
-  (8, 'Pimienta Negra',  NULL,        'Especias',           2,    'kg',        'Especias del Mundo',       'Bajo stock'),
-  (9, 'Vino Tinto',      NULL,        'Bebidas',           24,    'l',         'Bodegas Solaris',          'En stock'),
- (10, 'Queso Manchego',  'Lactosa',   'Lácteos',           12,    'kg',        'Queserías La Mancha',      'En stock');
+  ('Harina de trigo',                'gluten',     'Secos',                    50.00, 'kg',        'Harinas del Sur',        'En stock'),
+  ('Azúcar blanca',                  NULL,         'Secos',                    40.00, 'kg',        'Azúcares S.A.',          'En stock'),
+  ('Sal fina',                       NULL,         'Secos',                    10.00, 'kg',        'Salinas Iberia',         'En stock'),
+  ('Pechuga de pollo',               NULL,         'Carnes',                   25.00, 'kg',        'Avícola Central',        'En stock'),
+  ('Huevos camperos',                NULL,         'Frescos',                 540.00, 'unidades',  'Granja Sol',             'En stock'),
+  ('Leche entera',                   'lactosa',    'Lácteos',                 100.00, 'l',         'Lácteos Iber',           'En stock'),
+  ('Queso cheddar',                  'lactosa',    'Lácteos',                   8.00, 'kg',        'Queserías del Valle',    'Bajo stock'),
+  ('Tomate rama',                    NULL,         'Verduras',                 30.00, 'kg',        'Hortofrutícola Medina',  'En stock'),
+  ('Lechuga iceberg',                NULL,         'Verduras',                 12.00, 'kg',        'Hortofrutícola Medina',  'En stock'),
+  ('Cebolla dulce',                  NULL,         'Verduras',                 18.00, 'kg',        'Campo Verde',            'En stock'),
+  ('Pimienta negra',                 NULL,         'Especias',                  1.50, 'kg',        'Especias Global',        'En stock'),
+  ('Orégano seco',                   NULL,         'Especias',                  0.80, 'kg',        'Especias Global',        'Bajo stock'),
+  ('Aceite de oliva virgen extra',   NULL,         'Aceites',                  60.00, 'l',         'Aceites del Sur',        'En stock'),
+  ('Vinagre balsámico',              'sulfitos',   'Salsas y Condimentos',      8.00, 'l',         'Condimentos Selectos',   'En stock'),
+  ('Salsa de soja',                  'gluten',     'Salsas y Condimentos',      5.00, 'l',         'Asian Foods',            'Bajo stock'),
+  ('Atún en lata',                   'pescado',    'Conservas',                10.00, 'cajas',     'Conservas Atlántico',    'En stock'),
+  ('Guisantes congelados',           NULL,         'Congelados',               20.00, 'kg',        'Congelados Norte',       'En stock'),
+  ('Patatas fritas congeladas',      NULL,         'Congelados',               35.00, 'kg',        'Congelados Norte',       'En stock'),
+  ('Agua mineral 500 ml',            NULL,         'Bebidas',                 100.00, 'cajas',     'Agua Pura',              'En stock'),
+  ('Coca-Cola lata 330 ml',          NULL,         'Bebidas',                  80.00, 'cajas',     'Bebidas Cola',           'En stock'),
+  ('Cerveza lager 330 ml',           'gluten',     'Bebidas',                  60.00, 'cajas',     'Cervezas Iber',          'En stock'),
+  ('Vino tinto Rioja',               'sulfitos',   'Bebidas',                  24.00, 'cajas',     'Bodegas Rioja',          'En stock'),
+  ('Helado vainilla',                'lactosa',    'Postres',                  15.00, 'kg',        'Dulces Cremas',          'En stock'),
+  ('Chocolate negro 70 %',           NULL,         'Postres',                  12.00, 'kg',        'Chocolates Europa',      'En stock'),
+  ('Pan de hamburguesa',             'gluten',     'Panadería',               200.00, 'unidades',  'Panadería San Luis',     'En stock'),
+  ('Pan sin gluten',                 NULL,         'Panadería',                60.00, 'unidades',  'Panadería San Luis',     'Bajo stock'),
+  ('Garbanzos cocidos (bote)',       NULL,         'Conservas',                15.00, 'cajas',     'Legumbres Valle',        'En stock'),
+  ('Mayonesa bote 1 L',              'huevo',      'Salsas y Condimentos',      6.00, 'cajas',     'Condimentos Selectos',   'Sin stock');
+
 /*!40000 ALTER TABLE `ingredientes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
