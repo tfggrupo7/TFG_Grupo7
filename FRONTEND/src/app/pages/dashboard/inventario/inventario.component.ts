@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IIngredientes } from '../../../interfaces/iingredientes.interfaces';
 import { IngredientesService } from '../../../core/services/ingredientes.service';
 import { toast } from 'ngx-sonner';
 import { Router } from '@angular/router';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule, CommonModule]
 })
 export class InventarioComponent implements OnInit {
   ingredientes: IIngredientes[] = [];
@@ -18,6 +20,7 @@ export class InventarioComponent implements OnInit {
   ingredientesFiltrados: IIngredientes[] = [];
   currentPage: number = 1;
   totalPages: number = 1;
+  pageSize: number = 10;
 
   modalIngredienteAbierto = false;
   modalUpdateIngredienteAbierto = false;
@@ -25,6 +28,8 @@ export class InventarioComponent implements OnInit {
   ingredienteId!: number;
   searchTerm = new FormControl('');
   ingredienteForm: FormGroup = new FormGroup({}, []);
+
+  totalItems = 0;
 
   constructor(private ingredientesService: IngredientesService, private router: Router) {}
 
@@ -37,34 +42,50 @@ export class InventarioComponent implements OnInit {
       alergenos: new FormControl('', Validators.required)
     });
 
-    this.searchTerm.valueChanges.subscribe(valor => {
-      this.filtrarIngredientes(valor ?? '');
+    this.searchTerm.valueChanges
+      .pipe(debounceTime(300))
+      .subscribe(() => {
+        this.currentPage = 1;      // resetea a la primera página
+        this.cargarIngredientes(); // pide de nuevo al servidor con search
     });
 
     this.searchTerm.setValue('');
   }
 
   async cargarIngredientes() {
-    try {
-      this.ingredientes = await this.ingredientesService.getIngredientes();
-      this.ingredientesFiltrados = this.ingredientes;
-    } catch (error: any) {
-      toast.error(error?.error || 'Error al cargar ingredientes');
-    }
+    const search = this.searchTerm.value ?? '';
+
+    this.ingredientes = await this.ingredientesService.getIngredientes(
+      this.currentPage, this.pageSize, search
+    );
+
+    this.ingredientesFiltrados = this.ingredientes;
+    this.totalItems  = this.ingredientesService.totalItems;
+    this.totalPages  = Math.ceil(this.totalItems / this.pageSize);
   }
 
+  // paginación
+  primera()   { if (this.currentPage !== 1)                 { this.currentPage = 1;                 this.cargarIngredientes(); } }
+  anterior()  { if (this.currentPage > 1)                   { this.currentPage--;                   this.cargarIngredientes(); } }
+  siguiente() { if (this.currentPage < this.totalPages)     { this.currentPage++;                   this.cargarIngredientes(); } }
+  ultima()    { if (this.currentPage !== this.totalPages)   { this.currentPage = this.totalPages;   this.cargarIngredientes(); } }
+
+
   filtrarIngredientes(valor: string) {
-    const texto = valor.toLowerCase();
+    const texto = valor.trim().toLowerCase();
+
     if (!texto) {
-      this.ingredientesFiltrados = [];
+      this.ingredientesFiltrados = [...this.ingredientes]; //  muestra todo
       return;
     }
 
-    this.ingredientesFiltrados = this.ingredientes.filter(ing =>
-      ing.nombre.toLowerCase().includes(texto) ||
-      ing.alergenos.toLowerCase().includes(texto)
-    );
+    this.ingredientesFiltrados = this.ingredientes.filter(ing => {
+      const nombre    = ing.nombre.toLowerCase();
+      const alergenos = ing.alergenos?.toLowerCase() ?? '';
+      return nombre.includes(texto) || alergenos.includes(texto);
+    });
   }
+
 
   abrirModal() {
     this.modalIngredienteAbierto = true;
@@ -191,37 +212,37 @@ export class InventarioComponent implements OnInit {
   }
 
   async delete(id: number) {
-    // Buscar el ingrediente por id para mostrar el nombre
     const ingrediente = this.ingredientes.find(e => e.id === id);
-    const nombreIngrediente = ingrediente ? ingrediente.nombre : 'Ingrediente';
+    const nombreIngrediente = ingrediente?.nombre ?? 'Ingrediente';
 
-   toast(`¿Deseas Borrar al Ingrediente ${nombreIngrediente}?`, {
+    toast(`¿Deseas Borrar al Ingrediente ${nombreIngrediente}?`, {
       action: {
         label: 'Aceptar',
-        onClick: async () => {
-          try {
-            await this.ingredientesService.deleteIngrediente(id);
-            toast.success('Ingrediente eliminado con éxito', {
-              duration: 2000
-            });
-            this.router.navigate(['/dashboard', 'inventory']).then(() => {
-              setTimeout(() => {
-                window.location.reload();
-              }, 1000);
-            });
-
-
-
-          } catch (error: any) {
-            console.log('Error al eliminar el ingrediente:', error);
-            toast.error('Error al eliminar el ingrediente');
-          }
-        }
-      }
+        onClick: () => this.deleteIngrediente(id)
+      },
+      duration: 6000
     });
   }
-  deleteIngrediente(id: number) {
-    this.ingredientes = this.ingredientes.filter(ingrediente => ingrediente.id !== id);
-    toast.success('Ingrediente eliminado con éxito');
+
+  private async deleteIngrediente(id: number) {
+    try {
+      /* (opcional) desactiva UI: cambia bandera isDeleting = true … */
+      await this.ingredientesService.deleteIngrediente(id);
+
+      // quita del array base
+      this.ingredientes = this.ingredientes.filter(i => i.id !== id);
+
+      // vuelve a aplicar filtro actual
+      this.filtrarIngredientes(this.searchTerm.value ?? '');
+
+      toast.success('Ingrediente eliminado con éxito');
+    } catch (err) {
+      console.error('Error al eliminar:', err);
+      toast.error('Error al eliminar el ingrediente');
+    }
   }
+
+
+
+
 }
