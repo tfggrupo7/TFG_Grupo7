@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IIngredientes } from '../../../interfaces/iingredientes.interfaces';
@@ -6,13 +6,15 @@ import { IngredientesService } from '../../../core/services/ingredientes.service
 import { toast } from 'ngx-sonner';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
+import { InventarioFormComponent } from "./inventario-form/inventario-form.component";
+import { ModalComponent } from "../../../shared/components/modal/modal.component";
 
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule]
+  imports: [ReactiveFormsModule, CommonModule, InventarioFormComponent, ModalComponent],
 })
 export class InventarioComponent implements OnInit {
   ingredientes: IIngredientes[] = [];
@@ -23,30 +25,25 @@ export class InventarioComponent implements OnInit {
   pageSize: number = 10;
 
   modalIngredienteAbierto = false;
-  modalUpdateIngredienteAbierto = false;
 
   ingredienteId!: number;
   searchTerm = new FormControl('');
-  ingredienteForm: FormGroup = new FormGroup({}, []);
 
   totalItems = 0;
+  ingrediente!: IIngredientes | null;
 
-  constructor(private ingredientesService: IngredientesService, private router: Router) {}
+  ingredientesService = inject(IngredientesService)
+  router = inject(Router)
+
+  constructor() {}
 
   async ngOnInit() {
     await this.cargarIngredientes();
 
-    this.ingredienteForm = new FormGroup({
-      id: new FormControl(null),
-      nombre: new FormControl('', Validators.required),
-      alergenos: new FormControl('', Validators.required)
-    });
 
-    this.searchTerm.valueChanges
-      .pipe(debounceTime(300))
-      .subscribe(() => {
-        this.currentPage = 1;      // resetea a la primera página
-        this.cargarIngredientes(); // pide de nuevo al servidor con search
+    this.searchTerm.valueChanges.pipe(debounceTime(300)).subscribe(() => {
+      this.currentPage = 1; // resetea a la primera página
+      this.cargarIngredientes(); // pide de nuevo al servidor con search
     });
 
     this.searchTerm.setValue('');
@@ -86,8 +83,8 @@ export class InventarioComponent implements OnInit {
     });
   }
 
-
-  abrirModal() {
+  abrirModal(ingrediente?: IIngredientes) {
+    this.ingrediente = ingrediente ? ingrediente : null;
     this.modalIngredienteAbierto = true;
   }
 
@@ -95,55 +92,37 @@ export class InventarioComponent implements OnInit {
     this.modalIngredienteAbierto = false;
   }
 
-  cerrarModalUpdate() {
-    this.modalUpdateIngredienteAbierto = false;
-  }
-
-  abrirModalUpdate(ingrediente: IIngredientes) {
-    this.modalUpdateIngredienteAbierto = true;
-    this.ingredienteId = ingrediente.id;
-    this.ingredienteForm.patchValue(ingrediente);
-  }
-
-  async agregarIngrediente() {
-    if (this.ingredienteForm.invalid) {
-      toast.error('Completa todos los campos obligatorios.');
-      return;
+  agregarActualizarIngrediente(ingrediente: IIngredientes) {
+    if (ingrediente.id) {
+      this.actualizarIngrediente(ingrediente);
+    } else {
+      this.agregarIngrediente(ingrediente);
     }
+    this.cerrarModal();
+    this.cargarIngredientes()
+  }
 
+  async agregarIngrediente(ingrediente: IIngredientes) {
     try {
-      await this.ingredientesService.createIngrediente(this.ingredienteForm.value);
-      toast.success("Ingrediente agregado correctamente");
-      this.router.navigate(['/dashboard', 'ingredientes']).then(() => {
-        window.location.reload();
-        this.cerrarModal();
-      });
+      await this.ingredientesService.createIngrediente(ingrediente);
+      toast.success('Ingrediente agregado correctamente');
     } catch (error) {
-      toast.error("Error al agregar ingrediente");
+      toast.error('Error al agregar ingrediente');
     }
   }
 
-  async actualizarIngrediente() {
-    if (this.ingredienteForm.invalid) {
-      toast.error('Completa todos los campos obligatorios.');
-      return;
-    }
-
+  async actualizarIngrediente(ingrediente: IIngredientes) {
     try {
-      const ingredienteActualizado = { ...this.ingredienteForm.value, id: this.ingredienteId };
-      await this.ingredientesService.updateIngrediente(this.ingredienteId, ingredienteActualizado);
-      toast.success("Ingrediente actualizado correctamente");
-      this.router.navigate(['/dashboard', 'ingredientes']).then(() => {
-        window.location.reload();
-        this.cerrarModalUpdate();
-      });
+      const ingredienteActualizado = { ...ingrediente, id: ingrediente.id };
+      await this.ingredientesService.updateIngrediente(ingrediente.id, ingredienteActualizado);
+      toast.success('Ingrediente actualizado correctamente');
     } catch (error) {
-      toast.error("Error al actualizar ingrediente");
+      toast.error('Error al actualizar ingrediente');
     }
   }
 
   async eliminarIngrediente(id: number) {
-    const ingrediente = this.ingredientes.find(i => i.id === id);
+    const ingrediente = this.ingredientes.find((i) => i.id === id);
     const nombreIngrediente = ingrediente ? ingrediente.nombre : 'Ingrediente';
 
     toast(`¿Deseas eliminar ${nombreIngrediente}?`, {
@@ -152,75 +131,26 @@ export class InventarioComponent implements OnInit {
         onClick: async () => {
           try {
             await this.ingredientesService.deleteIngrediente(id);
-            toast.success("Ingrediente eliminado con éxito");
-            this.router.navigate(['/dashboard', 'ingredientes']).then(() => {
-              window.location.reload();
-            });
+            toast.success('Ingrediente eliminado con éxito');
           } catch (error) {
-            toast.error("Error al eliminar ingrediente");
+            toast.error('Error al eliminar ingrediente');
           }
-        }
-      }
+        },
+      },
     });
   }
 
-  // CRUD Ingredientes
-
-  async getDataForm() {
-    let response: IIngredientes | any;
-    try {
-
-      response = await this.ingredientesService.createIngrediente(
-        this.ingredienteForm.value
-      );
-
-      toast.success("Ingrediente registrado correctamente");
-      setTimeout(() => {
-        this.router.navigate(['/dashboard' , 'inventory']).then(() => {
-          window.location.reload();
-          this.cerrarModal();
-        });
-      }, 3000);
-    } catch (msg: any) {
-      toast.error("Fallo en el registro");
-    }
-    if (this.ingredienteForm.invalid) {
-    toast.error('Por favor, completa todos los campos obligatorios.');
-    return;
-    }
-  }
-
-  async updateDataForm() {
-    let response: IIngredientes | any;
-    try {
-      const ingredienteActualizado: IIngredientes = { ...this.ingredienteForm.value, id: this.ingredienteId };
-      response = await this.ingredientesService.updateIngrediente(this.ingredienteId, ingredienteActualizado);
-      toast.success("Ingrediente Actualizado correctamente");
-      this.router.navigate(['/dashboard', 'ingrediente']).then(() => {
-        setTimeout(() => {
-          window.location.reload();
-          this.cerrarModalUpdate();
-        }, 1000);
-      });
-    } catch (msg: any) {
-      toast.error("Fallo al actualizar el ingrediente");
-    }
-    if (this.ingredienteForm.invalid) {
-    toast.error('Por favor, completa todos los campos obligatorios.');
-    return;
-    }
-  }
 
   async delete(id: number) {
-    const ingrediente = this.ingredientes.find(e => e.id === id);
+    const ingrediente = this.ingredientes.find((e) => e.id === id);
     const nombreIngrediente = ingrediente?.nombre ?? 'Ingrediente';
 
     toast(`¿Deseas Borrar al Ingrediente ${nombreIngrediente}?`, {
       action: {
         label: 'Aceptar',
-        onClick: () => this.deleteIngrediente(id)
+        onClick: () => this.deleteIngrediente(id),
       },
-      duration: 6000
+      duration: 6000,
     });
   }
 
@@ -230,7 +160,7 @@ export class InventarioComponent implements OnInit {
       await this.ingredientesService.deleteIngrediente(id);
 
       // quita del array base
-      this.ingredientes = this.ingredientes.filter(i => i.id !== id);
+      this.ingredientes = this.ingredientes.filter((i) => i.id !== id);
 
       // vuelve a aplicar filtro actual
       this.filtrarIngredientes(this.searchTerm.value ?? '');
@@ -241,8 +171,4 @@ export class InventarioComponent implements OnInit {
       toast.error('Error al eliminar el ingrediente');
     }
   }
-
-
-
-
 }

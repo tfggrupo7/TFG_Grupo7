@@ -20,7 +20,7 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   const result = await Ingrediente.insert(req.body);
-  const { nombre, alergeno } = req.body;
+  const { nombre, categoria, cantidad, unidad, proveedor, estado, alergenos } = req.body;
   const ingrediente = await Ingrediente.selectById(result.insertId);
 
   res.json(ingrediente);
@@ -29,7 +29,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   const { ingredienteId } = req.params;
   const result = await Ingrediente.update(ingredienteId, req.body);
-  const { nombre, alergeno } = req.body;
+  const { nombre, categoria, cantidad, unidad, proveedor, estado, alergenos } = req.body;
   const ingrediente = await Ingrediente.selectById(ingredienteId);
 
   res.json(ingrediente);

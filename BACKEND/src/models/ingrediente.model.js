@@ -43,18 +43,18 @@ const selectById = async (ingredienteId) => {
   return result[0] ?? null;
 };
 
-const insert = async ({ nombre, alergeno }) => {
+const insert = async ({ nombre, categoria, cantidad, unidad, proveedor, estado, alergenos}) => {
   const [result] = await db.query(
-    "insert into ingredientes (nombre,alergeno ) values (?, ?)",
-    [nombre, alergeno]
+    "insert into ingredientes (nombre, categoria, cantidad, unidad, proveedor, estado, alergenos) values (?, ?, ?, ?, ?, ?, ?)",
+    [nombre, categoria, cantidad, unidad, proveedor, estado, alergenos]
   );
   return result;
 };
 
-const update = async (ingredienteId, { nombre, alergeno }) => {
+const update = async (ingredienteId, { nombre, categoria, cantidad, unidad, proveedor, estado, alergenos}) => {
   const [result] = await db.query(
-    "update ingredientes set nombre = ?, alergeno = ? where id = ?",
-    [nombre, alergeno, ingredienteId]
+    "update ingredientes set nombre = ?, categoria = ?, cantidad = ?, unidad = ?, proveedor = ?, estado = ?, alergenos = ? where id = ?",
+    [nombre, categoria, cantidad, unidad, proveedor, estado, alergenos, ingredienteId]
   );
   return result;
 };
