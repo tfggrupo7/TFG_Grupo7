@@ -10,21 +10,21 @@ export class TurnosService {
   private httpClient = inject(HttpClient);
   private url: string = 'http://localhost:3000/api/turnos';
 
-  getTurnos(): Promise<ITurnos[]> {
-    const token = localStorage.getItem('token')?.trim();
+  private getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return token
+      ? { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) }
+      : {};
+  }
 
-    if (!token) {
-      throw new Error('No hay token disponible');
-    }
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
+  getTurnos(page: number = 1, limit: number = 10): Promise<{ page: number, limit: number, total: number, data: ITurnos[] }> {
+    const fullUrl = `${this.url}?page=${page}&limit=${limit}`;
     return lastValueFrom(
-      this.httpClient.get<{ data: ITurnos[] }>(this.url, { headers })
-    ).then(r => r.data);
+      this.httpClient.get<{ page: number, limit: number, total: number, data: ITurnos[] }>(
+        fullUrl,
+        this.getAuthHeaders()
+      )
+    );
   }
 
   getTurnoById(id: number): Promise<ITurnos> {
