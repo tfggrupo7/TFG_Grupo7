@@ -2,9 +2,8 @@
 const Turno = require('../models/turnos.model');
 
 const getAll = async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
-  const data = await Turno.selectAll(Number(page), Number(limit));
-  res.json({ page: Number(page), limit: Number(limit), total: data.length, data });
+  const data = await Turno.selectAll();
+  res.json(data);
 };
 
 const getById = async (req, res) => {

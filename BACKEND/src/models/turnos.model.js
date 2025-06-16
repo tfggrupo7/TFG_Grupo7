@@ -3,8 +3,8 @@ const db = require('../config/db');
 
 const selectAll = async (page, limit) => {
   const [rows] = await db.query(
-    "SELECT * FROM turnos ORDER BY fecha, hora_inicio LIMIT ? OFFSET ?",
-    [limit, (page - 1) * limit]
+    "SELECT * FROM turnos ORDER BY fecha, hora_inicio "
+    
   );
   return rows;
 };
