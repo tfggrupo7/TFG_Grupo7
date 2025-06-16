@@ -1,6 +1,6 @@
 @host = http://localhost:3000
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo2LCJpYXQiOjE3NTAwNjA5OTcsImV4cCI6MTc1MDA2NDU5N30.-I67CmbihHMQwyVjJhhBGcSi_weG2GjlTzKmpsVnNLA
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJpYXQiOjE3NDg5Mjg1MzMsImV4cCI6MTc0ODkzMjEzM30.Hwck22WkQgK7QegG4kMi5qz3eVkZGTE1xoWz7Bdj_Bc
 ###############
 ## EMPLEADOS ##
 ###############
@@ -369,7 +369,6 @@ Content-Type: application/json
 
 ### Obtener turnos
 GET {{host}}/api/turnos
-Authorization:{{token}} 
 
 ### Obtener turnos por id
 GET {{host}}/api/turnos/2

@@ -70,4 +70,4 @@ const checkTokenTurnos = async (req, res, next) => {
     }
 }
 
-module.exports = { checkToken ,  checkRole};
+module.exports = { checkToken ,  checkRole, checkTokenTurnos};

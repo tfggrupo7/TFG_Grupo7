@@ -10,7 +10,6 @@ import { TurnosModalComponent } from './turnos-modal/turnos-modal.component';
   imports: [CommonModule, TurnosModalComponent],
   templateUrl: './turnos.component.html',
   styleUrls: ['./turnos.component.css'],
-  styleUrls: ['./turnos.component.css'],
 })
 export class TurnosComponent implements OnInit {
   @ViewChild(TurnosModalComponent) modalRef!: TurnosModalComponent;
@@ -120,26 +119,23 @@ export class TurnosComponent implements OnInit {
   }
 
   get todayTurnos(): ITurnos[] {
-    const todayStr = new Date().toISOString().slice(0, 10);
-    return this.turnos.filter(t => t.fecha === todayStr);
+    return this.turnos.filter(t => t.fecha === this.todayStr);
   }
 
   get todayStaffCount(): number {
-    const hoy = new Date().toISOString().slice(0, 10);
-    const empleados = this.turnos.filter(t => t.fecha === hoy).map(t => t.empleado_id);
-    return new Set(empleados).size;
+    return new Set(this.todayTurnos.map(t => t.empleado_id)).size;
   }
 
   get activeShiftsCount(): number {
-    return this.turnos.filter(t => t.estado.toLowerCase() === 'confirmado').length;
+    return this.turnos.filter((t) => t.estado.toLowerCase() === 'confirmado').length;
   }
 
   get pendingShiftsCount(): number {
-    return this.turnos.filter(t => t.estado.toLowerCase() === 'pendiente').length;
+    return this.turnos.filter((t) => t.estado.toLowerCase() === 'pendiente').length;
   }
 
   get completedShiftsCount(): number {
-    return this.turnos.filter(t => t.estado.toLowerCase() === 'completado' && this.currentWeekDates.includes(t.fecha)).length;
+    return this.turnos.filter((t) => t.estado.toLowerCase() === 'completado').length;
   }
 
   allowDrop(event: DragEvent) {
