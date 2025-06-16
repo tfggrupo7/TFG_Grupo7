@@ -131,7 +131,8 @@
   @for (empleado of getTareasPorEmpleado() | keyvalue; track empleado.key) {
     <div class="mb-8">
       <h3 class="text-lg font-semibold text-[#4b6b1c] mb-2">
-        Empleado ID: {{ empleado.key }}
+        Empleado ID: {{ empleado.key }} - {{ getEmpleadoById(empleado.key)?.nombre }} {{ getEmpleadoById(empleado.key)?.apellidos }}
+       
       </h3>
       <table class="min-w-full bg-white border border-[#d9dbc7] rounded-xl shadow">
         <thead class="bg-[#e9ebdd]">

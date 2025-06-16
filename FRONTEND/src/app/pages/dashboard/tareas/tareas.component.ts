@@ -7,6 +7,8 @@ import { TareasService } from '../../../core/services/tareas.service';
 import { inject } from '@angular/core';
 import { toast } from 'ngx-sonner';
 import { IUsuario } from '../../../interfaces/iusuario.interfaces';
+import { IEmpleados } from '../../../interfaces/iempleados.interfaces';
+import { EmpleadosService } from '../../../core/services/empleados.service';
 
 @Component({
   selector: 'app-tareas',
@@ -25,6 +27,8 @@ export class TareasComponent {
     email: '',
     contraseña: '',
   };
+  empleados: IEmpleados[] = []; 
+  empleadoService = inject(EmpleadosService);
 
   constructor(private fb: FormBuilder) {}
 
@@ -41,6 +45,10 @@ export class TareasComponent {
     });
 
     this.obtenerTareas();
+    this.empleadoService.getEmpleados().then(empleados => {
+      this.empleados = empleados;
+    
+    });
   }
   openModal() {
     this.showModal = true;
@@ -77,7 +85,7 @@ export class TareasComponent {
 
   async insertarTarea() {
     try {
-      console.log('Insertando tarea:', this.tareasForm.value);
+     
       await this.tareasService.createTarea(this.tareasForm.value);
       this.closeModal();
       this.obtenerTareas();
@@ -117,7 +125,9 @@ export class TareasComponent {
       },
     });
   }
-
+getEmpleadoById(empleadoId: string) {
+    return this.empleados.find(emp => emp.id.toString() === empleadoId);
+  }
   enviarTareasPorEmail() {
     this.tareasService
       .sendTareasByEmail(this.tareas)

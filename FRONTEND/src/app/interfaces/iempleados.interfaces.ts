@@ -9,9 +9,10 @@ export interface IEmpleados {
     telefono: string;
     salario: number;
     status: string
-    activo: boolean;
+    activo: string;
     usuario_id?: number;
     role: IRol[];
+    turno_id?: number;
 }
 
 export interface IRol {

@@ -56,7 +56,7 @@ mostrarRegistro(event: Event) {
 initializeLoginFormWithUsuario() {
   this.loginForm = new FormGroup({
     email: new FormControl(this.usuario ? this.usuario.email : '', [Validators.required, Validators.email]),
-    contraseña: new FormControl(this.usuario ? this.usuario.contraseña : '', Validators.required)
+    contraseña: new FormControl(this.usuario ? this.usuario.contraseña : '', [Validators.required, Validators.minLength(6)])
   });
 }
 

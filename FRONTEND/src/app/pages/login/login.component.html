@@ -63,8 +63,14 @@
       <form [formGroup]="loginForm" (ngSubmit)="ingresar()" class="w-full max-w-sm">
         <label class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
         <input type="email" placeholder="tu@email.com" class="w-full p-2 border rounded mb-4" formControlName="email" />
+        @if(loginForm.get('email')?.errors?.['email'] && loginForm.get('email')?.touched) {
+          <p class="text-red-500 text-sm">El correo electrónico no es válido.</p>
+        }
         <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
         <input type="password" class="w-full p-2 border rounded mb-4" formControlName="contraseña" />
+        @if(registerForm.get('contraseña')?.errors?.['minlength'] && registerForm.get('contraseña')?.touched) {
+          <p class="text-red-500 text-sm">La contraseña debe tener al menos 6 caracteres.</p>
+        }
         <div class="flex justify-between items-center mb-4">
           <label class="flex items-center">
             <input type="checkbox" class="mr-2" /> Recordarme

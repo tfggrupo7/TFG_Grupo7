@@ -341,3 +341,9 @@
 2025-06-15 14:29:16 POST /api/usuarios/registro ::1
 2025-06-15 14:29:35 POST /api/usuarios/registro ::1
 2025-06-15 14:34:45 POST /api/usuarios/registro ::1
+2025-06-15 19:59:21 POST /api/usuarios/login ::1
+2025-06-15 19:59:40 GET /api/empleados ::1
+2025-06-15 19:59:40 GET /api/roles ::1
+2025-06-15 20:50:22 GET /api/empleados ::1
+2025-06-15 20:53:09 GET /api/empleados ::1
+2025-06-15 20:54:44 GET /api/empleados ::1
