@@ -1,0 +1,166 @@
+<div class="bg-[#f3f3ec] border border-[#d9dbc7] rounded-xl p-6 mb-6 flex items-center justify-between">
+  <div>
+    <h1 class="text-2xl font-bold text-[#4b6b1c]">Gestión de Tareas</h1>
+    <p class="text-[#7a7a5c] text-sm">Organiza las tareas de tu equipo</p>
+  </div>
+  <div class="flex gap-2">
+    <!-- Botón de descarga -->
+    <button
+      (click)="descargarTareas()"
+      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center"
+      title="Descargar tareas"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+      </svg>
+      Descargar
+    </button>
+    <!-- Botón de enviar por email -->
+    <button
+      (click)="enviarTareasPorEmail()"
+      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center"
+      title="Enviar tareas por email"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M16 12h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v4a2 2 0 002 2h2m4 0v6m0 0l-3-3m3 3l3-3" />
+      </svg>
+      Enviar Email
+    </button>
+    
+    <!-- Botón de asignar tarea (ya existente) -->
+    @if(isEncargado) {
+    <button
+      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow"
+      (click)="openModal()"
+    >
+      + Asignar Tarea
+    </button>
+  }
+  </div>
+</div>
+<!-- Modal -->
+    @if (showModal) {
+      <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
+        <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md border border-[#d9dbc7]">
+          <h2 class="text-xl font-bold text-[#4b6b1c] mb-4">Asignar Nueva Tarea</h2>
+          <form [formGroup]="tareasForm" (ngSubmit)="insertarTarea()" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label
+                  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  for="titulo">Titulo</label>
+                <input
+                  class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+                  id="titulo" formControlName="titulo" placeholder="" required name="titulo">
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  for="descripcion">Descripcion</label>
+                <input
+                  class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+                  id="descripcion" formControlName="descripcion" placeholder="" required name="descripcion">
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  for="fecha_inicio">Fecha Inicio</label>
+                <input
+                  class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+                  id="fecha_inicio" formControlName="fecha_inicio" placeholder="" required type="date" name="fecha_inicio">
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  for="fecha_finalizacion">Fecha Finalizacion</label>
+                <input
+                  class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+                  id="fecha_finalizacion" formControlName="fecha_finalizacion" placeholder="" required type="date" name="fecha_finalizacion">
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  for="hora_inicio">Hora de inicio</label>
+                <input
+                  class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+                  id="hora_inicio" formControlName="hora_inicio" required type="time" name="hora_inicio">
+              </div>
+              <div class="space-y-2">
+                <label
+                  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  for="hora_finalizacion">Hora Finalizacion</label>
+                <input
+                  class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+                  id="hora_finalizacion" formControlName="hora_finalizacion" placeholder="" required type="time" name="hora_finalizacion">
+              </div>
+               <div class="space-y-2 md:col-span-2">
+                <label
+                  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  for="activo">Estado</label>
+                <select id="estado" formControlName="estado" name="estado"
+                  class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+                  required>
+                  <option value="Completada">Completada</option>
+                  <option value="En Curso">En Curso</option>
+                  <option value="Pendiente">Pendiente</option>
+                </select>
+              </div>
+            </div>
+            <div class="space-y-2">
+                <label
+                  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  for="hora_finalizacion">EmpleadoId</label>
+                <input
+                  class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+                  id="empleado_id" formControlName="empleado_id" placeholder="" required type="number" name="empleado_id">
+              </div>
+            <div class="flex justify-end pt-4">
+              <button type="submit" class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow">
+                Guardar
+              </button>
+              <button type="button" class="ml-2 px-5 py-2 rounded-lg font-semibold border border-[#d9dbc7] text-[#4b6b1c] bg-white hover:bg-[#f3f3ec]" (click)="closeModal()">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }
+<div class="mt-8">
+  <h2 class="text-xl font-bold text-[#4b6b1c] mb-4">Lista de Tareas del Empleado</h2>
+  <table class="min-w-full bg-white border border-[#d9dbc7] rounded-xl shadow">
+    <thead class="bg-[#e9ebdd]">
+      <tr>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Título</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Descripción</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Fecha Inicio</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Fecha Finalización</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Hora Inicio</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Hora Finalización</th>
+        <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if (tareas.length === 0) {
+    <tr>
+      <td colspan="7" class="text-center py-4 text-gray-500 font-semibold">
+        NO HAY TAREAS PARA ESTE EMPLEADO
+      </td>
+    </tr>
+  }
+      @for (tarea of tareas; track tarea.id) {
+        <tr class="hover:bg-[#f3f3ec]">
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.titulo }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.descripcion }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.fecha_inicio | date:'dd-MM-yyyy'}}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.fecha_finalizacion | date:'dd-MM-yyyy' }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.hora_inicio }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.hora_finalizacion }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ getEstadoTarea(tarea) }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

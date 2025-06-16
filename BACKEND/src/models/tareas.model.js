@@ -1,14 +1,17 @@
 const db = require("../config/db");
 
 const selectByEmpleadoId = async (empleadoId) => {
-  const [result] = await db.query("select * from tareas where empleado_id = ?", [
-    empleadoId,
-  ]);
+  const [result] = await db.query(
+    "select * from tareas where empleado_id = ?",
+    [empleadoId]
+  );
   return result;
 };
 
 const selectByTareaId = async (tareaId) => {
-  const [result] = await db.query("select * from tareas where id = ?", [tareaId]);
+  const [result] = await db.query("select * from tareas where id = ?", [
+    tareaId,
+  ]);
   return result;
 };
 
@@ -22,26 +25,65 @@ const selectAllTareas = async (page, limit) => {
 
 const selectAllTareasAndEmpleado = async (page, limit) => {
   const [result] = await db.query(
-    "select tareas.*, empleados.nombre, empleados.pass,empleados.email, empleados.telefono from tareas inner join empleados on tasks.empleado_id = empleados.id order by tareas.id desc limit ? offset ?",
+    "select tareas.*, empleado.nombre, empleado.email, empleado.telefono, activo, apellidos from tareas inner join empleados on tareas.empleado_id = empleados.id order by tareas.id desc limit ? offset ?",
     [limit, (page - 1) * limit]
   );
   return result;
-}
+};
 
-const insert = async (descripcion, empleado_id, menu_id, fecha) => {
+const insert = async (
+  descripcion,
+  empleado_id,
+  fecha_finalizacion,
+  fecha_inicio,
+  estado,
+  titulo,
+  hora_inicio,
+  hora_finalizacion
+) => {
   const [result] = await db.query(
-    "insert into tareas (descripcion,empleado_id,menu_id,fecha) values (?, ?, ?, ?)",
-    [descripcion,empleado_id,menu_id,fecha]
+    "insert into tareas (descripcion,empleado_id,fecha_finalizacion,fecha_inicio,estado,titulo,hora_inicio,hora_finalizacion) values (?, ?, ?, ?,?,?,?,?)",
+    [
+      descripcion,
+      empleado_id,
+      fecha_finalizacion,
+      fecha_inicio,
+      estado,
+      titulo,
+      hora_inicio,
+      hora_finalizacion,
+    ]
   );
-  
-    
+
   return result;
 };
 
-const update = async (tareaId, { descripcion,empleado_id,menu_id,fecha }) => {
+const update = async (
+  tareaId,
+  {
+    descripcion,
+    empleado_id,
+    fecha_finalizacion,
+    fecha_inicio,
+    estado,
+    titulo,
+    hora_inicio,
+    hora_finalizacion,
+  }
+) => {
   const [result] = await db.query(
-    "update tareas set descripcion = ?, empleado_id = ?,menu_id = ?, fecha = ? where id = ?",
-    [descripcion,empleado_id,menu_id,fecha, tareaId]
+    "update tareas set descripcion = ?, empleado_id = ?,fecha_finalizacion =?, fehca_inicio=?, estado=?, titulo=?, hora_inicio=?, hora_finalizacion=? where id = ?",
+    [
+      descripcion,
+      empleado_id,
+      fecha_finalizacion,
+      fecha_inicio,
+      estado,
+      titulo,
+      hora_inicio,
+      hora_finalizacion,
+      tareaId,
+    ]
   );
   return result;
 };
@@ -61,15 +103,23 @@ const selectAllTareasRaw = async () => {
 
 const selectAllTareasAndEmpleadoRaw = async (empleadoId) => {
   const [result] = await db.query(
-    `SELECT tarea_id, tareas.descripcion, tareas.empleado_id, empleados.nombre as empleado_nombre
-     FROM tareas
-     INNER JOIN empleados ON tareas.empleados_id = empleados_id
-     WHERE tareas.empleado_id = ?`,
+    `SELECT 
+  tareas.titulo, 
+  tareas.descripcion, 
+  tareas.hora_inicio, 
+  tareas.hora_finalizacion,
+  tareas.fecha_inicio,
+  tareas.fecha_finalizacion, 
+  tareas.estado,
+  tareas.empleado_id, 
+  empleados.nombre AS empleado_nombre
+FROM tareas
+INNER JOIN empleados ON tareas.empleado_id = empleados.id
+WHERE tareas.empleado_id = ?`,
     [empleadoId]
   );
   return result;
 };
-
 
 module.exports = {
   selectByEmpleadoId,

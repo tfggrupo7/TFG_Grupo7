@@ -3,15 +3,39 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Usuario = require("../models/usuarios.model");
 const CryptoJS = require("crypto-js");
-/*const crypto = require('crypto');*/
 const sendEmail = require("../sendEmail");
 
 const registro = async (req, res) => {
-  req.body.contraseña = bcrypt.hashSync(req.body.contraseña, 10);
-  const result = await Usuario.insert(req.body);
-  const usuario = await Usuario.getById(result.insertId);
-
-  res.json(usuario);
+  try {
+    const { email } = req.body;
+    
+    // Verificar si el email ya existe ANTES de insertar
+    const usuarioExistente = await Usuario.getByEmail(email);
+    
+    if (usuarioExistente) {
+      return res.status(400).json({ 
+        success: false,
+        message: "El email ya está registrado." 
+      });
+    }
+    
+    // Si no existe, proceder con el registro
+    req.body.contraseña = bcrypt.hashSync(req.body.contraseña, 10);
+    const result = await Usuario.insert(req.body);
+    const usuario = await Usuario.getById(result.insertId);
+    
+    res.status(201).json({
+      success: true,
+      usuario: usuario
+    });
+    
+  } catch (error) {
+    console.error('Error en registro:', error);
+    res.status(500).json({ 
+      success: false,
+      message: "Error interno del servidor" 
+    });
+  }
 };
 
 const login = async (req, res) => {
@@ -31,7 +55,7 @@ const login = async (req, res) => {
   res.json({
     message: "Login exitoso",
     token: jwt.sign(
-      { usuario_id: usuario.id, role: usuario.role },
+      { usuario_id: usuario.id, role: usuario.role, email: usuario.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     ),
@@ -184,11 +208,73 @@ const restablecerContraseña = async (req, res) => {
   }
 };
 
+const cambiarContraseña = async (req, res) => {
+  const { nuevaContraseña } = req.body;
+  const usuarioId = req.user.id;
+
+  if (!nuevaContraseña || typeof nuevaContraseña !== "string") {
+    return res
+      .status(400)
+      .json({ message: "La nueva contraseña es obligatoria." });
+  }
+
+  try {
+    const result = await Usuario.cambiarContraseña(usuarioId, nuevaContraseña);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.json({ message: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    console.error("Error al cambiar la contraseña:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
+const actualizarDatos = async (req, res) => {
+  const { nombre, apellidos, email } = req.body;
+  const usuarioId = req.user.id;
+
+  try {
+    const result = await Usuario.updateDatos(usuarioId, {
+      nombre,
+      apellidos,
+      email,
+    });
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.json({ message: "Datos actualizados correctamente" });
+      } catch (error) {
+      console.error("Error al actualizar los datos del usuario:", error);
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  };
+  
+  const eliminarUsuario = async (req, res) => {
+  const { id } = req.params;  
+  const usuarioId = req.user.id;
+  if (usuarioId !== Number.parseInt(id)) {
+    return res.status(403).json({ message: "No tienes permiso para eliminar este usuario." });
+  }
+  try {
+    const result = await Usuario.deleteUsuario(id);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    res.json({ message: "Usuario eliminado correctamente" }); 
+  }
+  catch (error) {
+    console.error("Error al eliminar el usuario:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  } 
+}
+
 module.exports = {
   registro,
   login,
   perfil,
   recuperarContraseña,
   restablecerContraseña,
-  generarYGuardarToken,
+  generarYGuardarToken,actualizarDatos,
+  cambiarContraseña, eliminarUsuario
 };

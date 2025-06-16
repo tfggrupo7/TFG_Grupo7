@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IIngredientes } from '../../../interfaces/iingredientes.interfaces';
 import { IngredientesService } from '../../../core/services/ingredientes.service';
 import { toast } from 'ngx-sonner';

@@ -1,10 +1,14 @@
-<div class="bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
+<div class="bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F] mb-4">
   <h1 class="text-2xl font-bold text-[#556B2F]">
     Panel de Control
   </h1>
   <p class="text-[#1C1C1C]/70">Resumen general de tu cocina</p>
 </div>
-<div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+<<<<<<< HEAD
+
+<div class="grid gap-6 lg:grid-cols-2">
+=======
+<div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-4">
   <div
     class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#556B2F] bg-[#556B2F]/5">
     <div class="flex items-center justify-between">
@@ -105,7 +109,8 @@
     </p>
   </div>
 </div>
-<div class="grid gap-6 lg:grid-cols-2">
+<div class="grid gap-6 lg:grid-cols-2 mb-4">
+>>>>>>> origin/main
   <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20"
     data-v0-t="card">
     <div class="flex flex-col space-y-1.5 p-6">
@@ -175,33 +180,25 @@
       </p>
     </div>
     <div class="p-6 pt-0 space-y-3">
-      <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
-        <div>
-          <p class="font-medium text-[#1C1C1C]">Ana García</p>
-          <p class="text-sm text-[#1C1C1C]/70">
-            Chef - 08:00 - 16:00
-          </p>
-        </div>
-        <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800">Activo</span>
+  @for(empleado of arrEmpleados; track empleado.id) {
+    <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
+      <div>
+        <p class="font-medium text-[#1C1C1C]">
+          {{empleado.nombre}} {{empleado.apellidos}}
+        </p>
+        <p class="text-sm text-[#1C1C1C]/70">
+          {{getNombreRol(empleado.rol_id)}} - Turno: {{empleado.turno_id}}
+        </p>
       </div>
-      <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
-        <div>
-          <p class="font-medium text-[#1C1C1C]">Carlos López</p>
-          <p class="text-sm text-[#1C1C1C]/70">
-            Ayudante - 10:00 - 18:00
-          </p>
-        </div>
-        <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800">Activo</span>
-      </div>
-      <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
-        <div>
-          <p class="font-medium text-[#1C1C1C]">María Pérez</p>
-          <p class="text-sm text-[#1C1C1C]/70">
-            Cocinera - 14:00 - 22:00
-          </p>
-        </div>
-        <span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-800">Próximo</span>
-      </div>
+      <span class="text-xs px-2 py-1 rounded-full" 
+            [class]="empleado.activo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+        {{empleado.activo ? 'Activo' : 'Inactivo'}}
+      </span>
+    </div>
+  }
+
+     
+      
       <button
         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 w-full bg-[#556B2F] hover:bg-[#556B2F]/90">
         <a href="/dashboard/turnos">Gestionar Turnos</a>
@@ -209,7 +206,7 @@
     </div>
   </div>
 </div>
-<div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20"
+<div class="rounded-lg border bg-card text-card-foreground mb-4 shadow-sm border-[#D4AF37]/20"
   data-v0-t="card">
   <div class="flex flex-col space-y-1.5 p-6">
     <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">
@@ -252,14 +249,14 @@
             <path d="M3 10h18"></path>
           </svg><span>Programar Turno</span></a></button><button
         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 py-2 px-4 h-20 flex-col gap-2 border-[#556B2F] text-[#556B2F]">
-        <a href="/dashboard/reportes"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+        <a href="/dashboard/tareas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" class="lucide lucide-bar-chart3 h-6 w-6">
             <path d="M3 3v18h18"></path>
             <path d="M18 17V9"></path>
             <path d="M13 17V5"></path>
             <path d="M8 17v-3"></path>
-          </svg><span>Ver Reportes</span></a>
+          </svg><span>Ver Tareas</span></a>
       </button>
     </div>
   </div>

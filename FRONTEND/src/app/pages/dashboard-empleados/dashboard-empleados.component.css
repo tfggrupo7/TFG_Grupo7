@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.group\/sidebar-wrapper {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.flex.min-h-svh {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+main {
+  height: calc(100vh - 4rem); /* Subtract header height */
+  overflow-y: auto;
+}

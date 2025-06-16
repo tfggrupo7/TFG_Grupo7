@@ -1,0 +1,47 @@
+.form-container {
+  top: 0;
+  height: 100%;
+  
+  width: 50%;
+  background: #fff;
+  
+}
+
+.sign-in-container {
+  left: 0;
+}
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+
+  z-index: -1;
+}
+
+.overlay {
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  color: #fff;
+
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+}
+.overlay-panel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 40px;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transition: transform 0.6s ease-in-out;
+}
+.espacio {
+  margin-top: 1rem;
+}

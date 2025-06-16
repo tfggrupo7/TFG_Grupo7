@@ -18,8 +18,13 @@ export class EmpleadosService {
   private totalPages: number = 2;
 
 
-  getEmpleados(): Promise<IEmpleados[]> {      
-    return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url,));
+  getEmpleados(): Promise<IEmpleados[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `${token}` } : {})
+    });
+    return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url, { headers }));
   }
   
   async cargarEmpleados(page: number): Promise<IResponse> {
@@ -50,12 +55,47 @@ export class EmpleadosService {
   createEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
   return lastValueFrom(this.httpClient.post<IEmpleados>(this.url, empleado));
   }
-  updateEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
+  
+  updateEmpleadoPerfil(empleado: IEmpleados): Promise<IEmpleados> {
   let { id, ...empleadoBody } = empleado;
-   return lastValueFrom(
-    this.httpClient.put<IEmpleados>(`${this.url}/${empleado.id}`, empleadoBody)
+  id = Number(id);
+  if (!id || isNaN(id)) {
+    return Promise.reject('ID de empleado inválido');
+  }
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  });
+  return lastValueFrom(
+    this.httpClient.put<IEmpleados>(
+      `${this.url}/${id}`,
+      empleadoBody,
+      { headers }
+    )
   );
   }
+  
+  updateEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
+  let { id, ...empleadoBody } = empleado;
+  id = Number(id);
+  if (!id || isNaN(id)) {
+    return Promise.reject('ID de empleado inválido');
+  }
+  const token = localStorage.getItem('token');
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  });
+  return lastValueFrom(
+    this.httpClient.put<IEmpleados>(
+      `${this.url}/updateEmpleado/${id}`,
+      empleadoBody,
+      { headers }
+    )
+  );
+  }
+
   deleteEmpleado(id: number): Promise<void> {
     return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
   }
@@ -63,37 +103,9 @@ export class EmpleadosService {
   obtenerRoles(id: number): Observable<any[]> {
     return this.httpClient.get<any[]>(`${this.url}/role/${id}`);
   }
-    
   
-  async gotoNext(): Promise<IResponse | null> {
-    if (this.currentPage < this.totalPages) {
-      const nextPage = this.currentPage + 1;
-      try {
-        const response = await this.cargarEmpleados(nextPage);
-        if (response) {
-          this.currentPage = response.page;
-          return response;
-        }
-      } catch (error) {
-        console.error("Error al cargar la siguiente página", error);
-      }
-    }
-    return null;
+  cambiarContraseña(empleadoId: number, nuevaContraseña: string): Promise<any> {
+    return lastValueFrom(this.httpClient.post(`http://localhost:3000/api/empleados/cambiar-contrasena/${empleadoId}`, { nuevaContraseña }));
   }
-
-  async gotoPrev(): Promise<IResponse | null> {
-    if (this.currentPage > 1) {
-      const prevPage = this.currentPage - 1;
-      try {
-        const response = await this.cargarEmpleados(prevPage);
-        if (response) {
-          this.currentPage = response.page;
-          return response;
-        }
-      } catch (error) {
-        console.error("Error al cargar la página anterior", error);
-      }
-    }
-    return null;
+  
   }
-}

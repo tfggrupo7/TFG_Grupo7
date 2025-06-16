@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer base {
   :root {
     --background: 60 30% 98%;
@@ -26,16 +24,6 @@
     --input: 240 5.9% 90%;
     --ring: 43 65% 53%;
     --radius: 0.5rem;
-
-    /* Sidebar variables */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 240 10% 3.9%;
-    --sidebar-primary: 43 65% 53%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 43 65% 95%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 240 5.9% 90%;
-    --sidebar-ring: 43 65% 53%;
   }
 
   .dark {
@@ -58,39 +46,31 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 43 65% 53%;
-
-    /* Sidebar variables */
-    --sidebar-background: 24 9.8% 10%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 43 65% 53%;
-    --sidebar-primary-foreground: 240 5.9% 10%;
-    --sidebar-accent: 43 30% 25%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 43 65% 53%;
   }
 
-  /* Custom scrollbar for sidebar */
-  .sidebar-scroll::-webkit-scrollbar {
-    width: 6px;
+  /* Estilos para el scroll global */
+  ::-webkit-scrollbar {
+    width: 10px;
+    background: #fdfbf8;
   }
 
-  .sidebar-scroll::-webkit-scrollbar-track {
-    background: transparent;
+  ::-webkit-scrollbar-thumb {
+    background: #d4af37;
+    border-radius: 8px;
+    border: 2px solid #fdfbf8;
   }
 
-  .sidebar-scroll::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb:hover {
     background: #556b2f;
-    border-radius: 3px;
   }
 
-  .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-    background: #6b7f3a;
+  ::-webkit-scrollbar-corner {
+    background: #fdfbf8;
   }
 
-  /* Firefox scrollbar */
-  .sidebar-scroll {
+  /* Firefox */
+  html {
     scrollbar-width: thin;
-    scrollbar-color: #556b2f transparent;
+    scrollbar-color: #d4af37 #fdfbf8;
   }
 }
