@@ -32,9 +32,9 @@ const insert = async ({
 }) => {
   const [result] = await db.query(
     `INSERT INTO turnos
-     (dia, hora, duracion, titulo, empleado_id, rol_id, fecha, estado, hora_inicio, hora_fin, color)
+     (dia, hora, duracion, titulo, empleado_id, roles_id, fecha, estado, hora_inicio, hora_fin, color)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [dia, hora, duracion, titulo, empleado_id, rol_id, fecha, estado, hora_inicio, hora_fin, color]
+    [dia, hora, duracion, titulo, empleado_id, roles_id, fecha, estado, hora_inicio, hora_fin, color]
   );
   return result;
 };

@@ -30,10 +30,11 @@ export class TurnosModalComponent implements OnInit, OnChanges {
       empleado_id: ['', Validators.required],
       roles_id: ['', Validators.required],
       fecha: ['', Validators.required],
-      estado: ['pendiente', Validators.required],
+      dia: ['', Validators.required],
+      estado: ['', Validators.required],
       hora_inicio: ['', Validators.required],
       hora_fin: ['', Validators.required],
-      duracion: [1, Validators.required],
+      duracion: [1],
       titulo: [''],
       color: ['bg-[#D4AF37]/90']
     });
@@ -41,24 +42,63 @@ export class TurnosModalComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.setFormForEdit();
+
+    // recalcular duración cuando cambian las horas
+    this.shiftForm.get('hora_inicio')?.valueChanges.subscribe(() => this.updateDuration());
+    this.shiftForm.get('hora_fin')?.valueChanges.subscribe(() => this.updateDuration());
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['shiftToEdit']) {
+    if (changes['shiftToEdit'] || changes['isOpen']) {
       this.setFormForEdit();
     }
   }
 
-  setFormForEdit() {
+  private setFormForEdit() {
     if (this.shiftToEdit) {
+      // modo edición
       this.isEditMode = true;
       this.shiftForm.patchValue(this.shiftToEdit);
     } else {
+      // modo creación: rellenamos campos clave
       this.isEditMode = false;
-      this.shiftForm.reset({ estado: 'pendiente', color: 'bg-[#D4AF37]/90' });
+
+      const fecha   = this.currentWeekDates[this.selectedDayIndex] ?? '';
+      const inicioH = this.selectedHour;
+      const finH    = inicioH + 1;
+
+      this.shiftForm.reset({
+        empleado_id : '',
+        roles_id    : '',
+        dia: this.getDayName(this.selectedDayIndex),
+        fecha,
+        estado      : 'pendiente',
+        hora_inicio : `${inicioH.toString().padStart(2, '0')}:00`,
+        hora_fin    : `${finH.toString().padStart(2, '0')}:00`,
+        duracion    : 1,
+        titulo      : '',
+        color       : 'bg-[#D4AF37]/90'
+      });
     }
+
+    // aseguramos duración coherente desde el principio
+    this.updateDuration();
   }
 
+   /* ---------- Lógica de duración ---------- */
+  private updateDuration() {
+    const ini = this.shiftForm.value.hora_inicio;
+    const fin = this.shiftForm.value.hora_fin;
+    if (!ini || !fin) return;
+
+    const [ih, im] = ini.split(':').map(Number);
+    const [fh, fm] = fin.split(':').map(Number);
+    const dur = (fh + fm / 60) - (ih + im / 60);
+
+    this.shiftForm.get('duracion')!.setValue(dur > 0 ? dur : null, { emitEvent: false });
+  }
+
+  /* ---------- Acciones ---------- */
   onDelete() {
     this.delete.emit();
     this.shiftForm.reset();
@@ -71,33 +111,39 @@ export class TurnosModalComponent implements OnInit, OnChanges {
     this.close.emit();
   }
 
-  onSubmit() {
-    if (this.shiftForm.valid) {
+  onSubmit(): void {
+  // 1. El formulario debe ser válido
+  if (this.shiftForm.invalid) { return; }
+
+  // 2. Copiamos los valores y recalculamos el día por si la fecha cambió
       const formValue = { ...this.shiftForm.value };
-      const hora = parseInt(formValue.hora_inicio.split(':')[0], 10);
-      const dayIndex = this.currentWeekDates.indexOf(formValue.fecha);
+  const dayIndex  = this.currentWeekDates.indexOf(formValue.fecha);
+
       if (dayIndex === -1) {
-        alert('La fecha no pertenece a la semana actual.');
+    alert('La fecha no pertenece a la semana visible');
         return;
       }
 
+  formValue.dia = this.getDayName(dayIndex);      // «Lunes», «Martes», …
+
+  // 3. Hora numérica auxiliar (p. ej. 14 para «14:00»)
+  const horaNum = parseInt(formValue.hora_inicio.split(':')[0], 10);
+
+  // 4. Construimos el objeto ITurnos
       const turno: ITurnos = {
         ...formValue,
-        dia: this.getDayName(dayIndex),
-        hora,
-        id: this.shiftToEdit?.id ?? 0
+    hora: horaNum,
+    id  : this.shiftToEdit?.id ?? 0
       };
 
-      if (this.isEditMode) {
-        this.update.emit(turno);
-      } else {
-        this.create.emit(turno);
-      }
+  // 5. Emitimos la acción adecuada
+  this.isEditMode ? this.update.emit(turno) : this.create.emit(turno);
 
+  // 6. Reset y cierre local
       this.shiftForm.reset();
       this.isEditMode = false;
     }
-  }
+
 
   getDayName(index: number): string {
     return ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'][index];

@@ -24,6 +24,35 @@ const checkToken = async (req, res, next) => {
   next();
 };
 
+const checkTokenTurnos = async (req, res, next) => {
+
+  if (!req.headers.authorization) {
+    return res.status(403).json({ message: "No tienes autorizacion"});
+  }
+  
+  // Extraer solo el token, quitando "Bearer "
+  const token = req.headers.authorization.split(' ')[1];
+  
+  if (!token) {
+    return res.status(403).json({ message: "Token no proporcionado"});
+  }
+  
+  let payload;
+  try {
+    payload = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    return res.status(403).json({ message: "Token invalido" });
+  }
+  
+  const usuario = await Usuario.getById(payload.usuario_id);
+  if(!usuario) {
+    return res.status(403).json({ message: 'Usuario no existe'});
+  }
+  req.user = usuario;
+
+  next();
+}
+
  /*const checkAdmin = (req, res, next) => {
   if (req.usuario.role !== "admin") {
     return res.status(403).json({ message: "No tienes permisos de administrador"});
@@ -41,4 +70,4 @@ const checkToken = async (req, res, next) => {
     }
 }
 
-module.exports = { checkToken ,  checkRole};
+module.exports = { checkToken ,  checkRole, checkTokenTurnos};

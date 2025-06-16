@@ -9,7 +9,7 @@ import { TurnosModalComponent } from './turnos-modal/turnos-modal.component';
   standalone: true,
   imports: [CommonModule, TurnosModalComponent],
   templateUrl: './turnos.component.html',
-  styleUrls: ['./turnos.component.css']
+  styleUrls: ['./turnos.component.css'],
 })
 export class TurnosComponent implements OnInit {
   @ViewChild(TurnosModalComponent) modalRef!: TurnosModalComponent;
@@ -31,8 +31,10 @@ export class TurnosComponent implements OnInit {
 
   async cargarTurnos() {
     try {
+      const tokenEnStorage = localStorage.getItem('token');
+
       const res = await this.turnosService.getTurnos();
-      this.turnos = res.data;
+      this.turnos = res;
     } catch (error) {
       console.error('Error cargando turnos:', error);
     }
@@ -40,11 +42,33 @@ export class TurnosComponent implements OnInit {
 
   get todayFormatted(): string {
     const hoy = new Date();
-    const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    return `${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]} ${hoy.getFullYear()}`;
+    const dias = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+    ];
+    const meses = [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
+    ];
+    return `${dias[hoy.getDay()]}, ${hoy.getDate()} de ${
+      meses[hoy.getMonth()]
+    } ${hoy.getFullYear()}`;
   }
-
 
   setCurrentWeekDates() {
     const today = new Date();
@@ -60,7 +84,7 @@ export class TurnosComponent implements OnInit {
   openModal(dayIndex: number, hour: number, turno?: ITurnos) {
     this.selectedDayIndex = dayIndex;
     this.selectedHour = hour;
-    this.selectedTurno = turno || null;
+    this.selectedTurno = turno ?? null;
     this.isModalOpen = true;
   }
 
@@ -70,6 +94,7 @@ export class TurnosComponent implements OnInit {
   }
 
   async createTurno(turno: ITurnos) {
+    console.log('Creating turno:', turno);
     await this.turnosService.createTurno(turno);
     await this.cargarTurnos();
     this.closeModal();
@@ -89,27 +114,28 @@ export class TurnosComponent implements OnInit {
     this.closeModal();
   }
 
+  get todayStr(): string {
+    return new Date().toISOString().slice(0, 10);
+  }
+
   get todayTurnos(): ITurnos[] {
-    const todayStr = new Date().toISOString().slice(0, 10);
-    return this.turnos.filter(t => t.fecha === todayStr);
+    return this.turnos.filter(t => t.fecha === this.todayStr);
   }
 
   get todayStaffCount(): number {
-    const hoy = new Date().toISOString().slice(0, 10);
-    const empleados = this.turnos.filter(t => t.fecha === hoy).map(t => t.empleado_id);
-    return new Set(empleados).size;
+    return new Set(this.todayTurnos.map(t => t.empleado_id)).size;
   }
 
   get activeShiftsCount(): number {
-    return this.turnos.filter(t => t.estado.toLowerCase() === 'confirmado').length;
+    return this.turnos.filter((t) => t.estado.toLowerCase() === 'confirmado').length;
   }
 
   get pendingShiftsCount(): number {
-    return this.turnos.filter(t => t.estado.toLowerCase() === 'pendiente').length;
+    return this.turnos.filter((t) => t.estado.toLowerCase() === 'pendiente').length;
   }
 
   get completedShiftsCount(): number {
-    return this.turnos.filter(t => t.estado.toLowerCase() === 'completado' && this.currentWeekDates.includes(t.fecha)).length;
+    return this.turnos.filter((t) => t.estado.toLowerCase() === 'completado').length;
   }
 
   allowDrop(event: DragEvent) {
@@ -126,17 +152,27 @@ export class TurnosComponent implements OnInit {
 
     const updated: ITurnos = {
       ...this.selectedTurno,
-      dia: this.getDayName(dayIndex),
+      dia: this.getDayName(dayIndex - 1),
       hora: Number(hour),
       fecha: this.currentWeekDates[dayIndex],
       hora_inicio: `${hour.toString().padStart(2, '0')}:00`,
-      hora_fin: `${(hour + this.selectedTurno.duracion).toString().padStart(2, '0')}:00`
+      hora_fin: `${(hour + this.selectedTurno.duracion)
+        .toString()
+        .padStart(2, '0')}:00`,
     };
     await this.updateTurno(updated);
   }
 
   getDayName(index: number): string {
-    return ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'][index];
+    return [
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+      'Domingo',
+    ][index];
   }
 
   onTurnoClick(turno: ITurnos) {
