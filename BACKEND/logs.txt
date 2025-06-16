@@ -348,3 +348,11 @@
 2025-06-15 20:53:09 GET /api/empleados ::1
 2025-06-15 20:54:44 GET /api/empleados ::1
 2025-06-16 17:03:42 POST /api/usuarios/login ::1
+2025-06-16 19:10:40 POST /api/usuarios/login ::1
+2025-06-16 19:10:49 GET /api/empleados ::1
+2025-06-16 19:10:49 GET /api/roles ::1
+2025-06-16 19:11:04 GET /api/empleados ::1
+2025-06-16 19:11:04 GET /api/roles ::1
+2025-06-16 19:11:49 GET /api/empleados ::1
+2025-06-16 19:13:24 GET /api/empleados ::1
+2025-06-16 19:13:24 GET /api/roles ::1

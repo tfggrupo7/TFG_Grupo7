@@ -188,11 +188,14 @@
                 style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
             </div>
             <div>
-              <h3 class="font-semibold tracking-tight text-[#556B2F] text-lg">{{empleado.nombre}}</h3>
+              <h3 class="font-semibold tracking-tight text-[#556B2F] text-lg">{{empleado.nombre}} {{empleado.apellidos}}</h3>
              
               <p class="text-muted-foreground text-sm">{{getNombreRol(empleado.rol_id)}}</p>
             
             </div>
+          </div>
+          <div class="inline-flex text-center items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
+            ID:{{empleado.id}}
           </div>
           <div class="inline-flex text-center items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
             {{empleado.activo}}
