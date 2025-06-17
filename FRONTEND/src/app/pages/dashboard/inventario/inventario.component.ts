@@ -130,34 +130,11 @@ export class InventarioComponent implements OnInit {
     }
   }
 
-  async eliminarIngrediente(id: number) {
-    const ingrediente = this.ingredientes.find((i) => i.id === id);
-    const nombreIngrediente = ingrediente ? ingrediente.nombre : 'Ingrediente';
-
-    toast(`¿Deseas eliminar ${nombreIngrediente}?`, {
+  async delete(ingrediente: IIngredientes) {
+    toast(`¿Deseas Borrar al Ingrediente ${ingrediente?.nombre}?`, {
       action: {
         label: 'Aceptar',
-        onClick: async () => {
-          try {
-            await this.ingredientesService.deleteIngrediente(id);
-            toast.success('Ingrediente eliminado con éxito');
-          } catch (error) {
-            toast.error('Error al eliminar ingrediente');
-          }
-        },
-      },
-    });
-  }
-
-
-  async delete(id: number) {
-    const ingrediente = this.ingredientes.find((e) => e.id === id);
-    const nombreIngrediente = ingrediente?.nombre ?? 'Ingrediente';
-
-    toast(`¿Deseas Borrar al Ingrediente ${nombreIngrediente}?`, {
-      action: {
-        label: 'Aceptar',
-        onClick: () => this.deleteIngrediente(id),
+        onClick: () => this.deleteIngrediente(ingrediente.id),
       },
       duration: 6000,
     });
@@ -167,14 +144,8 @@ export class InventarioComponent implements OnInit {
     try {
       /* (opcional) desactiva UI: cambia bandera isDeleting = true … */
       await this.ingredientesService.deleteIngrediente(id);
-
-      // quita del array base
-      this.ingredientes = this.ingredientes.filter((i) => i.id !== id);
-
-      // vuelve a aplicar filtro actual
-      this.filtrarIngredientes(this.searchTerm.value ?? '');
-
       toast.success('Ingrediente eliminado con éxito');
+      this.init()
     } catch (err) {
       console.error('Error al eliminar:', err);
       toast.error('Error al eliminar el ingrediente');
