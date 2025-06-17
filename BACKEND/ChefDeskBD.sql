@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS `restaurante`;
+
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
@@ -66,7 +68,101 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-13 18:13:15
+-- Dump completed on 2025-06-03 14:42:15
+
+CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `restaurante`;
+-- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: restaurante
+-- ------------------------------------------------------
+-- Server version	8.0.41
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `ingredientes`
+--
+
+DROP TABLE IF EXISTS `ingredientes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ingredientes` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `alergenos` varchar(100) DEFAULT NULL,
+  `categoria`   VARCHAR(100)      NOT NULL,
+  `cantidad`    DECIMAL(10,2)     NOT NULL DEFAULT 0,
+  `unidad`      ENUM('unidades','kg','g','l','ml','cajas','paquetes') NOT NULL DEFAULT 'unidades',
+  `proveedor`   VARCHAR(100)      DEFAULT NULL,
+  `estado`      ENUM('En stock','Bajo stock','Sin stock') NOT NULL DEFAULT 'En stock',
+  `created_at`  DATETIME          NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at`  DATETIME          NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                        ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ingredientes`
+--
+
+LOCK TABLES `ingredientes` WRITE;
+/*!40000 ALTER TABLE `ingredientes` DISABLE KEYS */;
+INSERT INTO ingredientes
+    (nombre, alergenos, categoria, cantidad, unidad, proveedor, estado)
+VALUES
+  ('Harina de trigo',                'gluten',     'Secos',                    50.00, 'kg',        'Harinas del Sur',        'En stock'),
+  ('Azúcar blanca',                  NULL,         'Secos',                    40.00, 'kg',        'Azúcares S.A.',          'En stock'),
+  ('Sal fina',                       NULL,         'Secos',                    10.00, 'kg',        'Salinas Iberia',         'En stock'),
+  ('Pechuga de pollo',               NULL,         'Carnes',                   25.00, 'kg',        'Avícola Central',        'En stock'),
+  ('Huevos camperos',                NULL,         'Frescos',                 540.00, 'unidades',  'Granja Sol',             'En stock'),
+  ('Leche entera',                   'lactosa',    'Lácteos',                 100.00, 'l',         'Lácteos Iber',           'En stock'),
+  ('Queso cheddar',                  'lactosa',    'Lácteos',                   8.00, 'kg',        'Queserías del Valle',    'Bajo stock'),
+  ('Tomate rama',                    NULL,         'Verduras',                 30.00, 'kg',        'Hortofrutícola Medina',  'En stock'),
+  ('Lechuga iceberg',                NULL,         'Verduras',                 12.00, 'kg',        'Hortofrutícola Medina',  'En stock'),
+  ('Cebolla dulce',                  NULL,         'Verduras',                 18.00, 'kg',        'Campo Verde',            'En stock'),
+  ('Pimienta negra',                 NULL,         'Especias',                  1.50, 'kg',        'Especias Global',        'En stock'),
+  ('Orégano seco',                   NULL,         'Especias',                  0.80, 'kg',        'Especias Global',        'Bajo stock'),
+  ('Aceite de oliva virgen extra',   NULL,         'Aceites',                  60.00, 'l',         'Aceites del Sur',        'En stock'),
+  ('Vinagre balsámico',              'sulfitos',   'Salsas y Condimentos',      8.00, 'l',         'Condimentos Selectos',   'En stock'),
+  ('Salsa de soja',                  'gluten',     'Salsas y Condimentos',      5.00, 'l',         'Asian Foods',            'Bajo stock'),
+  ('Atún en lata',                   'pescado',    'Conservas',                10.00, 'cajas',     'Conservas Atlántico',    'En stock'),
+  ('Guisantes congelados',           NULL,         'Congelados',               20.00, 'kg',        'Congelados Norte',       'En stock'),
+  ('Patatas fritas congeladas',      NULL,         'Congelados',               35.00, 'kg',        'Congelados Norte',       'En stock'),
+  ('Agua mineral 500 ml',            NULL,         'Bebidas',                 100.00, 'cajas',     'Agua Pura',              'En stock'),
+  ('Coca-Cola lata 330 ml',          NULL,         'Bebidas',                  80.00, 'cajas',     'Bebidas Cola',           'En stock'),
+  ('Cerveza lager 330 ml',           'gluten',     'Bebidas',                  60.00, 'cajas',     'Cervezas Iber',          'En stock'),
+  ('Vino tinto Rioja',               'sulfitos',   'Bebidas',                  24.00, 'cajas',     'Bodegas Rioja',          'En stock'),
+  ('Helado vainilla',                'lactosa',    'Postres',                  15.00, 'kg',        'Dulces Cremas',          'En stock'),
+  ('Chocolate negro 70 %',           NULL,         'Postres',                  12.00, 'kg',        'Chocolates Europa',      'En stock'),
+  ('Pan de hamburguesa',             'gluten',     'Panadería',               200.00, 'unidades',  'Panadería San Luis',     'En stock'),
+  ('Pan sin gluten',                 NULL,         'Panadería',                60.00, 'unidades',  'Panadería San Luis',     'Bajo stock'),
+  ('Garbanzos cocidos (bote)',       NULL,         'Conservas',                15.00, 'cajas',     'Legumbres Valle',        'En stock'),
+  ('Mayonesa bote 1 L',              'huevo',      'Salsas y Condimentos',      6.00, 'cajas',     'Condimentos Selectos',   'Sin stock');
+
+/*!40000 ALTER TABLE `ingredientes` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-05-25 12:05:08
 CREATE DATABASE  IF NOT EXISTS `restaurante` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `restaurante`;
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)

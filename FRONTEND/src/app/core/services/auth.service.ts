@@ -16,11 +16,11 @@ export class AuthService {
 
   //Ejemplo
   setToken = (token: string) => {
-    sessionStorage.setItem("token", token)
+    localStorage.setItem("token", token)
   }
 
   getToken = () => {
-    return sessionStorage.getItem("token")
+    return localStorage.getItem("token")
   }
 
   async login(email: string, password: string): Promise<LoginResponse> {

@@ -85,15 +85,15 @@
           {{getNombreRol(empleado.rol_id)}} - Turno: {{empleado.turno_id}}
         </p>
       </div>
-      <span class="text-xs px-2 py-1 rounded-full" 
+      <span class="text-xs px-2 py-1 rounded-full"
             [class]="empleado.activo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
         {{empleado.activo ? 'Activo' : 'Inactivo'}}
       </span>
     </div>
   }
 
-     
-      
+
+
       <button
         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 w-full bg-[#556B2F] hover:bg-[#556B2F]/90">
         <a href="/dashboard/turnos">Gestionar Turnos</a>
