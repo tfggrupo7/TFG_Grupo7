@@ -1,9 +1,10 @@
 const db = require("../config/db");
 
-const selectAll = async (page = 1, limit = 10, search = "") => {
+const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", direction="") => {
   const offset = (page - 1) * limit;
   const term = `%${search}%`;
-
+  orderBy = orderBy.replace(/['"`]/g, '');
+  direction = direction.replace(/['"`]/g, '');
   /* 1) datos paginados */
   const [rows] = await db.query(
     `SELECT id, nombre, alergenos, categoria, cantidad, unidad,
@@ -13,7 +14,7 @@ const selectAll = async (page = 1, limit = 10, search = "") => {
        FROM ingredientes
       WHERE CONCAT_WS(' ', nombre, alergenos, categoria, cantidad,
                            unidad, proveedor, estado) LIKE ?
-      ORDER BY nombre
+      ORDER BY ${orderBy} ${direction}
       LIMIT ? OFFSET ?`,
     [term, limit, offset]
   );
@@ -58,7 +59,6 @@ const selectSummary = async () => {
       LIMIT 1
     ) AS categoria_mas_usada
   FROM ingredientes`)
-  console.log("RESULT SUMMARY ", result.length)
   if (result.length === 0) return null;
 
   return result[0];

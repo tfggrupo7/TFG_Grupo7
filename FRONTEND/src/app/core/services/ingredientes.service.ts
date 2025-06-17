@@ -17,12 +17,16 @@ export class IngredientesService {
   getIngredientes(
     page: number = 1,
     limit: number = 10,
-    search: string = ''
+    search: string = '',
+    orderBy: string = 'nombre',
+    direction: string = ''
   ): Promise<IIngredientes[]> {
     const params = new HttpParams()
       .set('page', page)
       .set('limit', limit)
-      .set('search', search);
+      .set('search', search)
+      .set('orderBy', orderBy)
+      .set('direction', direction);
 
     return lastValueFrom(this.httpClient.get<any>(this.url, { params })).then(
       (resp) => {

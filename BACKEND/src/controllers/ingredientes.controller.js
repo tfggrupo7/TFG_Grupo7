@@ -1,13 +1,15 @@
 const Ingrediente = require("../models/ingrediente.model");
 
 const getAll = async (req, res) => {
-  const { page = 1, limit = 10, search = "" } = req.query;
+  const { page = 1, limit = 10, search = "", orderBy='cantidad', direction = ""} = req.query;
   const { rows, total } = await Ingrediente.selectAll(
     Number(page),
     Number(limit),
-    search
+    search,
+    orderBy,
+    direction
   );
-  res.json({ page: Number(page), limit: Number(limit), total, data: rows });
+  res.json({ page: Number(page), limit: Number(limit), total, orderBy, direction, data: rows});
 };
 
 const getById = async (req, res) => {
@@ -20,7 +22,6 @@ const getById = async (req, res) => {
 
 const getSummary = async (req, res) => {
   const summary = await Ingrediente.selectSummary();
-  console.log(summary)
   if(!summary){
     return res.status(404).json({message: "No hay datos de inventario"})
   }

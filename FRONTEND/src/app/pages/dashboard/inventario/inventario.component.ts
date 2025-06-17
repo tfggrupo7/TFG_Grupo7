@@ -24,6 +24,7 @@ export class InventarioComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
   pageSize: number = 10;
+  sort = { campo: 'nombre', direccion: 'ASC' };
 
   modalIngredienteAbierto = false;
 
@@ -61,7 +62,7 @@ export class InventarioComponent implements OnInit {
     const search = this.searchTerm.value ?? '';
 
     this.ingredientes = await this.ingredientesService.getIngredientes(
-      this.currentPage, this.pageSize, search
+      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion
     );
 
     this.ingredientesFiltrados = this.ingredientes;
@@ -75,21 +76,6 @@ export class InventarioComponent implements OnInit {
   siguiente() { if (this.currentPage < this.totalPages)     { this.currentPage++;                   this.cargarIngredientes(); } }
   ultima()    { if (this.currentPage !== this.totalPages)   { this.currentPage = this.totalPages;   this.cargarIngredientes(); } }
 
-
-  filtrarIngredientes(valor: string) {
-    const texto = valor.trim().toLowerCase();
-
-    if (!texto) {
-      this.ingredientesFiltrados = [...this.ingredientes]; //  muestra todo
-      return;
-    }
-
-    this.ingredientesFiltrados = this.ingredientes.filter(ing => {
-      const nombre    = ing.nombre.toLowerCase();
-      const alergenos = ing.alergenos?.toLowerCase() ?? '';
-      return nombre.includes(texto) || alergenos.includes(texto);
-    });
-  }
 
   abrirModal(ingrediente?: IIngredientes) {
     this.ingrediente = ingrediente ? ingrediente : null;
@@ -150,5 +136,16 @@ export class InventarioComponent implements OnInit {
       console.error('Error al eliminar:', err);
       toast.error('Error al eliminar el ingrediente');
     }
+  }
+
+  async getDataOrderBy(orderBy: string) {
+    if(this.sort.campo === orderBy){
+      this.sort.direccion = this.sort.direccion === 'ASC' ? 'DESC' : 'ASC';
+    }else {
+      this.sort.campo = orderBy
+      this.sort.direccion = 'ASC'
+    }
+
+    this.cargarIngredientes()
   }
 }
