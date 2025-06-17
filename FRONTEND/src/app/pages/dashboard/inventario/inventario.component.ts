@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { InventarioFormComponent } from "./inventario-form/inventario-form.component";
 import { ModalComponent } from "../../../shared/components/modal/modal.component";
+import { IInventarioResumen } from '../../../interfaces/iinventarioresumen.interface';
 
 @Component({
   selector: 'app-inventario',
@@ -31,6 +32,7 @@ export class InventarioComponent implements OnInit {
 
   totalItems = 0;
   ingrediente!: IIngredientes | null;
+  summary!: IInventarioResumen;
 
   ingredientesService = inject(IngredientesService)
   router = inject(Router)
@@ -38,15 +40,21 @@ export class InventarioComponent implements OnInit {
   constructor() {}
 
   async ngOnInit() {
-    await this.cargarIngredientes();
-
-
     this.searchTerm.valueChanges.pipe(debounceTime(300)).subscribe(() => {
       this.currentPage = 1; // resetea a la primera página
-      this.cargarIngredientes(); // pide de nuevo al servidor con search
+      this.init()
     });
 
     this.searchTerm.setValue('');
+  }
+
+  init() {
+    this.cargarResumen()
+    this.cargarIngredientes()
+  }
+
+  async cargarResumen() {
+    this.summary = await this.ingredientesService.getResumen();
   }
 
   async cargarIngredientes() {
@@ -99,13 +107,13 @@ export class InventarioComponent implements OnInit {
       this.agregarIngrediente(ingrediente);
     }
     this.cerrarModal();
-    this.cargarIngredientes()
   }
 
   async agregarIngrediente(ingrediente: IIngredientes) {
     try {
       await this.ingredientesService.createIngrediente(ingrediente);
       toast.success('Ingrediente agregado correctamente');
+      this.init()
     } catch (error) {
       toast.error('Error al agregar ingrediente');
     }
@@ -115,6 +123,7 @@ export class InventarioComponent implements OnInit {
     try {
       const ingredienteActualizado = { ...ingrediente, id: ingrediente.id };
       await this.ingredientesService.updateIngrediente(ingrediente.id, ingredienteActualizado);
+      this.init()
       toast.success('Ingrediente actualizado correctamente');
     } catch (error) {
       toast.error('Error al actualizar ingrediente');

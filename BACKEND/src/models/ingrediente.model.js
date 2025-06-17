@@ -43,6 +43,27 @@ const selectById = async (ingredienteId) => {
   return result[0] ?? null;
 };
 
+const selectSummary = async () => {
+  const [result] = await db.query(`SELECT
+    COUNT(*) AS total_productos,
+    SUM(CASE WHEN estado = 'Bajo stock' THEN 1 ELSE 0 END) AS productos_bajo_stock,
+    COUNT(DISTINCT categoria) AS categorias,
+    COUNT(DISTINCT proveedor) AS proveedores,
+    MAX(updated_at) AS ultima_actualizacion,
+    (
+      SELECT categoria
+      FROM ingredientes
+      GROUP BY categoria
+      ORDER BY COUNT(*) DESC
+      LIMIT 1
+    ) AS categoria_mas_usada
+  FROM ingredientes`)
+  console.log("RESULT SUMMARY ", result.length)
+  if (result.length === 0) return null;
+
+  return result[0];
+}
+
 const insert = async ({ nombre, categoria, cantidad, unidad, proveedor, estado, alergenos}) => {
   const [result] = await db.query(
     "insert into ingredientes (nombre, categoria, cantidad, unidad, proveedor, estado, alergenos) values (?, ?, ?, ?, ?, ?, ?)",
@@ -69,6 +90,7 @@ const remove = async (ingredienteId) => {
 module.exports = {
   selectAll,
   selectById,
+  selectSummary,
   insert,
   update,
   remove,

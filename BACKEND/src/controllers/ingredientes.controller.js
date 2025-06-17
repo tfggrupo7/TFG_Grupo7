@@ -18,6 +18,15 @@ const getById = async (req, res) => {
   //res.json(req.ingredientes);
 };
 
+const getSummary = async (req, res) => {
+  const summary = await Ingrediente.selectSummary();
+  console.log(summary)
+  if(!summary){
+    return res.status(404).json({message: "No hay datos de inventario"})
+  }
+  res.json(summary)
+}
+
 const create = async (req, res) => {
   const result = await Ingrediente.insert(req.body);
   const ingrediente = await Ingrediente.selectById(result.insertId);
@@ -41,4 +50,4 @@ const remove = async (req, res) => {
   res.json({ message: "Ingrediente eliminado", data: ingredientes });
 };
 
-module.exports = { getAll , getById, create, update, remove };
+module.exports = { getAll , getById, getSummary, create, update, remove };

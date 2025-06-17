@@ -24,7 +24,7 @@ export class InventarioFormComponent {
       unidad: new FormControl('', [Validators.required])
   })
 
-  btnDescription: string = 'Añadir ingrediente'
+  btnDescription: string = 'Añadir'
 
   constructor(){}
 
@@ -45,7 +45,7 @@ export class InventarioFormComponent {
 
   ngOnInit() {
     if(this.ingrediente?.id){
-      this.btnDescription = 'Actualizar ingrediente'
+      this.btnDescription = 'Actualizar'
     }
   }
 

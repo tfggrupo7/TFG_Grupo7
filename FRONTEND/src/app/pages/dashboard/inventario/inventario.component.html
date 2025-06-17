@@ -1,16 +1,15 @@
-<div
-  class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
   <div>
     <h1 class="text-2xl font-bold text-[#556B2F]">Inventario</h1>
-    <p class="text-[#1C1C1C]/70">Gestiona tus ingredientes</p>
+    <p class="text-[#1C1C1C]/70">Gestiona tus productos</p>
   </div>
-  <button (click)="abrirModal()" data-open-modal="ingrediente"
+  <button (click)="abrirModal()"
     class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"><svg
       xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus h-4 w-4">
       <path d="M5 12h14"></path>
       <path d="M12 5v14"></path>
-    </svg>Añadir ingrediente
+    </svg>Añadir producto
   </button>
 </div>
 <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
@@ -18,8 +17,8 @@
     class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#D4AF37] bg-[#D4AF37]/5">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-sm font-medium text-[#1C1C1C]/70">Total Ingredientes</p>
-        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">15</h3>
+        <p class="text-sm font-medium text-[#1C1C1C]/70">Total productos</p>
+        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{summary.total_productos}}</h3>
       </div>
       <div class="rounded-full p-2 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -32,14 +31,14 @@
           <path d="M8 16h.01"></path>
         </svg></div>
     </div>
-    <p class="mt-2 text-xs text-[#1C1C1C]/70"><span class="text-[#556B2F]">↑ 3%</span> desde ayer</p>
+    <!-- <p class="mt-2 text-xs text-[#1C1C1C]/70"><span class="text-[#556B2F]">↑ 3%</span> desde ayer</p> -->
   </div>
   <div
     class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#556B2F] bg-[#556B2F]/5">
     <div class="flex items-center justify-between">
       <div>
-        <p class="text-sm font-medium text-[#1C1C1C]/70">Ingredientes Bajo Stock</p>
-        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">6</h3>
+        <p class="text-sm font-medium text-[#1C1C1C]/70">Productos Bajo Stock</p>
+        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{summary.productos_bajo_stock}}</h3>
       </div>
       <div class="rounded-full p-2 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -49,14 +48,14 @@
           <path d="M12 17h.01"></path>
         </svg></div>
     </div>
-    <p class="mt-2 text-xs text-[#1C1C1C]/70"><span class="text-[#556B2F]">↓ 2%</span> desde ayer</p>
+    <!-- <p class="mt-2 text-xs text-[#1C1C1C]/70"><span class="text-[#556B2F]">↓ 2%</span> desde ayer</p> -->
   </div>
   <div
     class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#D4AF37] bg-[#D4AF37]/5">
     <div class="flex items-center justify-between">
       <div>
         <p class="text-sm font-medium text-[#1C1C1C]/70">Categorías</p>
-        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">8</h3>
+        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{summary.categorias}}</h3>
       </div>
       <div class="rounded-full p-2 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -72,7 +71,7 @@
     <div class="flex items-center justify-between">
       <div>
         <p class="text-sm font-medium text-[#1C1C1C]/70">Proveedores</p>
-        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">11</h3>
+        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{summary.proveedores}}</h3>
       </div>
       <div class="rounded-full p-2 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -91,7 +90,7 @@
     <div class="flex items-center justify-between">
       <div>
         <p class="text-sm font-medium text-[#1C1C1C]/70">Última Actualización</p>
-        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">25 de mayo de 2025</h3>
+        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{summary.ultima_actualizacion | date:'dd-MM-yyyy HH:mm'}}</h3>
       </div>
       <div class="rounded-full p-2 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -108,7 +107,7 @@
     <div class="flex items-center justify-between">
       <div>
         <p class="text-sm font-medium text-[#1C1C1C]/70">Categoría Más Usada</p>
-        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">Otros</h3>
+        <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{summary.categoria_mas_usada}}</h3>
       </div>
       <div class="rounded-full p-2 flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -136,7 +135,7 @@
 
       <input type="search"
              [formControl]="searchTerm"
-             placeholder="Buscar ingredientes..."
+             placeholder="Buscar productos..."
              class="flex rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 h-9 w-full pl-8 pr-4 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" />
     </div>
 
@@ -187,7 +186,7 @@
               {{ ingrediente.estado }}
             </div>
           </td>
-          <td class="px-4 py-3 text-sm text-[#1C1C1C]">  {{ ingrediente.updatedAt | date:'yyyy-MM-dd' }} </td>
+          <td class="px-4 py-3 text-sm text-[#1C1C1C]">  {{ ingrediente.updatedAt | date:'yyyy-MM-dd HH:mm' }} </td>
           <td class="px-4 py-3 text-sm">
           <div class="flex gap-2">
             <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:text-[#556B2F] h-8 px-3 text-xs text-[#556B2F] hover:bg-[#556B2F]/10">
@@ -215,7 +214,7 @@
         </tr>
 
         }@empty {
-          <h2 class="text-center text-muted">NO HAY INGREDIENTES</h2>
+          <h2 class="text-center text-muted">NO HAY PRODUCTOS</h2>
         }
       </tbody>
     </table>

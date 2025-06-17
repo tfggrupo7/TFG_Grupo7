@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IIngredientes } from '../../interfaces/iingredientes.interfaces';
 import { lastValueFrom } from 'rxjs';
+import { IInventarioResumen } from '../../interfaces/iinventarioresumen.interface';
 @Injectable({
   providedIn: 'root'
 })
@@ -34,6 +35,11 @@ export class IngredientesService {
   getIngredienteById(id: number): Promise<IIngredientes> {
     return lastValueFrom(this.httpClient.get<IIngredientes>(`${this.url}/${id}`));
   }
+
+  getResumen(): Promise<IInventarioResumen> {
+    return lastValueFrom(this.httpClient.get<IInventarioResumen>(`${this.url}/summary`));
+  }
+
   createIngrediente(ingrediente: IIngredientes): Promise<IIngredientes> {
     return lastValueFrom(this.httpClient.post<IIngredientes>(this.url, ingrediente));
   }

@@ -173,7 +173,12 @@ Content-Type: application/json
 GET {{host}}/api/ingredientes
 
 ### Obtener ingredientes por id
-GET {{host}}/api/ingredientes/2
+GET {{host}}/api/ingredientes/4
+Authorization:{{token}} 
+
+### Obtener resumen inventario productos
+GET {{host}}/api/ingredientes/summary
+Authorization:{{token}} 
 
 ### Actualizar ingredientes
 PUT {{host}}/api/ingredientes/1
