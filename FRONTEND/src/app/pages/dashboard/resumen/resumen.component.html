@@ -27,29 +27,19 @@
       </p>
     </div>
     <div class="p-6 pt-0 space-y-3">
-      <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
-        <div>
-          <p class="font-medium text-[#1C1C1C]">
-            Aceite de Oliva
-          </p>
-          <p class="text-sm text-[#1C1C1C]/70">5L restantes</p>
+      @for(ingrediente of arrIngredientes | slice:0:5; track ingrediente.id) {
+        <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
+          <div>
+            <p class="font-medium text-[#1C1C1C]">
+              {{ingrediente.nombre}}
+            </p>
+            <p class="text-sm text-[#1C1C1C]/70">{{ingrediente.cantidad}} {{ingrediente.unidad}} restantes</p>
+          </div>
+          <span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">{{ingrediente.estado}}</span>
+        
         </div>
-        <span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">Crítico</span>
-      </div>
-      <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
-        <div>
-          <p class="font-medium text-[#1C1C1C]">Harina</p>
-          <p class="text-sm text-[#1C1C1C]/70">8kg restantes</p>
-        </div>
-        <span class="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800">Bajo</span>
-      </div>
-      <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
-        <div>
-          <p class="font-medium text-[#1C1C1C]">Sal</p>
-          <p class="text-sm text-[#1C1C1C]/70">3kg restantes</p>
-        </div>
-        <span class="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800">Bajo</span>
-      </div>
+      }
+        
       <button
         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 w-full bg-[#556B2F] hover:bg-[#556B2F]/90">
         <a href="/dashboard/inventory">Ver Todo el Inventario</a>

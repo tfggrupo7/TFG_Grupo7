@@ -89,8 +89,10 @@ export class InventarioComponent implements OnInit {
   agregarActualizarIngrediente(ingrediente: IIngredientes) {
     if (ingrediente.id) {
       this.actualizarIngrediente(ingrediente);
+      this.init()
     } else {
       this.agregarIngrediente(ingrediente);
+      this.init()
     }
     this.cerrarModal();
   }
@@ -121,9 +123,11 @@ export class InventarioComponent implements OnInit {
       action: {
         label: 'Aceptar',
         onClick: () => this.deleteIngrediente(ingrediente.id),
+        
       },
       duration: 6000,
     });
+    this.init()
   }
 
   private async deleteIngrediente(id: number) {

@@ -6,6 +6,8 @@ import { EmpleadosService } from '../../../core/services/empleados.service';
 import { IRoles } from '../../../interfaces/iroles.interfaces';
 import { inject } from '@angular/core';
 import { toast } from 'ngx-sonner';
+import { IIngredientes } from '../../../interfaces/iingredientes.interfaces';
+import { IngredientesService } from '../../../core/services/ingredientes.service';
 
 
 @Component({
@@ -15,11 +17,31 @@ import { toast } from 'ngx-sonner';
   standalone: true,
   imports: [CommonModule, RouterModule]
 })
+
 export class ResumenComponent  {
-   arrEmpleados: IEmpleados[] = [];
+  arrIngredientes: IIngredientes[] = [];
+  arrEmpleados: IEmpleados[] = [];
   arrRoles: any[] = [];
   empleadoService = inject(EmpleadosService);
-async cargarEmpleados() {
+  IngredientesService = inject(IngredientesService)
+
+
+ngOnInit(){
+  this.IngredientesService.getIngredientes()
+    .then((data: IIngredientes[]) => {
+      // Filtrar solo ingredientes con stock bajo o sin stock
+      this.arrIngredientes = data.filter(ingrediente => 
+        ingrediente.estado === 'Bajo stock' || 
+        ingrediente.estado === 'Sin stock'
+      );
+    })
+    .catch((error: any) => {
+      toast.error(error?.error || 'Error al cargar ingredientes');
+    });
+}
+
+
+  async cargarEmpleados() {
   try {
     const userId = Number(this.getUserIdFromToken());
     const empleados = await this.empleadoService.getEmpleados();

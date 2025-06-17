@@ -3,10 +3,10 @@ export interface IIngredientes {
   nombre:      string;
   alergenos?:  string | null;
   categoria:   string;
-  cantidad:    string;   // llega como "25.00"
+  cantidad:    string;   
   unidad:      string;
   proveedor?:  string | null;
   estado:      string;
-  createdAt:   string;   // ISO
+  createdAt:   string;   
   updatedAt:   string;
 }
