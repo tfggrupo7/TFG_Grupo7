@@ -158,9 +158,9 @@ export class TurnosComponent implements OnInit {
 
   /** Alta de un turno (llamado por output del modal) */
   async createTurno(turno: ITurnos) {
-    console.log('Creating turno:', turno);
     await this.turnosService.createTurno(turno);
     await this.cargarTurnos(); // refresh grid
+    await this.cargarTurnosHoy();
     this.closeModal();
   }
 
@@ -169,6 +169,7 @@ export class TurnosComponent implements OnInit {
     if (!turno.id) return;
     await this.turnosService.updateTurno(turno.id, turno);
     await this.cargarTurnos();
+    await this.cargarTurnosHoy();
     this.closeModal();
   }
 
@@ -177,6 +178,7 @@ export class TurnosComponent implements OnInit {
     if (!this.selectedTurno?.id) return;
     await this.turnosService.deleteTurno(this.selectedTurno.id);
     await this.cargarTurnos();
+    await this.cargarTurnosHoy();
     this.closeModal();
   }
 
