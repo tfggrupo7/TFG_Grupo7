@@ -28,9 +28,10 @@ export class InventarioEmpleadosComponent implements OnInit {
   totalPages: number = 1;
   pageSize: number = 10;
   sort = { campo: 'nombre', direccion: 'ASC' };
-fecha: Date = new Date();
+  fecha: Date = new Date();
+  
   modalIngredienteAbierto = false;
-empleadoLogueado: string = '';
+  empleadoLogueado: string = '';
   ingredienteId!: number;
   searchTerm = new FormControl('');
 
