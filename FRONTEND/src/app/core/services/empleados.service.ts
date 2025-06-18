@@ -22,7 +22,7 @@ export class EmpleadosService {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      ...(token ? { 'Authorization': `${token}` } : {})
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
     });
     return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url, { headers }));
   }

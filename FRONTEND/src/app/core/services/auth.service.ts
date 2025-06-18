@@ -25,6 +25,10 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<LoginResponse> {
     const body = { email, password };
+    const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  };
     const response = await lastValueFrom(
       this.httpClient.post<LoginResponse>('http://localhost:3000/api/empleados/login', body, { observe: 'response' })
     );

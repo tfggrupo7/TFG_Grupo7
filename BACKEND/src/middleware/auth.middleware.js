@@ -17,21 +17,14 @@ const checkToken = async (req, res, next) => {
   
   const usuario = await Usuario.getById(payload.usuario_id);
   if(!usuario) {
-    return res.status(403).json({ message: 'Usuario no existe'});
+    return res.status(403).json({ message: 'Usuario o Empleado no existe'});
   }
   req.user = usuario;
 
   next();
 };
 
- /*const checkAdmin = (req, res, next) => {
-  if (req.usuario.role !== "admin") {
-    return res.status(403).json({ message: "No tienes permisos de administrador"});
-  }
-  
-  next();
- }*/
-
+ 
  const checkRole = (role) => {
     return (req, res, next) => {
         if (req.user.role !== role) {
@@ -40,5 +33,7 @@ const checkToken = async (req, res, next) => {
         next();
     }
 }
+
+
 
 module.exports = { checkToken ,  checkRole};
