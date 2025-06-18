@@ -9,6 +9,8 @@ import { debounceTime } from 'rxjs/operators';
 import { InventarioFormComponent } from "./inventario-form/inventario-form.component";
 import { ModalComponent } from "../../../shared/components/modal/modal.component";
 import { IInventarioResumen } from '../../../interfaces/iinventarioresumen.interface';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 
 @Component({
   selector: 'app-inventario',
@@ -25,7 +27,7 @@ export class InventarioComponent implements OnInit {
   totalPages: number = 1;
   pageSize: number = 10;
   sort = { campo: 'nombre', direccion: 'ASC' };
-
+fecha: Date = new Date();
   modalIngredienteAbierto = false;
 
   ingredienteId!: number;
@@ -38,7 +40,9 @@ export class InventarioComponent implements OnInit {
   ingredientesService = inject(IngredientesService)
   router = inject(Router)
 
-  constructor() {}
+  constructor() {
+    registerLocaleData(localeEs, 'es-ES');
+  }
 
   async ngOnInit() {
     this.searchTerm.valueChanges.pipe(debounceTime(300)).subscribe(() => {

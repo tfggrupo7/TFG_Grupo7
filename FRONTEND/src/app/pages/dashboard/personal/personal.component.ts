@@ -103,7 +103,7 @@ export class PersonalComponent {
 
   get totalEnVacaciones(): number {
     return this.arrEmpleados.filter(
-      (e: IEmpleados) => e.status === 'vacaciones'
+      (e: IEmpleados) => e.activo === 'VACACIONES'
     ).length;
   }
 
