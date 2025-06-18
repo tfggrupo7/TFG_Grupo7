@@ -26,6 +26,10 @@ const getByEmail = async (email) => {
 };
 
 const selectById = async (empleadoId) => {
+  const id = Number(empleadoId);
+  if (isNaN(id)) {
+    throw new Error("ID de empleado no válido");
+  }
   const [result] = await db.query("select * from empleados where id = ?", [
     Number(empleadoId),
   ]);

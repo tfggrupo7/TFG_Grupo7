@@ -19,7 +19,7 @@ const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", d
     [term, limit, offset]
   );
 
-  /* 2) total para la paginación */
+    /* 2) total para la paginación */
   const [[{ total }]] = await db.query(
     `SELECT COUNT(*) AS total
        FROM ingredientes
@@ -30,6 +30,20 @@ const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", d
 
   return { rows, total };
 };
+
+const selectIngredientesConProblemasDeStock = async () => {
+  try {
+    const [result] = await db.query(`
+      SELECT * FROM ingredientes 
+      WHERE estado IN ('Bajo stock', 'Sin stock')
+    `);
+    return result || [];
+  } catch (error) {
+    console.error("Error al obtener ingredientes con problemas de stock:", error);
+    throw new Error("Error al consultar ingredientes filtrados");
+  }
+};
+
 
 const selectById = async (ingredienteId) => {
   const [result] = await db.query(
@@ -89,6 +103,7 @@ const remove = async (ingredienteId) => {
 
 module.exports = {
   selectAll,
+  selectIngredientesConProblemasDeStock,  
   selectById,
   selectSummary,
   insert,
