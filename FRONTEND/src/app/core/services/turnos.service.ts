@@ -45,6 +45,27 @@ export class TurnosService {
     ).then(r => r.data);
   }
 
+  /**
+   * GET /api/turnos/hoy?date=YYYY-MM-DD
+   * --------------------------------------------------
+   * Recupera los turnos filtrados por una fecha concreta.
+   * @param date Fecha en formato YYYY-MM-DD
+   * @returns Promise<ITurnos[]> Array de turnos para la fecha indicada
+   */
+  getTurnosByDate(date: string): Promise<ITurnos[]> {
+    const token = localStorage.getItem('token')?.trim();
+    if (!token) throw new Error('No hay token disponible');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return lastValueFrom(
+      this.httpClient.get<ITurnos[]>(`${this.url}/date/${date}`, { headers })
+    );
+  }
+
 
   /**
    * GET /api/turnos/:id

@@ -54,6 +54,26 @@ const getById = async (req, res) => {
 };
 
 /**
+ * GET /api/turnos/by-date
+ * --------------------------------------------------
+ * Devuelve una lista de turnos filtrados por fecha.
+ * QueryString:
+ *   • date — fecha en formato YYYY-MM-DD (obligatorio)
+ *
+ * Ejemplo de respuesta:
+ * [
+ *   { ...turno1 },
+ *   { ...turno2 },
+ *   ...
+ * ]
+ */
+const getByDate = async (req, res) => {
+  const { fecha } = req.params;                 // YYYY-MM-DD
+  const turnos = await Turno.selectByDate(fecha);
+  return res.json(turnos);                      // 200 OK
+};
+
+/**
  * POST /api/turnos
  * --------------------------------------------------
  * Crea un nuevo turno. Los campos admitidos deben coincidir con la interfaz ITurnos del front.
@@ -105,4 +125,4 @@ const remove = async (req, res) => {
 
 
 // Exportamos todas las acciones del controlador
-module.exports = { getAll, getById, create, update, remove };
+module.exports = { getAll, getById, create, update, remove, getByDate };

@@ -40,6 +40,19 @@ const selectById = async (turnoId) => {
 };
 
 /**
+ * Devuelve un listado de turnos filtrados por fecha.
+ * @param {string} date - Fecha en formato YYYY-MM-DD
+ * @returns {Promise<Array>} Array de filas (vacío si no hay datos)
+ */
+const selectByDate = async (date) => {
+  const [rows] = await db.query(
+    "SELECT * FROM turnos WHERE fecha = ? ORDER BY hora_inicio",
+    [date]
+  );
+  return rows; // Array de objetos (vacío si no hay datos)
+}
+
+/**
  * Inserta un nuevo turno.
  * @param {Object} payload - Campos del turno (ver interfaz ITurnos)
  * @returns {Promise<Object>} Resultado MySQL con insertId, etc.
@@ -86,4 +99,4 @@ const remove = async (turnoId) => {
 };
 
 // Exports
-module.exports = { selectAll, selectById, insert, update, remove };
+module.exports = { selectAll, selectById, insert, update, remove, selectByDate };

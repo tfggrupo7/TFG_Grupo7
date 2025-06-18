@@ -26,6 +26,8 @@ export class TurnosComponent implements OnInit {
   /** Array completo de turnos cargado desde la API */
   turnos: ITurnos[] = [];
 
+  turnosHoy: ITurnos[] = [];
+
   /** Fechas (YYYY‑MM‑DD) de la semana actual, lunes → domingo */
   currentWeekDates: string[] = [];
 
@@ -54,6 +56,7 @@ export class TurnosComponent implements OnInit {
   async ngOnInit() {
     this.setCurrentWeekDates();
     await this.cargarTurnos();
+    await this.cargarTurnosHoy();
   }
 
   /** Descarga la lista de turnos y actualiza `this.turnos` */
@@ -65,6 +68,19 @@ export class TurnosComponent implements OnInit {
     } catch (error) {
       // TODO: mostrar notificación UI en vez de solo log
       console.error('Error cargando turnos:', error);
+    }
+  }
+
+  /**
+   * Descarga los turnos correspondientes a la fecha de hoy y actualiza `this.turnosHoy`.
+   * Utiliza el servicio para filtrar por la fecha actual (YYYY-MM-DD).
+   * Si ocurre un error, lo muestra por consola.
+   */
+  async cargarTurnosHoy() {
+    try {
+      this.turnosHoy = await this.turnosService.getTurnosByDate(this.todayStr);
+    } catch (err) {
+      console.error('Error cargando turnos del día:', err);
     }
   }
 
@@ -155,11 +171,13 @@ export class TurnosComponent implements OnInit {
     return new Date().toISOString().slice(0, 10);
   }
 
-  /** Turnos que coinciden con la fecha actual */
+  /**
+   * Devuelve los turnos correspondientes a la fecha de hoy.
+   * Si `turnosHoy` está cargado, lo utiliza; si no, filtra el array general.
+   */
   get todayTurnos(): ITurnos[] {
-    return this.turnos.filter(t => t.fecha === this.todayStr);
+    return this.turnosHoy.length ? this.turnosHoy : this.turnos.filter(t => t.fecha === this.todayStr);
   }
-
   /** Nº de empleados distintos trabajando hoy */
   get todayStaffCount(): number {
     return new Set(this.todayTurnos.map(t => t.empleado_id)).size;
