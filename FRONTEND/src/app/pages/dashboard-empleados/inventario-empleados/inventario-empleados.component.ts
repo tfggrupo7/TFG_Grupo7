@@ -30,7 +30,7 @@ export class InventarioEmpleadosComponent implements OnInit {
   sort = { campo: 'nombre', direccion: 'ASC' };
 fecha: Date = new Date();
   modalIngredienteAbierto = false;
-
+empleadoLogueado: string = '';
   ingredienteId!: number;
   searchTerm = new FormControl('');
 
