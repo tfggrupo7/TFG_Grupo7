@@ -578,208 +578,74 @@
   }
 </style>
 <!-- /Logo animation -->
-
-<div class="group/sidebar-wrapper text-sidebar-foreground has-[[data-variant=inset]]:bg-sidebar flex min-h-svh w-full"
+ <div class="group/sidebar-wrapper text-sidebar-foreground has-[[data-variant=inset]]:bg-sidebar flex min-h-svh w-full"
   style="--sidebar-width: 16rem; --sidebar-width-icon: 3rem">
   <div class="flex min-h-screen bg-[#FDFBF8] overflow-hidden">
-    <div class="group peer hidden md:block" data-collapsible="" data-side="left" data-state="expanded"
-      data-variant="inset">
-      <div
-        class="relative h-svh w-[--sidebar-width] bg-transparent transition-[width] duration-200 ease-linear group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]">
-      </div>
-      <div
-        class="fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear md:flex left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)] overflow-hidden">
-        <div
-          class="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow"
-          data-sidebar="sidebar">
-          <div class="flex flex-col gap-2 p-2 overflow-hidden" data-sidebar="header">
-            <div class="flex items-center gap-2 px-4 py-2 min-w-0">
-              <img alt="ChefDesk Logo" loading="lazy" width="32" height="32" decoding="async" data-nimg="1"
-                class="flex-shrink-0"
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoPNG-srZX79nsLuSZQqjEw8tppWzcPhMTrI.png"
-                style="color: transparent" /><span
-                class="font-bold text-lg text-[#1C1C1C] group-data-[collapsible=icon]:hidden truncate">ChefDesk</span>
-            </div>
+ <app-sidebar></app-sidebar>
+  <main
+    class="relative flex min-h-svh flex-1 flex-col bg-background peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow w-full overflow-hidden">
+    <div class="flex flex-col h-full w-full">
+      <header class="border-b border-[#D4AF37]/10 bg-white w-full flex-shrink-0">
+        <div class="flex h-16 items-center justify-between px-4 w-full">
+          <div class="flex items-center gap-2">
+            <button
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-7 w-7 text-[#556B2F]"
+              data-sidebar="trigger">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-panel-left">
+                <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                <path d="M9 3v18"></path>
+              </svg><span class="sr-only">Toggle Sidebar</span>
+            </button>
           </div>
-          <div class="flex min-h-0 flex-1 flex-col gap-2 sidebar-scroll overflow-hidden" data-sidebar="content">
-            <div class="relative flex w-full min-w-0 flex-col p-2" data-sidebar="group">
-              <div
-                class="text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-none transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&amp;>svg]:size-4 [&amp;>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 overflow-hidden"
-                data-sidebar="group-label">
-                General
-              </div>
-              <div class="w-full text-sm" data-sidebar="group-content">
-                <ul class="flex w-full min-w-0 flex-col gap-1" data-sidebar="menu">
-                  <li class="group/menu-item relative" data-sidebar="menu-item">
-                    <a routerLink="/dashboard" routerLinkActive="data-[active=true]"
-                      [routerLinkActiveOptions]="{ exact: true }"
-                      class="peer/menu-button ring-sidebar-ring active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground w-full rounded-md p-2 text-left outline-none transition-[width,height,padding] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&amp;>span:last-child]:truncate [&amp;>svg]:size-4 [&amp;>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm overflow-hidden flex items-center gap-2 min-w-0"
-                      data-sidebar="menu-button" data-size="default">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-home h-5 w-5 flex-shrink-0">
-                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                      </svg><span class="truncate">Resumen</span>
-                    </a>
-                  </li>
-                  <li class="group/menu-item relative" data-sidebar="menu-item">
-                    <a routerLink="/dashboard/inventory" routerLinkActive="data-[active=true]"
-                      class="peer/menu-button ring-sidebar-ring active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground w-full rounded-md p-2 text-left outline-none transition-[width,height,padding] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&amp;>span:last-child]:truncate [&amp;>svg]:size-4 [&amp;>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm overflow-hidden flex items-center gap-2 min-w-0"
-                      data-sidebar="menu-button" data-size="default">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-clipboard-list h-5 w-5 flex-shrink-0">
-                        <rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect>
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                        <path d="M12 11h4"></path>
-                        <path d="M12 16h4"></path>
-                        <path d="M8 11h.01"></path>
-                        <path d="M8 16h.01"></path>
-                      </svg><span class="truncate">Inventario</span>
-                    </a>
-                  </li>
-                  <li class="group/menu-item relative" data-sidebar="menu-item">
-                    <a routerLink="/dashboard/personal" routerLinkActive="data-[active=true]"
-                      class="peer/menu-button ring-sidebar-ring active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground w-full rounded-md p-2 text-left outline-none transition-[width,height,padding] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&amp;>span:last-child]:truncate [&amp;>svg]:size-4 [&amp;>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm overflow-hidden flex items-center gap-2 min-w-0"
-                      data-sidebar="menu-button" data-size="default">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-users h-5 w-5 flex-shrink-0">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                      </svg><span class="truncate">Personal</span>
-                    </a>
-                  </li>
-                  <li class="group/menu-item relative" data-sidebar="menu-item">
-                    <a routerLink="/dashboard/turnos" routerLinkActive="data-[active=true]"
-                      class="peer/menu-button ring-sidebar-ring active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground w-full rounded-md p-2 text-left outline-none transition-[width,height,padding] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&amp;>span:last-child]:truncate [&amp;>svg]:size-4 [&amp;>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm overflow-hidden flex items-center gap-2 min-w-0"
-                      data-sidebar="menu-button" data-size="default">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-calendar h-5 w-5 flex-shrink-0">
-                        <path d="M8 2v4"></path>
-                        <path d="M16 2v4"></path>
-                        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                        <path d="M3 10h18"></path>
-                      </svg><span class="truncate">Turnos</span>
-                    </a>
-                  </li>
-                  <li class="group/menu-item relative" data-sidebar="menu-item"></li>
-                  <li class="group/menu-item relative" data-sidebar="menu-item">
-                    <a routerLink="/dashboard/tareas" routerLinkActive="data-[active=true]"
-                      class="peer/menu-button ring-sidebar-ring active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground w-full rounded-md p-2 text-left outline-none transition-[width,height,padding] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&amp;>span:last-child]:truncate [&amp;>svg]:size-4 [&amp;>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm overflow-hidden flex items-center gap-2 min-w-0"
-                      data-sidebar="menu-button" data-size="default">
-                      <svg xmlns="http://www.w3.org/2000/svg"
-                      width="24" height="24" viewBox="0 0 24 24"
-                      fill="none" stroke="currentColor"
-                      stroke-width="2" stroke-linecap="round"
-                      stroke-linejoin="round" class="lucide lucide-cooking-pot-icon lucide-cooking-pot h-5 w-5 flex-shrink-0">
-                      <path d="M2 12h20"/>
-                      <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="m4 8 16-4"/><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"/></svg>
-                      <span class="truncate">Tareas</span>
-                    </a>
-                  </li>
-                  <li class="group/menu-item relative" data-sidebar="menu-item"></li>
-                </ul>
-              </div>
-            </div>
-            <div class="relative flex w-full min-w-0 flex-col p-2" data-sidebar="group">
-              <div
-                class="text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-none transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&amp;>svg]:size-4 [&amp;>svg]:shrink-0 group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 overflow-hidden"
-                data-sidebar="group-label"></div>
-              <div class="w-full text-sm" data-sidebar="group-content">
-                <ul class="flex w-full min-w-0 flex-col gap-1" data-sidebar="menu">
-                  <li class="group/menu-item relative" data-sidebar="menu-item"></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col gap-2 p-2 overflow-hidden" data-sidebar="footer">
-            <ul class="flex w-full min-w-0 flex-col gap-1" data-sidebar="menu">
-              <li class="group/menu-item relative" data-sidebar="menu-item">
-                <a href="/login"
-                  class="peer/menu-button ring-sidebar-ring active:bg-sidebar-accent active:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground w-full rounded-md p-2 text-left outline-none transition-[width,height,padding] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&amp;>span:last-child]:truncate [&amp;>svg]:size-4 [&amp;>svg]:shrink-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground h-8 text-sm overflow-hidden flex items-center gap-2 min-w-0"
-                  data-active="false" data-sidebar="menu-button" data-size="default"><svg
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-log-out h-5 w-5 flex-shrink-0">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                    <polyline points="16 17 21 12 16 7"></polyline>
-                    <line x1="21" x2="9" y1="12" y2="12"></line>
-                  </svg><span class="truncate" (click)="cerrarSesion()">Cerrar Sesión</span></a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <main
-      class="relative flex min-h-svh flex-1 flex-col bg-background peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow w-full overflow-hidden">
-      <div class="flex flex-col h-full w-full">
-        <header class="border-b border-[#D4AF37]/10 bg-white w-full flex-shrink-0">
-          <div class="flex h-16 items-center justify-between px-4 w-full">
-            <div class="flex items-center gap-2">
-              <button
-                class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-7 w-7 text-[#556B2F]"
-                data-sidebar="trigger">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-panel-left">
-                  <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-                  <path d="M9 3v18"></path>
-                </svg><span class="sr-only">Toggle Sidebar</span>
-              </button>
-            </div>
-            <div class="flex items-center gap-4">
-              <button
-                class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:bg-[#556B2F]/10 hover:text-[#556B2F] h-10 w-10 text-[#556B2F] hidden sm:flex">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-message-square h-5 w-5">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          <div class="flex items-center gap-4">
+            <button
+              class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:bg-[#556B2F]/10 hover:text-[#556B2F] h-10 w-10 text-[#556B2F] hidden sm:flex">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-message-square h-5 w-5">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </button>
+            <!-- Menú de perfil de usuario (Angular) -->
+            <div class="relative">
+              <button (click)="toggleProfileMenu()" class="flex items-center gap-2 focus:outline-none">
+                <div class="relative h-8 w-8 rounded-full overflow-hidden border-2 border-[#556B2F]/20">
+                  <img [src]="avatar.avatar" alt="Avatar" class="object-cover w-full h-full" />
+                </div>
+                <div class="hidden md:block text-left">
+                  <div class="text-sm font-medium text-[#1C1C1C]"></div>
+                  <div class="text-xs text-[#1C1C1C]/70">
+                    {{ avatar.rol }}
+                  </div>
+                </div>
+                <svg class="lucide lucide-chevron-down h-4 w-8 text-[#556B2F] hidden sm:block" width="24" height="24"
+                  fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m6 9 6 6 6-6"></path>
                 </svg>
               </button>
-              <!-- Menú de perfil de usuario (Angular) -->
-              <div class="relative">
-                <button (click)="toggleProfileMenu()" class="flex items-center gap-2 focus:outline-none">
-                  <div class="relative h-8 w-8 rounded-full overflow-hidden border-2 border-[#556B2F]/20">
-                    <img [src]="avatar.avatar" alt="Avatar" class="object-cover w-full h-full" />
-                  </div>
-                  <div class="hidden md:block text-left">
-                    <div class="text-sm font-medium text-[#1C1C1C]"></div>
-                    <div class="text-xs text-[#1C1C1C]/70">
-                      {{ avatar.rol }}
-                    </div>
-                  </div>
-                  <svg class="lucide lucide-chevron-down h-4 w-8 text-[#556B2F] hidden sm:block" width="24" height="24"
-                    fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m6 9 6 6 6-6"></path>
-                  </svg>
+              <!-- Menú desplegable -->
+              <div class="absolute right-0 mt-2 w-48 bg-white border border-[#D4AF37]/30 rounded shadow-lg z-50"
+                [class.hidden]="!showProfileMenu">
+                <a routerLink="/dashboard/perfil"
+                  class="block px-4 py-2 text-sm text-[#1C1C1C] hover:bg-[#FDFBF8]">Ver perfil</a>
+                <button (click)="logout()"
+                  class="w-full text-left px-4 py-2 text-sm text-[#1C1C1C] hover:bg-[#FDFBF8]">
+                  Cerrar sesión
                 </button>
-                <!-- Menú desplegable -->
-                <div class="absolute right-0 mt-2 w-48 bg-white border border-[#D4AF37]/30 rounded shadow-lg z-50"
-                  [class.hidden]="!showProfileMenu">
-                  <a routerLink="/dashboard/perfil"
-                    class="block px-4 py-2 text-sm text-[#1C1C1C] hover:bg-[#FDFBF8]">Ver perfil</a>
-                  <button (click)="logout()"
-                    class="w-full text-left px-4 py-2 text-sm text-[#1C1C1C] hover:bg-[#FDFBF8]">
-                    Cerrar sesión
-                  </button>
-                </div>
               </div>
             </div>
           </div>
-        </header>
-        <main class="flex-1 overflow-auto p-4 md:p-6 w-full">
-          <div class="w-full">
-            <router-outlet></router-outlet>
-          </div>
-        </main>
-      </div>
-    </main>
+        </div>
+      </header>
+      <main class="flex-1 overflow-auto p-4 md:p-6 w-full">
+        <div class="w-full">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+    </div>
+  </main>
   </div>
 </div>
 <!-- Modales -->
