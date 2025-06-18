@@ -27,7 +27,7 @@ export class ResumenComponent  {
 
 
 ngOnInit(){
-  this.IngredientesService.getIngredientes()
+  this.IngredientesService.getAllIngredientes()
     .then((data: IIngredientes[]) => {
       // Filtrar solo ingredientes con stock bajo o sin stock
       this.arrIngredientes = data.filter(ingrediente => 

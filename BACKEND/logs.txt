@@ -645,3 +645,15 @@
 2025-06-18 16:51:50 GET /api/ingredientes/summary ::1
 2025-06-18 16:51:50 GET /api/ingredientes?page=1&limit=10&search=&orderBy=nombre&direction=ASC ::1
 2025-06-18 16:51:56 GET /api/ingredientes/all ::1
+2025-06-18 16:54:46 POST /api/usuarios/login ::1
+2025-06-18 16:54:47 GET /api/ingredientes?page=1&limit=10&search=&orderBy=nombre&direction= ::1
+2025-06-18 16:54:55 GET /api/ingredientes/summary ::1
+2025-06-18 16:54:55 GET /api/ingredientes?page=1&limit=10&search=&orderBy=nombre&direction=ASC ::1
+2025-06-18 16:55:05 GET /api/ingredientes?page=1&limit=10&search=&orderBy=nombre&direction= ::1
+2025-06-18 16:56:05 GET /api/ingredientes/all ::1
+2025-06-18 16:56:17 GET /api/ingredientes/summary ::1
+2025-06-18 16:56:17 GET /api/ingredientes?page=1&limit=10&search=&orderBy=nombre&direction=ASC ::1
+2025-06-18 16:56:22 GET /api/ingredientes?page=2&limit=10&search=&orderBy=nombre&direction=ASC ::1
+2025-06-18 16:56:22 GET /api/ingredientes?page=3&limit=10&search=&orderBy=nombre&direction=ASC ::1
+2025-06-18 16:56:24 GET /api/ingredientes?page=2&limit=10&search=&orderBy=nombre&direction=ASC ::1
+2025-06-18 16:56:36 GET /api/ingredientes/all ::1
