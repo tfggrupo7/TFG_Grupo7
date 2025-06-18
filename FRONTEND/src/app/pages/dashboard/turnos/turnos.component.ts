@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 import { TurnosService } from '../../../core/services/turnos.service';
 import { ITurnos } from '../../../interfaces/iturnos.interfaces';
 import { TurnosModalComponent } from './turnos-modal/turnos-modal.component';
+import { EmpleadosService } from '../../../core/services/empleados.service';
+import { RolesService }     from '../../../core/services/roles.service';
 
 @Component({
   selector: 'app-turnos',
@@ -46,7 +48,11 @@ export class TurnosComponent implements OnInit {
   /** Flag que controla la visibilidad del modal */
   isModalOpen = false;
 
-  constructor(private turnosService: TurnosService) {}
+  // + maps
+  empleadosMap = new Map<number, string>();
+  rolesMap     = new Map<number, string>();
+
+  constructor(private turnosService: TurnosService, private empleadosService: EmpleadosService, private rolesService: RolesService) {}
 
   /**
    * Ciclo de vida — al inicializar:
@@ -54,6 +60,14 @@ export class TurnosComponent implements OnInit {
    *   2. Descarga turnos desde el backend.
    */
   async ngOnInit() {
+    // cargar catálogos primero
+    const [emps, roles] = await Promise.all([
+      this.empleadosService.getEmpleados(),
+      this.rolesService.getRoles()
+    ]);
+    emps.forEach(e => this.empleadosMap.set(e.id, e.nombre));
+    roles.forEach(r => this.rolesMap.set(r.id, r.nombre));
+
     this.setCurrentWeekDates();
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
