@@ -420,14 +420,14 @@ CREATE TABLE turnos (
     dia VARCHAR(20) NOT NULL,
     hora INT NOT NULL,
     duracion INT NOT NULL,
-    titulo VARCHAR(100) NOT NULL,
+    titulo VARCHAR(100),
     empleado_id INT NOT NULL,
     roles_id INT NOT NULL,
     fecha DATE NOT NULL,
     estado VARCHAR(20) NOT NULL,
     hora_inicio TIME NOT NULL,
     hora_fin TIME NOT NULL,
-    color VARCHAR(20) NOT NULL,
+    color VARCHAR(20),
     FOREIGN KEY (empleado_id) REFERENCES empleados(id),
     FOREIGN KEY (roles_id) REFERENCES roles(id)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

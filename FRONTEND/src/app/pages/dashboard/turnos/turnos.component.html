@@ -1,13 +1,31 @@
+<!--
+  Plantilla HTML del componente <app-turnos>
+  Descripción: Muestra la gestión de turnos con estadísticas, turnos del día y vista semanal.
+  Notas:  
+    • Usa Tailwind CSS para estilos.
+    • Incluye un modal para crear/editar turnos.
+    • Muestra estadísticas clave y turnos del día.
+    • Vista semanal con drag & drop de turnos.
+-->
+
 <div class="space-y-6">
-  <!-- CABECERA -->
+  <!-- 🟢 CABECERA ---------------------------------------------------------- -->
+  <!--
+    Descripción: Bloque superior con título, subtítulo y CTA para programar un turno.
+    Notas:
+      • Usa un layout flex que se adapta de columna (mobile) a fila (>= sm).
+      • El botón llama a openModal con día = lunes (0) y hora = 8.
+  -->
   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
     <div>
       <h1 class="text-2xl font-bold text-[#556B2F]">Gestión de Turnos</h1>
       <p class="text-[#1C1C1C]/70">Organiza los horarios de tu equipo</p>
     </div>
+    <!-- Botón principal (+) -->
     <button
       class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
       (click)="openModal(0, 8)">
+      <!-- Icono plus (Lucide) -->
       <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-plus h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path d="M5 12h14M12 5v14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
       </svg>
@@ -15,27 +33,32 @@
     </button>
   </div>
 
-  <!-- ESTADÍSTICAS -->
+  <!-- 🟠 ESTADÍSTICAS ------------------------------------------------------ -->
+  <!-- Cuatro tarjetas con KPI de la semana/día. -->
   <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <!-- Tarjeta: Activos -->
     <div class="rounded-lg border bg-white p-4 md:p-6 border-[#556B2F] bg-[#556B2F]/5">
       <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Activos</p>
       <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{ activeShiftsCount }}</h3>
     </div>
+    <!-- Tarjeta: Pendientes -->
     <div class="rounded-lg border bg-white p-4 md:p-6 border-[#D4AF37] bg-[#D4AF37]/5">
       <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Pendientes</p>
       <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{ pendingShiftsCount }}</h3>
     </div>
+    <!-- Tarjeta: Completados -->
     <div class="rounded-lg border bg-white p-4 md:p-6 border-[#556B2F] bg-[#556B2F]/5">
       <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Completados</p>
       <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{ completedShiftsCount }}</h3>
     </div>
+    <!-- Tarjeta: Personal Hoy -->
     <div class="rounded-lg border bg-white p-4 md:p-6 border-[#D4AF37] bg-[#D4AF37]/5">
       <p class="text-sm font-medium text-[#1C1C1C]/70">Total Personal Hoy</p>
       <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{ todayStaffCount }}</h3>
     </div>
   </div>
 
-  <!-- TURNOS DE HOY -->
+  <!-- 🔵 TURNOS DE HOY ------------------------------------------------------ -->
   <div class="rounded-lg border bg-card shadow-sm border-[#D4AF37]/20">
     <div class="p-6 pb-0">
       <h3 class="text-2xl font-semibold text-[#556B2F]">Turnos de Hoy</h3>
@@ -43,6 +66,7 @@
     </div>
     <div class="p-6 pt-3">
       <ng-container *ngIf="todayTurnos.length; else noShifts">
+        <!-- Listado de turnos, uno por tarjeta -->
         <div *ngFor="let turno of todayTurnos" class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10">
           <div>
             <div class="font-medium text-[#1C1C1C]">Empleado {{ turno.empleado_id }}</div>
@@ -57,19 +81,22 @@
           </div>
         </div>
       </ng-container>
+      <!-- Estado vacío -->
       <ng-template #noShifts>
         <div class="text-center text-[#1C1C1C]/60 py-8">No hay turnos programados para hoy.</div>
       </ng-template>
     </div>
   </div>
 
-  <!-- VISTA SEMANAL -->
+  <!-- 🟣 VISTA SEMANAL ------------------------------------------------------ -->
   <div class="rounded-lg border shadow-sm border-[#D4AF37]/20">
+    <!-- Encabezado Vista Semanal -->
     <div class="flex justify-between items-center p-6">
       <div>
         <h3 class="text-2xl font-semibold text-[#556B2F]">Vista Semanal</h3>
         <p class="text-sm text-muted-foreground">Planificación de la semana actual</p>
       </div>
+      <!-- CTA Añadir turno -->
       <button (click)="openModal(0, 8)" class="flex items-center gap-2 rounded-md bg-[#D4AF37] hover:bg-[#EBCB64] text-white px-4 py-2 font-medium">
         <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-plus h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path d="M5 10h14M12 5v14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
@@ -77,24 +104,34 @@
         Añadir turno
       </button>
     </div>
+
+    <!-- Grid horario (horas x días) -->
     <div class="p-6 pt-0 grid grid-cols-8 gap-4">
+      <!-- Columna vacía para rotular horas -->
       <div class="col-span-1"></div>
+      <!-- Cabeceras de cada día (L‑D) -->
       <div *ngFor="let day of currentWeekDates; let i = index" class="text-center font-medium text-[#556B2F]">
         {{ getDayName(i) }}
       </div>
+
+      <!-- Grid principal: 7 días x 24 h -->
       <div class="col-span-8 grid grid-cols-8 gap-4 relative">
+        <!-- Lado izquierdo: horas -->
         <div class="col-span-1">
           <div *ngFor="let hour of hours" class="h-[60px] text-sm text-gray-500">
             {{ hour }}:00
           </div>
         </div>
+        <!-- Celdas por día/horas -->
         <div *ngFor="let day of currentWeekDates; let dayIndex = index" class="relative">
+          <!-- Rejilla interactiva -->
           <div *ngFor="let hour of hours"
                class="h-[60px] border border-[#D4AF37]/30 hover:bg-[#D4AF37]/10 cursor-pointer"
                (click)="openModal(dayIndex, hour)"
                (dragover)="allowDrop($event)"
                (drop)="onDrop($event, dayIndex, hour)">
           </div>
+          <!-- Bloques de turnos dibujados en posición absoluta -->
           <ng-container *ngFor="let turno of turnos">
             <div *ngIf="turno.fecha === day"
                  class="absolute text-white p-2 rounded cursor-move"
@@ -114,7 +151,8 @@
     </div>
   </div>
 
-  <!-- MODAL -->
+  <!-- 🔘 MODAL ------------------------------------------------------------- -->
+  <!-- Componente hijo autónomo para creación/edición de turnos -->
   <app-turnos-modal
     [isOpen]="isModalOpen"
     [selectedDayIndex]="selectedDayIndex"

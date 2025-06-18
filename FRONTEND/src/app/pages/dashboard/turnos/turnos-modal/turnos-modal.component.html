@@ -1,30 +1,39 @@
+<!--
+  Plantilla HTML del <app-turnos-modal> 
+-->
+
 <div *ngIf="isOpen" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+  <!-- Dialog principal centrado -->
   <div role="dialog" class="bg-white fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg sm:max-w-[600px] border-[#D4AF37]/30">
+    <!-- Encabezado ------------------------------------------------------- -->
     <div class="flex flex-col space-y-1.5 text-center sm:text-left">
-      <h2 class="font-semibold tracking-tight text-[#556B2F] text-xl">{{ isEditMode ? 'Editar Turno' : 'Programar Turno' }}</h2>
+      <h2 class="font-semibold tracking-tight text-[#556B2F] text-xl">
+        {{ isEditMode ? 'Editar Turno' : 'Programar Turno' }}
+      </h2>
     </div>
 
+    <!-- Formulario ------------------------------------------------------- -->
     <form [formGroup]="shiftForm" (ngSubmit)="onSubmit()" class="space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Empleado ID -->
+        <!-- Empleado ID -------------------------------------------------- -->
         <div class="space-y-2">
           <label for="empleado_id" class="text-sm font-medium text-[#1C1C1C]">Empleado ID</label>
           <input id="empleado_id" type="number" formControlName="empleado_id" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]" required>
         </div>
 
-        <!-- Rol ID -->
+        <!-- Rol ID ------------------------------------------------------- -->
         <div class="space-y-2">
           <label for="roles_id" class="text-sm font-medium text-[#1C1C1C]">Rol ID</label>
           <input id="roles_id" type="number" formControlName="roles_id" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]" required>
         </div>
 
-        <!-- Fecha -->
+        <!-- Fecha -------------------------------------------------------- -->
         <div class="space-y-2">
           <label for="fecha" class="text-sm font-medium text-[#1C1C1C]">Fecha</label>
           <input id="fecha" type="date" formControlName="fecha" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]" required>
         </div>
 
-        <!-- Estado -->
+        <!-- Estado ------------------------------------------------------- -->
         <div class="space-y-2">
           <label for="estado" class="text-sm font-medium text-[#1C1C1C]">Estado</label>
           <select id="estado" formControlName="estado" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]" required>
@@ -34,7 +43,7 @@
           </select>
         </div>
 
-        <!-- Hora inicio -->
+        <!-- Hora inicio -------------------------------------------------- -->
         <div class="space-y-2">
           <label for="hora_inicio" class="text-sm font-medium text-[#1C1C1C]">Hora de inicio</label>
           <select id="hora_inicio" formControlName="hora_inicio" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]">
@@ -42,7 +51,7 @@
           </select>
         </div>
 
-        <!-- Hora fin -->
+        <!-- Hora fin ------------------------------------------------------ -->
         <div class="space-y-2">
           <label for="hora_fin" class="text-sm font-medium text-[#1C1C1C]">Hora de fin</label>
           <select id="hora_fin" formControlName="hora_fin" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]">
@@ -51,7 +60,7 @@
         </div>
       </div>
 
-      <!-- Acciones -->
+      <!-- Botones de acción --------------------------------------------- -->
       <div class="flex justify-end gap-2 pt-4">
         <button *ngIf="isEditMode" type="button" (click)="onDelete()" class="rounded-md text-sm font-medium h-10 px-4 bg-red-600 hover:bg-red-700 text-white">Eliminar turno</button>
         <button type="button" (click)="onClose()" class="rounded-md text-sm font-medium h-10 px-4 border border-[#556B2F] text-[#556B2F] hover:bg-[#556B2F]/10">Cancelar</button>
@@ -59,6 +68,7 @@
       </div>
     </form>
 
+    <!-- Botón cerrar (X) ----------------------------------------------- -->
     <button type="button" (click)="onClose()" class="absolute right-4 top-4 opacity-70 hover:opacity-100">
       <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-x h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />

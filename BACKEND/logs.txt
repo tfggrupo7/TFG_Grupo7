@@ -222,3 +222,5 @@
 2025-06-16 17:46:05 GET /api/turnos ::ffff:127.0.0.1
 2025-06-16 17:46:13 POST /api/turnos ::ffff:127.0.0.1
 2025-06-16 17:46:13 GET /api/turnos ::ffff:127.0.0.1
+2025-06-18 14:47:55 POST /api/usuarios/login ::ffff:127.0.0.1
+2025-06-18 14:48:03 GET /api/turnos ::ffff:127.0.0.1
