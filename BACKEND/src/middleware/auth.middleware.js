@@ -50,7 +50,7 @@ const checkToken = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Token decodificado:", decoded);
+  
 
     // Intentar primero como usuario
     if (decoded.usuario_id) {

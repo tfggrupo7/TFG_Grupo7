@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { checkToken, } = require("../middleware/auth.middleware");
+const { checkToken } = require("../middleware/auth.middleware");
 
 router.use("/empleados", require("./api/empleados.routes"));
 router.use("/tareas", checkToken, require("./api/tareas.routes"));
