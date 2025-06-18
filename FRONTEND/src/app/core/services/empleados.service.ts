@@ -19,8 +19,10 @@ export class EmpleadosService {
 
 
   getEmpleados(): Promise<IEmpleados[]> {
-    return lastValueFrom(this.httpClient.get<IEmpleados[]>(this.url));
-  }
+  return lastValueFrom(
+    this.httpClient.get<{ data: IEmpleados[] }>(this.url)
+  ).then(r => r.data);
+}
   
   async cargarEmpleados(page: number): Promise<IResponse> {
     const url = `${this.url}?page=${page}&limit=${this.limit}`;

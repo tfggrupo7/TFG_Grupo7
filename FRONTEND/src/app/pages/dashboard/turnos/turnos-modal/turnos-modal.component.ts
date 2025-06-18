@@ -10,6 +10,10 @@ import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChange
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ITurnos } from '../../../../interfaces/iturnos.interfaces';
+import { EmpleadosService } from '../../../../core/services/empleados.service';
+import { RolesService }     from '../../../../core/services/roles.service';
+import { IEmpleados }       from '../../../../interfaces/iempleados.interfaces';
+import { IRoles }           from '../../../../interfaces/iroles.interfaces';
 
 @Component({
   selector: 'app-turnos-modal',
@@ -43,7 +47,10 @@ export class TurnosModalComponent implements OnInit, OnChanges {
   /** Flag para distinguir entre modo creación y edición */
   isEditMode = false;
 
-  constructor(private fb: FormBuilder) {
+  employees: IEmpleados[] = [];
+  roles: IRoles[] = [];
+
+  constructor(private fb: FormBuilder, private empleadosService: EmpleadosService, private rolesService: RolesService) {
     // Construcción del formulario con validaciones mínimas
     this.shiftForm = this.fb.group({
       empleado_id : ['', Validators.required],
@@ -62,7 +69,9 @@ export class TurnosModalComponent implements OnInit, OnChanges {
   /* -----------------------------------------------------------------------
    * Ciclo de vida Angular
    * --------------------------------------------------------------------- */
-  ngOnInit() {
+  async ngOnInit() {
+    // ① cargamos empleados y roles en paralelo
+    await Promise.all([this.loadEmployees(), this.loadRoles()]);
     this.setFormForEdit(); // Configura el formulario según «isEditMode»
 
     // Recalcular duración cuando cambian las horas de inicio/fin
@@ -110,6 +119,22 @@ export class TurnosModalComponent implements OnInit, OnChanges {
 
     // Establecemos la duración coherente tras inicializar
     this.updateDuration();
+  }
+
+
+  private async loadEmployees() {
+    try {
+      this.employees = await this.empleadosService.getEmpleados();
+    } catch (err) {
+      console.error('Error cargando empleados', err);
+    }
+  }
+  private async loadRoles() {
+    try {
+      this.roles = await this.rolesService.getRoles();
+    } catch (err) {
+      console.error('Error cargando roles', err);
+    }
   }
 
   /* -----------------------------------------------------------------------
