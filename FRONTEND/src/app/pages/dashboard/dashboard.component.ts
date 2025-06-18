@@ -4,6 +4,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { Input } from '@angular/core';
 import { IUsuario } from '../../interfaces/iusuario.interfaces';
+import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
 
 
 @Component({
@@ -11,6 +12,7 @@ import { IUsuario } from '../../interfaces/iusuario.interfaces';
   standalone: true,
   imports: [
     RouterModule,
+    SidebarComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
@@ -23,6 +25,7 @@ export class DashboardComponent {
   
   
 showProfileMenu = false;
+isMobile = window.innerWidth <= 768;
 
 avatar = {
   rol: "Administrador",
