@@ -28,6 +28,8 @@ export class TurnosComponent implements OnInit {
   /** Array completo de turnos cargado desde la API */
   turnos: ITurnos[] = [];
 
+  draggedTurno: ITurnos | null = null;
+
   turnosHoy: ITurnos[] = [];
 
   /** Fechas (YYYY‑MM‑DD) de la semana actual, lunes → domingo */
@@ -218,30 +220,29 @@ export class TurnosComponent implements OnInit {
   }
 
   /** Guarda el turno que se está arrastrando */
-  onDragStart(turno: ITurnos) {
-    this.selectedTurno = turno;
-  }
+ onDragStart(turno: ITurnos) {
+  this.draggedTurno = turno;
+}
 
   /**
    * Drop handler: actualiza turno con nueva fecha/hora.
    * Reutiliza `updateTurno` para persistir el cambio.
    */
   async onDrop(event: DragEvent, dayIndex: number, hour: number) {
-    event.preventDefault();
-    if (!this.selectedTurno) return;
+  event.preventDefault();
+  if (this.draggedTurno) {
+    this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
+    this.draggedTurno.hora = hour;
+    this.draggedTurno.hora_inicio = `${hour.toString().padStart(2, '0')}:00`;
+    const endHour = hour + this.draggedTurno.duracion;
+    this.draggedTurno.hora_fin = `${endHour.toString().padStart(2, '0')}:00`;
 
-    const updated: ITurnos = {
-      ...this.selectedTurno,
-      dia: this.getDayName(dayIndex - 1),
-      hora: Number(hour),
-      fecha: this.currentWeekDates[dayIndex],
-      hora_inicio: `${hour.toString().padStart(2, '0')}:00`,
-      hora_fin: `${(hour + this.selectedTurno.duracion)
-        .toString()
-        .padStart(2, '0')}:00`,
-    };
-    await this.updateTurno(updated);
+    // Actualiza en backend
+    await this.updateTurno(this.draggedTurno);
+
+    this.draggedTurno = null;
   }
+}
 
   /** Devuelve nombre completo del día dado su índice (0=Lunes) */
   getDayName(index: number): string {

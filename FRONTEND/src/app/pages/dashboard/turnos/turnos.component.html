@@ -1,7 +1,7 @@
 <!--
   Plantilla HTML del componente <app-turnos>
   Descripción: Muestra la gestión de turnos con estadísticas, turnos del día y vista semanal.
-  Notas:  
+  Notas:
     • Usa Tailwind CSS para estilos.
     • Incluye un modal para crear/editar turnos.
     • Muestra estadísticas clave y turnos del día.
@@ -109,45 +109,45 @@
     <div class="p-6 pt-0 grid grid-cols-8 gap-4">
       <!-- Columna vacía para rotular horas -->
       <div class="col-span-1"></div>
-      <!-- Cabeceras de cada día (L‑D) -->
-      <div *ngFor="let day of currentWeekDates; let i = index" class="text-center font-medium text-[#556B2F]">
-        {{ getDayName(i) }}
-      </div>
+<div *ngFor="let day of currentWeekDates; let i = index" class="text-center font-medium text-[#556B2F]">
+  {{ getDayName(i) }}
+</div>
 
-      <!-- Grid principal: 7 días x 24 h -->
-      <div class="col-span-8 grid grid-cols-8 gap-4 relative">
-        <!-- Lado izquierdo: horas -->
-        <div class="col-span-1">
-          <div *ngFor="let hour of hours" class="h-[60px] text-sm text-gray-500">
-            {{ hour }}:00
-          </div>
-        </div>
-        <!-- Celdas por día/horas -->
-        <div *ngFor="let day of currentWeekDates; let dayIndex = index" class="relative">
-          <!-- Rejilla interactiva -->
-          <div *ngFor="let hour of hours"
-               class="h-[60px] border border-[#D4AF37]/30 hover:bg-[#D4AF37]/10 cursor-pointer"
-               (click)="openModal(dayIndex, hour)"
-               (dragover)="allowDrop($event)"
-               (drop)="onDrop($event, dayIndex, hour)">
-          </div>
-          <!-- Bloques de turnos dibujados en posición absoluta -->
-          <ng-container *ngFor="let turno of turnos">
-            <div *ngIf="turno.fecha === day"
-                 class="absolute text-white p-2 rounded cursor-move"
-                 [ngClass]="turno.color"
-                 [style.top.px]="turno.hora * 60"
-                 [style.height.px]="turno.duracion * 60"
-                 draggable="true"
-                 (dragstart)="onDragStart(turno)"
-                 (click)="onTurnoClick(turno)">
-              <div class="text-sm font-medium">Empleado {{ turno.empleado_id }}</div>
-              <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
-              <div class="text-xs">{{ turno.estado | titlecase }}</div>
-            </div>
-          </ng-container>
-        </div>
-      </div>
+<!-- Líneas de tiempo -->
+<div class="col-span-8 grid grid-cols-8 gap-4 relative">
+  <!-- Línea de horas -->
+  <div class="col-span-1">
+    <div *ngFor="let hour of hours" class="h-[60px] text-sm text-gray-500">
+      {{hour}}:00
+    </div>
+  </div>
+
+  <!-- Celdas de turnos -->
+  <div *ngFor="let day of currentWeekDates; let dayIndex = index" class="relative">
+    <div *ngFor="let hour of hours"
+         class="h-[60px] border border-[#D4AF37]/30 hover:bg-[#D4AF37]/10 cursor-pointer"
+         (click)="openModal(dayIndex, hour)"
+         (dragover)="allowDrop($event)"
+         (drop)="onDrop($event, dayIndex, hour)">
+    </div>
+
+    <!-- Turnos para este día -->
+    <ng-container *ngFor="let turno of turnos">
+    <div *ngIf="(turno.fecha | date:'yyyy-MM-dd') === day"
+      class="absolute text-white p-2 rounded cursor-move shift-card"
+      [ngClass]="turno.color"
+      [style.top.px]="turno.hora * 60"
+      [style.height.px]="turno.duracion * 60"
+      draggable="true"
+      (dragstart)="onDragStart(turno)"
+      (click)="onTurnoClick(turno)">
+      <div class="text-sm font-medium">{{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}</div>
+      <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
+      <div class="text-xs">{{ turno.estado | titlecase }}</div>
+    </div>
+  </ng-container>
+  </div>
+</div>
     </div>
   </div>
 
