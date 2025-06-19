@@ -163,6 +163,7 @@ export class TurnosComponent implements OnInit {
     await this.turnosService.createTurno(turno);
     await this.cargarTurnos(); // refresh grid
     await this.cargarTurnosHoy();
+    console.log('Turno recibido:', turno);
     this.closeModal();
   }
 

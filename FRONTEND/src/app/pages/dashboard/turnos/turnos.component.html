@@ -66,15 +66,18 @@
     </div>
     <div class="p-6 pt-3">
       <ng-container *ngIf="todayTurnos.length; else noShifts">
-        <!-- Listado de turnos, uno por tarjeta -->
-        <div *ngFor="let turno of todayTurnos" class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10">
+  <div *ngFor="let turno of todayTurnos; let i = index"
+       class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
+       [ngClass]="i < todayTurnos.length - 1 ? 'mb-[5px]' : ''">
           <div>
             <div class="font-medium text-[#1C1C1C]">Empleado {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}</div>
             <div class="text-sm text-[#1C1C1C]/70">Rol {{ rolesMap.get(turno.roles_id) || 'Rol ' + turno.roles_id }}</div>
           </div>
           <div class="text-right">
             <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
-            <div class="text-sm text-[#1C1C1C]/70">{{ turno.duracion }} horas</div>
+            <p class="text-sm text-[#1C1C1C]/70">
+  {{ turno.duracion | number:'1.0-2' }} horas
+</p>
           </div>
           <div class="text-xs rounded-full px-2 py-1 bg-[#556B2F]/20 text-[#556B2F] font-medium">
             {{ turno.estado | titlecase }}
@@ -141,7 +144,9 @@
       draggable="true"
       (dragstart)="onDragStart(turno)"
       (click)="onTurnoClick(turno)">
-      <div class="text-sm font-medium">{{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}</div>
+      <div class="font-medium text-sm">
+  {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
+</div>
       <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
       <div class="text-xs">{{ turno.estado | titlecase }}</div>
     </div>

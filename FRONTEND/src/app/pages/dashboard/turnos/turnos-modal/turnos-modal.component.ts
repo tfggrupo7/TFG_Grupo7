@@ -90,36 +90,46 @@ export class TurnosModalComponent implements OnInit, OnChanges {
    * Configuración inicial del formulario
    * --------------------------------------------------------------------- */
   private setFormForEdit() {
-    if (this.shiftToEdit) {
-      /* ----- Modo edición ----- */
-      this.isEditMode = true;
-      this.shiftForm.patchValue(this.shiftToEdit); // Precargar datos
-    } else {
-      /* ----- Modo creación ----- */
-      this.isEditMode = false;
+  if (this.shiftToEdit) {
+    /* ----- Modo edición ----- */
+     this.isEditMode = true;
+    this.shiftForm.reset();// <-- Añade este reset para limpiar el formulario
+     const patch = { ...this.shiftToEdit };
+     // Normaliza fecha a 'YYYY-MM-DD'
+    if (patch.fecha) {
+  patch.fecha = this.toLocalDateString(patch.fecha);
+}
 
-      const fecha   = this.currentWeekDates[this.selectedDayIndex] ?? '';
-      const inicioH = this.selectedHour;
-      const finH    = inicioH + 1;
-
-      // Valores por defecto para un nuevo turno de 1 hora
-      this.shiftForm.reset({
-        empleado_id : '',
-        roles_id    : '',
-        dia         : this.getDayName(this.selectedDayIndex),
-        fecha,
-        estado      : 'pendiente',
-        hora_inicio : `${inicioH.toString().padStart(2, '0')}:00`,
-        hora_fin    : `${finH.toString().padStart(2, '0')}:00`,
-        duracion    : 1,
-        titulo      : '',
-        color       : 'bg-[#D4AF37]/90'
-      });
+    // Normaliza horas a 'HH:mm'
+    if (patch.hora_inicio) {
+      patch.hora_inicio = patch.hora_inicio.slice(0, 5);
+    }
+    if (patch.hora_fin) {
+      patch.hora_fin = patch.hora_fin.slice(0, 5);
     }
 
-    // Establecemos la duración coherente tras inicializar
-    this.updateDuration();
+    this.shiftForm.patchValue(patch);
+  } else {
+    /* ----- Modo creación ----- */
+    this.isEditMode = false;
+    const fecha   = this.currentWeekDates[this.selectedDayIndex] ?? '';
+    const inicioH = this.selectedHour;
+    const finH    = inicioH + 1;
+    this.shiftForm.reset({
+      empleado_id : '',
+      roles_id    : '',
+      dia         : this.getDayName(this.selectedDayIndex),
+      fecha,
+      estado      : 'pendiente',
+      hora_inicio : `${inicioH.toString().padStart(2, '0')}:00`,
+      hora_fin    : `${finH.toString().padStart(2, '0')}:00`,
+      duracion    : 1,
+      titulo      : '',
+      color       : 'bg-[#D4AF37]/90'
+    });
   }
+  this.updateDuration();
+}
 
 
   private async loadEmployees() {
@@ -173,37 +183,44 @@ export class TurnosModalComponent implements OnInit, OnChanges {
    * 1) Verifica validez. 2) Prepara objeto ITurnos. 3) Emitter.
    */
   onSubmit(): void {
-    // 1. Validación
-    if (this.shiftForm.invalid) { return; }
+  // 1. Validación
+  if (this.shiftForm.invalid) { return; }
 
-    // 2. Copia de valores + coherencia con la semana visible
-    const formValue = { ...this.shiftForm.value };
-    const dayIndex  = this.currentWeekDates.indexOf(formValue.fecha);
+  // 2. Copia de valores + coherencia con la semana visible
+  const formValue = { ...this.shiftForm.value };
+  const dayIndex  = this.currentWeekDates.indexOf(formValue.fecha);
 
-    if (dayIndex === -1) {
-      alert('La fecha no pertenece a la semana visible');
-      return;
-    }
-
-    formValue.dia = this.getDayName(dayIndex);
-
-    // 3. Campo «hora» numérico derivado de hora_inicio (HH:mm)
-    const horaNum = parseInt(formValue.hora_inicio.split(':')[0], 10);
-
-    // 4. Construir ITurnos completo
-    const turno: ITurnos = {
-      ...formValue,
-      hora: horaNum,
-      id  : this.shiftToEdit?.id ?? 0          // id=0 para creaciones nuevas
-    } as ITurnos;
-
-    // 5. Enviar acción al padre
-    this.isEditMode ? this.update.emit(turno) : this.create.emit(turno);
-
-    // 6. Limpieza local
-    this.shiftForm.reset();
-    this.isEditMode = false;
+  if (dayIndex === -1) {
+    alert('La fecha no pertenece a la semana visible');
+    return;
   }
+
+  formValue.dia = this.getDayName(dayIndex);
+
+  // 3. Campo «hora» numérico derivado de hora_inicio (HH:mm)
+  const horaNum = parseInt(formValue.hora_inicio.split(':')[0], 10);
+
+  // 4. Validar duración y forzar valor por defecto si es null o <= 0
+  if (!formValue.duracion || formValue.duracion <= 0) {
+    alert('La duración del turno debe ser mayor que 0');
+    formValue.duracion = 1; // Valor por defecto para evitar null
+    // return; // Si quieres evitar guardar, descomenta esta línea
+  }
+
+  // 5. Construir ITurnos completo
+  const turno: ITurnos = {
+    ...formValue,
+    hora: horaNum,
+    id  : this.shiftToEdit?.id ?? 0
+  } as ITurnos;
+
+  // 6. Enviar acción al padre
+  this.isEditMode ? this.update.emit(turno) : this.create.emit(turno);
+
+  // 7. Limpieza local
+  this.shiftForm.reset();
+  this.isEditMode = false;
+}
 
   /* -----------------------------------------------------------------------
    * Helpers
@@ -218,4 +235,16 @@ export class TurnosModalComponent implements OnInit, OnChanges {
     const minute = i % 2 === 0 ? '00' : '30';
     return `${hour.toString().padStart(2, '0')}:${minute}`;
   });
+
+  private toLocalDateString(fecha: string): string {
+  // Si ya está en formato YYYY-MM-DD, devuélvelo tal cual
+  if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+    return fecha;
+  }
+  // Si viene en formato ISO, extrae solo la parte de la fecha
+  if (fecha.length >= 10) {
+    return fecha.slice(0, 10);
+  }
+  return '';
+}
 }
