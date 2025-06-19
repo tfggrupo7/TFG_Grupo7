@@ -5,6 +5,8 @@ import { IEmpleados } from '../../interfaces/iempleados.interfaces';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { LoginResponse } from '../../interfaces/login-response.interfaces';
+import { jwtDecode } from 'jwt-decode';
+
 
 
 @Injectable({
@@ -74,4 +76,63 @@ export class AuthService {
       return '';
     }
   } 
+  getUserFromToken(): any {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        return jwtDecode(token);
+      } catch (error) {
+        console.error('Error decodificando token:', error);
+        return null;
+      }
+    }
+    return null;
+  }
+
+  getUserId(): string | null {
+    const tokenData = this.getUserFromToken();
+    
+    if (!tokenData) {
+      return null;
+    }
+    
+    // Tu token tiene el ID en usuario_id
+    const userId = tokenData.usuario_id;
+    console.log('✅ ID encontrado:', userId);
+    
+    return userId ? String(userId) : null;
+  }
+
+getUserFromTokenEmpleado(): any {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        return jwtDecode(token);
+      } catch (error) {
+        console.error('Error decodificando token:', error);
+        return null;
+      }
+    }
+    return null;
+  }
+
+  getEmpleadoId(): string | null {
+    const tokenData = this.getUserFromTokenEmpleado();
+    if (!tokenData) return null;
+    
+    // Buscar el ID del empleado en diferentes propiedades posibles
+    const empleadoId = tokenData.empleado_id || 
+                      tokenData.id_empleado || 
+                      tokenData.empleadoId ||
+                      tokenData.usuario_id || // Si usan la misma tabla
+                      tokenData.id;
+    
+    console.log('🔍 ID empleado encontrado:', empleadoId);
+    return empleadoId ? String(empleadoId) : null;
+  }
+
+  getUserType(): string {
+    const tokenData = this.getUserFromToken();
+    return tokenData?.tipo || tokenData?.role || tokenData?.user_type || 'empleado';
+  }
 }
