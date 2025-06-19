@@ -1,6 +1,9 @@
 const router = require('express').Router();
-const { registro, login, perfil, recuperarContraseña, restablecerContraseña, actualizarDatos, cambiarContraseña , eliminarUsuario} = require('../../controllers/usuarios.controller');
+const { registro, getByUsuarioId,login, perfil, recuperarContraseña, restablecerContraseña, actualizarDatos, cambiarContraseña , eliminarUsuario} = require('../../controllers/usuarios.controller');
 const { checkToken } = require('../../middleware/auth.middleware');
+
+
+router.get('/:usuarioId', getByUsuarioId);
 
 /**
  * @swagger

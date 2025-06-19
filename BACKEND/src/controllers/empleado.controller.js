@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../sendEmail");
 const {sendHtmlEmail} = require("../helper/welcome-email");
+const { get } = require("../routes/api/usuarios.routes");
 
 
 
@@ -199,6 +200,33 @@ const getById = async (req, res) => {
   res.json(req.empleados);
 };
 
+const getByEmpleadoId = async (req, res) => {
+  try {
+    const empleadoId = req.params.empleadoId;
+
+    if (!empleadoId) {
+      return res.status(400).json({ message: "ID de empleado requerido" });
+    }
+
+    const id = parseInt(empleadoId, 10);
+
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "ID de empleado inválido" });
+    }
+
+    const empleado = await Empleado.selectById(id);
+
+    if (!empleado) {
+      return res.status(404).json({ message: "Empleado no encontrado" });
+    }
+
+    const { password, ...empleadoSinPassword } = empleado;
+    return res.status(200).json(empleadoSinPassword);
+  } catch (error) {
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
 const getEmpleadosAndTarea = async (req, res) => {
   const empleados = await Empleado.selectAll(1, 500);
 
@@ -368,6 +396,7 @@ const getEmpleadosYRoles = async (req, res) => {
 module.exports = {
   getAll,
   getById,
+  getByEmpleadoId,
   create,
   getEmpleadosAndTarea,
   update,

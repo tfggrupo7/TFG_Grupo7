@@ -4,6 +4,9 @@ import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { Input } from '@angular/core';
 import { IUsuario } from '../../interfaces/iusuario.interfaces';
+import { UsuarioService } from '../../core/services/usuario.service';
+
+
 
 
 @Component({
@@ -17,17 +20,23 @@ import { IUsuario } from '../../interfaces/iusuario.interfaces';
 })
 
 export class DashboardComponent {
-  authService = inject(AuthService);
+  
   router = inject(Router);
   @Input() usuario!: IUsuario;
   
   
 showProfileMenu = false;
+currentUser: any = null;
 
 avatar = {
   rol: "Administrador",
   avatar: '../../../assets/avatar.avif'
 };
+
+constructor(
+    private usuarioService: UsuarioService,
+    private authService: AuthService
+  ) {}
 
 toggleProfileMenu() {
   this.showProfileMenu = !this.showProfileMenu;
@@ -35,6 +44,17 @@ toggleProfileMenu() {
 
 closeProfileMenu() {
   this.showProfileMenu = false;
+}
+ngOnInit() {
+    this.loadCurrentUser();
+  }
+  
+async loadCurrentUser() {
+  try {
+    this.currentUser = await this.usuarioService.getCurrentUser()
+  } catch (error) {
+    console.error('Error cargando usuario:', error);
+  }
 }
 
 logout() {

@@ -9,7 +9,8 @@ const {
   remove,
   getEmpleadosYRoles,login, recuperarContraseña,restablecerContraseña,
   updateEmpleado,
-  cambiarContraseña
+  cambiarContraseña,
+  getByEmpleadoId
 } = require("../../controllers/empleado.controller");
 const { checkToken } = require("../../middleware/auth.middleware");
 
@@ -201,7 +202,7 @@ router.get('/role', getEmpleadosYRoles);
  *             schema:
  *               $ref: '#/components/schemas/Empleado'
  */
-router.get("/:empleadoId", checkempleadosId, getById);
+router.get("/:empleadoId", checkempleadosId, getByEmpleadoId);
 /**
  * @swagger
  * /empleados:
