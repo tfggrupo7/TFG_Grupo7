@@ -262,6 +262,9 @@ const create = async (req, res) => {
     // Contenido HTML del email
     const emailSubject = 'Bienvenido - Configura tu contraseña';
     const emailHtml = `
+    <div style="width:80px; height:80px; margin-right:16px;">
+                   <img src="cid:logo" width="60" height="60" style="margin-right:16px;">
+                  </div>
       <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6 border border-gray-200">
   <h2 class="text-2xl font-bold text-green-600 mb-2">¡Bienvenido ${nombre}!</h2>
   <p class="text-gray-700 mb-2">Has sido registrado en nuestro sistema.</p>

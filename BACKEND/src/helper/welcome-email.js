@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const path = require('path');
 
 // Crear el transporter
 const transporter = nodemailer.createTransport({
@@ -30,7 +31,12 @@ async function sendHtmlEmail(to, subject, html) {
     from: '"ChefDesk" <waltra2@gmail.com>',
     to,
     subject,
-    html,     
+    html, 
+    attachments: [{
+      filename: 'logoPNG.png',
+      path: path.join(__dirname, 'images', 'logoPNG.png'),
+      cid: 'logo'
+    }]    
   };
 
   return transporter.sendMail(mailOptions);
