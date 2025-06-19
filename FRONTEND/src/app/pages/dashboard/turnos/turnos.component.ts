@@ -12,7 +12,7 @@ import { TurnosService } from '../../../core/services/turnos.service';
 import { ITurnos } from '../../../interfaces/iturnos.interfaces';
 import { TurnosModalComponent } from './turnos-modal/turnos-modal.component';
 import { EmpleadosService } from '../../../core/services/empleados.service';
-import { RolesService }     from '../../../core/services/roles.service';
+import { RolesService } from '../../../core/services/roles.service';
 
 @Component({
   selector: 'app-turnos',
@@ -52,9 +52,9 @@ export class TurnosComponent implements OnInit {
 
   // + maps
   empleadosMap = new Map<number, string>();
-  rolesMap     = new Map<number, string>();
+  rolesMap = new Map<number, string>();
 
-  constructor(private turnosService: TurnosService, private empleadosService: EmpleadosService, private rolesService: RolesService) {}
+  constructor(private turnosService: TurnosService, private empleadosService: EmpleadosService, private rolesService: RolesService) { }
 
   /**
    * Ciclo de vida — al inicializar:
@@ -100,8 +100,10 @@ export class TurnosComponent implements OnInit {
     }
   }
 
-  /** Devuelve la fecha de hoy formateada en español (e.g. "Martes, 18 de Junio 2025") */
-  get todayFormatted(): string {
+/** 
+ * Devuelve la fecha de hoy formateada en español (e.g. "Martes, 18 de Junio 2025").
+ * Utiliza arrays de días y meses para mostrar el nombre completo.
+ */  get todayFormatted(): string {
     const hoy = new Date();
     const dias = [
       'Domingo',
@@ -126,13 +128,14 @@ export class TurnosComponent implements OnInit {
       'Noviembre',
       'Diciembre',
     ];
-    return `${dias[hoy.getDay()]}, ${hoy.getDate()} de ${
-      meses[hoy.getMonth()]
-    } ${hoy.getFullYear()}`;
+    return `${dias[hoy.getDay()]}, ${hoy.getDate()} de ${meses[hoy.getMonth()]
+      } ${hoy.getFullYear()}`;
   }
 
-  /** Rellena `currentWeekDates` con las 7 fechas (YYYY‑MM‑DD) de la semana corriente */
-  setCurrentWeekDates() {
+/**
+ * Calcula y rellena `currentWeekDates` con las 7 fechas (YYYY‑MM‑DD) de la semana corriente.
+ * El primer día es lunes y el último domingo, siguiendo la convención española.
+ */  setCurrentWeekDates() {
     const today = new Date();
     const firstDayOfWeek = new Date(today);
     // Ajustar a lunes (Intl API: week starts Monday en ES)
@@ -144,30 +147,39 @@ export class TurnosComponent implements OnInit {
     });
   }
 
-  /** Abre modal en modo creación o edición */
-  openModal(dayIndex: number, hour: number, turno?: ITurnos) {
+/**
+ * Abre el modal para crear o editar un turno.
+ * Recibe el índice del día, la hora y opcionalmente el turno a editar.
+ * Actualiza los estados internos para el modal.
+ */  openModal(dayIndex: number, hour: number, turno?: ITurnos) {
     this.selectedDayIndex = dayIndex;
     this.selectedHour = hour;
     this.selectedTurno = turno ?? null;
     this.isModalOpen = true;
   }
 
-  /** Cierra modal y limpia selección */
-  closeModal() {
+/**
+ * Cierra el modal y limpia la selección de turno.
+ * Restablece los flags y variables asociadas al modal.
+ */  closeModal() {
     this.isModalOpen = false;
     this.selectedTurno = null;
   }
 
-  /** Alta de un turno (llamado por output del modal) */
-  async createTurno(turno: ITurnos) {
+/**
+ * Alta de un turno (llamado por output del modal).
+ * Envía el nuevo turno al backend, refresca la cuadrícula y cierra el modal.
+ */  async createTurno(turno: ITurnos) {
     await this.turnosService.createTurno(turno);
     await this.cargarTurnos(); // refresh grid
     await this.cargarTurnosHoy();
     this.closeModal();
   }
 
-  /** Edición de turno existente */
-  async updateTurno(turno: ITurnos) {
+/**
+ * Edición de turno existente.
+ * Actualiza el turno en el backend, refresca la cuadrícula y cierra el modal.
+ */  async updateTurno(turno: ITurnos) {
     if (!turno.id) return;
     await this.turnosService.updateTurno(turno.id, turno);
     await this.cargarTurnos();
@@ -175,8 +187,10 @@ export class TurnosComponent implements OnInit {
     this.closeModal();
   }
 
-  /** Borrado hard de turno */
-  async deleteTurno() {
+/**
+ * Borrado hard de turno seleccionado.
+ * Elimina el turno en el backend, refresca la cuadrícula y cierra el modal.
+ */  async deleteTurno() {
     if (!this.selectedTurno?.id) return;
     await this.turnosService.deleteTurno(this.selectedTurno.id);
     await this.cargarTurnos();
@@ -184,8 +198,10 @@ export class TurnosComponent implements OnInit {
     this.closeModal();
   }
 
-  /** YYYY‑MM‑DD de hoy */
-  get todayStr(): string {
+/**
+ * Devuelve la fecha de hoy en formato YYYY‑MM‑DD (ISO 8601).
+ * Se utiliza para filtrar turnos del día.
+ */  get todayStr(): string {
     return new Date().toISOString().slice(0, 10);
   }
 
@@ -206,45 +222,59 @@ export class TurnosComponent implements OnInit {
     return this.turnos.filter((t) => t.estado.toLowerCase() === 'confirmado').length;
   }
 
+  /**
+ * Devuelve el número de turnos pendientes (estado 'pendiente').
+ * Se utiliza como métrica KPI en la cabecera.
+ */
   get pendingShiftsCount(): number {
     return this.turnos.filter((t) => t.estado.toLowerCase() === 'pendiente').length;
   }
 
+  /**
+ * Devuelve el número de turnos completados (estado 'completado').
+ * Se utiliza como métrica KPI en la cabecera.
+ */
   get completedShiftsCount(): number {
     return this.turnos.filter((t) => t.estado.toLowerCase() === 'completado').length;
   }
 
-  /** Habilita drop en las celdas del grid */
+  /**
+   * Permite el drop en las celdas del grid de turnos.
+   * Previene el comportamiento por defecto del navegador.
+   */
   allowDrop(event: DragEvent) {
     event.preventDefault();
   }
 
   /** Guarda el turno que se está arrastrando */
- onDragStart(turno: ITurnos) {
-  this.draggedTurno = turno;
-}
+  onDragStart(turno: ITurnos) {
+    this.draggedTurno = turno;
+  }
 
   /**
    * Drop handler: actualiza turno con nueva fecha/hora.
    * Reutiliza `updateTurno` para persistir el cambio.
    */
   async onDrop(event: DragEvent, dayIndex: number, hour: number) {
-  event.preventDefault();
-  if (this.draggedTurno) {
-    this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
-    this.draggedTurno.hora = hour;
-    this.draggedTurno.hora_inicio = `${hour.toString().padStart(2, '0')}:00`;
-    const endHour = hour + this.draggedTurno.duracion;
-    this.draggedTurno.hora_fin = `${endHour.toString().padStart(2, '0')}:00`;
+    event.preventDefault();
+    if (this.draggedTurno) {
+      this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
+      this.draggedTurno.hora = hour;
+      this.draggedTurno.hora_inicio = `${hour.toString().padStart(2, '0')}:00`;
+      const endHour = hour + this.draggedTurno.duracion;
+      this.draggedTurno.hora_fin = `${endHour.toString().padStart(2, '0')}:00`;
 
-    // Actualiza en backend
-    await this.updateTurno(this.draggedTurno);
+      // Actualiza en backend
+      await this.updateTurno(this.draggedTurno);
 
-    this.draggedTurno = null;
+      this.draggedTurno = null;
+    }
   }
-}
 
-  /** Devuelve nombre completo del día dado su índice (0=Lunes) */
+  /**
+   * Devuelve el nombre completo del día de la semana dado su índice (0=Lunes).
+   * Utilizado para mostrar encabezados de la cuadrícula.
+   */
   getDayName(index: number): string {
     return [
       'Lunes',
@@ -257,29 +287,40 @@ export class TurnosComponent implements OnInit {
     ][index];
   }
 
-  /** Click en un turno existente: abre modal en modo edición */
+  /**
+   * Click en un turno existente: abre el modal en modo edición.
+   * Calcula el índice del día y la hora del turno seleccionado.
+   */
   onTurnoClick(turno: ITurnos) {
     const dayIndex = this.currentWeekDates.indexOf(turno.fecha);
     this.openModal(dayIndex, turno.hora, turno);
   }
 
+  /**
+   * Calcula la duración en horas decimales entre dos horas (formato HH:mm).
+   * Devuelve el resultado redondeado a dos decimales.
+   */
   calcularDuracion(horaInicio: string, horaFin: string): number {
-  if (!horaInicio || !horaFin) return 0;
-  const [h1, m1] = horaInicio.split(':').map(Number);
-  const [h2, m2] = horaFin.split(':').map(Number);
-  return +( (h2 + m2 / 60) - (h1 + m1 / 60) ).toFixed(2);
-}
-
-getEstadoClase(estado: string): string {
-  switch (estado?.toLowerCase()) {
-    case 'completado':
-      return 'bg-green-100 text-green-700 border border-green-300';
-    case 'pendiente':
-      return 'bg-yellow-100 text-yellow-700 border border-yellow-300';
-    case 'confirmado':
-      return 'bg-blue-100 text-blue-700 border border-blue-300';
-    default:
-      return 'bg-gray-100 text-gray-700 border border-gray-300';
+    if (!horaInicio || !horaFin) return 0;
+    const [h1, m1] = horaInicio.split(':').map(Number);
+    const [h2, m2] = horaFin.split(':').map(Number);
+    return +((h2 + m2 / 60) - (h1 + m1 / 60)).toFixed(2);
   }
-}
+
+  /**
+   * Devuelve la clase CSS correspondiente al estado del turno.
+   * Permite colorear visualmente los turnos según su estado.
+   */
+  getEstadoClase(estado: string): string {
+    switch (estado?.toLowerCase()) {
+      case 'completado':
+        return 'bg-green-100 text-green-700 border border-green-300';
+      case 'pendiente':
+        return 'bg-yellow-100 text-yellow-700 border border-yellow-300';
+      case 'confirmado':
+        return 'bg-blue-100 text-blue-700 border border-blue-300';
+      default:
+        return 'bg-gray-100 text-gray-700 border border-gray-300';
+    }
+  }
 }
