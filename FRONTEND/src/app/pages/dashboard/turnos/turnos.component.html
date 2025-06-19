@@ -79,9 +79,10 @@
   {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
 </p>
           </div>
-          <div class="text-xs rounded-full px-2 py-1 bg-[#556B2F]/20 text-[#556B2F] font-medium">
-            {{ turno.estado | titlecase }}
-          </div>
+          <div class="text-xs rounded-full px-2 py-1 font-medium"
+     [ngClass]="getEstadoClase(turno.estado)">
+  {{ turno.estado | titlecase }}
+</div>
         </div>
       </ng-container>
       <!-- Estado vacío -->
