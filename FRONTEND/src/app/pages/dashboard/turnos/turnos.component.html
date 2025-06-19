@@ -76,7 +76,7 @@
           <div class="text-right">
             <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
             <p class="text-sm text-[#1C1C1C]/70">
-  {{ turno.duracion | number:'1.0-2' }} horas
+  {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
 </p>
           </div>
           <div class="text-xs rounded-full px-2 py-1 bg-[#556B2F]/20 text-[#556B2F] font-medium">

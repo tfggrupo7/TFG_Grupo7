@@ -263,4 +263,11 @@ export class TurnosComponent implements OnInit {
     const dayIndex = this.currentWeekDates.indexOf(turno.fecha);
     this.openModal(dayIndex, turno.hora, turno);
   }
+
+  calcularDuracion(horaInicio: string, horaFin: string): number {
+  if (!horaInicio || !horaFin) return 0;
+  const [h1, m1] = horaInicio.split(':').map(Number);
+  const [h2, m2] = horaFin.split(':').map(Number);
+  return +( (h2 + m2 / 60) - (h1 + m1 / 60) ).toFixed(2);
+}
 }
