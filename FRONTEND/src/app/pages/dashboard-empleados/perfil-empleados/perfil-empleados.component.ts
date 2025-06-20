@@ -25,7 +25,7 @@ export class PerfilEmpleadosComponent {
   };
   datosForm!: FormGroup;
   passwordForm!: FormGroup;
-
+currentUser: any = null;
   constructor(
     private empleadosService: EmpleadosService,
     private router: Router,
@@ -33,9 +33,6 @@ export class PerfilEmpleadosComponent {
   ) {}
 
   ngOnInit() {
-    // Inicializa el usuario antes de usarlo (puedes cargarlo desde un servicio si lo necesitas)
-    // this.usuario = ...;
-
     this.datosForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
@@ -53,6 +50,7 @@ export class PerfilEmpleadosComponent {
       },
       { validators: [this.passwordsMatchValidator] }
     );
+    this.loadCurrentEmpleado();
   }
 
   // Validador de coincidencia de contraseñas
@@ -71,6 +69,13 @@ export class PerfilEmpleadosComponent {
       return null;
     }
   }
+  async loadCurrentEmpleado() {
+  try {
+    this.currentUser = await this.empleadosService.getCurrentUser()
+  } catch (error) {
+    console.error('Error cargando empleado:', error);
+  }
+}
 
   async actualizarEmpleado() {
     if (this.datosForm.invalid) {

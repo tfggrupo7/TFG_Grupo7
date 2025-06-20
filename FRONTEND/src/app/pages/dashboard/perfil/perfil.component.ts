@@ -28,7 +28,7 @@ export class PerfilComponent implements OnInit {
 
   datosForm!: FormGroup;
   passwordForm!: FormGroup;
-
+  currentUser: any = null;
   constructor(
     private usuariosService: UsuarioService,
     private router: Router,
@@ -60,7 +60,15 @@ export class PerfilComponent implements OnInit {
       email: this.usuario.email,
       apellidos: this.usuario.apellidos,
     });
+    this.loadCurrentUser();
   }
+async loadCurrentUser() {
+  try {
+    this.currentUser = await this.usuariosService.getCurrentUser()
+  } catch (error) {
+    console.error('Error cargando usuario:', error);
+  }
+}
 
   // Validador de coincidencia de contraseñas
   passwordsMatchValidator(form: FormGroup) {

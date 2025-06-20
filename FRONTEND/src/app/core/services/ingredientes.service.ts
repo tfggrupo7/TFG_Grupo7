@@ -43,6 +43,19 @@ export class IngredientesService {
     );
   }
 
+getAllIngredientes(): Promise<IIngredientes[]> {
+  const token = localStorage.getItem('token'); // Asegúrate de obtener el token
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  });
+
+  return lastValueFrom(this.httpClient.get<IIngredientes[]>(`${this.url}/all`, { headers }));
+}
+
+
+
+
   getIngredienteById(id: number): Promise<IIngredientes> {
     const token = localStorage.getItem('token');
   const headers = new HttpHeaders({

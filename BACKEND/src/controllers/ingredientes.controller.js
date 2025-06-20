@@ -1,5 +1,11 @@
 const Ingrediente = require("../models/ingrediente.model");
 
+const AllIngredientes = async (req, res) => {
+  const ingredientes = await Ingrediente.selectIngredientesConProblemasDeStock();
+  res.json(ingredientes);
+};
+
+
 const getAll = async (req, res) => {
   const { page = 1, limit = 10, search = "", orderBy='cantidad', direction = ""} = req.query;
   const { rows, total } = await Ingrediente.selectAll(
@@ -51,4 +57,4 @@ const remove = async (req, res) => {
   res.json({ message: "Ingrediente eliminado", data: ingredientes });
 };
 
-module.exports = { getAll , getById, getSummary, create, update, remove };
+module.exports = { getAll , AllIngredientes, getById, getSummary, create, update, remove };

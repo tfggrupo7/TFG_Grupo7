@@ -1,97 +1,161 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { IIngredientes } from '../../../interfaces/iingredientes.interfaces';
+import { IngredientesService } from '../../../core/services/ingredientes.service';
+import { toast } from 'ngx-sonner';
+import { Router } from '@angular/router';
+import { debounceTime } from 'rxjs/operators';
+import { InventarioFormEmpleadosComponent } from '../inventario-empleados/inventario-form-empleados/inventario-form-empleados.component';
+import { ModalComponent } from "../../../shared/components/modal/modal.component";
+import { IInventarioResumen } from '../../../interfaces/iinventarioresumen.interface';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+
+
 @Component({
   selector: 'app-inventario-empleados',
-  imports: [CommonModule],
   templateUrl: './inventario-empleados.component.html',
-  styleUrl: './inventario-empleados.component.css'
+  styleUrls: ['./inventario-empleados.component.css'],
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, InventarioFormEmpleadosComponent, ModalComponent],
 })
-export class InventarioEmpleadosComponent {
-// Datos de ejemplo para las métricas
-  metrics = {
-    totalProductos: {
-      valor: '15',
-      cambio: '3%',
-      tendencia: '↑'
-    },
-    productosBajoStock: {
-      valor: '6',
-      cambio: '2%',
-      tendencia: '↓'
-    },
-    categorias: {
-      valor: '8'
-    },
-    proveedores: {
-      valor: '11'
-    },
-    ultimaActualizacion: {
-      valor: '25 de mayo de 2025'
-    },
-    categoriaMasUsada: {
-      valor: 'Otros'
+export class InventarioEmpleadosComponent implements OnInit {
+  ingredientes: IIngredientes[] = [];
+  arrIngredientes: IIngredientes[] = [];
+  ingredientesFiltrados: IIngredientes[] = [];
+  currentPage: number = 1;
+  totalPages: number = 1;
+  pageSize: number = 10;
+  sort = { campo: 'nombre', direccion: 'ASC' };
+  fecha: Date = new Date();
+  
+  modalIngredienteAbierto = false;
+  empleadoLogueado: string = '';
+  ingredienteId!: number;
+  searchTerm = new FormControl('');
+
+  totalItems = 0;
+  ingrediente!: IIngredientes | null;
+  summary!: IInventarioResumen;
+
+  ingredientesService = inject(IngredientesService)
+  router = inject(Router)
+
+  constructor() {
+    registerLocaleData(localeEs, 'es-ES');
+  }
+
+  async ngOnInit() {
+    this.searchTerm.valueChanges.pipe(debounceTime(300)).subscribe(() => {
+      this.currentPage = 1; // resetea a la primera página
+      this.init()
+    });
+
+    this.searchTerm.setValue('');
+  }
+
+  init() {
+    this.cargarResumen()
+    this.cargarIngredientes()
+  }
+
+  async cargarResumen() {
+    this.summary = await this.ingredientesService.getResumen();
+  }
+
+  async cargarIngredientes() {
+    const search = this.searchTerm.value ?? '';
+
+    this.ingredientes = await this.ingredientesService.getIngredientes(
+      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion
+    );
+
+    this.ingredientesFiltrados = this.ingredientes;
+    this.totalItems  = this.ingredientesService.totalItems;
+    this.totalPages  = Math.ceil(this.totalItems / this.pageSize);
+  }
+
+  // paginación
+  primera()   { if (this.currentPage !== 1)                 { this.currentPage = 1;                 this.cargarIngredientes(); } }
+  anterior()  { if (this.currentPage > 1)                   { this.currentPage--;                   this.cargarIngredientes(); } }
+  siguiente() { if (this.currentPage < this.totalPages)     { this.currentPage++;                   this.cargarIngredientes(); } }
+  ultima()    { if (this.currentPage !== this.totalPages)   { this.currentPage = this.totalPages;   this.cargarIngredientes(); } }
+
+
+  abrirModal(ingrediente?: IIngredientes) {
+    this.ingrediente = ingrediente ? ingrediente : null;
+    this.modalIngredienteAbierto = true;
+  }
+
+  cerrarModal() {
+    this.modalIngredienteAbierto = false;
+  }
+
+  agregarActualizarIngrediente(ingrediente: IIngredientes) {
+    if (ingrediente.id) {
+      this.actualizarIngrediente(ingrediente);
+      this.init()
+    } else {
+      this.agregarIngrediente(ingrediente);
+      this.init()
     }
-  };
+    this.cerrarModal();
+  }
 
-  // Datos de ejemplo para la tabla de productos
-  productos = [
-    {
-      nombre: 'Tomates',
-      categoria: 'Frutas y Verduras',
-      cantidad: '25 kg',
-      proveedor: 'Huerta Orgánica S.L.',
-      estado: 'En stock',
-      ultimaActualizacion: '2023-05-15'
-    },
-    {
-      nombre: 'Pechuga de Pollo',
-      categoria: 'Carnes',
-      cantidad: '15 kg',
-      proveedor: 'Carnes Premium S.A.',
-      estado: 'En stock',
-      ultimaActualizacion: '2023-05-16'
-    },
-    {
-      nombre: 'Aceite de Oliva',
-      categoria: 'Otros',
-      cantidad: '5 l',
-      proveedor: 'Aceites del Sur',
-      estado: 'Bajo stock',
-      ultimaActualizacion: '2023-05-14'
+  async agregarIngrediente(ingrediente: IIngredientes) {
+    try {
+      await this.ingredientesService.createIngrediente(ingrediente);
+      toast.success('Ingrediente agregado correctamente');
+      this.init()
+    } catch (error) {
+      toast.error('Error al agregar ingrediente');
     }
-  ];
-
-  // Estado del filtro de búsqueda
-  searchTerm: string = '';
-
-  constructor() { }
-
-  ngOnInit(): void {
   }
 
-  // Método para añadir un nuevo producto
-  agregarProducto(): void {
-    // Implementar lógica para añadir producto
-    console.log('Añadiendo nuevo producto...');
+  async actualizarIngrediente(ingrediente: IIngredientes) {
+    try {
+      const ingredienteActualizado = { ...ingrediente, id: ingrediente.id };
+      await this.ingredientesService.updateIngrediente(ingrediente.id, ingredienteActualizado);
+      this.init()
+      toast.success('Ingrediente actualizado correctamente');
+    } catch (error) {
+      toast.error('Error al actualizar ingrediente');
+    }
   }
 
-  // Método para editar un producto
-  editarProducto(producto: any): void {
-    // Implementar lógica para editar producto
-    console.log('Editando producto:', producto);
+  async delete(ingrediente: IIngredientes) {
+    toast(`¿Deseas Borrar al Ingrediente ${ingrediente?.nombre}?`, {
+      action: {
+        label: 'Aceptar',
+        onClick: () => this.deleteIngrediente(ingrediente.id),
+        
+      },
+      duration: 6000,
+    });
+    this.init()
   }
 
-  // Método para eliminar un producto
-  eliminarProducto(producto: any): void {
-    // Implementar lógica para eliminar producto
-    console.log('Eliminando producto:', producto);
+  private async deleteIngrediente(id: number) {
+    try {
+      /* (opcional) desactiva UI: cambia bandera isDeleting = true … */
+      await this.ingredientesService.deleteIngrediente(id);
+      toast.success('Ingrediente eliminado con éxito');
+      this.init()
+    } catch (err) {
+      console.error('Error al eliminar:', err);
+      toast.error('Error al eliminar el ingrediente');
+    }
   }
 
-  // Método para filtrar productos
-  filtrarProductos(): void {
-    // Implementar lógica de filtrado
-    console.log('Filtrando productos...');
+  async getDataOrderBy(orderBy: string) {
+    if(this.sort.campo === orderBy){
+      this.sort.direccion = this.sort.direccion === 'ASC' ? 'DESC' : 'ASC';
+    }else {
+      this.sort.campo = orderBy
+      this.sort.direccion = 'ASC'
+    }
+
+    this.cargarIngredientes()
   }
 }
-
-

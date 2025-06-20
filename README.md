@@ -77,7 +77,7 @@ FRONTEND/
    ```
 3. Inicia el servidor:
    ```sh
-   npm start
+   npm start o npm run dev(desarrollo)
    ```
    El backend estará disponible normalmente en `http://localhost:3000`.
 
@@ -92,7 +92,7 @@ FRONTEND/
    ```
 3. Inicia la aplicación Angular:
    ```sh
-   npm start
+   npm start o ng s(desarrollo)
    ```
    La aplicación estará disponible en `http://localhost:4200`.
 
