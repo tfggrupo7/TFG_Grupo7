@@ -4,159 +4,236 @@ import { EmpleadosService } from '../../../core/services/empleados.service';
 import { toast } from 'ngx-sonner';
 import { IRoles } from '../../../interfaces/iroles.interfaces';
 import { RolesService } from '../../../core/services/roles.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormGroup , FormControl, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { LoaderService } from '../../../core/services/loader.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-personal',
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './personal.component.html',
-  styleUrls: ['./personal.component.css']
+  styleUrls: ['./personal.component.css'],
 })
 export class PersonalComponent {
-  empleados: IEmpleados[]=[];
-  arrEmpleados: IEmpleados []=[];
-  currentPage: number = 1;
-  totalPages: number = 1;
-  roles:IRoles[] = [];
+  arrEmpleados: IEmpleados[] = [];
+  arrRoles: IRoles[] = [];
+  empleadosFiltrados: IEmpleados[] = [];
   modalEmpleadoAbierto = false;
-  userForm: FormGroup = new FormGroup({},[]);
-  empleadosFiltrados: IEmpleados[] = []; 
+  modalUpdateEmpleadoAbierto = false;
+  userForm: FormGroup = new FormGroup({});
   busqueda = new FormControl('');
-  
-  constructor(private empleadoService: EmpleadosService, private rolesService: RolesService, private router: Router){}
+  empleadoId!: number;
+  loaderService = inject(LoaderService);
 
+  constructor(
+    private empleadoService: EmpleadosService,
+    private rolesService: RolesService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   async ngOnInit() {
-    this.cargarEmpleados();
-    this.cargarRoles();
+    await this.cargarEmpleados();
+    this.arrRoles = await this.rolesService.getRoles();
+
+    const userId = this.getUserIdFromToken();
 
     this.userForm = new FormGroup({
-      id: new FormControl(null, []),
-      nombre: new FormControl("", Validators.required),
+      id: new FormControl(null),
+      nombre: new FormControl('', Validators.required),
+      apellidos: new FormControl('', Validators.required),
       rol_id: new FormControl<number | null>(null, Validators.required),
-      telefono: new FormControl("", [Validators.required, Validators.pattern('^[0-9]+$')]),
-      email: new FormControl("", [Validators.required, Validators.email]),
-      fecha_inicio: new FormControl("", Validators.required),
-      salario: new FormControl("", Validators.required),
-      activo: new FormControl("", Validators.required)
+      telefono: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]+$'),
+      ]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      fecha_inicio: new FormControl('', Validators.required),
+      salario: new FormControl('', Validators.required),
+      usuario_id: new FormControl(userId),
+      activo: new FormControl('', Validators.required),
     });
 
-    this.empleados = await this.empleadoService.getEmpleados();
-  this.empleadosFiltrados = this.empleados;
-
-  this.busqueda.valueChanges.subscribe(valor => {
-    this.filtrarEmpleados(valor ? valor : '');
-  });
-    this.busqueda.setValue(''); // Inicializar el campo de búsqueda vacío
-    this.userForm.valueChanges.subscribe(value => {
-      console.log('Form changes:', value);
-    });
-   }
-   
-
-   filtrarEmpleados(valor: string) {
-    console.log('Filtrando empleados con valor:', valor);
-    if (!Array.isArray(this.empleados)) {
     this.empleadosFiltrados = [];
-    return;
+
+    this.busqueda.valueChanges.subscribe((valor) => {
+      this.filtrarEmpleados(valor || '');
+    });
+    this.busqueda.setValue(''); // Inicializar el campo de búsqueda vacío
   }
-    const texto = (valor || '').toLowerCase();
+
+  filtrarEmpleados(valor: string) {
+    const texto = valor.trim().toLowerCase();
     if (!texto) {
-      this.empleadosFiltrados = this.empleados;
+      this.empleadosFiltrados = []; // No mostrar ninguno si no hay búsqueda
       return;
     }
-    this.empleadosFiltrados = this.empleados.filter(emp =>
-      emp.nombre.toLowerCase().includes(texto) ||
-      emp.email.toLowerCase().includes(texto)
-      
+    this.empleadosFiltrados = this.arrEmpleados.filter((emp: IEmpleados) =>
+      emp.nombre.toLowerCase().includes(texto)
     );
-    
   }
 
-
-
-  async cargarEmpleados(page: number = 1) {
+  async cargarEmpleados() {
     try {
-      const response = await this.empleadoService.cargarEmpleados(page);
-      if (response) {
-        this.arrEmpleados = response.data;
-        this.currentPage = response.page;
-        
-      }
-    } catch (msg: any) {
-      toast.error(msg.error || 'Error al cargar usuarios');
+      const userId = Number(this.getUserIdFromToken());
+      const empleados = await this.empleadoService.getEmpleados();
+      this.arrEmpleados = empleados.filter(
+        (emp: IEmpleados) => emp.usuario_id === userId
+      );
+    } catch (error: any) {
+      toast.error(error?.error || 'Error al cargar empleados');
     }
   }
+
+  getNombreRol(rol_id: number): string {
+    const rol = this.arrRoles.find((r: IRoles) => r.id === rol_id);
+    return rol ? rol.nombre : 'Sin rol';
+  }
+
   get totalActivos(): number {
-  return this.arrEmpleados.filter(e => e.activo).length;
-}
+    return this.arrEmpleados.filter((e: IEmpleados) => e.activo).length;
+  }
+
   get totalEnVacaciones(): number {
-  return this.arrEmpleados.filter(e => e.status === 'vacaciones').length;
-}
+    return this.arrEmpleados.filter(
+      (e: IEmpleados) => e.activo === 'VACACIONES'
+    ).length;
+  }
+
   get totalSalario(): number {
-  return this.arrEmpleados.reduce((total, empleado) => total + Number(empleado.salario),0);
+    return this.arrEmpleados.reduce(
+      (total: number, empleado: IEmpleados) => total + Number(empleado.salario),
+      0
+    );
   }
 
-
-esActivo(empleado: any): string {
-  return empleado.activo ? 'ACTIVO' : 'INACTIVO';
-}
-  esEnVacaciones(empleado: any): string {
-    return empleado.status === 'vacaciones' ? 'EN VACACIONES' : "";
+  esActivo(empleado: IEmpleados): string {
+    return empleado.activo ? 'ACTIVO' : 'INACTIVO';
   }
-async cargarRoles(): Promise<void> {
+
+  esEnVacaciones(empleado: IEmpleados): string {
+    return empleado.status === 'vacaciones' ? 'EN VACACIONES' : '';
+  }
+
+  abrirModal() {
+    this.modalEmpleadoAbierto = true;
+  }
+
+  cerrarModal() {
+    this.modalEmpleadoAbierto = false;
+  }
+
+  cerrarModalUpdate() {
+    this.modalUpdateEmpleadoAbierto = false;
+  }
+
+  abrirModalUpdate(empleado: IEmpleados) {
+    this.modalUpdateEmpleadoAbierto = true;
+    this.empleadoId = empleado.id;
+    this.userForm.patchValue({
+      id: empleado.id,
+      nombre: empleado.nombre,
+      apellidos: empleado.apellidos,
+      rol_id: empleado.rol_id,
+      telefono: empleado.telefono,
+      email: empleado.email,
+      fecha_inicio: empleado.fecha_inicio,
+      salario: empleado.salario,
+      usuario_id: empleado.usuario_id,
+      activo: empleado.activo,
+    });
+  }
+
+  getUserIdFromToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    const payload = token.split('.')[1];
+    if (!payload) return null;
     try {
-      this.roles = await this.rolesService.getRoles();
-    } catch (error) {
-      toast.error('Error al cargar roles');
-    }
-}
-
-  empleadoYroles(empleado: IEmpleados): string {
-    const roles = empleado.role.map(role => role.nombre).join(', ');
-    return roles;
-}
-  
-  async gotoNext() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      await this.cargarEmpleados(this.currentPage);
+      const decoded = JSON.parse(atob(payload));
+      return decoded.usuario_id || null;
+    } catch (e) {
+      return null;
     }
   }
 
-  async gotoPrev() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      await this.cargarEmpleados(this.currentPage);
+  async getDataForm() {
+    if (this.userForm.invalid) {
+      toast.error('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
+    try {
+      await this.empleadoService.createEmpleado(this.userForm.value);
+      toast.success('Empleado registrado correctamente');
+      setTimeout(() => {
+        this.router.navigate(['/dashboard', 'personal']).then(() => {
+          window.location.reload();
+          this.cerrarModal();
+        });
+      }, 3000);
+    } catch {
+      toast.error('Fallo en el registro');
     }
   }
 
-
-
-abrirModal() {
-  this.modalEmpleadoAbierto = true;
-}
-
-cerrarModal() {
-  this.modalEmpleadoAbierto = false;
-}
-async getDataForm() {
-  let response: IEmpleados | any;
-  try {
-    console.log('Form values:', this.userForm.value);
-    response = await this.empleadoService.createEmpleado(this.userForm.value);
-    console.log('API response:', response);
-    toast.success("Usuario registrado correctamente");
-    setTimeout(() => {
-      this.router.navigate(['/dashboard']);
-    }, 3000); 
-  } catch (msg: any) {
-    console.log('Error:', msg);
-    toast.error("El usuario que intentas editar no existe");
+  async updateDataForm() {
+    if (this.userForm.invalid) {
+      toast.error('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
+    try {
+      const empleadoActualizado: IEmpleados = {
+        ...this.userForm.value,
+        id: this.empleadoId,
+      };
+      await this.empleadoService.updateEmpleado(empleadoActualizado);
+      toast.success('Empleado Actualizado correctamente');
+      this.router.navigate(['/dashboard', 'personal']).then(() => {
+        setTimeout(() => {
+          window.location.reload();
+          this.cerrarModalUpdate();
+        }, 1000);
+      });
+    } catch {
+      toast.error('Fallo al actualizar el empleado');
+    }
   }
-}
+
+  async delete(id: number) {
+    const empleado = this.arrEmpleados.find((e) => e.id === id);
+    const nombreEmpleado = empleado ? empleado.nombre : 'Empleado';
+
+    toast(`¿Deseas Borrar al Empleado ${nombreEmpleado}?`, {
+      action: {
+        label: 'Aceptar',
+        onClick: async () => {
+          try {
+            await this.empleadoService.deleteEmpleado(id);
+            toast.success('Empleado eliminado con éxito', { duration: 2000 });
+            this.router.navigate(['/dashboard', 'personal']).then(() => {
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
+            });
+          } catch (error: any) {
+            toast.error('Error al eliminar el usuario');
+          }
+        },
+      },
+    });
+  }
+
+  deleteEmpleado(id: number) {
+    this.arrEmpleados = this.arrEmpleados.filter(
+      (empleado) => empleado.id !== id
+    );
+    toast.success('Empleado eliminado con éxito');
+  }
 }

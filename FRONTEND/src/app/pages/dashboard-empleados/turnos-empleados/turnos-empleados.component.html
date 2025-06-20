@@ -1,0 +1,196 @@
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
+    <div>
+      <h1 class="text-2xl font-bold text-[#556B2F]">Gestión de Turnos</h1>
+      <p class="text-[#1C1C1C]/70">Organiza los horarios de tu equipo</p>
+    </div>
+    <button data-open-modal="turno"
+      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-plus h-4 w-4">
+        <path d="M5 12h14"></path>
+        <path d="M12 5v14"></path>
+      </svg>Programar Turno
+    </button>
+  </div>
+
+  <!-- Tarjetas de estadísticas -->
+  <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#556B2F] bg-[#556B2F]/5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Activos</p>
+          <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">3</h3>
+        </div>
+        <div class="rounded-full p-2 flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-user-check h-5 w-5 md:h-6 md:w-6">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <polyline points="16 11 18 13 22 9"></polyline>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#D4AF37] bg-[#D4AF37]/5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Programados</p>
+          <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">1</h3>
+        </div>
+        <div class="rounded-full p-2 flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-clock h-5 w-5 md:h-6 md:w-6">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#556B2F] bg-[#556B2F]/5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Completados</p>
+          <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">1</h3>
+        </div>
+        <div class="rounded-full p-2 flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-calendar h-5 w-5 md:h-6 md:w-6">
+            <path d="M8 2v4"></path>
+            <path d="M16 2v4"></path>
+            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+            <path d="M3 10h18"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#D4AF37] bg-[#D4AF37]/5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-[#1C1C1C]/70">Total Personal Hoy</p>
+          <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">5</h3>
+        </div>
+        <div class="rounded-full p-2 flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-users h-5 w-5 md:h-6 md:w-6">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de turnos de hoy -->
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20" data-v0-t="card">
+    <div class="flex flex-col space-y-1.5 p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">Turnos de Hoy</h3>
+          <p class="text-sm text-muted-foreground">Jueves, 18 de Mayo 2023</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-8 px-3 text-xs border-[#556B2F] text-[#556B2F]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-chevron-left h-4 w-4">
+              <path d="m15 18-6-6 6-6"></path>
+            </svg>
+          </button>
+          <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-8 px-3 text-xs border-[#556B2F] text-[#556B2F]">Hoy</button>
+          <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-8 px-3 text-xs border-[#556B2F] text-[#556B2F]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-chevron-right h-4 w-4">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="p-6 pt-0">
+      <div class="space-y-3">
+        <!-- Aquí irán los turnos individuales -->
+        <div class="flex items-center justify-between p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-[#556B2F]/10 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-users h-6 w-6 text-[#556B2F]">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-medium text-[#1C1C1C]">Ana García</h3>
+              <p class="text-sm text-[#1C1C1C]/70">Chef Ejecutivo</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="text-right">
+              <p class="font-medium text-[#556B2F]">08:00 - 16:00</p>
+              <p class="text-sm text-[#1C1C1C]/70">8 horas</p>
+            </div>
+            <div class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
+              En curso
+            </div>
+          </div>
+        </div>
+        <!-- Más turnos... -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Vista semanal -->
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20" data-v0-t="card">
+    <div class="flex flex-col space-y-1.5 p-6">
+      <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">Vista Semanal</h3>
+      <p class="text-sm text-muted-foreground">Planificación de la semana actual</p>
+    </div>
+    <div class="p-6 pt-0">
+      <div class="grid grid-cols-7 gap-2 text-center">
+        <div class="p-3 rounded-lg bg-gray-50">
+          <div class="font-medium text-sm text-[#1C1C1C]">Lun</div>
+          <div class="text-xs text-[#1C1C1C]/70 mt-1">7 turnos</div>
+        </div>
+        <div class="p-3 rounded-lg bg-gray-50">
+          <div class="font-medium text-sm text-[#1C1C1C]">Mar</div>
+          <div class="text-xs text-[#1C1C1C]/70 mt-1">7 turnos</div>
+        </div>
+        <div class="p-3 rounded-lg bg-gray-50">
+          <div class="font-medium text-sm text-[#1C1C1C]">Mié</div>
+          <div class="text-xs text-[#1C1C1C]/70 mt-1">5 turnos</div>
+        </div>
+        <div class="p-3 rounded-lg bg-[#556B2F]/10 border border-[#556B2F]">
+          <div class="font-medium text-sm text-[#1C1C1C]">Jue</div>
+          <div class="text-xs text-[#1C1C1C]/70 mt-1">5 turnos</div>
+        </div>
+        <div class="p-3 rounded-lg bg-gray-50">
+          <div class="font-medium text-sm text-[#1C1C1C]">Vie</div>
+          <div class="text-xs text-[#1C1C1C]/70 mt-1">3 turnos</div>
+        </div>
+        <div class="p-3 rounded-lg bg-gray-50">
+          <div class="font-medium text-sm text-[#1C1C1C]">Sáb</div>
+          <div class="text-xs text-[#1C1C1C]/70 mt-1">4 turnos</div>
+        </div>
+        <div class="p-3 rounded-lg bg-gray-50">
+          <div class="font-medium text-sm text-[#1C1C1C]">Dom</div>
+          <div class="text-xs text-[#1C1C1C]/70 mt-1">6 turnos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

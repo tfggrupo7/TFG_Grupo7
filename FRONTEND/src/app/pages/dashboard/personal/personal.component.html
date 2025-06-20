@@ -94,34 +94,87 @@
   </div>
 
   <!-- Barra de búsqueda -->
-  <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-    <div class="relative w-full sm:w-80">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="lucide lucide-search absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-[#556B2F]">
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.3-4.3"></path>
-      </svg>
-      <input [formControl]="busqueda" class="flex rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 h-9 w-full pl-8 pr-4 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
-        placeholder="Buscar empleados..." type="search" value="">
-    </div>
+  <div class="relative w-full sm:w-80">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="lucide lucide-search absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-[#556B2F]">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.3-4.3"></path>
+    </svg>
+    <input [formControl]="busqueda"
+      class="flex rounded-md border bg-white py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 h-9 w-full pl-10 pr-4 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+      placeholder="Buscar empleados..." type="search" value="" />
   </div>
 <!-- Lista de empleados filtrados -->
  
 <div>
-    <ul class="mt-4">
-@for(empleado of empleadosFiltrados; track empleado.id) {
-  <li>
-    {{ empleado.nombre }} - {{ empleado.email }}
-  </li>
-}@empty {
-    <li class="text-muted">No se encontraron empleados</li>
-  }
-</ul>
+  <ul class="mt-4">
+    @for (empleado of empleadosFiltrados; track empleado.id) {
+      <li>
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 hover:border-[#556B2F]/30 transition-all duration-200" data-v0-t="card">
+          <div class="flex flex-col space-y-1.5 p-6 pb-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="relative h-12 w-12 rounded-full overflow-hidden border-2 border-[#556B2F]/20">
+                  <img alt="{{empleado.nombre}}" loading="lazy" decoding="async" data-nimg="fill" class="object-cover"
+                    src="../../../../assets/avatar.avif"
+                    style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
+                </div>
+                <div>
+                  <h3 class="font-semibold tracking-tight text-[#556B2F] text-lg">{{empleado.nombre}}</h3>
+                  <p class="text-muted-foreground text-sm">{{getNombreRol(empleado.rol_id)}}</p>
+                </div>
+              </div>
+              <div class="inline-flex text-center items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
+                {{empleado.activo}}
+              </div>
+            </div>
+          </div>
+          <div class="p-6 pt-0 space-y-3">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2 text-sm text-[#1C1C1C]/70">
+                <!-- Email icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-mail h-4 w-4">
+                  <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+                <span>{{empleado.email}}</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-[#1C1C1C]/70">
+                <!-- Phone icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-phone h-4 w-4">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                  </path>
+                </svg>
+                <span>{{empleado.telefono}}</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t border-[#D4AF37]/10">
+              <div class="text-sm">
+                <span class="text-[#1C1C1C]/70 text-[0.8rem] md:text-base">Salario: </span>
+                <span class="font-medium text-[#556B2F] text-[0.7rem] md:text-base">{{empleado.salario}} €</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    }
+    @empty {
+      <li class="text-muted text-center mt-8">No se encontraron empleados</li>
+    }
+  </ul>
 </div>
+    
+ 
+<h2 class="text-lg font-semibold text-[#556B2F] mt-8">Lista de Empleados</h2>
  
   <!-- Lista de empleados -->
-  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+  <div class="grid gap-4 grid-cols-2 md:grid-cols-3">
     <!-- Tarjeta de empleado -->
     @for (empleado of arrEmpleados; track empleado.id) {
     <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 hover:border-[#556B2F]/30 transition-all duration-200"
@@ -135,14 +188,17 @@
                 style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
             </div>
             <div>
-              <h3 class="font-semibold tracking-tight text-[#556B2F] text-lg">{{empleado.nombre}}</h3>
-              @if(roles.length > 0) {
-              <p class="text-muted-foreground text-sm">{{empleadoYroles(empleado)}}</p>
-              }
+              <h3 class="font-semibold tracking-tight text-[#556B2F] text-lg">{{empleado.nombre}} {{empleado.apellidos}}</h3>
+             
+              <p class="text-muted-foreground text-sm">{{getNombreRol(empleado.rol_id)}}</p>
+            
             </div>
           </div>
           <div class="inline-flex text-center items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
-            {{esActivo(empleado)}} <br> {{esEnVacaciones(empleado)}}
+            ID:{{empleado.id}}
+          </div>
+          <div class="inline-flex text-center items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
+            {{empleado.activo}}
           </div>
         </div>
       </div>
@@ -170,12 +226,12 @@
         </div>
         <div class="flex justify-between items-center pt-2 border-t border-[#D4AF37]/10">
           <div class="text-sm">
-            <span class="text-[#1C1C1C]/70">Salario: </span>
-            <span class="font-medium text-[#556B2F]">{{empleado.salario}} €</span>
+            <span class="text-[#1C1C1C]/70 text-[0.8rem] md:text-base">Salario: </span>
+            <span class="font-medium text-[#556B2F] text-[0.7rem] md:text-base">{{empleado.salario}} €</span>
           </div>
           <div class="flex gap-2">
             <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:text-[#556B2F] h-8 px-3 text-xs text-[#556B2F] hover:bg-[#556B2F]/10">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              <svg (click)="abrirModalUpdate(empleado)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-square-pen h-4 w-4">
                 <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -183,7 +239,7 @@
               </svg>
             </button>
             <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:text-[#556B2F] h-8 px-3 text-xs text-red-500 hover:bg-red-50">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              <svg (click)="delete(empleado.id)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-trash2 h-4 w-4">
                 <path d="M3 6h18"></path>
@@ -203,7 +259,7 @@
         <h2 class="text-center text-muted">NO HAY EMPLEADOS</h2>
       }
 </div>
-<!-- Modal Empleado -->
+<!-- Modal Crear Empleado -->
 @if(modalEmpleadoAbierto) {
 <div id="modal-empleado" data-modal-content="empleado">
   <div role="dialog" id="radix-«r8q»" aria-describedby="radix-«r8s»" aria-labelledby="radix-«r8r»" data-state="closed"
@@ -216,9 +272,99 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="space-y-2"><label
             class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            for="name">Nombre completo</label><input
+            for="name">Nombre</label><input
             class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
             id="nombre" formControlName="nombre" placeholder="Ej: Ana García" required="" value="" name="nombre"></div>
+            <div class="space-y-2"><label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="name">Apellidos</label><input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="apellidos" formControlName="apellidos" placeholder="Ej: García" required="" value="" name="apellidos"></div>
+        <div class="space-y-2"><label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="rol_id">Cargo</label><select id="rol_id" formControlName="rol_id" name="role" type=number
+            class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+            required="">
+            <option value="">Seleccionar cargo</option>
+            <option value="1">Jefe Cocina</option>
+            <option value="2">Encargado</option>
+            <option value="3">Empleado</option>
+           
+          </select></div>
+        <div class="space-y-2"><label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="email">Email</label><input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="email" formControlName="email" placeholder="ana.garcia@email.com" required="" type="email" value="" name="email"></div>
+        <div class="space-y-2"><label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="telefono">Teléfono</label><input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="telefono" formControlName="telefono" placeholder="+34 612 345 678" required="" value="" name="telefono"></div>
+        <div class="space-y-2"><label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="fecha_inicio">Fecha de inicio</label><input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="fecha_inicio" formControlName="fecha_inicio" required="" type="date" value="" name="fecha_inicio"></div>
+        <div class="space-y-2"><label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="salario">Salario (€)</label><input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="salario" formControlName="salario" min="0" step="50" placeholder="2500" required="" type="number" value="0" name="salario"></div>
+        <div class="space-y-2"><input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="usuario_id" formControlName="usuario_id" placeholder="" required="" type="hidden" value="" name="usuario_id"></div>
+            <div class="space-y-2 md:col-span-2"><label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="activo">Estado</label><select id="activo" formControlName="activo" name="activo"
+            class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+            required="">
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+            <option value="Vacaciones">Vacaciones</option>
+            </select></div>
+      </div>
+      <div class="flex justify-end gap-2 pt-4">
+        <button (click)="cerrarModal()"
+          class="close-modal inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-10 py-2 px-4 border-[#556B2F] text-[#556B2F]"
+          type="button">Cancelar</button><button
+          class="close-modal inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 bg-[#D4AF37] hover:bg-[#EBCB64]"
+          type="submit">Añadir Empleado</button></div>
+    </form>
+    <button type="button" (click)="cerrarModal()"
+      class="close-modal absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"><svg
+        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg><span class="sr-only">Close</span></button>
+  </div>
+ 
+</div>
+}
+
+<!-- Modal Actualizar Empleado -->
+
+@if(modalUpdateEmpleadoAbierto) {
+<div id="modal-empleado" data-modal-content="empleado">
+  <div role="dialog" id="radix-«r8q»" aria-describedby="radix-«r8s»" aria-labelledby="radix-«r8r»" data-state="closed"
+    class="bg-white fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg sm:max-w-[600px] border-[#D4AF37]/30"
+    tabindex="-1" style="pointer-events: auto;">
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 id="radix-«r8r»" class="font-semibold tracking-tight text-[#556B2F] text-xl">Modificar Empleado</h2>
+    </div>
+    <form [formGroup]="userForm" (ngSubmit)="updateDataForm()" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2"><label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="name">Nombre</label><input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="nombre" formControlName="nombre" placeholder="Ej: Ana García" required="" value="" name="nombre"></div>
+            <div class="space-y-2"><label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="name">Apellidos</label><input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="apellidos" formControlName="apellidos" placeholder="Ej: García" required="" value="" name="apellidos"></div>
         <div class="space-y-2"><label
             class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             for="rol_id">Cargo</label><select id="rol_id" formControlName="rol_id" name="role" type=number
@@ -258,16 +404,16 @@
             <option value="Activo">Activo</option>
             <option value="Inactivo">Inactivo</option>
             <option value="Vacaciones">Vacaciones</option>
-          </select></div>
+           </select></div>
       </div>
       <div class="flex justify-end gap-2 pt-4">
-        <button (click)="cerrarModal()"
+        <button (click)="cerrarModalUpdate()"
           class="close-modal inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-10 py-2 px-4 border-[#556B2F] text-[#556B2F]"
           type="button">Cancelar</button><button
           class="close-modal inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 bg-[#D4AF37] hover:bg-[#EBCB64]"
-          type="submit">Añadir Empleado</button></div>
+          type="submit">Modificar Empleado</button></div>
     </form>
-    <button type="button" (click)="cerrarModal()"
+    <button type="button" (click)="cerrarModalUpdate()"
       class="close-modal absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"><svg
         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-4 w-4">

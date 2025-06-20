@@ -1,18 +1,21 @@
 export interface IEmpleados {
     id: number;
     nombre: string;
-    pass: string;
+    apellidos: string;
+    password?: string;
     email: string;
     rol_id: number;
-    usuario_id: number;
+    fecha_inicio: string;
     telefono: string;
     salario: number;
     status: string
-    activo: boolean;
-    role: IRoles[];
+    activo: string;
+    usuario_id?: number;
+    role: IRol[];
+    turno_id?: number;
 }
 
-export interface IRoles {
-    id: number;
-    nombre: string;
+export interface IRol {
+  id: number;
+  nombre: string;
 }

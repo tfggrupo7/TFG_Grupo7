@@ -1,0 +1,82 @@
+<div class="max-w-2xl mx-auto  bg-white rounded-xl shadow-lg p-8">
+  <div class="flex items-center gap-4 mb-8">
+    <img src="../../../../assets/avatar.avif" alt="Avatar" class="w-20 h-20 rounded-full border-4 border-[#D4AF37]/40 shadow" />
+    <div>
+      <h2 class="text-2xl font-bold text-[#1C1C1C]">{{ currentUser?.nombre }} {{ currentUser?.apellidos }}</h2>
+      
+    </div>
+  </div>
+
+  <!-- Actualizar datos -->
+  <form [formGroup]="datosForm" (ngSubmit)="actualizarEmpleado()" class="space-y-4 mb-8">
+    <h3 class="text-lg font-semibold text-[#1C1C1C] mb-2">Actualizar datos</h3>
+    <div>
+      <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Nombre</label>
+      <input type="text" formControlName="nombre"  value="{{empleado.nombre}}" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+    @if (datosForm.get('nombre')?.touched && datosForm.get('nombre')?.invalid) {
+      <div class="text-red-600 text-xs mt-1">
+        El nombre es obligatorio y máximo 50 caracteres.
+      </div>
+    }
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Apellidos</label>
+      <input type="text" formControlName="apellidos"  value="{{empleado.apellidos}}" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+    @if (datosForm.get('apellidos')?.touched && datosForm.get('apellidos')?.invalid) {
+      <div class="text-red-600 text-xs mt-1">
+        El apellidos es obligatorio y máximo 50 caracteres.
+      </div>
+    }
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Email</label>
+      <input type="email" formControlName="email" value="{{empleado.email}}" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+    @if (datosForm.get('email')?.touched && datosForm.get('email')?.invalid) {
+      <div class="text-red-600 text-xs mt-1">
+        Ingresa un email válido.
+      </div>
+    }
+    </div>
+    <button type="submit" [disabled]="datosForm.invalid" class="bg-[#556B2F] text-white px-6 py-2 rounded hover:bg-[#445522] transition">Guardar cambios</button>
+  </form>
+
+  <!-- Cambiar contraseña -->
+  <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()" class="space-y-4 mb-8">
+    <h3 class="text-lg font-semibold text-[#1C1C1C] mb-2">Cambiar contraseña</h3>
+    <div>
+      <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Contraseña actual</label>
+      <input type="password" formControlName="contraseñaActual" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+    @if (passwordForm.get('passwordActual')?.touched && passwordForm.get('passwordActual')?.invalid) {
+      <div class="text-red-600 text-xs mt-1">
+        Campo obligatorio.
+      </div>
+    }
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Nueva contraseña</label>
+      <input type="password" formControlName="nuevaContraseña" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+    @if (passwordForm.get('passwordNueva')?.touched && passwordForm.get('passwordNueva')?.invalid) {
+      <div class="text-red-600 text-xs mt-1">
+        Mínimo 6 caracteres.
+      </div>
+    }
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-[#1C1C1C] mb-1">Repetir nueva contraseña</label>
+      <input type="password" formControlName="contraseñaRepetida" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/60" />
+    @if (passwordForm.hasError('noCoincide') && passwordForm.get('passwordRepetir')?.touched) {
+      <div class="text-red-600 text-xs mt-1">
+        Las contraseñas no coinciden.
+      </div>
+    }
+    </div>
+    <button type="submit" [disabled]="passwordForm.invalid" class="bg-[#D4AF37] text-[#1C1C1C] px-6 py-2 rounded hover:bg-[#bfa22e] transition">Cambiar contraseña</button>
+  </form>
+
+  <!-- Eliminar usuario -->
+  <div class="border-t pt-6">
+    <h3 class="text-lg font-semibold text-red-600 mb-2">Eliminar cuenta</h3>
+    <p class="text-sm text-[#1C1C1C]/70 mb-4">Esta acción es irreversible. Todos tus datos serán eliminados.</p>
+    <button (click)="eliminarEmpleado()" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition">Eliminar cuenta</button>
+  </div>
+</div>

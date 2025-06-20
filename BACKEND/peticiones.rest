@@ -17,12 +17,17 @@ POST {{host}}/api/empleados
 Content-Type: application/json
 
 {
-  "nombre": "Patricia Gomez",
+  "nombre": "Patricia",
+  "apellidos": "Gomez",
   "pass": "000123",
-  "email": "patricia@gmail.com",
+  "email": "cinm4t1sm6@ibolinva.com",
   "telefono": "678965423",
   "rol_id":3,
-  "usuario_id": 1
+  "usuario_id": 6,
+  "fecha_inicio": "2025-10-18",
+  "salario": 1500.00,
+  "telefono": "678965423",
+  "activo": "activo"
  
 }
 
@@ -55,7 +60,7 @@ GET {{host}}/api/tareas
 
 ### Pedir todas las tareas de un empleado con id 1
 
-GET {{host}}/api/empleados/1
+GET {{host}}/api/empleados/2
 
 ### Pedir una tarea con id 1
 GET {{host}}/api/tareas/1
@@ -65,7 +70,7 @@ GET {{host}}/api/tareas/1
 GET {{host}}/api/empleados/tareas
 
 ### Pedir todas las tareas de un empleado con id 1
-GET {{host}}/api/tareas/empleado/1
+GET {{host}}/api/tareas/empleado/2
 
 ### crear una tarea
 POST {{host}}/api/tareas
@@ -168,7 +173,12 @@ Content-Type: application/json
 GET {{host}}/api/ingredientes
 
 ### Obtener ingredientes por id
-GET {{host}}/api/ingredientes/2
+GET {{host}}/api/ingredientes/4
+Authorization:{{token}} 
+
+### Obtener resumen inventario productos
+GET {{host}}/api/ingredientes/summary
+Authorization:{{token}} 
 
 ### Actualizar ingredientes
 PUT {{host}}/api/ingredientes/1
@@ -459,5 +469,22 @@ Content-Type: application/json
 }
 
 ###
-GET {{host}}/api/empleados/role/2
+GET {{host}}/api/empleados/role
 
+###
+POST {{host}}/api/usuarios
+Content-Type: application/json
+
+{
+  "nombre":"Manuel",
+  "apellidos":"Perez",
+  "email":"waltra@gmail.com"
+}
+
+###
+POST {{host}}/api/usuarios/cambiar-contrasena/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJpYXQiOjE3NDkxNDMwNDIsImV4cCI6MTc0OTE0NjY0Mn0.Ng4Axbetg9GLE2k7JzIXpbNmRN3bDSPBBNVidTWpufE
+Content-Type: application/json
+
+{
+  "nuevaContraseña": "123456" 
+}

@@ -1,5 +1,12 @@
 export interface IIngredientes {
-    id: number;
-    nombre: string;
-    alergenos: string;
+  id:          number;
+  nombre:      string;
+  alergenos?:  string | null;
+  categoria:   string;
+  cantidad:    string;   
+  unidad:      string;
+  proveedor?:  string | null;
+  estado:      string;
+  createdAt:   string;   
+  updatedAt:   string;
 }
