@@ -141,9 +141,10 @@ export class TurnosComponent implements OnInit {
     // Ajustar a lunes (Intl API: week starts Monday en ES)
     firstDayOfWeek.setDate(today.getDate() - today.getDay() + 1);
     this.currentWeekDates = Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(firstDayOfWeek);
-      d.setDate(firstDayOfWeek.getDate() + i);
-      return d.toISOString().slice(0, 10); // ISO‑8601 yyyy-MM-dd
+      const d = new Date(firstDayOfWeek);   // lunes base
+      d.setDate(d.getDate() + i);   // +0…6 días
+      d.setHours(12, 0, 0, 0);      // ← fija a 12:00 local
+      return d.toISOString().slice(0, 10);  // YYYY-MM-DD correcto
     });
   }
 
@@ -202,7 +203,9 @@ export class TurnosComponent implements OnInit {
  * Devuelve la fecha de hoy en formato YYYY‑MM‑DD (ISO 8601).
  * Se utiliza para filtrar turnos del día.
  */  get todayStr(): string {
-    return new Date().toISOString().slice(0, 10);
+    const d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());   // fuerza horario local
+    return d.toISOString().slice(0, 10);
   }
 
   /**
@@ -210,7 +213,9 @@ export class TurnosComponent implements OnInit {
    * Si `turnosHoy` está cargado, lo utiliza; si no, filtra el array general.
    */
   get todayTurnos(): ITurnos[] {
-    return this.turnosHoy.length ? this.turnosHoy : this.turnos.filter(t => t.fecha === this.todayStr);
+    return this.turnosHoy.length
+      ? this.turnosHoy
+      : this.turnos.filter(t => t.fecha === this.todayStr);
   }
   /** Nº de empleados distintos trabajando hoy */
   get todayStaffCount(): number {
