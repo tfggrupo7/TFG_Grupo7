@@ -11,6 +11,8 @@ import { ModalComponent } from "../../../shared/components/modal/modal.component
 import { IInventarioResumen } from '../../../interfaces/iinventarioresumen.interface';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
+import { AuthService } from '../../../core/services/auth.service';
+import { IEmpleados } from '../../../interfaces/iempleados.interfaces';
 
 @Component({
   selector: 'app-inventario',
@@ -27,7 +29,7 @@ export class InventarioComponent implements OnInit {
   totalPages: number = 1;
   pageSize: number = 10;
   sort = { campo: 'nombre', direccion: 'ASC' };
-fecha: Date = new Date();
+  fecha: Date = new Date();
   modalIngredienteAbierto = false;
 
   ingredienteId!: number;
@@ -36,8 +38,10 @@ fecha: Date = new Date();
   totalItems = 0;
   ingrediente!: IIngredientes | null;
   summary!: IInventarioResumen;
+  user: any;
 
   ingredientesService = inject(IngredientesService)
+  authService = inject(AuthService)
   router = inject(Router)
 
   constructor() {
@@ -54,19 +58,22 @@ fecha: Date = new Date();
   }
 
   init() {
+    this.user = this.authService.getCurrentUserIdFromToken()
+    console.log("USER logado: ", this.user)
     this.cargarResumen()
     this.cargarIngredientes()
   }
 
   async cargarResumen() {
-    this.summary = await this.ingredientesService.getResumen();
+    const id = this.user.id ? this.user.id : this.user.usuario_id
+    this.summary = await this.ingredientesService.getResumen(id);
   }
 
   async cargarIngredientes() {
     const search = this.searchTerm.value ?? '';
-
+    const id = this.user.id ? this.user.id : this.user.usuario_id
     this.ingredientes = await this.ingredientesService.getIngredientes(
-      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion
+      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion, id
     );
 
     this.ingredientesFiltrados = this.ingredientes;

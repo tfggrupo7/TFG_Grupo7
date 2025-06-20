@@ -21,14 +21,16 @@ export class IngredientesService {
     limit: number = 10,
     search: string = '',
     orderBy: string = 'nombre',
-    direction: string = ''
+    direction: string = '',
+    userId: string = ''
   ): Promise<IIngredientes[]> {
     const params = new HttpParams()
       .set('page', page)
       .set('limit', limit)
       .set('search', search)
       .set('orderBy', orderBy)
-      .set('direction', direction);
+      .set('direction', direction)
+      .set('userId', userId);
       const token = localStorage.getItem('token');
   const headers = new HttpHeaders({
     'Content-Type': 'application/json',
@@ -52,13 +54,14 @@ export class IngredientesService {
     return lastValueFrom(this.httpClient.get<IIngredientes>(`${this.url}/${id}`));
   }
 
-  getResumen(): Promise<IInventarioResumen> {
+  getResumen(userId: string): Promise<IInventarioResumen> {
+    const params = new HttpParams().set('userId', userId);
     const token = localStorage.getItem('token');
   const headers = new HttpHeaders({
     'Content-Type': 'application/json',
     ...(token ? { 'Authorization': `Bearer ${token}` } : {})
   });
-    return lastValueFrom(this.httpClient.get<IInventarioResumen>(`${this.url}/summary`));
+    return lastValueFrom(this.httpClient.get<IInventarioResumen>(`${this.url}/summary`, {params}));
   }
 
   createIngrediente(ingrediente: IIngredientes): Promise<IIngredientes> {

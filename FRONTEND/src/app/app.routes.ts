@@ -41,7 +41,7 @@ export const routes: Routes = [
   ] },
 { path:'dashboard-empleados',component:DashboardEmpleadosComponent,children: [
     { path: '', component: ResumenEmpleadosComponent },
-    { path: 'inventario-empleados', component: InventarioEmpleadosComponent },
+    { path: 'inventario-empleados', component: InventarioComponent },
     { path: 'turnos-empleados', component: TurnosEmpleadosComponent },
     { path: 'perfil-empleados', component: PerfilEmpleadosComponent},
     { path: 'tareas-empleados', component: TareasEmpleadosComponent }

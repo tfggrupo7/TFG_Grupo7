@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class DashboardEmpleadosComponent {
 authService = inject(AuthService);
 router = inject(Router);
+rol: string = ''
 
   // Propiedad para controlar la visibilidad del menú de perfil
   
@@ -39,6 +40,12 @@ logout() {
   cerrarSesion() {
     this.authService.logout();
     this.router.navigate(['/']);
+  }
+
+  ngOnInit(){
+    console.log("pasa por aqui")
+    this.rol = this.authService.getRolEmpleado()
+    console.log("pasa por aqui rol: ", this.rol)
   }
 }
 

@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   getCurrentUserIdFromToken(): string | null {
-    const token = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
     if (!token) return null;
     // JWT: header.payload.signature
     const payload = token.split('.')[1];
@@ -64,7 +64,7 @@ export class AuthService {
     if (!token) return '';
     try {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
-      return decodedToken.rol || '';
+      return decodedToken.role || '';
     } catch (e) {
       console.error('Error decoding token:', e);
       return '';

@@ -1,8 +1,10 @@
 const jwt = require("jsonwebtoken");
 
 const Usuario = require("../models/usuarios.model");
+const Empleado = require("../models/empleados.model")
 
 const checkToken = async (req, res, next) => {
+  console.log(req.originalUrl)
   if (!req.headers.authorization) {
     return res.status(403).json({ message: "No tienes autorizacion"});
   }
@@ -15,7 +17,8 @@ const checkToken = async (req, res, next) => {
     return res.status(403).json({ message: "Token invalido" });
   }
   
-  const usuario = await Usuario.getById(payload.usuario_id);
+  const usuario = payload.role ? await Empleado.selectById(payload.id) : await Usuario.getById(payload.usuario_id);
+  
   if(!usuario) {
     return res.status(403).json({ message: 'Usuario no existe'});
   }
