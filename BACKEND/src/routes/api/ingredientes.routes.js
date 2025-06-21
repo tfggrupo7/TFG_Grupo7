@@ -7,9 +7,11 @@ const {
   create,
   update,
   remove,
+  AllIngredientes,
 } = require("../../controllers/ingredientes.controller");
 
 router.get("/", getAll);
+router.get("/all", AllIngredientes);
 router.get("/summary", getSummary);
 router.get("/:ingredienteId", getById);
 

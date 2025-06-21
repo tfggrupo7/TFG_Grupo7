@@ -29,6 +29,7 @@ constructor(private fb: FormBuilder, private router: Router, private authService
 }
 
   async ingresar() {
+  console.log('Intentando iniciar sesión con:', this.loginForm.value);
   if (this.loginForm.invalid) {
     toast.info('Error en email o contraseña');
     return;
@@ -50,6 +51,7 @@ constructor(private fb: FormBuilder, private router: Router, private authService
       toast.error('Email o contraseña incorrectos.');
     }
   } catch (error) {
+    console.log('Error al iniciar sesión:', error);
     toast.error('Error al iniciar sesión.');
   }
 }

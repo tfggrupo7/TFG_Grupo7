@@ -744,10 +744,10 @@
                   </div>
                   <div class="hidden md:block text-left">
                     <div class="text-sm font-medium text-[#1C1C1C]">
-                      {{ usuario.nombre }}
+                      {{ currentEmpleado?.nombre }} {{ currentEmpleado?.apellidos }}
                     </div>
                     <div class="text-xs text-[#1C1C1C]/70">
-                      {{ usuario.rol }}
+                      {{ currentEmpleado?.rol || currentEmpleado?.puesto || currentEmpleado?.role}}
                     </div>
                   </div>
                   <svg class="lucide lucide-chevron-down h-6 w-8 text-[#556B2F] hidden sm:block" width="24" height="24"

@@ -1,87 +1,10 @@
 const router = require('express').Router();
-const { registro, login, perfil, recuperarContraseña, restablecerContraseña, actualizarDatos, cambiarContraseña , eliminarUsuario} = require('../../controllers/usuarios.controller');
+const { registro, getByUsuarioId,login, perfil, recuperarContraseña, restablecerContraseña, actualizarDatos, cambiarContraseña , eliminarUsuario} = require('../../controllers/usuarios.controller');
 const { checkToken } = require('../../middleware/auth.middleware');
 
 
-/**
- * @swagger
- * tags:
- *   name: Autenticación y Perfil
- *   description: Endpoints para autenticación, recuperación de contraseña y gestión de perfil de usuario
- */
+router.get('/:usuarioId', getByUsuarioId);
 
-/**
- * @swagger
- * /usuarios/perfil:
- *   get:
- *     summary: Obtiene el perfil del usuario autenticado
- *     tags: [Autenticación y Perfil]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Perfil del usuario
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Usuario'
- *       401:
- *         description: No autorizado
- */
-router.get('/perfil',checkToken, perfil);
-/**
- * @swagger
- * /usuarios/recuperar-contrasena:
- *   post:
- *     summary: Inicia el proceso de recuperación de contraseña
- *     tags: [Autenticación y Perfil]
- *     responses:
- *       200:
- *         description: Proceso de recuperación iniciado
- *       400:
- *         description: Error en la solicitud
- */
-router.post('/recuperar-contrasena',recuperarContraseña);
-/**
- * @swagger
- * /usuarios/restablecer-contrasena/{token}:
- *   post:
- *     summary: Restablece la contraseña del usuario usando un token
- *     tags: [Autenticación y Perfil]
- *     parameters:
- *       - in: path
- *         name: token
- *         required: true
- *         schema:
- *           type: string
- *         description: Token de restablecimiento de contraseña
- *     responses:
- *       200:
- *         description: Contraseña restablecida exitosamente
- *       400:
- *         description: Error en el token o solicitud
- */
-router.post('/restablecer-contrasena/:token',restablecerContraseña);
-/**
- * @swagger
- * /usuarios/cambiar-contrasena/{token}:
- *   post:
- *     summary: Cambia la contraseña del usuario autenticado
- *     tags: [Autenticación y Perfil]
- *     parameters:
- *       - in: path
- *         name: token
- *         required: true
- *         schema:
- *           type: string
- *         description: Token de autenticación del usuario
- *     responses:
- *       200:
- *         description: Contraseña cambiada exitosamente
- *       400:
- *         description: Error en la solicitud o token inválido
- */
-router.post('/cambiar-contrasena/:token',checkToken, cambiarContraseña); 
 /**
  * @swagger
  * /usuarios/registro:
@@ -157,7 +80,91 @@ router.post('/login', login);
  *       400:
  *         description: Error en la solicitud
  */
-router.put('/',checkToken,actualizarDatos);
+/**
+ * @swagger
+ * /usuarios/recuperar-contrasena:
+ *   post:
+ *     summary: Inicia el proceso de recuperación de contraseña
+ *     tags: [Autenticación y Perfil]
+ *     responses:
+ *       200:
+ *         description: Proceso de recuperación iniciado
+ *       400:
+ *         description: Error en la solicitud
+ */
+router.post('/recuperar-contrasena',recuperarContraseña);
+/**
+ * @swagger
+ * /usuarios/restablecer-contrasena/{token}:
+ *   post:
+ *     summary: Restablece la contraseña del usuario usando un token
+ *     tags: [Autenticación y Perfil]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Token de restablecimiento de contraseña
+ *     responses:
+ *       200:
+ *         description: Contraseña restablecida exitosamente
+ *       400:
+ *         description: Error en el token o solicitud
+ */
+router.post('/restablecer-contrasena/:token',restablecerContraseña);
+
+router.use(checkToken);
+
+/**
+ * @swagger
+ * tags:
+ *   name: Autenticación y Perfil
+ *   description: Endpoints para autenticación, recuperación de contraseña y gestión de perfil de usuario
+ */
+
+/**
+ * @swagger
+ * /usuarios/perfil:
+ *   get:
+ *     summary: Obtiene el perfil del usuario autenticado
+ *     tags: [Autenticación y Perfil]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Perfil del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Usuario'
+ *       401:
+ *         description: No autorizado
+ */
+router.get('/perfil', perfil);
+
+/**
+ * @swagger
+ * /usuarios/cambiar-contrasena/{token}:
+ *   post:
+ *     summary: Cambia la contraseña del usuario autenticado
+ *     tags: [Autenticación y Perfil]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Token de autenticación del usuario
+ *     responses:
+ *       200:
+ *         description: Contraseña cambiada exitosamente
+ *       400:
+ *         description: Error en la solicitud o token inválido
+ */
+router.post('/cambiar-contrasena/:token', cambiarContraseña); 
+
+router.put('/',actualizarDatos);
 /**
  * @swagger
  * /usuarios/{id}:
@@ -179,7 +186,7 @@ router.put('/',checkToken,actualizarDatos);
  *       404:
  *         description: Usuario no encontrado
  */
-router.delete('/:id',checkToken, eliminarUsuario); 
+router.delete('/:id', eliminarUsuario); 
 /**
  * @swagger
  * components:

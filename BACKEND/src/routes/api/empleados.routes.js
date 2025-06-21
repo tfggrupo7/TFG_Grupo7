@@ -9,13 +9,85 @@ const {
   remove,
   getEmpleadosYRoles,login, recuperarContraseña,restablecerContraseña,
   updateEmpleado,
-  cambiarContraseña
+  cambiarContraseña,
+  getByEmpleadoId
 } = require("../../controllers/empleado.controller");
 const { checkToken } = require("../../middleware/auth.middleware");
 
 
 const { checkempleadosId, checkdataEmpleado, checkdataEmpleadoUpdate} = require("../../middleware/empleados.middleware");
 
+/**
+ * @swagger
+ * /empleados/login:
+ *   post:
+ *     summary: Inicia sesión de un empleado
+ *     tags: [Empleados]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Inicio de sesión exitoso
+ */
+router.post('/login', login);
+/**
+ * @swagger
+ * /empleados/recuperar-contrasena:
+ *   post:
+ *     summary: Recupera la contraseña de un empleado
+ *     tags: [Empleados]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Correo de recuperación enviado exitosamente
+ */
+router.post('/recuperar-contrasena', recuperarContraseña);
+/**
+ * @swagger
+ * /empleados/restablecer-contrasena/{token}:
+ *   post:
+ *     summary: Restablece la contraseña de un empleado
+ *     tags: [Empleados]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Token de restablecimiento de contraseña
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Contraseña restablecida exitosamente
+ */
+router.post('/restablecer-contrasena/:token',restablecerContraseña);
+
+router.use(checkToken);
 /**
  * @swagger
  * components:
@@ -130,7 +202,7 @@ router.get('/role', checkToken, getEmpleadosYRoles);
  *             schema:
  *               $ref: '#/components/schemas/Empleado'
  */
-router.get("/:empleadoId", checkToken, checkempleadosId, getById);
+router.get("/:empleadoId", checkempleadosId, getByEmpleadoId);
 /**
  * @swagger
  * /empleados:
@@ -147,76 +219,8 @@ router.get("/:empleadoId", checkToken, checkempleadosId, getById);
  *       201:
  *         description: Empleado creado exitosamente
  */
-router.post("/", checkToken, checkdataEmpleado,create);
-/**
- * @swagger
- * /empleados/login:
- *   post:
- *     summary: Inicia sesión de un empleado
- *     tags: [Empleados]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Inicio de sesión exitoso
- */
-router.post('/login', login);
-/**
- * @swagger
- * /empleados/recuperar-contrasena:
- *   post:
- *     summary: Recupera la contraseña de un empleado
- *     tags: [Empleados]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *     responses:
- *       200:
- *         description: Correo de recuperación enviado exitosamente
- */
-router.post('/recuperar-contrasena', recuperarContraseña);
-/**
- * @swagger
- * /empleados/restablecer-contrasena/{token}:
- *   post:
- *     summary: Restablece la contraseña de un empleado
- *     tags: [Empleados]
- *     parameters:
- *       - in: path
- *         name: token
- *         required: true
- *         schema:
- *           type: string
- *         description: Token de restablecimiento de contraseña
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Contraseña restablecida exitosamente
- */
-router.post('/restablecer-contrasena/:token',restablecerContraseña);
+router.post("/", checkdataEmpleado,create);
+
 /**
  * @swagger
  * /empleados/cambiar-contrasena/{empleadoId}:

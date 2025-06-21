@@ -5,35 +5,62 @@ const Usuario = require("../models/usuarios.model");
 const CryptoJS = require("crypto-js");
 const sendEmail = require("../sendEmail");
 
+const getByUsuarioId = async (req, res) => {
+  try {
+    const usuarioId = req.params.usuarioId;
+
+    if (!usuarioId) {
+      console.log("ID no existe");
+      return res.status(400).json({ message: "ID de usuario requerido" });
+    }
+
+    const id = parseInt(usuarioId, 10);
+
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "ID de usuario inválido" });
+    }
+
+    const usuario = await Usuario.getById(id);
+
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    const { password, ...usuarioSinPassword } = usuario;
+    return res.status(200).json(usuarioSinPassword);
+  } catch (error) {
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
 const registro = async (req, res) => {
   try {
     const { email } = req.body;
-    
+
     // Verificar si el email ya existe ANTES de insertar
     const usuarioExistente = await Usuario.getByEmail(email);
-    
+
     if (usuarioExistente) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: "El email ya está registrado." 
+        message: "El email ya está registrado.",
       });
     }
-    
+
     // Si no existe, proceder con el registro
     req.body.contraseña = bcrypt.hashSync(req.body.contraseña, 10);
     const result = await Usuario.insert(req.body);
     const usuario = await Usuario.getById(result.insertId);
-    
+
     res.status(201).json({
       success: true,
-      usuario: usuario
+      usuario: usuario,
     });
-    
   } catch (error) {
-    console.error('Error en registro:', error);
-    res.status(500).json({ 
+    console.error("Error en registro:", error);
+    res.status(500).json({
       success: false,
-      message: "Error interno del servidor" 
+      message: "Error interno del servidor",
     });
   }
 };
@@ -96,7 +123,7 @@ const recuperarContraseña = async (req, res) => {
 
     // 5. Envía el email con el token plano
     const resetUrl = `http://localhost:4200/restablecer-contrasena/${token}`;
-const htmlTemplate = `
+    const htmlTemplate = `
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -145,17 +172,15 @@ const htmlTemplate = `
 </html>
 `;
 
-await sendEmail(
-  email,
-  "Recupera tu contraseña",
-  `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetUrl}\nEste enlace expirará en 1 hora.`,
-  htmlTemplate
-);
-    res
-      .status(200)
-      .json({
-        message: "Si el correo existe, se enviará un enlace de recuperación.",
-      });
+    await sendEmail(
+      email,
+      "Recupera tu contraseña",
+      `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetUrl}\nEste enlace expirará en 1 hora.`,
+      htmlTemplate
+    );
+    res.status(200).json({
+      message: "Si el correo existe, se enviará un enlace de recuperación.",
+    });
   } catch (err) {
     console.error("Error al recuperar contraseña:", err);
     res.status(500).json({ message: "Error en el servidor." });
@@ -244,37 +269,41 @@ const actualizarDatos = async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
     res.json({ message: "Datos actualizados correctamente" });
-      } catch (error) {
-      console.error("Error al actualizar los datos del usuario:", error);
-      res.status(500).json({ message: "Error interno del servidor" });
-    }
-  };
-  
-  const eliminarUsuario = async (req, res) => {
-  const { id } = req.params;  
+  } catch (error) {
+    console.error("Error al actualizar los datos del usuario:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
+const eliminarUsuario = async (req, res) => {
+  const { id } = req.params;
   const usuarioId = req.user.id;
   if (usuarioId !== Number.parseInt(id)) {
-    return res.status(403).json({ message: "No tienes permiso para eliminar este usuario." });
+    return res
+      .status(403)
+      .json({ message: "No tienes permiso para eliminar este usuario." });
   }
   try {
     const result = await Usuario.deleteUsuario(id);
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
-    res.json({ message: "Usuario eliminado correctamente" }); 
-  }
-  catch (error) {
+    res.json({ message: "Usuario eliminado correctamente" });
+  } catch (error) {
     console.error("Error al eliminar el usuario:", error);
     res.status(500).json({ message: "Error interno del servidor" });
-  } 
-}
+  }
+};
 
 module.exports = {
   registro,
+  getByUsuarioId,
   login,
   perfil,
   recuperarContraseña,
   restablecerContraseña,
-  generarYGuardarToken,actualizarDatos,
-  cambiarContraseña, eliminarUsuario
+  generarYGuardarToken,
+  actualizarDatos,
+  cambiarContraseña,
+  eliminarUsuario,
 };
