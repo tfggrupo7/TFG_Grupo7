@@ -27,7 +27,7 @@ export class DashboardComponent {
   
 showProfileMenu = false;
 currentUser: any = null;
-
+sidebarCollapsed = false;
 avatar = {
   rol: "Administrador",
   avatar: '../../../assets/avatar.avif'
@@ -38,6 +38,7 @@ constructor(
     private authService: AuthService
   ) {}
 
+  
 toggleProfileMenu() {
   this.showProfileMenu = !this.showProfileMenu;
 }

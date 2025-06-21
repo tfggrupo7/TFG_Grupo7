@@ -3,14 +3,18 @@ const router = require("express").Router();
 const {
   getAll,
   getById,
-  getByDate, // ← nuevo
+  getByDate, 
+  getByEmpleadoId,
+  getTurnosByDateAndEmpleado, // ← nuevo, para obtener turnos por empleado
   create,
   update,
   remove,
 } = require("../../controllers/turnos.controller");
 
-router.get("/date/:fecha", getByDate); // /api/turnos/date/2025-06-18
+router.get("/date/:fecha", getByDate); 
 router.get("/", getAll);
+router.get("/fecha/:fecha/empleado/:empleadoId", getTurnosByDateAndEmpleado); // ← nuevo, para obtener turnos por fecha y empleado
+router.get('/empleado/:empleadoId', getByEmpleadoId); // ← nuevo, para obtener turnos por empleado
 router.get("/:turnoId", getById);
 router.post("/", create);
 router.put("/:turnoId", update);

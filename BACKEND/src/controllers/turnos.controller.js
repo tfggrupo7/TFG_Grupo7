@@ -52,6 +52,22 @@ const getById = async (req, res) => {
   }
   res.json(turno);
 };
+const getByEmpleadoId = async (req, res) => {
+  const { empleadoId } = req.params; // id numérico recibido en la ruta
+  const turnos = await Turno.selectByEmpleadoId(empleadoId); // consulta directa en BD
+  if (!turnos || turnos.length === 0) {
+    return res.status(404).json({ error: 'No se encontraron turnos para el empleado' });
+  }
+  res.json(turnos);
+}
+ const getTurnosByDateAndEmpleado = async (req, res) => {
+  const { fecha, empleadoId } = req.params; // YYYY-MM-DD y empleadoId
+  const turnos = await Turno.selectTurnosByDateAndEmpleado(fecha, empleadoId);
+  if (!turnos || turnos.length === 0) {
+    return res.status(404).json({ error: 'No se encontraron turnos para la fecha y empleado especificados' });
+  }
+  res.json(turnos);
+};
 
 /**
  * GET /api/turnos/by-date
@@ -125,4 +141,4 @@ const remove = async (req, res) => {
 
 
 // Exportamos todas las acciones del controlador
-module.exports = { getAll, getById, create, update, remove, getByDate };
+module.exports = { getAll, getById, getByEmpleadoId,getTurnosByDateAndEmpleado, create, update, remove, getByDate };

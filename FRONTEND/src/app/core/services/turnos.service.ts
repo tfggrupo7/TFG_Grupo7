@@ -112,10 +112,34 @@ export class TurnosService {
    * @returns Promise<{ message: string; data: ITurnos[] }>
    */
   deleteTurno(id: number): Promise<{ message: string; data: ITurnos[] }> {
+    
     return lastValueFrom(
       this.httpClient.delete<{ message: string; data: ITurnos[] }>(
         `${this.url}/${id}`
-      )
-    );
+    )
+  )
   }
+
+  getTurnosByEmpleado(empleadoId: number): Promise<ITurnos[]> {
+    const token = localStorage.getItem('token')?.trim();
+    if (!token) throw new Error('No hay token disponible');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+  return lastValueFrom (this.httpClient.get<ITurnos[]>(`${this.url}/empleado/${empleadoId}`, { headers }));
+}
+
+  // En tu turnosService
+getTurnosByDateAndEmpleado(fecha: string, empleadoId: number): Promise<ITurnos[]> {
+  const token = localStorage.getItem('token')?.trim();
+    if (!token) throw new Error('No hay token disponible');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+  return lastValueFrom(this.httpClient.get<ITurnos[]>(`${this.url}/fecha/${fecha}/empleado/${empleadoId}`, { headers }));
+}
 }

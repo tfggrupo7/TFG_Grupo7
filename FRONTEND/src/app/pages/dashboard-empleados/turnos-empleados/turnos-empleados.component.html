@@ -1,196 +1,193 @@
+<!--
+  Plantilla HTML del componente <app-turnos>
+  Descripción: Muestra la gestión de turnos con estadísticas, turnos del día y vista semanal.
+  Notas:
+    • Usa Tailwind CSS para estilos.
+    • Incluye un modal para crear/editar turnos.
+    • Muestra estadísticas clave y turnos del día.
+    • Vista semanal con drag & drop de turnos.
+-->
+
 <div class="space-y-6">
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
+  <!-- 🟢 CABECERA ---------------------------------------------------------- -->
+  <!--
+    Descripción: Bloque superior con título, subtítulo y CTA para programar un turno.
+    Notas:
+      • Usa un layout flex que se adapta de columna (mobile) a fila (>= sm).
+      • El botón llama a openModal con día = lunes (0) y hora = 8.
+  -->
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
     <div>
       <h1 class="text-2xl font-bold text-[#556B2F]">Gestión de Turnos</h1>
       <p class="text-[#1C1C1C]/70">Organiza los horarios de tu equipo</p>
     </div>
-    <button data-open-modal="turno"
-      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="lucide lucide-plus h-4 w-4">
-        <path d="M5 12h14"></path>
-        <path d="M12 5v14"></path>
-      </svg>Programar Turno
+    <!-- Botón principal (+) -->
+    @if(currentUserRole === 'Encargado'){
+      <button
+      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
+      (click)="openModal(0, 8)">
+      <!-- Icono plus (Lucide) -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-plus h-4 w-4" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path d="M5 12h14M12 5v14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+      </svg>
+      Programar Turno
     </button>
+  }
   </div>
 
-  <!-- Tarjetas de estadísticas -->
-  <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-    <div class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#556B2F] bg-[#556B2F]/5">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Activos</p>
-          <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">3</h3>
-        </div>
-        <div class="rounded-full p-2 flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-user-check h-5 w-5 md:h-6 md:w-6">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <polyline points="16 11 18 13 22 9"></polyline>
-          </svg>
-        </div>
-      </div>
+  <!-- 🟠 ESTADÍSTICAS ------------------------------------------------------ -->
+  <!-- Cuatro tarjetas con KPI de la semana/día. -->
+  <div class="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-3 lg:grid-cols-3">
+    <!-- Tarjeta: Activos -->
+    <div class="rounded-lg border bg-white p-4 md:p-6 border-[#556B2F] bg-[#556B2F]/5">
+      <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Activos</p>
+      <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{ activeShiftsCount }}</h3>
     </div>
-
-    <div class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#D4AF37] bg-[#D4AF37]/5">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Programados</p>
-          <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">1</h3>
-        </div>
-        <div class="rounded-full p-2 flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-clock h-5 w-5 md:h-6 md:w-6">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-        </div>
-      </div>
+    <!-- Tarjeta: Pendientes -->
+    <div class="rounded-lg border bg-white p-4 md:p-6 border-[#D4AF37] bg-[#D4AF37]/5">
+      <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Pendientes</p>
+      <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{ pendingShiftsCount }}</h3>
     </div>
-
-    <div class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#556B2F] bg-[#556B2F]/5">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Completados</p>
-          <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">1</h3>
-        </div>
-        <div class="rounded-full p-2 flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-calendar h-5 w-5 md:h-6 md:w-6">
-            <path d="M8 2v4"></path>
-            <path d="M16 2v4"></path>
-            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-            <path d="M3 10h18"></path>
-          </svg>
-        </div>
-      </div>
+    <!-- Tarjeta: Completados -->
+    <div class="rounded-lg border bg-white p-4 md:p-6 border-[#556B2F] bg-[#556B2F]/5">
+      <p class="text-sm font-medium text-[#1C1C1C]/70">Turnos Completados</p>
+      <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">{{ completedShiftsCount }}</h3>
     </div>
-
-    <div class="rounded-lg border bg-white p-4 md:p-6 transition-all duration-200 hover:shadow-md border-[#D4AF37] bg-[#D4AF37]/5">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-[#1C1C1C]/70">Total Personal Hoy</p>
-          <h3 class="text-xl md:text-2xl font-bold text-[#1C1C1C] mt-1">5</h3>
-        </div>
-        <div class="rounded-full p-2 flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-users h-5 w-5 md:h-6 md:w-6">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-          </svg>
-        </div>
-      </div>
-    </div>
+    <!-- Tarjeta: Personal Hoy -->
+    
   </div>
 
-  <!-- Lista de turnos de hoy -->
-  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20" data-v0-t="card">
-    <div class="flex flex-col space-y-1.5 p-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">Turnos de Hoy</h3>
-          <p class="text-sm text-muted-foreground">Jueves, 18 de Mayo 2023</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-8 px-3 text-xs border-[#556B2F] text-[#556B2F]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-chevron-left h-4 w-4">
-              <path d="m15 18-6-6 6-6"></path>
-            </svg>
-          </button>
-          <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-8 px-3 text-xs border-[#556B2F] text-[#556B2F]">Hoy</button>
-          <button class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-8 px-3 text-xs border-[#556B2F] text-[#556B2F]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-chevron-right h-4 w-4">
-              <path d="m9 18 6-6-6-6"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="p-6 pt-0">
-      <div class="space-y-3">
-        <!-- Aquí irán los turnos individuales -->
-        <div class="flex items-center justify-between p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10">
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-full bg-[#556B2F]/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-users h-6 w-6 text-[#556B2F]">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="font-medium text-[#1C1C1C]">Ana García</h3>
-              <p class="text-sm text-[#1C1C1C]/70">Chef Ejecutivo</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-4">
-            <div class="text-right">
-              <p class="font-medium text-[#556B2F]">08:00 - 16:00</p>
-              <p class="text-sm text-[#1C1C1C]/70">8 horas</p>
-            </div>
-            <div class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
-              En curso
-            </div>
-          </div>
-        </div>
-        <!-- Más turnos... -->
-      </div>
-    </div>
+  <!-- 🔵 TURNOS DE HOY ------------------------------------------------------ -->
+  <div class="rounded-lg border bg-card shadow-sm border-[#D4AF37]/20">
+  <div class="p-6 pb-0">
+    <h3 class="text-2xl font-semibold text-[#556B2F]">Turnos de la Semana</h3>
+    <p class="text-sm text-muted-foreground">
+      {{ formatDateForDisplay(currentWeekDates[0]) }} - {{ formatDateForDisplay(currentWeekDates[6]) }}
+    </p>
+  
+    
   </div>
 
-  <!-- Vista semanal -->
-  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20" data-v0-t="card">
-    <div class="flex flex-col space-y-1.5 p-6">
-      <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">Vista Semanal</h3>
-      <p class="text-sm text-muted-foreground">Planificación de la semana actual</p>
-    </div>
-    <div class="p-6 pt-0">
-      <div class="grid grid-cols-7 gap-2 text-center">
-        <div class="p-3 rounded-lg bg-gray-50">
-          <div class="font-medium text-sm text-[#1C1C1C]">Lun</div>
-          <div class="text-xs text-[#1C1C1C]/70 mt-1">7 turnos</div>
-        </div>
-        <div class="p-3 rounded-lg bg-gray-50">
-          <div class="font-medium text-sm text-[#1C1C1C]">Mar</div>
-          <div class="text-xs text-[#1C1C1C]/70 mt-1">7 turnos</div>
-        </div>
-        <div class="p-3 rounded-lg bg-gray-50">
-          <div class="font-medium text-sm text-[#1C1C1C]">Mié</div>
-          <div class="text-xs text-[#1C1C1C]/70 mt-1">5 turnos</div>
-        </div>
-        <div class="p-3 rounded-lg bg-[#556B2F]/10 border border-[#556B2F]">
-          <div class="font-medium text-sm text-[#1C1C1C]">Jue</div>
-          <div class="text-xs text-[#1C1C1C]/70 mt-1">5 turnos</div>
-        </div>
-        <div class="p-3 rounded-lg bg-gray-50">
-          <div class="font-medium text-sm text-[#1C1C1C]">Vie</div>
-          <div class="text-xs text-[#1C1C1C]/70 mt-1">3 turnos</div>
-        </div>
-        <div class="p-3 rounded-lg bg-gray-50">
-          <div class="font-medium text-sm text-[#1C1C1C]">Sáb</div>
-          <div class="text-xs text-[#1C1C1C]/70 mt-1">4 turnos</div>
-        </div>
-        <div class="p-3 rounded-lg bg-gray-50">
-          <div class="font-medium text-sm text-[#1C1C1C]">Dom</div>
-          <div class="text-xs text-[#1C1C1C]/70 mt-1">6 turnos</div>
-        </div>
-      </div>
-    </div>
+  <div class="p-6 pt-3">
+    <table class="min-w-full bg-white border border-[#D4AF37]/20 rounded-xl shadow">
+      <thead class="bg-[#556B2F]/10">
+        <tr>
+          <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Nombre</th>
+          <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Rol</th>
+          <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Fecha</th>
+          <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Hora Inicio</th>
+          <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Hora Fin</th>
+          <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Duración</th>
+          <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (weekTurnos.length === 0) {
+          <tr>
+            <td colspan="6" class="text-center py-8 text-[#1C1C1C]/60 font-medium">
+              No hay turnos programados para esta semana.
+            </td>
+          </tr>
+        }
+        @for (turno of weekTurnos; track $index) {
+          <tr class="hover:bg-[#556B2F]/5 transition-colors duration-200">
+            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#1C1C1C]">
+              {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
+            </td>
+            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
+              {{ rolesMap.get(turno.roles_id) || 'Rol ' + turno.roles_id }}
+            </td>
+            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
+              {{ turno.fecha | date:'dd/MM/yyyy' }}
+            </td>
+            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#556B2F]">
+              {{ turno.hora_inicio }}
+            </td>
+            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#556B2F]">
+              {{ turno.hora_fin }}
+            </td>
+            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
+              {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
+            </td>
+            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10">
+              <span class="text-xs rounded-full px-3 py-1 font-medium" [ngClass]="getEstadoClase(turno.estado)">
+                {{ turno.estado | titlecase }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
   </div>
 </div>
+  @if(currentUserRole === 'Encargado'){
+  <!-- 🟣 VISTA SEMANAL ------------------------------------------------------ -->
+  <div class="rounded-lg border shadow-sm border-[#D4AF37]/20">
+    <!-- Encabezado Vista Semanal -->
+    <div class="flex justify-between items-center p-6">
+      <div>
+        <h3 class="text-2xl font-semibold text-[#556B2F]">Vista Semanal</h3>
+        <p class="text-sm text-muted-foreground">Planificación de la semana actual</p>
+      </div>
+      <!-- CTA Añadir turno -->
+      <button (click)="openModal(0, 8)"
+        class="flex items-center gap-2 rounded-md bg-[#D4AF37] hover:bg-[#EBCB64] text-white px-4 py-2 font-medium">
+        <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-plus h-4 w-4" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path d="M5 10h14M12 5v14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+        </svg>
+        Añadir turno
+      </button>
+    </div>
 
+    <!-- Grid horario (horas x días) -->
+    <div class="p-6 pt-0 grid grid-cols-8 gap-4">
+      <!-- Columna vacía para rotular horas -->
+      <div class="col-span-1"></div>
+      <div *ngFor="let day of currentWeekDates; let i = index" class="text-center font-medium text-[#556B2F]">
+        {{ getDayName(i) }}
+      </div>
+
+      <!-- Líneas de tiempo -->
+      <div class="col-span-8 grid grid-cols-8 gap-4 relative">
+        <!-- Línea de horas -->
+        <div class="col-span-1">
+          <div *ngFor="let hour of hours" class="h-[60px] text-sm text-gray-500">
+            {{hour}}:00
+          </div>
+        </div>
+
+        <!-- Celdas de turnos -->
+        <div *ngFor="let day of currentWeekDates; let dayIndex = index" class="relative">
+          <div *ngFor="let hour of hours"
+            class="h-[60px] border border-[#D4AF37]/30 hover:bg-[#D4AF37]/10 cursor-pointer"
+            (click)="openModal(dayIndex, hour)" (dragover)="allowDrop($event)" (drop)="onDrop($event, dayIndex, hour)">
+          </div>
+
+          <!-- Turnos para este día -->
+          <ng-container *ngFor="let turno of turnos">
+            <div *ngIf="(turno.fecha | date:'yyyy-MM-dd') === day"
+              class="absolute text-white p-2 rounded cursor-move shift-card" [ngClass]="turno.color"
+              [style.top.px]="turno.hora * 60" [style.height.px]="turno.duracion * 60" draggable="true"
+              (dragstart)="onDragStart(turno)" (click)="onTurnoClick(turno)">
+              <div class="font-medium text-sm">
+                {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
+              </div>
+              <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
+              <div class="text-xs">{{ turno.estado | titlecase }}</div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+  <!-- 🔘 MODAL ------------------------------------------------------------- -->
+  <!-- Componente hijo autónomo para creación/edición de turnos -->
+  <app-turnos-modal [isOpen]="isModalOpen" [selectedDayIndex]="selectedDayIndex" [selectedHour]="selectedHour"
+    [currentWeekDates]="currentWeekDates" [shiftToEdit]="selectedTurno" (close)="closeModal()"
+    (create)="createTurno($event)" (update)="updateTurno($event)" (delete)="deleteTurno()">
+  </app-turnos-modal>
+</div>

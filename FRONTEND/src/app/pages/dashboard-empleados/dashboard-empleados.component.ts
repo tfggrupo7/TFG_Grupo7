@@ -40,9 +40,14 @@ closeProfileMenu() {
 async loadCurrentEmpleado() {
   try {
     this.currentEmpleado = await this.empleadosService.getCurrentUser();
-    console.log('Usuario cargado:', this.currentEmpleado);
-  } catch (error) {
-    console.error('Error cargando empleado:', error);
+     } catch (error: any) {
+    
+    
+    // Manejar el error específico
+    if (error.status === 404) {
+          
+      this.router.navigate(['/login']);
+    }
   }
 }
 
