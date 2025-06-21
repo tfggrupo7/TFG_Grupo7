@@ -14,12 +14,14 @@ import { RolesService } from '../../../core/services/roles.service';
 })
 export class TurnosEmpleadosComponent {
   // Accedemos al componente hijo (modal) para abrir/cerrar desde el padre
-  @ViewChild(TurnosModalEmpleadosComponent) modalRef!: TurnosModalEmpleadosComponent;
+  @ViewChild(TurnosModalEmpleadosComponent)
+  modalRef!: TurnosModalEmpleadosComponent;
 
   empleadosMap = new Map<number, string>();
   rolesMap = new Map<number, string>();
+  rolesArray: any[] = [];
   currentUserRole: any = '';
-  
+
   /** Array completo de turnos cargado desde la API */
   turnos: ITurnos[] = [];
 
@@ -46,7 +48,7 @@ export class TurnosEmpleadosComponent {
   isModalOpen = false;
 
   // + maps
-  
+
   constructor(
     private turnosService: TurnosService,
     private empleadosService: EmpleadosService,
@@ -59,38 +61,49 @@ export class TurnosEmpleadosComponent {
    *   2. Descarga turnos desde el backend.
    */
   async ngOnInit() {
+    this.currentUserRole = this.getCurrentUserRole();
     // cargar catálogos primero
     const [emps, roles] = await Promise.all([
       this.empleadosService.getEmpleados(),
       this.rolesService.getRoles(),
     ]);
+
     emps.forEach((e) => this.empleadosMap.set(e.id, e.nombre));
     roles.forEach((r) => this.rolesMap.set(r.id, r.nombre));
+    this.rolesArray = roles;
 
     this.setCurrentWeekDates();
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
-   
   }
+  getRoleIdByName(roleName: string): number | null {
+    const role = this.rolesArray.find((r) => r.nombre === roleName);
+    return role ? role.id : null;
+  }
+
+  getCurrentUserRole(): string {
+  // Opción 1: Desde localStorage
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.role || '';
+    } catch (error) {
+      console.error('Error decodificando token:', error);
+      return '';
+    }
+  }
+  
+  // Opción 2: Si tienes un servicio de auth
+  // return this.authService.getCurrentUserRole();
+  
+  return '';
+}
   /**
    * Obtiene el ID del empleado logueado desde localStorage o token
    */
   getEmpleadoLogueadoId(): number | null {
     try {
-      // Opción A: ID directo en localStorage
-      const empleadoId = localStorage.getItem('empleado_id');
-      if (empleadoId) {
-        return parseInt(empleadoId);
-      }
-
-      // Opción B: Desde objeto usuario
-      const userStr = localStorage.getItem('user');
-      if (userStr) {
-        const user = JSON.parse(userStr);
-        return user.empleado_id || user.id || null;
-      }
-
-      // Opción C: Desde token JWT
       const token = localStorage.getItem('token');
       if (token) {
         const tokenData = this.decodeToken(token);
@@ -379,7 +392,7 @@ export class TurnosEmpleadosComponent {
       ? this.turnosHoy
       : this.turnos.filter((t) => t.fecha === this.todayStr);
   }
-  
+
   /** Métricas KPI mostradas en la cabecera */
   get activeShiftsCount(): number {
     return this.turnos.filter((t) => t.estado.toLowerCase() === 'confirmado')

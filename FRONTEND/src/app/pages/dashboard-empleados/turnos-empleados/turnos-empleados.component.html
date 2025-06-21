@@ -100,6 +100,7 @@
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
               {{ rolesMap.get(turno.roles_id) || 'Rol ' + turno.roles_id }}
             </td>
+            
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
               {{ turno.fecha | date:'dd/MM/yyyy' }}
             </td>
@@ -123,7 +124,7 @@
     </table>
   </div>
 </div>
-  @if(currentUserRole === 'Encargado'){
+  @if(currentUserRole === 'encargado'){
   <!-- 🟣 VISTA SEMANAL ------------------------------------------------------ -->
   <div class="rounded-lg border shadow-sm border-[#D4AF37]/20">
     <!-- Encabezado Vista Semanal -->
@@ -187,8 +188,8 @@
   }
   <!-- 🔘 MODAL ------------------------------------------------------------- -->
   <!-- Componente hijo autónomo para creación/edición de turnos -->
-  <app-turnos-modal [isOpen]="isModalOpen" [selectedDayIndex]="selectedDayIndex" [selectedHour]="selectedHour"
+  <app-turnos-modal-empleados [isOpen]="isModalOpen" [selectedDayIndex]="selectedDayIndex" [selectedHour]="selectedHour"
     [currentWeekDates]="currentWeekDates" [shiftToEdit]="selectedTurno" (close)="closeModal()"
     (create)="createTurno($event)" (update)="updateTurno($event)" (delete)="deleteTurno()">
-  </app-turnos-modal>
+  </app-turnos-modal-empleados>
 </div>

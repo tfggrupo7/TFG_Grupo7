@@ -16,7 +16,7 @@ import { IEmpleados } from '../../../../interfaces/iempleados.interfaces';
 import { IRoles } from '../../../../interfaces/iroles.interfaces';
 
 @Component({
-  selector: 'app-turnos-modal',
+  selector: 'app-turnos-modal-empleados',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './turnos-modal-empleados.component.html',
