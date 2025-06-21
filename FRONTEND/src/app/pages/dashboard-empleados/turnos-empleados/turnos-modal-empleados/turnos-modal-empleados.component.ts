@@ -19,10 +19,10 @@ import { IRoles } from '../../../../interfaces/iroles.interfaces';
   selector: 'app-turnos-modal',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './turnos-modal.component.html',
-  styleUrls: ['./turnos-modal.component.css']
+  templateUrl: './turnos-modal-empleados.component.html',
+  styleUrls: ['./turnos-modal-empleados.component.css']
 })
-export class TurnosModalComponent implements OnInit, OnChanges {
+export class TurnosModalEmpleadosComponent implements OnInit, OnChanges {
   /**
    * Propiedades de entrada : controlan visibilidad y contexto del modal
    * --------------------------------------------------

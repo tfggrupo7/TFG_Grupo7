@@ -23,7 +23,7 @@
       <p class="text-[#1C1C1C]/70">Organiza los horarios de tu equipo</p>
     </div>
     <!-- Botón principal (+) -->
-    @if(currentUserRole === 'Encargado'){
+    @if(currentUserRole === 'encargado'){
       <button
       class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
       (click)="openModal(0, 8)">
@@ -92,7 +92,8 @@
           </tr>
         }
         @for (turno of weekTurnos; track $index) {
-          <tr class="hover:bg-[#556B2F]/5 transition-colors duration-200">
+          <!-- Debug info -->
+            <tr class="hover:bg-[#556B2F]/5 transition-colors duration-200">
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#1C1C1C]">
               {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
             </td>

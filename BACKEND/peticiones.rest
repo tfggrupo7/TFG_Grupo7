@@ -1,6 +1,6 @@
 @host = http://localhost:3000
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJpYXQiOjE3NDg5Mjg1MzMsImV4cCI6MTc0ODkzMjEzM30.Hwck22WkQgK7QegG4kMi5qz3eVkZGTE1xoWz7Bdj_Bc
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo2LCJlbWFpbCI6IndhbHRyYUBnbWFpbC5jb20iLCJpYXQiOjE3NTA1MDU4NzksImV4cCI6MTc1MDUwOTQ3OX0.Gr6pk-LVStvPd3MqMuIcycWZxJa15WS0fXg5TCBwDno
 ###############
 ## EMPLEADOS ##
 ###############
@@ -488,3 +488,5 @@ Content-Type: application/json
 {
   "nuevaContraseña": "123456" 
 }
+
+

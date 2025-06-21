@@ -2,20 +2,24 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TurnosService } from '../../../core/services/turnos.service';
 import { ITurnos } from '../../../interfaces/iturnos.interfaces';
-import { TurnosModalComponent } from './turnos-modal/turnos-modal.component';
+import { TurnosModalEmpleadosComponent } from './turnos-modal-empleados/turnos-modal-empleados.component';
 import { EmpleadosService } from '../../../core/services/empleados.service';
 import { RolesService } from '../../../core/services/roles.service';
 
 @Component({
   selector: 'app-turnos-empleados',
-  imports: [CommonModule, TurnosModalComponent],
+  imports: [CommonModule, TurnosModalEmpleadosComponent],
   templateUrl: './turnos-empleados.component.html',
   styleUrl: './turnos-empleados.component.css',
 })
 export class TurnosEmpleadosComponent {
   // Accedemos al componente hijo (modal) para abrir/cerrar desde el padre
-  @ViewChild(TurnosModalComponent) modalRef!: TurnosModalComponent;
+  @ViewChild(TurnosModalEmpleadosComponent) modalRef!: TurnosModalEmpleadosComponent;
 
+  empleadosMap = new Map<number, string>();
+  rolesMap = new Map<number, string>();
+  currentUserRole: any = '';
+  
   /** Array completo de turnos cargado desde la API */
   turnos: ITurnos[] = [];
 
@@ -42,9 +46,7 @@ export class TurnosEmpleadosComponent {
   isModalOpen = false;
 
   // + maps
-  empleadosMap = new Map<number, string>();
-  rolesMap = new Map<number, string>();
-  currentUserRole: any = '';
+  
   constructor(
     private turnosService: TurnosService,
     private empleadosService: EmpleadosService,
@@ -68,6 +70,7 @@ export class TurnosEmpleadosComponent {
     this.setCurrentWeekDates();
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
+   
   }
   /**
    * Obtiene el ID del empleado logueado desde localStorage o token
