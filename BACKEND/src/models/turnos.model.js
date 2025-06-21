@@ -38,6 +38,21 @@ const selectById = async (turnoId) => {
   );
   return rows[0] || null;
 };
+const selectByEmpleadoId = async (empleadoId) => {
+  const [rows] = await db.query(
+    "SELECT * FROM turnos WHERE empleado_id = ? ORDER BY fecha, hora_inicio",
+    [Number(empleadoId)] 
+  );
+  return rows; 
+}
+
+const selectTurnosByDateAndEmpleado = async (fecha, empleadoId) => {
+  const [rows] = await db.query(
+    "SELECT * FROM turnos WHERE fecha = ? AND empleado_id = ? ORDER BY hora_inicio",
+    [fecha, Number(empleadoId)]
+  );
+  return rows; // Array de objetos (vacío si no hay datos)
+}
 
 /**
  * Devuelve un listado de turnos filtrados por fecha.
@@ -99,4 +114,4 @@ const remove = async (turnoId) => {
 };
 
 // Exports
-module.exports = { selectAll, selectById, insert, update, remove, selectByDate };
+module.exports = { selectAll, selectById, selectByEmpleadoId,selectTurnosByDateAndEmpleado, insert, update, remove, selectByDate };

@@ -3,3 +3,40 @@
   display: block;
   width: 100%;
 }
+.calendar-container {
+  overflow-x: auto;
+}
+
+.calendar-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.calendar-table th, .calendar-table td {
+  border: 1px solid #ccc;
+  text-align: center;
+  min-width: 100px;
+  height: 40px;
+  position: relative;
+}
+
+.hour-label {
+  background: #f0f0f0;
+  font-weight: bold;
+  width: 60px;
+}
+
+.shift {
+  background: #1976d2;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px;
+  cursor: grab;
+  margin: 2px 0;
+}
+.shift-card {
+  opacity: 0.8;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+}
