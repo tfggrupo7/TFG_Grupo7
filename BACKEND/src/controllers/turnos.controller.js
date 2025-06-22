@@ -138,7 +138,126 @@ const remove = async (req, res) => {
   res.json({ message: "turno eliminado", id: turnoId });
 };
 
+const exportTurnosEmpleadoPDF = async (req, res) => {
+  console.log("req.params:", req.params);
+  const empleadoId = Number(req.params.empleadoId);
+  console.log("empleadoId recibido y convertido:", empleadoId);
 
+  if (isNaN(empleadoId)) {
+    return res.status(400).json({ error: "ID de empleado inválido" });
+  }
+
+  try {
+    const turnos = await Turno.selectAllTurnosAndEmpleadoRaw(
+      Number(empleadoId)
+    );
+
+    if (!turnos || turnos.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No se encontraron turnos para este empleado" });
+    }
+
+    const pdfDir = path.join(__dirname, "pdfsTurnos");
+    const filePath = path.join(pdfDir, `turnos_emp_${empleadoId}.pdf`);
+
+    if (!fs.existsSync(pdfDir)) {
+      fs.mkdirSync(pdfDir, { recursive: true });
+    }
+
+    console.log("Generando PDF en:", filePath);
+    await generateTurnosPDF(tareas, filePath);
+    console.log("PDF generado");
+
+    res.download(filePath, `empleado_${empleadoId}_turnos.pdf`, (err) => {
+      if (err) {
+        console.error("Error al enviar el PDF:", err);
+        return res
+          .status(500)
+          .json({ error: "Error al enviar el archivo PDF" });
+      }
+      // Eliminar el archivo temporal luego de enviarlo
+      fs.unlink(filePath, (err) => {
+        if (err) console.error("Error al borrar el archivo PDF:", err);
+      });
+    });
+  } catch (err) {
+    console.error("Error al generar el PDF:", err);
+    res
+      .status(500)
+      .json({ error: "Error al generar el PDF", details: err.message });
+  }
+};
+
+// Envio de todas las tareas por email
+const sendTurnoPDF = async (req, res) => {
+  const email = req.user?.email || req.body.email;
+
+  if (!email) return res.status(400).json({ error: "Email requerido" });
+
+  try {
+    const turnos = await Turno.selectAllTurnosRaw();
+    console.log("Tareas obtenidas:", tareas.length);
+    const filePath = path.join(__dirname, "turnos.pdf");
+    console.log("PDF generado en:", filePath);
+    await generateTurnosPDF(tareas, filePath);
+    await sendTurnosEmail(
+      email,
+      "Turnos",
+      "Adjunto encontrarás el PDF con los Turnos.",
+      filePath
+    );
+    console.log("Email enviado a:", email);
+
+    fs.unlinkSync(filePath);
+    res.json({ message: "Email enviado correctamente" });
+  } catch (err) {
+    console.error("Error al enviar el email:", err);
+    res.status(500).json({ error: "Error al enviar el email" });
+  }
+};
+// Envio tareas por email de un empleado
+
+const sendAllTurnoEmpleadoPDF = async (req, res) => {
+  const email = req.user?.email || req.body.email;
+  const empleadoId = Number(req.params.empleadoId);
+
+  if (!email) return res.status(400).json({ error: "Email requerido" });
+
+  try {
+    const tareas = await Tarea.selectAllTurnosAndEmpleadoRaw(empleadoId);
+
+    if (!tareas || tareas.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No se encontraron turnos para este empleado" });
+    }
+
+    const filePath = path.join(__dirname, `turnos_emp_${empleadoId}.pdf`);
+    console.log("Generando PDF en:", filePath);
+
+    await generateTurnosPDF(tareas, filePath);
+
+    await sendTurnosEmail(
+      email,
+      "Trunoss",
+      "Adjunto encontrarás el PDF con los Turnos.",
+      filePath
+    );
+
+    console.log("Email enviado a:", email);
+
+    fs.unlinkSync(filePath);
+
+    res.json({ message: "Email enviado correctamente" });
+  } catch (err) {
+    console.error("Error al enviar el email:", err);
+    res
+      .status(500)
+      .json({ error: "Error al enviar el email", details: err.message });
+  }
+
+}
 
 // Exportamos todas las acciones del controlador
-module.exports = { getAll, getById, getByEmpleadoId,getTurnosByDateAndEmpleado, create, update, remove, getByDate };
+module.exports = { getAll, getById, getByEmpleadoId,getTurnosByDateAndEmpleado, create, update, remove, getByDate, exportTurnosEmpleadoPDF, sendAllTurnoEmpleadoPDF, sendTurnoPDF };

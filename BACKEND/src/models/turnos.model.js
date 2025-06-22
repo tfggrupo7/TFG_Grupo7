@@ -113,5 +113,30 @@ const remove = async (turnoId) => {
   return result;
 };
 
+const selectAllTurnosRaw = async () => {
+  const [result] = await db.query("SELECT * FROM turnos");
+  return result;
+};
+
+const selectAllTurnosAndEmpleadoRaw = async (empleadoId) => {
+  const [result] = await db.query(
+    `SELECT 
+  turnos.dia, 
+  turnos.hora_inicio,
+  turnos.hora_fin,
+  turnos.duracion, 
+  turnos.fecha,
+  turnos.estado, 
+  turnos.empleado_id,
+  turnos.roles_id
+  empleados.nombre AS empleado_nombre
+FROM turnos
+INNER JOIN empleados ON turnos.empleado_id = empleados.id
+WHERE turnos.empleado_id = ?`,
+    [empleadoId]
+  );
+  return result;
+};
+
 // Exports
-module.exports = { selectAll, selectById, selectByEmpleadoId,selectTurnosByDateAndEmpleado, insert, update, remove, selectByDate };
+module.exports = { selectAll, selectById, selectByEmpleadoId,selectTurnosByDateAndEmpleado, insert, update, remove, selectByDate, selectAllTurnosAndEmpleadoRaw,selectAllTurnosRaw };
