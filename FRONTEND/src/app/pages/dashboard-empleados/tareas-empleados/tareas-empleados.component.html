@@ -110,11 +110,25 @@
             </div>
             <div class="space-y-2">
                 <label
-                  class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  for="hora_finalizacion">EmpleadoId</label>
-                <input
-                  class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
-                  id="empleado_id" formControlName="empleado_id" placeholder="" required type="number" name="empleado_id">
+          class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          for="empleado_id"
+          >Empleado</label
+        >
+
+        <select
+          class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+          id="empleado_id"
+          formControlName="empleado_id"
+          required
+        >
+        <option value="" disabled>Selecciona un empleado</option>
+        @for (empleado of empleados; track empleado.id) {
+          <option [value]="empleado.id">
+            {{ empleado.nombre }} {{ empleado.apellidos }}
+          </option>
+        }
+        </select>
+    
               </div>
             <div class="flex justify-end pt-4">
               <button type="submit" class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow">
@@ -130,6 +144,7 @@
     }
 <div class="mt-8">
   <h2 class="text-xl font-bold text-[#4b6b1c] mb-4">Lista de Tareas del Empleado</h2>
+  
   <table class="min-w-full bg-white border border-[#d9dbc7] rounded-xl shadow">
     <thead class="bg-[#e9ebdd]">
       <tr>

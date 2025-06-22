@@ -35,19 +35,45 @@ function formatearFecha(fecha) {
   return "";
 }
 
-// Agrupa tareas por empleado_id
+// Mantén tu función original
 function agruparPorEmpleado(turnos) {
   return turnos.reduce((acc, turno) => {
-    const id = turno.empleado_id || "No asignado";
-    if (!acc[id]) acc[id] = [];
+    const id = turno.empleado_id;
+    if (!acc[id]) {
+      acc[id] = [];
+    }
     acc[id].push(turno);
     return acc;
   }, {});
 }
 
+// Corrige la función agruparPorEmpleado
 function generateTurnosPDF(turnos, filePath) {
   return new Promise((resolve, reject) => {
-    const turnosPorEmpleado = agruparPorEmpleado(turnos);
+       
+    // Aplanar y filtrar solo objetos válidos con empleado_id
+    const turnosFlat = Array.isArray(turnos[0]) ? turnos.flat() : turnos;
+    
+    // FILTRAR: Solo objetos que tengan las propiedades necesarias
+    const turnosValidos = turnosFlat.filter(turno => 
+      turno && 
+      typeof turno === 'object' && 
+      turno.hasOwnProperty('id') && 
+      turno.hasOwnProperty('empleado_id') &&
+      turno.empleado_id !== null &&
+      turno.empleado_id !== undefined
+    );
+    
+    console.log("Turnos válidos:", turnosValidos.length);
+    console.log("Turnos filtrados:", turnosValidos);
+    
+    if (turnosValidos.length === 0) {
+      reject(new Error("No hay turnos válidos para procesar"));
+      return;
+    }
+    
+    const turnosPorEmpleado = agruparPorEmpleado(turnosValidos);
+    console.log("Turnos agrupados:", turnosPorEmpleado);
 
     const doc = new PDFDocument({
       margin: 30,
@@ -72,7 +98,7 @@ function generateTurnosPDF(turnos, filePath) {
     const borderColor = "#e0e0e0";
 
     // Columnas
-    const colWidths = [90, 170, 80, 100, 70, 100, 70, 60];
+    const colWidths = [90, 170, 80, 100, 70, 100, 70];
     const headers = [
       "Día",
       "Hora_inicio",
@@ -80,84 +106,91 @@ function generateTurnosPDF(turnos, filePath) {
       "Fecha",
       "Estado",
       "Empleado_id",
-      "", // Papelera
+      "Acciones"
     ];
 
     let y = doc.y;
 
-    Object.entries(turnosPorEmpleado).forEach(
-      ([empleadoId, turnosEmpleado]) => {
-        // Encabezado de empleado
-        doc
-          .font("Helvetica-Bold")
-          .fontSize(12)
-          .fillColor("#6b8e23")
-          .text(`Empleado ID: ${empleadoId}`, 30, y);
-        y += 18;
+    Object.entries(turnosPorEmpleado).forEach(([empleadoId, turnosEmpleado]) => {
+    
+      // Obtener info del empleado del primer turno
+      const primerTurno = turnosEmpleado[0];
+      
+      const nombreCompleto = primerTurno.empleado_nombre && primerTurno.empleado_apellidos 
+        ? `${primerTurno.empleado_nombre} ${primerTurno.empleado_apellidos}`.trim()
+        : primerTurno.empleado_nombre || "Sin nombre";
 
-        // Encabezado de tabla
-        let x = 30;
-        headers.forEach((header, i) => {
-          doc
-            .rect(x, y, colWidths[i], 22)
-            .fillAndStroke(headerBg, borderColor)
-            .fillColor(headerText)
-            .font("Helvetica-Bold")
-            .fontSize(10)
-            .text(header, x + 4, y + 6, {
-              width: colWidths[i] - 8,
-              align: "left",
-            });
+      // Encabezado de empleado con nombre
+      doc
+        .font("Helvetica-Bold")
+        .fontSize(12)
+        .fillColor("#6b8e23")
+        .text(`Empleado ID: ${empleadoId} - ${nombreCompleto}`, 30, y);
+      y += 18;
+
+      // Encabezado de tabla
+      let x = 30;
+      headers.forEach((header, i) => {
+        doc
+          .rect(x, y, colWidths[i], 22)
+          .fillAndStroke(headerBg, borderColor)
+          .fillColor(headerText)
+          .font("Helvetica-Bold")
+          .fontSize(10)
+          .text(header, x + 4, y + 6, {
+            width: colWidths[i] - 8,
+            align: "left",
+          });
+        x += colWidths[i];
+      });
+      y += 22;
+
+      // Filas de turnos
+      turnosEmpleado.forEach((turno, index) => {
+        x = 30;
+        const values = [
+          turno.dia || "",
+          turno.hora_inicio || "",
+          turno.hora_fin || "",
+          formatearFecha(turno.fecha),
+          turno.estado || "",
+          turno.empleado_id || "",
+          ""
+        ];
+        
+        values.forEach((value, i) => {
+          doc.rect(x, y, colWidths[i], 20).stroke(borderColor);
+
+          if (i === 6) {
+            // Draw trash icon if available
+            try {
+              doc.image("trash.png", x + 8, y + 4, { width: 12, height: 12 });
+            } catch (e) {
+              // Handle error
+            }
+          } else {
+            doc
+              .fillColor(rowText)
+              .font("Helvetica")
+              .fontSize(10)
+              .text(String(value), x + 4, y + 5, {
+                width: colWidths[i] - 8,
+                align: "left",
+              });
+          }
           x += colWidths[i];
         });
-        y += 22;
+        y += 20;
 
-        // Filas de turnos
-        turnosEmpleado.forEach((turno) => {
-          x = 30;
-          const values = [
-            turno.dia || "",
-            turno.hora_inicio || "",
-            turno.hora_fin || "",
-            formatearFecha(turno.fecha),
-            turno.estado || "",
-            turno.empleado_id || "",
-            "", // Placeholder for trash icon
-          ];
-          values.forEach((value, i) => {
-            doc.rect(x, y, colWidths[i], 20).stroke(borderColor);
+        // Salto de página si es necesario
+        if (y > 750) {
+          doc.addPage();
+          y = 30;
+        }
+      });
 
-            if (i === 7) {
-              // Draw trash icon if available
-              try {
-                doc.image("trash.png", x + 8, y + 4, { width: 12, height: 12 });
-              } catch (e) {
-                // If image not found, leave blank or handle error
-              }
-            } else {
-              doc
-                .fillColor(rowText)
-                .font("Helvetica")
-                .fontSize(10)
-                .text(value, x + 4, y + 5, {
-                  width: colWidths[i] - 8,
-                  align: "left",
-                });
-            }
-            x += colWidths[i];
-          });
-          y += 20;
-
-          // Salto de página si es necesario
-          if (y > 750) {
-            doc.addPage();
-            y = 30;
-          }
-        });
-
-        y += 18; // Espacio entre empleados
-      }
-    );
+      y += 18; // Espacio entre empleados
+    });
 
     doc.end();
 

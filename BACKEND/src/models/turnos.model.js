@@ -114,25 +114,36 @@ const remove = async (turnoId) => {
 };
 
 const selectAllTurnosRaw = async () => {
-  const [result] = await db.query("SELECT * FROM turnos");
-  return result;
+  const query = `
+    SELECT 
+      t.*,
+      e.nombre as empleado_nombre,
+      e.apellidos as empleado_apellidos
+    FROM turnos t
+    LEFT JOIN empleados e ON t.empleado_id = e.id
+    ORDER BY t.empleado_id, t.fecha
+  `;
+  // Ejecuta la consulta según tu ORM/conexión DB
+  return await db.query(query);
 };
 
 const selectAllTurnosAndEmpleadoRaw = async (empleadoId) => {
   const [result] = await db.query(
     `SELECT 
-  turnos.dia, 
-  turnos.hora_inicio,
-  turnos.hora_fin,
-  turnos.duracion, 
-  turnos.fecha,
-  turnos.estado, 
-  turnos.empleado_id,
-  turnos.roles_id
-  empleados.nombre AS empleado_nombre
-FROM turnos
-INNER JOIN empleados ON turnos.empleado_id = empleados.id
-WHERE turnos.empleado_id = ?`,
+      turnos.id,               -- Agregado el id del turno
+      turnos.dia, 
+      turnos.hora_inicio,
+      turnos.hora_fin,
+      turnos.duracion, 
+      turnos.fecha,
+      turnos.estado, 
+      turnos.empleado_id,
+      turnos.roles_id,
+      empleados.nombre AS empleado_nombre,
+      empleados.apellidos AS empleado_apellidos
+    FROM turnos
+    INNER JOIN empleados ON turnos.empleado_id = empleados.id
+    WHERE turnos.empleado_id = ?`,
     [empleadoId]
   );
   return result;

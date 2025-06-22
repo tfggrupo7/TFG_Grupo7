@@ -5,6 +5,8 @@ import { ITurnos } from '../../../interfaces/iturnos.interfaces';
 import { TurnosModalEmpleadosComponent } from './turnos-modal-empleados/turnos-modal-empleados.component';
 import { EmpleadosService } from '../../../core/services/empleados.service';
 import { RolesService } from '../../../core/services/roles.service';
+import { toast } from 'ngx-sonner';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-turnos-empleados',
@@ -21,6 +23,9 @@ export class TurnosEmpleadosComponent {
   rolesMap = new Map<number, string>();
   rolesArray: any[] = [];
   currentUserRole: any = '';
+  empleadoId: string = '';
+  turnosEmpleado: any[] = [];
+  
 
   /** Array completo de turnos cargado desde la API */
   turnos: ITurnos[] = [];
@@ -46,6 +51,7 @@ export class TurnosEmpleadosComponent {
 
   /** Flag que controla la visibilidad del modal */
   isModalOpen = false;
+  cdr: any;
 
   // + maps
 
@@ -73,9 +79,14 @@ export class TurnosEmpleadosComponent {
     this.rolesArray = roles;
 
     this.setCurrentWeekDates();
+    const empleadoIdFromToken = this.getEmpleadoIdFromToken();
+    this.empleadoId = empleadoIdFromToken !== null ? String(empleadoIdFromToken) : '';
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
+  this.turnos = await this.turnosService.getTurnos();
+ 
   }
+
   getRoleIdByName(roleName: string): number | null {
     const role = this.rolesArray.find((r) => r.nombre === roleName);
     return role ? role.id : null;
@@ -89,7 +100,6 @@ export class TurnosEmpleadosComponent {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.role || '';
     } catch (error) {
-      console.error('Error decodificando token:', error);
       return '';
     }
   }
@@ -112,7 +122,6 @@ export class TurnosEmpleadosComponent {
 
       return null;
     } catch (error) {
-      console.error('Error obteniendo ID del empleado:', error);
       return null;
     }
   }
@@ -125,47 +134,31 @@ export class TurnosEmpleadosComponent {
       const payload = token.split('.')[1];
       return JSON.parse(atob(payload));
     } catch (error) {
-      console.error('Error decodificando token:', error);
       return null;
     }
   }
-  /** Descarga la lista de turnos y actualiza `this.turnos` */
-  /** Descarga solo los turnos del empleado logueado */
-  async cargarTurnos() {
+async cargarTurnos() {
     try {
-      const empleadoId = this.getEmpleadoLogueadoId();
-
-      if (!empleadoId) {
-        this.turnos = [];
-        return;
-      }
-
-      // Agregar timeout manual
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(
-          () => reject(new Error('Timeout después de 10 segundos')),
-          10000
-        )
-      );
-
-      const turnosPromise = this.turnosService.getTurnos();
-
-      const allTurnos = (await Promise.race([
-        turnosPromise,
-        timeoutPromise,
-      ])) as ITurnos[];
-
-      // Filtrar por empleado
-      this.turnos = allTurnos.filter(
-        (turno) => turno.empleado_id === empleadoId
-      );
-    } catch (error: any) {
-      if (error.message.includes('Timeout')) {
-        console.error('⏰ La petición tardó más de 10 segundos');
-      }
-      this.turnos = [];
+      const empleadoIdFromToken = this.getEmpleadoIdFromToken();
+      this.empleadoId = empleadoIdFromToken !== null ? String(empleadoIdFromToken) : '';
+      const empleadoIdNumber = Number(this.empleadoId);
+      
+      
+      const todosTurnos = await this.turnosService.getTurnos();
+      
+      // Usar la nueva propiedad (NO readonly)
+      this.turnosEmpleado = todosTurnos.filter((turno, index) => {
+        const coincide = turno.empleado_id === empleadoIdNumber;
+        return coincide;
+      });
+      
+      
+      
+    } catch (error) {
+      console.error('Error cargando turnos:', error);
     }
   }
+  
 
   async cargarTurnosHoy() {
     try {
@@ -395,8 +388,9 @@ export class TurnosEmpleadosComponent {
 
   /** Métricas KPI mostradas en la cabecera */
   get activeShiftsCount(): number {
-    return this.turnos.filter((t) => t.estado.toLowerCase() === 'confirmado')
-      .length;
+    const count = this.turnos.filter((t) => t.estado.toLowerCase() === 'confirmado').length;
+    
+    return count;
   }
 
   /**
@@ -502,4 +496,75 @@ export class TurnosEmpleadosComponent {
         return 'bg-gray-100 text-gray-700 border border-gray-300';
     }
   }
+  
+    getEmpleadoIdFromToken(): number | null {
+      const token = localStorage.getItem('token');
+      if (!token) return null;
+      try {
+        const decoded: any = jwtDecode(token);
+        return decoded.id || decoded.empleadoId || null;
+      } catch (e) {
+        return null;
+      }
+      
+    }
+  
+    enviarTurnosPorEmail() {
+      const empleadoId = this.getEmpleadoIdFromToken();
+      if (!empleadoId) {
+        toast.error('No se pudo obtener el ID del empleado');
+        return;
+      }
+      // Obtener el email del token
+      const token = localStorage.getItem('token');
+      let email: string | null = null;
+      if (token) {
+        try {
+          const decoded: any = jwtDecode(token);
+          email = decoded.email || null;
+        } catch (e) {
+          email = null;
+        }
+      }
+      if (!email) {
+        toast.error('No se pudo obtener el email del empleado');
+        return;
+      }
+      this.turnosService
+        .sendTurnosEmpleadoByEmail(empleadoId, email)
+        .then(() => {
+          toast.success('Tareas enviadas por correo electrónico correctamente');
+        })
+        .catch((err: unknown) => {
+          console.error(
+            'Error al enviar las tareas por correo electrónico:',
+            err
+          );
+          toast.error('Error al enviar las tareas por correo electrónico');
+        });
+    }
+    descargarTurnos() {
+      const empleadoId = this.getEmpleadoIdFromToken();
+      console.log('EmpleadoId obtenido del token:', empleadoId);
+      if (!empleadoId) {
+        alert('No se pudo obtener el ID del empleado');
+        return;
+      }
+      this.turnosService
+        .downloadTurnosPorId(empleadoId)
+        .then((respuesta: any) => {
+          const blob = new Blob([respuesta], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'tareas de empleado.pdf';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        })
+        .catch((err: unknown) => {
+          toast.error('Error al descargar las tareas');
+        });
+    }
 }

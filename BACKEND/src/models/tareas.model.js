@@ -97,8 +97,25 @@ const remove = async (tareaId) => {
 // y enviarlas por email
 
 const selectAllTareasRaw = async () => {
-  const [result] = await db.query("SELECT * FROM tareas");
-  return result;
+  const query = `
+    SELECT 
+      t.id,
+      t.titulo,
+      t.descripcion,
+      t.fecha_inicio,
+      t.fecha_finalizacion,
+      t.hora_inicio,
+      t.hora_finalizacion,
+      t.empleado_id,
+      t.estado,
+      e.nombre as empleado_nombre,
+      e.apellidos as empleado_apellidos
+    FROM tareas t
+    LEFT JOIN empleados e ON t.empleado_id = e.id
+    ORDER BY t.empleado_id, t.fecha_inicio
+  `;
+ 
+  return await db.query(query);
 };
 
 const selectAllTareasAndEmpleadoRaw = async (empleadoId) => {

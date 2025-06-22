@@ -142,4 +142,60 @@ getTurnosByDateAndEmpleado(fecha: string, empleadoId: number): Promise<ITurnos[]
     });
   return lastValueFrom(this.httpClient.get<ITurnos[]>(`${this.url}/fecha/${fecha}/empleado/${empleadoId}`, { headers }));
 }
+ sendTurnosByEmail(turnos: ITurnos[]): Promise<void> {
+    const token = localStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    });
+    return lastValueFrom(
+      this.httpClient.post<void>(
+        `${this.url}/send/pdf`,
+        { turnos },
+        { headers }
+      )
+    );
+  }
+  sendTurnosEmpleadoByEmail(empleadoId: number, email: string): Promise<void> {
+    const token = localStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    });
+    return lastValueFrom(
+      this.httpClient.post<void>(
+        `${this.url}/empleado/${empleadoId}/send/pdf`,
+        { empleadoId, email },
+        { headers }
+      )
+    );
+  }
+  downloadTurnos(): Promise<Blob> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    });
+    return lastValueFrom(
+      this.httpClient.get(`${this.url}/export/pdf`, {
+        responseType: 'blob',
+        headers: headers,
+      })
+    );
+  }
+  downloadTurnosPorId(empleadoId: number): Promise<Blob> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    });
+    return lastValueFrom(
+      this.httpClient.get(`${this.url}/empleado/${empleadoId}/pdf`, {
+        responseType: 'blob',
+        headers: headers,
+      })
+    );
+  }
 }

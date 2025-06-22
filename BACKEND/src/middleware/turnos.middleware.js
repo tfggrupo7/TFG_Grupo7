@@ -11,7 +11,7 @@
  *                          *todos* los campos obligatorios. Si falta alguno, responde 400.
  */
 const Turnos = require("../models/turnos.model"); // Acceso a métodos DAO (selectById, etc.)
-
+const jwt = require("jsonwebtoken");
 /**
  * Verifica que el parámetro de ruta `turnoId` es un número válido y que existe en la base de datos.
  *
@@ -60,5 +60,22 @@ const checkDataTurno = (req, res, next) => {
   // Si todo OK → delegamos al siguiente middleware/controlador
   next();
 };
+const auth = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-module.exports = { checkTurnoId, checkDataTurno}; // Exportación agrupada para facilidad de importación
+  if (!token) {
+    return res.status(401).json({ error: 'Token de acceso requerido' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      console.log('JWT VERIFY ERROR:', err.message);
+      return res.status(403).json({ error: 'Token inválido' });
+    }
+    req.user = user;
+    next();
+  });
+};
+
+module.exports = { checkTurnoId, checkDataTurno, auth}; // Exportación agrupada para facilidad de importación

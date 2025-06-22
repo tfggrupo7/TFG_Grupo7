@@ -13,7 +13,7 @@ import { ITurnos } from '../../../interfaces/iturnos.interfaces';
 import { TurnosModalComponent } from './turnos-modal/turnos-modal.component';
 import { EmpleadosService } from '../../../core/services/empleados.service';
 import { RolesService } from '../../../core/services/roles.service';
-
+import { toast } from 'ngx-sonner';
 @Component({
   selector: 'app-turnos',
   standalone: true,
@@ -328,4 +328,38 @@ export class TurnosComponent implements OnInit {
         return 'bg-gray-100 text-gray-700 border border-gray-300';
     }
   }
+  enviarTurnosPorEmail() {
+      this.turnosService
+        .sendTurnosByEmail(this.turnos)
+        .then(() => {
+          toast.success('Turnos enviados por correo electrónico correctamente');
+        })
+        .catch((err: unknown) => {
+          console.error(
+            'Error al enviar los turnos por correo electrónico:',
+            err
+          );
+          toast.error('Error al enviar las tareas por correo electrónico');
+        });
+    }
+    descargarTareas() {
+      this.turnosService
+      .downloadTurnos()
+      .then((respuesta: any) => {
+        const blob = new Blob([respuesta], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'turnos.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((err: unknown) => {
+        console.error('Error al descargar los turnos:', err);
+        toast.error('Error al descargar los turnos');
+      });
+    }
+  
 }

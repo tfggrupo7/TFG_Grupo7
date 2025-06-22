@@ -10,7 +10,10 @@
  */
 
 const Turno = require('../models/turnos.model'); // DAO que encapsula las consultas MySQL
-
+const path = require('path');
+const fs = require('node:fs'); 
+const { generateTurnosPDF } = require("../helper/turnosPdf.helper");
+const { sendTurnosEmail } = require("../helper/turnosEmail.helper");
 /**
  * GET /api/turnos
  * --------------------------------------------------
@@ -137,6 +140,43 @@ const remove = async (req, res) => {
   // Respuesta optimizada: solo mensaje y ID eliminado
   res.json({ message: "turno eliminado", id: turnoId });
 };
+const exportTurnosPDF = async (req, res) => {
+  console.log("Entrando a exportTurnosPDF");
+  try {
+    const turnos = await Turno.selectAllTurnosRaw();
+    
+    // Verificar que turnos no sea undefined o null
+    if (!turnos || !Array.isArray(turnos)) {
+      return res.status(404).json({ error: "No se encontraron turnos" });
+    }
+    
+    const pdfDir = path.join(__dirname, "pdfs");
+    const filePath = path.join(pdfDir, "turnos.pdf");
+    
+    if (!fs.existsSync(pdfDir)) {
+      fs.mkdirSync(pdfDir);
+    }
+    
+    // Generar el PDF - cambiar 'tareas' por 'turnos'
+    console.log("Generando PDF en:", filePath);
+    await generateTurnosPDF(turnos, filePath); 
+    console.log("PDF generado");
+    
+    res.download(filePath, "turnos.pdf", (err) => {
+      if (err) {
+        console.error("Error al enviar el PDF:", err);
+      }
+      fs.unlink(filePath, (err) => {
+        if (err) console.error("Error al borrar el PDF:", err);
+      });
+    });
+  } catch (err) {
+    console.error("Error al generar el PDF:", err);
+    res
+      .status(500)
+      .json({ error: "Error al generar el PDF", details: err.message });
+  }
+};
 
 const exportTurnosEmpleadoPDF = async (req, res) => {
   console.log("req.params:", req.params);
@@ -166,7 +206,7 @@ const exportTurnosEmpleadoPDF = async (req, res) => {
     }
 
     console.log("Generando PDF en:", filePath);
-    await generateTurnosPDF(tareas, filePath);
+    await generateTurnosPDF(turnos, filePath);
     console.log("PDF generado");
 
     res.download(filePath, `empleado_${empleadoId}_turnos.pdf`, (err) => {
@@ -197,10 +237,10 @@ const sendTurnoPDF = async (req, res) => {
 
   try {
     const turnos = await Turno.selectAllTurnosRaw();
-    console.log("Tareas obtenidas:", tareas.length);
+    console.log("Tareas obtenidas:", turnos.length);
     const filePath = path.join(__dirname, "turnos.pdf");
     console.log("PDF generado en:", filePath);
-    await generateTurnosPDF(tareas, filePath);
+    await generateTurnosPDF(turnos, filePath);
     await sendTurnosEmail(
       email,
       "Turnos",
@@ -216,7 +256,7 @@ const sendTurnoPDF = async (req, res) => {
     res.status(500).json({ error: "Error al enviar el email" });
   }
 };
-// Envio tareas por email de un empleado
+// Envio turnos por email de un empleado
 
 const sendAllTurnoEmpleadoPDF = async (req, res) => {
   const email = req.user?.email || req.body.email;
@@ -225,9 +265,9 @@ const sendAllTurnoEmpleadoPDF = async (req, res) => {
   if (!email) return res.status(400).json({ error: "Email requerido" });
 
   try {
-    const tareas = await Tarea.selectAllTurnosAndEmpleadoRaw(empleadoId);
+    const turnos = await Turno.selectAllTurnosAndEmpleadoRaw(empleadoId);
 
-    if (!tareas || tareas.length === 0) {
+    if (!turnos || turnos.length === 0) {
       return res
         .status(404)
         .json({ error: "No se encontraron turnos para este empleado" });
@@ -236,11 +276,11 @@ const sendAllTurnoEmpleadoPDF = async (req, res) => {
     const filePath = path.join(__dirname, `turnos_emp_${empleadoId}.pdf`);
     console.log("Generando PDF en:", filePath);
 
-    await generateTurnosPDF(tareas, filePath);
+    await generateTurnosPDF(turnos, filePath);
 
     await sendTurnosEmail(
       email,
-      "Trunoss",
+      "Turnos",
       "Adjunto encontrarás el PDF con los Turnos.",
       filePath
     );
@@ -260,4 +300,4 @@ const sendAllTurnoEmpleadoPDF = async (req, res) => {
 }
 
 // Exportamos todas las acciones del controlador
-module.exports = { getAll, getById, getByEmpleadoId,getTurnosByDateAndEmpleado, create, update, remove, getByDate, exportTurnosEmpleadoPDF, sendAllTurnoEmpleadoPDF, sendTurnoPDF };
+module.exports = { getAll, getById, getByEmpleadoId,getTurnosByDateAndEmpleado, create, update, remove, getByDate, exportTurnosPDF,exportTurnosEmpleadoPDF, sendAllTurnoEmpleadoPDF, sendTurnoPDF };
