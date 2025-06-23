@@ -219,7 +219,10 @@ const getByEmpleadoId = async (req, res) => {
     if (!empleado) {
       return res.status(404).json({ message: "Empleado no encontrado" });
     }
-
+    const rol = await Role.selectById(empleado.rol_id)
+    if (rol) {
+      empleado.rol = rol
+    }
     const { password, ...empleadoSinPassword } = empleado;
     return res.status(200).json(empleadoSinPassword);
   } catch (error) {

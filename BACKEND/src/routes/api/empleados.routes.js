@@ -158,7 +158,7 @@ router.get("/", getAll);
  *                     items:
  *                       type: string
  */
-router.get("/tareas", getEmpleadosAndTarea);
+router.get("/tareas", checkToken,getEmpleadosAndTarea);
 /**
  * @swagger
  * /empleados/role:
@@ -180,7 +180,7 @@ router.get("/tareas", getEmpleadosAndTarea);
  *                   rol:
  *                     type: string
  */
-router.get('/role', getEmpleadosYRoles); 
+router.get('/role', checkToken, getEmpleadosYRoles); 
 /**
  * @swagger
  * /empleados/{empleadoId}:
@@ -273,7 +273,7 @@ router.post('/cambiar-contrasena/:empleadoId',checkempleadosId, cambiarContrase√
  *       200:
  *         description: Empleado actualizado exitosamente
  */
-router.put('/updateEmpleado/:empleadoId', checkempleadosId, checkdataEmpleadoUpdate, updateEmpleado);
+router.put('/updateEmpleado/:empleadoId', checkToken, checkempleadosId, checkdataEmpleadoUpdate, updateEmpleado);
   /**
  * @swagger
  * /empleados/{empleadoId}:
@@ -297,7 +297,7 @@ router.put('/updateEmpleado/:empleadoId', checkempleadosId, checkdataEmpleadoUpd
  *       200:
  *         description: Empleado actualizado exitosamente
  */
-router.put("/:empleadoId",checkdataEmpleado, checkempleadosId, update);
+router.put("/:empleadoId",checkToken, checkdataEmpleado, checkempleadosId, update);
 /**
  * @swagger
  * /empleados/{empleadoId}:
@@ -315,6 +315,6 @@ router.put("/:empleadoId",checkdataEmpleado, checkempleadosId, update);
  *       200:
  *         description: Empleado eliminado exitosamente
  */
-router.delete("/:empleadoId",checkempleadosId, remove);
+router.delete("/:empleadoId",checkToken, checkempleadosId, remove);
 
 module.exports = router;
