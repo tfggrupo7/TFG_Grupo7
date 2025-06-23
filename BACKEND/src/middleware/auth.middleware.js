@@ -23,7 +23,8 @@ const Empleados = require("../models/empleados.model");
     return res.status(403).json({ message: "Token invalido" });
   }
   
-  const usuario = await Usuario.getById(payload.usuario_id);
+  const usuario = payload.role ? await Empleado.selectById(payload.id) : await Usuario.getById(payload.usuario_id);
+  
   if(!usuario) {
     return res.status(403).json({ message: 'Usuario o Empleado no existe'});
   }

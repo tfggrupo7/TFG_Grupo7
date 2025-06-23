@@ -7,15 +7,16 @@ const AllIngredientes = async (req, res) => {
 
 
 const getAll = async (req, res) => {
-  const { page = 1, limit = 10, search = "", orderBy='cantidad', direction = ""} = req.query;
+  const { page = 1, limit = 10, search = "", orderBy='cantidad', direction = "", userId=""} = req.query;
   const { rows, total } = await Ingrediente.selectAll(
     Number(page),
     Number(limit),
     search,
     orderBy,
-    direction
+    direction,
+    userId
   );
-  res.json({ page: Number(page), limit: Number(limit), total, orderBy, direction, data: rows});
+  res.json({ page: Number(page), limit: Number(limit), total, orderBy, data: rows});
 };
 
 const getById = async (req, res) => {
@@ -27,7 +28,8 @@ const getById = async (req, res) => {
 };
 
 const getSummary = async (req, res) => {
-  const summary = await Ingrediente.selectSummary();
+  const { userId=""} = req.query;
+  const summary = await Ingrediente.selectSummary(userId);
   if(!summary){
     return res.status(404).json({message: "No hay datos de inventario"})
   }

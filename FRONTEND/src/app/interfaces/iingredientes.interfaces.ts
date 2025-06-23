@@ -9,4 +9,6 @@ export interface IIngredientes {
   estado:      string;
   createdAt:   string;   
   updatedAt:   string;
+  usuario_id?: number;
+  empleados_id?: number;
 }

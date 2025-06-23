@@ -11,6 +11,8 @@ import { ModalComponent } from "../../../shared/components/modal/modal.component
 import { IInventarioResumen } from '../../../interfaces/iinventarioresumen.interface';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
+import { AuthService } from '../../../core/services/auth.service';
+import { IEmpleados } from '../../../interfaces/iempleados.interfaces';
 
 @Component({
   selector: 'app-inventario',
@@ -27,7 +29,7 @@ export class InventarioComponent implements OnInit {
   totalPages: number = 1;
   pageSize: number = 10;
   sort = { campo: 'nombre', direccion: 'ASC' };
-fecha: Date = new Date();
+  fecha: Date = new Date();
   modalIngredienteAbierto = false;
 
   ingredienteId!: number;
@@ -36,8 +38,10 @@ fecha: Date = new Date();
   totalItems = 0;
   ingrediente!: IIngredientes | null;
   summary!: IInventarioResumen;
+  user: any;
 
   ingredientesService = inject(IngredientesService)
+  authService = inject(AuthService)
   router = inject(Router)
 
   constructor() {
@@ -45,9 +49,11 @@ fecha: Date = new Date();
   }
 
   async ngOnInit() {
+    this.user = this.authService.getCurrentUserIdFromToken()
+    this.cargarResumen()
     this.searchTerm.valueChanges.pipe(debounceTime(300)).subscribe(() => {
       this.currentPage = 1; // resetea a la primera página
-      this.init()
+      this.cargarIngredientes()
     });
 
     this.searchTerm.setValue('');
@@ -59,14 +65,15 @@ fecha: Date = new Date();
   }
 
   async cargarResumen() {
-    this.summary = await this.ingredientesService.getResumen();
+    const id = this.user.id = this.user.id ? this.user.id: this.user.usuario_id
+    this.summary = await this.ingredientesService.getResumen(id);
   }
 
   async cargarIngredientes() {
+    const id = this.user.id = this.user.id ? this.user.id: this.user.usuario_id
     const search = this.searchTerm.value ?? '';
-
     this.ingredientes = await this.ingredientesService.getIngredientes(
-      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion
+      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion, id
     );
 
     this.ingredientesFiltrados = this.ingredientes;
@@ -91,12 +98,16 @@ fecha: Date = new Date();
   }
 
   agregarActualizarIngrediente(ingrediente: IIngredientes) {
+    if(!this.user.role) {
+      ingrediente.usuario_id = this.user.usuario_id
+    }else {
+      ingrediente.empleados_id = this.user.id
+      
+    }   
     if (ingrediente.id) {
       this.actualizarIngrediente(ingrediente);
-      this.init()
     } else {
       this.agregarIngrediente(ingrediente);
-      this.init()
     }
     this.cerrarModal();
   }
@@ -115,8 +126,8 @@ fecha: Date = new Date();
     try {
       const ingredienteActualizado = { ...ingrediente, id: ingrediente.id };
       await this.ingredientesService.updateIngrediente(ingrediente.id, ingredienteActualizado);
-      this.init()
       toast.success('Ingrediente actualizado correctamente');
+      this.init()
     } catch (error) {
       toast.error('Error al actualizar ingrediente');
     }
@@ -131,7 +142,6 @@ fecha: Date = new Date();
       },
       duration: 6000,
     });
-    this.init()
   }
 
   private async deleteIngrediente(id: number) {
