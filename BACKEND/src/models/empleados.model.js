@@ -62,13 +62,39 @@ const insert = async ({ nombre, email, telefono, rol_id, usuario_id, salario, st
 
 const update = async (
   empleadoId,
-  { nombre, email, telefono, rol_id, salario,status,activo, fecha_inicio, apellidos }
+  { nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio, apellidos }
 ) => {
-  const [result] = await db.query(
-    "update empleados set nombre = ?,  email = ?, telefono = ? , rol_id= ? , salario = ?, status = ?, activo = ?, fecha_inicio = ?, apellidos =? where id = ?",
-    [nombre, email, telefono, rol_id, salario,status,activo, fecha_inicio, apellidos,empleadoId]
-  );
-  return result;
+  console.log("Actualizando empleado ID:", empleadoId);
+  console.log("Datos a actualizar:", {
+    nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio, apellidos
+  });
+
+  try {
+    // Ejecutar la actualización
+    const [result] = await db.query(
+      "UPDATE empleados SET nombre = ?, email = ?, telefono = ?, rol_id = ?, salario = ?, status = ?, activo = ?, fecha_inicio = ?, apellidos = ? WHERE id = ?",
+      [nombre, email, telefono, rol_id, salario, status, activo, fecha_inicio, apellidos, empleadoId]
+    );
+    
+    console.log("Filas afectadas:", result.affectedRows);
+    
+    if (result.affectedRows === 0) {
+      throw new Error("No se encontró el empleado o no se pudo actualizar");
+    }
+    
+    // IMPORTANTE: Consultar y devolver el empleado actualizado
+    const [updatedRows] = await db.query(
+      "SELECT * FROM empleados WHERE id = ?",
+      [empleadoId]
+    );
+    
+    console.log("Empleado actualizado:", updatedRows[0]);
+    return updatedRows[0];
+    
+  } catch (error) {
+    console.error("Error en actualización:", error);
+    throw error;
+  }
 };
 
 const updateEmpleadoPerfil = async (

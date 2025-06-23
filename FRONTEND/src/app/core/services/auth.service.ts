@@ -98,8 +98,7 @@ export class AuthService {
     
     // Tu token tiene el ID en usuario_id
     const userId = tokenData.usuario_id;
-    console.log('✅ ID encontrado:', userId);
-    
+       
     return userId ? String(userId) : null;
   }
 
@@ -127,7 +126,6 @@ getUserFromTokenEmpleado(): any {
                       tokenData.usuario_id || // Si usan la misma tabla
                       tokenData.id;
     
-    console.log('🔍 ID empleado encontrado:', empleadoId);
     return empleadoId ? String(empleadoId) : null;
   }
 

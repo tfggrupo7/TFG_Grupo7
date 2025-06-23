@@ -13,7 +13,7 @@ app.use('/api/tareas', tareasRoutes);
 
 // Middleware
 
-app.use(async (req, res, next) => {
+/*app.use(async (req, res, next) => {
   const fechaActual = dayjs().format("YYYY-MM-DD HH:mm:ss");
   const linea = `${fechaActual} ${req.method} ${req.url} ${req.ip}\n`;
   await fs
@@ -25,7 +25,7 @@ app.use(async (req, res, next) => {
       console.error("Error al guardar el log", err);
     });
   next();
-});
+});*/
 
 // Route configuration
 

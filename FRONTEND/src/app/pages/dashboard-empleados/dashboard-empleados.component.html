@@ -716,7 +716,7 @@
         <header class="border-b border-[#D4AF37]/10 bg-white w-full flex-shrink-0">
           <div class="flex h-16 items-center justify-between px-4 w-full">
             <div class="flex items-center gap-2">
-              <button
+              <button (click)="mobileMenuOpen = !mobileMenuOpen"
                 class="test inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-7 w-7 text-[#556B2F]"
                 data-sidebar="trigger">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -727,15 +727,27 @@
                 </svg><span class="sr-only">Toggle Sidebar</span>
               </button>
             </div>
+      @if (mobileMenuOpen) {
+      <div class="md:hidden bg-[#FDFBF8] border-b border-[#D4AF37]/10 absolute top-16 left-0 right-0 z-30">
+        <nav class="flex flex-col p-4 gap-4 text-center">
+          <div class="border-t border-[#D4AF37]/10 pt-4 mt-2 flex flex-col gap-3 text-center">
+            <a [routerLink]="['/dashboard-empleados']"
+            (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Resumen</a>
+            <a [routerLink]="['/dashboard-empleados/inventario-empleados']"
+              (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Inventario</a>
+             <a [routerLink]="['/dashboard-empleados/turnos-empleados']"
+              (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Turnos</a>
+              <a [routerLink]="['/dashboard-empleados/tareas-empleados']"
+              (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Tareas</a>
+          </div>
+        </nav>
+      </div>
+    }
             <div class="flex items-center gap-4">
-              <button
-                class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:bg-[#556B2F]/10 hover:text-[#556B2F] h-10 w-10 text-[#556B2F] hidden sm:flex">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-message-square h-5 w-5">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-              </button>
               <!-- Menú de perfil de usuario (Angular) -->
               <div class="relative">
                 <button (click)="toggleProfileMenu()" class="flex items-center gap-2 focus:outline-none">
@@ -746,9 +758,7 @@
                     <div class="text-sm font-medium text-[#1C1C1C]">
                       {{ currentEmpleado?.nombre }} {{ currentEmpleado?.apellidos }}
                     </div>
-                    <div class="text-xs text-[#1C1C1C]/70">
-                      {{ currentEmpleado?.rol || currentEmpleado?.puesto || currentEmpleado?.role}}
-                    </div>
+                    
                   </div>
                   <svg class="lucide lucide-chevron-down h-6 w-8 text-[#556B2F] hidden sm:block" width="24" height="24"
                     fill="none" stroke="currentColor" stroke-width="2">

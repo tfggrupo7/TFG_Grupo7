@@ -64,6 +64,7 @@ export class InventarioComponent implements OnInit {
     this.cargarIngredientes()
   }
 
+  
   async cargarResumen() {
     const id = this.user.id = this.user.id ? this.user.id: this.user.usuario_id
     this.summary = await this.ingredientesService.getResumen(id);

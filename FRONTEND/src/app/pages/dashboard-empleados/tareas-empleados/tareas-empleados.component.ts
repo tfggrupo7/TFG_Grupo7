@@ -4,7 +4,7 @@ import { ITareas } from '../../../interfaces/itareas.interfaces';
 import { TareasService } from '../../../core/services/tareas.service';
 import { inject } from '@angular/core';
 import { toast } from 'ngx-sonner';
-import { IEmpleados } from '../../../interfaces/iempleados.interfaces';
+import { EmpleadosService } from '../../../core/services/empleados.service';
 import { jwtDecode } from 'jwt-decode';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,16 +16,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class TareasEmpleadosComponent {
-  empleados!: IEmpleados[];
+  empleados: any[] = [];
   tareas: ITareas[] = [];
   tareasService = inject(TareasService);
    showModal = false;
     tareasForm!: FormGroup;
     role: string[] = [];
 
-constructor(private fb: FormBuilder) {}
+constructor(private fb: FormBuilder, private empleadoService: EmpleadosService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const empleadoId = this.getEmpleadoIdFromToken();
     console.log('ID del empleado obtenido del token:', empleadoId);
     if (empleadoId) {
@@ -46,6 +46,20 @@ constructor(private fb: FormBuilder) {}
   });
 // Obtener el rol del empleado desde el token
 this.getRolEmpleado();
+await this.cargarEmpleados();
+  }
+
+  async cargarEmpleados() {
+    try {
+      this.empleados = await this.empleadoService.getEmpleados()
+      console.log('Empleados cargados:', this.empleados);
+    } catch (error) {
+      console.error('Error cargando empleados:', error);
+    }
+  }
+
+  getEmpleadosById(id: number) {
+    return this.empleados.find(emp => emp.id == id);
   }
 
   openModal() {

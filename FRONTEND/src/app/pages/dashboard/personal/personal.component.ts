@@ -184,28 +184,47 @@ export class PersonalComponent {
   }
 
   async updateDataForm() {
-    if (this.userForm.invalid) {
-      toast.error('Por favor, completa todos los campos obligatorios.');
-      return;
-    }
-    try {
-      const empleadoActualizado: IEmpleados = {
-        ...this.userForm.value,
-        id: this.empleadoId,
-      };
-      await this.empleadoService.updateEmpleado(empleadoActualizado);
-      toast.success('Empleado Actualizado correctamente');
-      this.router.navigate(['/dashboard', 'personal']).then(() => {
-        setTimeout(() => {
-          window.location.reload();
-          this.cerrarModalUpdate();
-        }, 1000);
-      });
-    } catch {
-      toast.error('Fallo al actualizar el empleado');
-    }
+  console.log('=== INICIO UPDATE ===');
+  console.log('empleadoId original:', this.empleadoId);
+  console.log('Formulario válido:', this.userForm.valid);
+  console.log('Valores del formulario:', this.userForm.value);
+
+  if (this.userForm.invalid) {
+    toast.error('Por favor, completa todos los campos obligatorios.');
+    return;
   }
 
+  const empleadoId = Number(this.empleadoId);
+  console.log('empleadoId convertido:', empleadoId);
+  
+  if (!empleadoId || isNaN(empleadoId)) {
+    toast.error('ID de empleado inválido');
+    return;
+  }
+
+  try {
+    const empleadoActualizado: IEmpleados = {
+      ...this.userForm.value,
+      id: empleadoId,
+    };
+    
+    console.log('Objeto final a enviar:', empleadoActualizado);
+    
+    const resultado = await this.empleadoService.updateEmpleado(empleadoActualizado);
+    console.log('Resultado del servicio:', resultado);
+    
+    toast.success('Empleado Actualizado correctamente');
+    this.router.navigate(['/dashboard', 'personal']).then(() => {
+      setTimeout(() => {
+        this.cargarEmpleados();;
+        this.cerrarModalUpdate();
+      }, 1000);
+    });
+  } catch (error) {
+    console.error('Error completo:', error);
+    toast.error('Fallo al actualizar el empleado');
+  }
+}
   async delete(id: number) {
     const empleado = this.arrEmpleados.find((e) => e.id === id);
     const nombreEmpleado = empleado ? empleado.nombre : 'Empleado';

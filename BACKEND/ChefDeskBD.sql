@@ -276,27 +276,28 @@ USE `restaurante`;
 DROP TABLE IF EXISTS `turnos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `turnos` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `empleado_id` int DEFAULT NULL,
-  `fecha` date NOT NULL,
-  `hora_inicio` time NOT NULL,
-  `hora_fin` time NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `turnos_ibfk_1` (`empleado_id`),
-  CONSTRAINT `turnos_ibfk_1` FOREIGN KEY (`empleado_id`) REFERENCES `empleados` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE turnos (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    dia VARCHAR(20) NOT NULL,
+    hora INT NOT NULL,
+    duracion INT NOT NULL,
+    titulo VARCHAR(100),
+    empleado_id INT NOT NULL,
+    roles_id INT NOT NULL,
+    fecha DATE NOT NULL,
+    estado VARCHAR(20) NOT NULL,
+    hora_inicio TIME NOT NULL,
+    hora_fin TIME NOT NULL,
+    color VARCHAR(20),
+    FOREIGN KEY (empleado_id) REFERENCES empleados(id),
+    FOREIGN KEY (roles_id) REFERENCES roles(id)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `turnos`
 --
 
-LOCK TABLES `turnos` WRITE;
-/*!40000 ALTER TABLE `turnos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `turnos` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

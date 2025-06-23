@@ -35,11 +35,34 @@ function formatearFecha(fecha) {
   return "";
 }
 
+
+function getEstadoTarea(tarea) {
+    const ahora = new Date();
+
+    // Combina fecha y hora para comparar correctamente
+    const fechaInicio = new Date(`${tarea.fecha_inicio}T${tarea.hora_inicio}`);
+    const fechaFin = new Date(
+      `${tarea.fecha_finalizacion}T${tarea.hora_finalizacion}`
+    );
+
+    if (ahora < fechaInicio) {
+      return 'Pendiente';
+    } else if (ahora >= fechaInicio && ahora <= fechaFin) {
+      return 'En Curso';
+    } else if (ahora > fechaFin) {
+      return 'Completada';
+    }
+    return tarea.estado || 'Pendiente';
+  }
+
 // Agrupa tareas por empleado_id
+// Mantén tu función original
 function agruparPorEmpleado(tareas) {
   return tareas.reduce((acc, tarea) => {
-    const id = tarea.empleado_id || "No asignado";
-    if (!acc[id]) acc[id] = [];
+    const id = tarea.empleado_id;
+    if (!acc[id]) {
+      acc[id] = [];
+    }
     acc[id].push(tarea);
     return acc;
   }, {});
@@ -47,8 +70,27 @@ function agruparPorEmpleado(tareas) {
 
 function generateTareasPDF(tareas, filePath) {
   return new Promise((resolve, reject) => {
-    const tareasPorEmpleado = agruparPorEmpleado(tareas);
+       
+    // Aplanar y filtrar solo objetos válidos con empleado_id
+    const tareasFlat = Array.isArray(tareas[0]) ? tareas.flat() : tareas;
+    
+    // FILTRAR: Solo objetos que tengan las propiedades necesarias
+    const tareasValidas = tareasFlat.filter(tarea => 
+      tarea && 
+      typeof tarea === 'object' && 
+      tarea.hasOwnProperty('id') && 
+      tarea.hasOwnProperty('empleado_id') &&
+      tarea.empleado_id !== null &&
+      tarea.empleado_id !== undefined
+    );
 
+    if (tareasValidas.length === 0) {
+      reject(new Error("No hay tareas válidas para procesar"));
+      return;
+    }
+    
+    const tareasPorEmpleado = agruparPorEmpleado(tareasValidas);
+    
     const doc = new PDFDocument({
       margin: 30,
       size: "A4",
@@ -84,34 +126,42 @@ function generateTareasPDF(tareas, filePath) {
       "", // Papelera
     ];
 
-    let y = doc.y;
+ let y = doc.y;
 
-    Object.entries(tareasPorEmpleado).forEach(
-      ([empleadoId, tareasEmpleado]) => {
-        // Encabezado de empleado
+    Object.entries(tareasPorEmpleado).forEach(([empleadoId, tareasEmpleado]) => {
+    
+      // Obtener info del empleado del primer turno
+      const primeraTarea = tareasEmpleado[0];
+      
+      const nombreCompleto = primeraTarea.empleado_nombre && primeraTarea.empleado_apellidos 
+        ? `${primeraTarea.empleado_nombre} ${primeraTarea.empleado_apellidos}`.trim()
+        : primeraTarea.empleado_nombre || "Sin nombre";
+
+      // Encabezado de empleado con nombre
+      doc
+        .font("Helvetica-Bold")
+        .fontSize(12)
+        .fillColor("#6b8e23")
+        .text(`Empleado ID: ${empleadoId} - ${nombreCompleto}`, 30, y);
+      y += 18;
+
+      // Encabezado de tabla
+      let x = 30;
+      headers.forEach((header, i) => {
         doc
+          .rect(x, y, colWidths[i], 22)
+          .fillAndStroke(headerBg, borderColor)
+          .fillColor(headerText)
           .font("Helvetica-Bold")
-          .fontSize(12)
-          .fillColor("#6b8e23")
-          .text(`Empleado ID: ${empleadoId}`, 30, y);
-        y += 18;
+          .fontSize(10)
+          .text(header, x + 4, y + 6, {
+            width: colWidths[i] - 8,
+            align: "left",
+          });
+        x += colWidths[i];
+      });
+      y += 22;
 
-        // Encabezado de tabla
-        let x = 30;
-        headers.forEach((header, i) => {
-          doc
-            .rect(x, y, colWidths[i], 22)
-            .fillAndStroke(headerBg, borderColor)
-            .fillColor(headerText)
-            .font("Helvetica-Bold")
-            .fontSize(10)
-            .text(header, x + 4, y + 6, {
-              width: colWidths[i] - 8,
-              align: "left",
-            });
-          x += colWidths[i];
-        });
-        y += 22;
 
         // Filas de tareas
         tareasEmpleado.forEach((tarea) => {
@@ -123,49 +173,49 @@ function generateTareasPDF(tareas, filePath) {
             formatearFecha(tarea.fecha_finalizacion),
             tarea.hora_inicio || "",
             tarea.hora_finalizacion || "",
-            tarea.estado || "",
+            getEstadoTarea(tarea),
             "", // Placeholder for trash icon
           ];
           values.forEach((value, i) => {
-            doc.rect(x, y, colWidths[i], 20).stroke(borderColor);
+          doc.rect(x, y, colWidths[i], 20).stroke(borderColor);
 
-            if (i === 7) {
-              // Draw trash icon if available
-              try {
-                doc.image("trash.png", x + 8, y + 4, { width: 12, height: 12 });
-              } catch (e) {
-                // If image not found, leave blank or handle error
-              }
-            } else {
-              doc
-                .fillColor(rowText)
-                .font("Helvetica")
-                .fontSize(10)
-                .text(value, x + 4, y + 5, {
-                  width: colWidths[i] - 8,
-                  align: "left",
-                });
+          if (i === 7) {
+            // Draw trash icon if available
+            try {
+              doc.image("trash.png", x + 8, y + 4, { width: 12, height: 12 });
+            } catch (e) {
+              // Handle error
             }
-            x += colWidths[i];
-          });
-          y += 20;
-
-          // Salto de página si es necesario
-          if (y > 750) {
-            doc.addPage();
-            y = 30;
+          } else {
+            doc
+              .fillColor(rowText)
+              .font("Helvetica")
+              .fontSize(10)
+              .text(String(value), x + 4, y + 5, {
+                width: colWidths[i] - 8,
+                align: "left",
+              });
           }
+          x += colWidths[i];
         });
+        y += 20;
 
-        y += 18; // Espacio entre empleados
-      }
-    );
+        // Salto de página si es necesario
+        if (y > 750) {
+          doc.addPage();
+          y = 30;
+        }
+      });
+
+      y += 18; // Espacio entre empleados
+    });
 
     doc.end();
 
     stream.on("finish", () => resolve(filePath));
     stream.on("error", (err) => reject(err));
   });
-}
+}    
+        
 
-module.exports = { generateTareasPDF };
+module.exports = { generateTareasPDF};

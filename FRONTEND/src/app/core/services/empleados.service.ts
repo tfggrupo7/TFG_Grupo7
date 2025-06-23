@@ -70,7 +70,7 @@ export class EmpleadosService {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     });
     return lastValueFrom(
-      this.httpClient.put<IEmpleados>(`${this.url}/${id}`, empleadoBody, {
+      this.httpClient.put<IEmpleados>(`${this.url}/updateEmpleado/${id}`, empleadoBody, {
         headers,
       })
     );
@@ -79,6 +79,11 @@ export class EmpleadosService {
   updateEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
     let { id, ...empleadoBody } = empleado;
     id = Number(id);
+    console.log('URL base:', this.url);
+  console.log('URL completa:', `${this.url}/${id}`);
+  console.log('ID:', id);
+  console.log('Body:', empleadoBody);
+
     if (!id || isNaN(id)) {
       return Promise.reject('ID de empleado inválido');
     }
@@ -89,7 +94,7 @@ export class EmpleadosService {
     });
     return lastValueFrom(
       this.httpClient.put<IEmpleados>(
-        `${this.url}/updateEmpleado/${id}`,
+        `${this.url}/${id}`,
         empleadoBody,
         { headers }
       )

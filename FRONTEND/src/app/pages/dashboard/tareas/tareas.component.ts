@@ -7,7 +7,6 @@ import { TareasService } from '../../../core/services/tareas.service';
 import { inject } from '@angular/core';
 import { toast } from 'ngx-sonner';
 import { IUsuario } from '../../../interfaces/iusuario.interfaces';
-import { IEmpleados } from '../../../interfaces/iempleados.interfaces';
 import { EmpleadosService } from '../../../core/services/empleados.service';
 
 @Component({
@@ -27,12 +26,12 @@ export class TareasComponent {
     email: '',
     contraseña: '',
   };
-  empleados: IEmpleados[] = []; 
-  empleadoService = inject(EmpleadosService);
+ empleados: any[] = [];
+  
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private empleadoService: EmpleadosService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.tareasForm = this.fb.group({
       titulo: ['', Validators.required],
       descripcion: ['', Validators.required],
@@ -49,7 +48,23 @@ export class TareasComponent {
       this.empleados = empleados;
     
     });
+    await this.cargarEmpleados();
   }
+
+  async cargarEmpleados() {
+    try {
+      this.empleados = await this.empleadoService.getEmpleados()
+      console.log('Empleados cargados:', this.empleados);
+    } catch (error) {
+      console.error('Error cargando empleados:', error);
+    }
+  }
+
+  getEmpleadosById(id: number) {
+    return this.empleados.find(emp => emp.id == id);
+  }
+
+
   openModal() {
     this.showModal = true;
   }

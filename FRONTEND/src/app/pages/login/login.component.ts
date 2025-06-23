@@ -6,12 +6,13 @@ import { inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ILogin } from '../../interfaces/ilogin.interfaces';
 import { toast } from 'ngx-sonner';
+import { HeaderComponent } from '../../shared/header/header.component';
 
 
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule,RouterLink],
+  imports: [ReactiveFormsModule,RouterLink,HeaderComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

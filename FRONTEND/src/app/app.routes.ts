@@ -38,7 +38,7 @@ export const routes: Routes = [
     { path: 'perfil', component: PerfilComponent},
     { path: 'tareas', component: TareasComponent}
   ] },
-{ path:'dashboard-empleados',component:DashboardEmpleadosComponent,children: [
+{ path:'dashboard-empleados',component:DashboardEmpleadosComponent, canActivate: [loginGuard], children: [
     { path: '', component: ResumenEmpleadosComponent },
     { path: 'inventario-empleados', component: InventarioComponent },
     { path: 'turnos-empleados', component: TurnosEmpleadosComponent },
