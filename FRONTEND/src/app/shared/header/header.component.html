@@ -40,7 +40,7 @@
 
     @if (mobileMenuOpen) {
       <div class="md:hidden bg-[#FDFBF8] border-b border-[#D4AF37]/10 absolute top-16 left-0 right-0 z-30">
-        <nav class="flex flex-col p-4 gap-4">
+        <nav class="flex flex-col p-4 gap-4 text-center">
           <a href="#features"
             class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Características</a>
           <a href="#testimonials"
@@ -49,12 +49,17 @@
             class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Partners</a>
           <a href="#contact"
             class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Contacto</a>
-          <div class="border-t border-[#D4AF37]/10 pt-4 mt-2 flex flex-col gap-3">
+          <div class="border-t border-[#D4AF37]/10 pt-4 mt-2 flex flex-col gap-3 text-center">
             <a [routerLink]="['/login']"
+            (click)="mobileMenuOpen = false"
               class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Iniciar Sesión</a>
-            <button
+              <a [routerLink]="['/empleados/login']"
+              (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Area Empleados</a>
+            <button (click)="mobileMenuOpen = false"
               class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full">
               <a [routerLink]="['/login']">Regístrate</a>
+              
             </button>
           </div>
         </nav>

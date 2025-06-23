@@ -198,4 +198,14 @@ getTurnosByDateAndEmpleado(fecha: string, empleadoId: number): Promise<ITurnos[]
       })
     );
   }
+  getTurnosAndEmpleadoById(id: number): Promise<ITurnos[]> {
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      });
+      return lastValueFrom(
+        this.httpClient.get<ITurnos[]>(`${this.url}/empleado/${id}`)
+      );
+    }
 }

@@ -722,7 +722,7 @@
         <header class="border-b border-[#D4AF37]/10 bg-white w-full flex-shrink-0">
           <div class="flex h-16 items-center justify-between px-4 w-full">
             <div class="flex items-center gap-2">
-              <button 
+              <button (click)="mobileMenuOpen = !mobileMenuOpen"
                 class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-7 w-7 text-[#556B2F]"
                 data-sidebar="trigger">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -733,6 +733,29 @@
                 </svg><span class="sr-only">Toggle Sidebar</span>
               </button>
             </div>
+            @if (mobileMenuOpen) {
+      <div class="md:hidden bg-[#FDFBF8] border-b border-[#D4AF37]/10 absolute top-16 left-0 right-0 z-30">
+        <nav class="flex flex-col p-4 gap-4 text-center">
+          <div class="border-t border-[#D4AF37]/10 pt-4 mt-2 flex flex-col gap-3 text-center">
+            <a [routerLink]="['/dashboard']"
+            (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Resumen</a>
+            <a [routerLink]="['/dashboard/inventory']"
+              (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Inventario</a>
+            <a [routerLink]="['/dashboard/personal']"
+              (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Personal</a>
+              <a [routerLink]="['/dashboard/turnos']"
+              (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Turnos</a>
+              <a [routerLink]="['/dashboard/tareas']"
+              (click)="mobileMenuOpen = false"
+              class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Tareas</a>
+          </div>
+        </nav>
+      </div>
+    }
             <div class="flex items-center gap-4">
               
               <!-- Menú de perfil de usuario (Angular) -->

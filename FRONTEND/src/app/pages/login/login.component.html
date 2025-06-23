@@ -1,20 +1,22 @@
-  <header class="active">
-    <a routerLink="/">
-      <img src="../../../assets/logo/logoSVG.svg" alt="logo" class="logo h-10 md:h-20 mx-auto mt-2" />
-    </a>
-  </header>
- <nav class="bg-white shadow-md p-4  justify-between items-center hidden">
-  <ul class="flex justify-center space-x-4 mt-4 mx-auto">
-    <li>
-      <a href="#" id="register" class="text-[#556B2F] hover:text-green-600" (click)="mostrarRegistro($event)">Iniciar Sesión</a>
-    </li>
-    <li>
-      <a href="#" id="login" class=" text-[#556B2F] hover:text-green-600" (click)="mostrarLogin($event)">Registrarse</a>
-    </li>
-  </ul>
-</nav>
+  <app-header></app-header>
 
-  <section class="mt-4 md:mt-8 mx-auto">
+  <section class="mt-8 md:mt-16 mx-auto">
+    <nav class="bg-white shadow-md p-4  justify-between items-center hidden">
+  <ul class="flex justify-center space-x-4 mt-4 mx-auto">
+  
+  <li>
+    <button id="login" class="text-[#556B2F] border-4 border-green-500 px-3 py-1 rounded hover:text-green-600 transition-colors duration-300 bg-green-200" (click)="mostrarRegistro($event)">
+      Iniciar Sesión
+    </button>
+  </li>
+  <li>
+    <button id="register" class="text-[#556B2F] border-4 border-green-500 px-3 py-1 rounded hover:text-green-600 transition-colors duration-300 bg-green-200" (click)="mostrarLogin($event)">
+      Registrarse
+    </button>
+  </li>
+
+</ul>
+</nav>
   <div class="container" id="container" [class.right-panel-active]="rightPanelActive">
   <!-- Sign Up Form -->
   <div class="form-container sign-up-container">

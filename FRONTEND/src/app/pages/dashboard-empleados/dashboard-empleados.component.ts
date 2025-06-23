@@ -15,6 +15,7 @@ export class DashboardEmpleadosComponent {
 authService = inject(AuthService);
 router = inject(Router);
 empleadosService = inject(EmpleadosService);
+mobileMenuOpen = false;
 
 
   // Propiedad para controlar la visibilidad del menú de perfil

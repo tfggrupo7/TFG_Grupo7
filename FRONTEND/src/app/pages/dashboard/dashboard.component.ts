@@ -5,15 +5,14 @@ import { Router } from '@angular/router';
 import { Input } from '@angular/core';
 import { IUsuario } from '../../interfaces/iusuario.interfaces';
 import { UsuarioService } from '../../core/services/usuario.service';
-
-
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    RouterModule,
+    RouterModule,CommonModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
@@ -23,7 +22,7 @@ export class DashboardComponent {
   
   router = inject(Router);
   @Input() usuario!: IUsuario;
-  
+  mobileMenuOpen = false;
   
 showProfileMenu = false;
 currentUser: any = null;
@@ -32,6 +31,12 @@ avatar = {
   rol: "Administrador",
   avatar: '../../../assets/avatar.avif'
 };
+
+isOpen = false;
+
+  toggleMenu() {
+    this.isOpen = !this.isOpen;
+  }
 
 constructor(
     private usuarioService: UsuarioService,
