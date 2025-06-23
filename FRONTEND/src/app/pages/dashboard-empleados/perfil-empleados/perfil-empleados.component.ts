@@ -97,7 +97,7 @@ currentUser: any = null;
         id: Number(empleadoId),
       };
 
-      await this.empleadosService.updateEmpleado(empleadoActualizado);
+      await this.empleadosService.updateEmpleadoPerfil(empleadoActualizado);
       toast.success('Empleado actualizado correctamente');
       this.router.navigate(['/dashboard-empleados']);
     } catch (error) {

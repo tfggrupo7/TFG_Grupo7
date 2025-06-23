@@ -70,7 +70,7 @@ export class EmpleadosService {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     });
     return lastValueFrom(
-      this.httpClient.put<IEmpleados>(`${this.url}/${id}`, empleadoBody, {
+      this.httpClient.put<IEmpleados>(`${this.url}/updateEmpleado/${id}`, empleadoBody, {
         headers,
       })
     );

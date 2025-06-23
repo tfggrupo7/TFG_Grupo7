@@ -58,10 +58,10 @@ ngOnInit(){
 
 
   async cargarTurnos() {
-    console.log('Cargando turnos...');
+    
     try {
       const data = await this.turnosService.getTurnos();
-      console.log('Turnos recibidos:', data);
+      
       this.turnos = data;
     } catch (error) {
       console.error('Error cargando turnos:', error);
