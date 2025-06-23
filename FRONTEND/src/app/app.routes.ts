@@ -18,7 +18,6 @@ import { LoginEmpleadosComponent } from './login-empleados/login-empleados.compo
 import { RecuperacionContrasenaEmpleadosComponent } from './pages/recuperacion-contrasena-empleados/recuperacion-contrasena-empleados.component';
 import { RestablecerContrasenaEmpleadosComponent } from './pages/restablecer-contrasena-empleados/restablecer-contrasena-empleados.component';
 import { DashboardEmpleadosComponent } from './pages/dashboard-empleados/dashboard-empleados.component';
-import { InventarioEmpleadosComponent } from './pages/dashboard-empleados/inventario-empleados/inventario-empleados.component';
 import { TurnosEmpleadosComponent } from './pages/dashboard-empleados/turnos-empleados/turnos-empleados.component';
 import { PerfilEmpleadosComponent } from './pages/dashboard-empleados/perfil-empleados/perfil-empleados.component';
 import { ResumenEmpleadosComponent } from './pages/dashboard-empleados/resumen-empleados/resumen-empleados.component';

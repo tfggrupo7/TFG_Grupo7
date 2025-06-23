@@ -87,6 +87,7 @@ getAllIngredientes(): Promise<IIngredientes[]> {
   }
   updateIngrediente(id: number, ingrediente: IIngredientes): Promise<IIngredientes> {
     const token = localStorage.getItem('token');
+    console.log("ID: ",[id, ingrediente])
   const headers = new HttpHeaders({
     'Content-Type': 'application/json',
     ...(token ? { 'Authorization': `Bearer ${token}` } : {})

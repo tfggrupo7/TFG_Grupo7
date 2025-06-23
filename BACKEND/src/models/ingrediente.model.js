@@ -12,13 +12,13 @@ const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", d
             i.created_at AS createdAt,
             i.updated_at AS updatedAt
       FROM ingredientes i
-      LEFT JOIN empleados e ON i.empleado_id = e.id
+      LEFT JOIN empleados e ON i.empleados_id = e.id
       WHERE
         ( ? IN (SELECT id FROM usuarios) AND 
-        (i.usuario_id = ? OR i.empleado_id IN (SELECT id FROM empleados WHERE usuario_id = ?)))
+        (i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?)))
         OR
         ( ? IN (SELECT id FROM empleados) AND 
-        (i.empleado_id = ? OR i.usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))
+        (i.empleados_id = ? OR i.usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))
       AND CONCAT_WS(' ', i.nombre, i.alergenos, i.categoria, i.cantidad, i.unidad, i.proveedor, i.estado) LIKE ?
       ORDER BY ${orderBy} ${direction}
       LIMIT ? OFFSET ?`,
@@ -29,13 +29,13 @@ const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", d
   const [[{ total }]] = await db.query(
     `SELECT COUNT(*) AS total
     FROM ingredientes i
-    LEFT JOIN empleados e ON i.empleado_id = e.id
+    LEFT JOIN empleados e ON i.empleados_id = e.id
     WHERE 
     (? IN (SELECT id FROM usuarios) AND 
-      (i.usuario_id = ? OR i.empleado_id IN (SELECT id FROM empleados WHERE usuario_id = ?)))
+      (i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?)))
     OR
     (? IN (SELECT id FROM empleados) AND 
-      (i.empleado_id = ? OR i.usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))
+      (i.empleados_id = ? OR i.usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))
     AND
     CONCAT_WS(' ', i.nombre, i.alergenos, i.categoria, i.cantidad,
         i.unidad, i.proveedor, i.estado) LIKE ?`,
@@ -84,11 +84,11 @@ const selectSummary = async (userId) => {
         FROM ingredientes
         WHERE 
             (EXISTS (SELECT 1 FROM usuarios WHERE id = ?) AND
-            (usuario_id = ? OR empleado_id IN (SELECT id FROM empleados WHERE usuario_id = ?))
+            (usuario_id = ? OR empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?))
             )
           OR
             (EXISTS (SELECT 1 FROM empleados WHERE id = ?) AND
-             empleado_id = ? OR usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))
+             empleados_id = ? OR usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?))
         GROUP BY categoria
         ORDER BY COUNT(*) DESC
         LIMIT 1
@@ -96,28 +96,29 @@ const selectSummary = async (userId) => {
     FROM ingredientes i
     WHERE 
     (EXISTS (SELECT 1 FROM usuarios WHERE id = ?) AND
-     (i.usuario_id = ? OR i.empleado_id IN (SELECT id FROM empleados WHERE usuario_id = ?)))
+     (i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?)))
     OR
     (EXISTS (SELECT 1 FROM empleados WHERE id = ?) AND
-     (i.empleado_id = ? OR i.usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))`,
+     (i.empleados_id = ? OR i.usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))`,
     [userId,userId,userId,userId,userId,userId, userId,userId,userId,userId,userId,userId])
   if (result.length === 0) return null;
 
   return result[0];
 }
 
-const insert = async ({ nombre, categoria, cantidad, unidad, proveedor, estado, alergenos}) => {
+const insert = async ({ nombre, categoria, cantidad, unidad, proveedor, estado, alergenos, usuario_id, empleados_id}) => {
   const [result] = await db.query(
-    "insert into ingredientes (nombre, categoria, cantidad, unidad, proveedor, estado, alergenos) values (?, ?, ?, ?, ?, ?, ?)",
-    [nombre, categoria, cantidad, unidad, proveedor, estado, alergenos]
+    "insert into ingredientes (nombre, categoria, cantidad, unidad, proveedor, estado, alergenos, usuario_id, empleados_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [nombre, categoria, cantidad, unidad, proveedor, estado, alergenos, usuario_id, empleados_id]
   );
   return result;
 };
 
-const update = async (ingredienteId, { nombre, categoria, cantidad, unidad, proveedor, estado, alergenos}) => {
+const update = async (ingredienteId, { nombre, categoria, cantidad, unidad, proveedor, estado, alergenos, usuario_id, empleados_id}) => {
   const [result] = await db.query(
-    "update ingredientes set nombre = ?, categoria = ?, cantidad = ?, unidad = ?, proveedor = ?, estado = ?, alergenos = ? where id = ?",
-    [nombre, categoria, cantidad, unidad, proveedor, estado, alergenos, ingredienteId]
+    `update ingredientes set nombre = ?, categoria = ?, cantidad = ?, unidad = ?, proveedor = ?, estado = ?, alergenos = ?,
+    usuario_id = ?, empleados_id = ? where id = ?`,
+    [nombre, categoria, cantidad, unidad, proveedor, estado, alergenos, usuario_id, empleados_id, ingredienteId]
   );
   return result;
 };

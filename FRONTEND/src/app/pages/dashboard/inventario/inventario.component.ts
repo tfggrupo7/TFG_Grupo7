@@ -49,29 +49,29 @@ export class InventarioComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.user = this.authService.getCurrentUserIdFromToken()
+    this.cargarResumen()
     this.searchTerm.valueChanges.pipe(debounceTime(300)).subscribe(() => {
       this.currentPage = 1; // resetea a la primera página
-      this.init()
+      this.cargarIngredientes()
     });
 
     this.searchTerm.setValue('');
   }
 
   init() {
-    this.user = this.authService.getCurrentUserIdFromToken()
-    console.log("USER logado: ", this.user)
     this.cargarResumen()
     this.cargarIngredientes()
   }
 
   async cargarResumen() {
-    const id = this.user.id ? this.user.id : this.user.usuario_id
+    const id = this.user.id = this.user.id ? this.user.id: this.user.usuario_id
     this.summary = await this.ingredientesService.getResumen(id);
   }
 
   async cargarIngredientes() {
+    const id = this.user.id = this.user.id ? this.user.id: this.user.usuario_id
     const search = this.searchTerm.value ?? '';
-    const id = this.user.id ? this.user.id : this.user.usuario_id
     this.ingredientes = await this.ingredientesService.getIngredientes(
       this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion, id
     );
@@ -98,12 +98,16 @@ export class InventarioComponent implements OnInit {
   }
 
   agregarActualizarIngrediente(ingrediente: IIngredientes) {
+    if(!this.user.role) {
+      ingrediente.usuario_id = this.user.usuario_id
+    }else {
+      ingrediente.empleados_id = this.user.id
+      
+    }   
     if (ingrediente.id) {
       this.actualizarIngrediente(ingrediente);
-      this.init()
     } else {
       this.agregarIngrediente(ingrediente);
-      this.init()
     }
     this.cerrarModal();
   }
@@ -122,8 +126,8 @@ export class InventarioComponent implements OnInit {
     try {
       const ingredienteActualizado = { ...ingrediente, id: ingrediente.id };
       await this.ingredientesService.updateIngrediente(ingrediente.id, ingredienteActualizado);
-      this.init()
       toast.success('Ingrediente actualizado correctamente');
+      this.init()
     } catch (error) {
       toast.error('Error al actualizar ingrediente');
     }
@@ -138,7 +142,6 @@ export class InventarioComponent implements OnInit {
       },
       duration: 6000,
     });
-    this.init()
   }
 
   private async deleteIngrediente(id: number) {
