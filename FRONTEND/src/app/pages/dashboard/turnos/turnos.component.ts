@@ -28,6 +28,8 @@ export class TurnosComponent implements OnInit {
   /** Array completo de turnos cargado desde la API */
   turnos: ITurnos[] = [];
 
+  turnosPorDia: { [fecha: string]: ITurnos[] } = {};
+
   draggedTurno: ITurnos | null = null;
 
   turnosHoy: ITurnos[] = [];
@@ -71,6 +73,7 @@ export class TurnosComponent implements OnInit {
     roles.forEach(r => this.rolesMap.set(r.id, r.nombre));
 
     this.setCurrentWeekDates();
+    await this.cargarTurnosSemana();
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
   }
@@ -100,7 +103,7 @@ export class TurnosComponent implements OnInit {
     }
   }
 
-/** 
+/**
  * Devuelve la fecha de hoy formateada en español (e.g. "Martes, 18 de Junio 2025").
  * Utiliza arrays de días y meses para mostrar el nombre completo.
  */  get todayFormatted(): string {
@@ -361,5 +364,17 @@ export class TurnosComponent implements OnInit {
         toast.error('Error al descargar los turnos');
       });
     }
-  
+
+    async cargarTurnosSemana() {
+  this.turnosPorDia = {};
+  for (const fecha of this.currentWeekDates) {
+    try {
+      this.turnosPorDia[fecha] = await this.turnosService.getTurnosByDate(fecha);
+    } catch (err) {
+      this.turnosPorDia[fecha] = [];
+      console.error('Error cargando turnos para', fecha, err);
+    }
+  }
+
+}
 }

@@ -119,7 +119,7 @@
   </div>
 
   <!-- 🟣 VISTA SEMANAL ------------------------------------------------------ -->
-  <div class="rounded-lg border shadow-sm border-[#D4AF37]/20">
+  <div class="rounded-lg border shadow-sm border-[#D4AF37]/20 hidden md:block">
     <!-- Encabezado Vista Semanal -->
     <div class="flex justify-between items-center p-6">
       <div>
@@ -177,7 +177,35 @@
         </div>
       </div>
     </div>
+
   </div>
+  <div class="rounded-lg border shadow-sm border-[#D4AF37]/20 block md:hidden mt-6">
+  <div *ngFor="let day of currentWeekDates; let i = index" class="mb-6">
+  <div class="font-bold text-[#556B2F] mb-2">{{ getDayName(i) }}</div>
+  <ng-container *ngIf="turnosPorDia[day]?.length; else noTurnosMobile">
+    <div *ngFor="let turno of turnosPorDia[day]" class="mb-2 p-3 rounded-lg bg-[#556B2F]/10 border border-[#D4AF37]/20">
+      <div class="font-medium text-[#1C1C1C]">
+  {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
+</div>
+<div class="text-xs text-[#1C1C1C]/70">
+  {{ (rolesMap.get(turno.roles_id) || ('Rol ' + turno.roles_id)) | titlecase }}
+</div>
+<div class="text-xs text-[#556B2F] font-medium">
+  {{ turno.hora_inicio }} - {{ turno.hora_fin }}
+</div>
+<div class="text-xs">
+  {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
+</div>
+<div class="text-xs rounded-full px-2 py-1 font-medium mt-1" [ngClass]="getEstadoClase(turno.estado)">
+  {{ turno.estado | titlecase }}
+</div>
+    </div>
+  </ng-container>
+  <ng-template #noTurnosMobile>
+    <div class="text-xs text-[#1C1C1C]/60">Sin turnos para este día.</div>
+  </ng-template>
+  </div>
+</div>
 
   <!-- 🔘 MODAL ------------------------------------------------------------- -->
   <!-- Componente hijo autónomo para creación/edición de turnos -->

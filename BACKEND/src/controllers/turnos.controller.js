@@ -74,12 +74,9 @@ const getTurnosByDateAndEmpleado = async (req, res) => {
   const { fecha, empleadoId } = req.params; // YYYY-MM-DD y empleadoId
   const turnos = await Turno.selectTurnosByDateAndEmpleado(fecha, empleadoId);
   if (!turnos || turnos.length === 0) {
-    return res
-      .status(404)
-      .json({
-        error:
-          "No se encontraron turnos para la fecha y empleado especificados",
-      });
+    return res.status(404).json({
+      error: "No se encontraron turnos para la fecha y empleado especificados",
+    });
   }
   res.json(turnos);
 };
@@ -101,6 +98,20 @@ const getTurnosByDateAndEmpleado = async (req, res) => {
 const getByDate = async (req, res) => {
   const { fecha } = req.params; // YYYY-MM-DD
   const turnos = await Turno.selectByDate(fecha);
+  return res.json(turnos); // 200 OK
+};
+
+/**
+ * GET /api/turnos/by-date?date=YYYY-MM-DD
+ * --------------------------------------------------
+ * Devuelve una lista de turnos filtrados por fecha (query param).
+ */
+const getByDateQuery = async (req, res) => {
+  const { date } = req.query; // YYYY-MM-DD
+  if (!date) {
+    return res.status(400).json({ error: "Falta el parámetro 'date'" });
+  }
+  const turnos = await Turno.selectByDate(date);
   return res.json(turnos); // 200 OK
 };
 
@@ -358,6 +369,7 @@ module.exports = {
   update,
   remove,
   getByDate,
+  getByDateQuery,
   exportTurnosPDF,
   exportTurnosEmpleadoPDF,
   sendAllTurnoEmpleadoPDF,

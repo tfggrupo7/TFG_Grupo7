@@ -13,7 +13,7 @@ import { lastValueFrom } from 'rxjs';
   providedIn: 'root', // Servicio singleton a nivel de aplicación
 })
 export class TurnosService {
-  
+
   private httpClient = inject(HttpClient);
   private url: string = 'http://localhost:3000/api/turnos';
 
@@ -112,7 +112,7 @@ export class TurnosService {
    * @returns Promise<{ message: string; data: ITurnos[] }>
    */
   deleteTurno(id: number): Promise<{ message: string; data: ITurnos[] }> {
-    
+
     return lastValueFrom(
       this.httpClient.delete<{ message: string; data: ITurnos[] }>(
         `${this.url}/${id}`
