@@ -142,11 +142,19 @@
         </div>
       </div>
     }
+<!-- 🟤 LISTA DE TAREAS DEL EMPLEADO ---------------------------------------- -->
+<!--
+  Descripción: Tabla con las tareas asignadas al empleado seleccionado.
+  Notas:
+    • Es responsive gracias al contenedor overflow-x-auto.
+    • Muestra mensaje si no hay tareas.
+    • Los métodos y bindings se mantienen igual.
+-->
 <div class="mt-8">
   <h2 class="text-xl font-bold text-[#4b6b1c] mb-4">Lista de Tareas del Empleado</h2>
   
   <div class="overflow-x-auto md:overflow-x-visible w-full rounded-xl border border-[#d9dbc7] shadow bg-white">
-    <table class="min-w-[800px] w-full border-collapse">
+    <table class="min-w-[800px] w-full border-collapse rounded-xl bg-white">
       <thead class="bg-[#e9ebdd]">
         <tr>
           <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Título</th>
@@ -159,18 +167,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">Tarea 1</td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">Descripción larga que fuerza el scroll horizontal</td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">01-01-2025</td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">05-01-2025</td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">08:00</td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">17:00</td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">Pendiente</td>
-        </tr>
+        <!-- Si no hay tareas, mostrar mensaje -->
         @if (tareas.length === 0) {
           <tr>
-            <td colspan="7" class="text-center py-4 text-gray-500 font-semibold">
+            <td colspan="7" class="min-w-[800px] text-center py-8 text-[#7a7a5c] font-semibold bg-white">
               NO HAY TAREAS PARA ESTE EMPLEADO
             </td>
           </tr>
@@ -190,3 +190,4 @@
     </table>
   </div>
 </div>
+<!-- ----------------------------------------------------------------------- -->

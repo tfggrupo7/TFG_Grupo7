@@ -228,87 +228,53 @@
   </div>
 </div>
 }
+<!-- 🟤 TAREAS POR EMPLEADO ------------------------------------------------- -->
+<!--
+  Descripción: Tabla de tareas agrupadas por empleado.
+  Notas:
+    • Cada empleado tiene su propia tabla.
+    • El contenedor y la tabla tienen esquinas redondeadas (rounded-xl).
+    • Responsive con overflow-x-auto.
+    • Incluye botón para eliminar tarea.
+-->
 <div class="mt-8">
   <h2 class="text-xl font-bold text-[#4b6b1c] mb-4">Tareas por Empleado</h2>
   @for (empleado of getTareasPorEmpleado() | keyvalue; track empleado.key) {
   <div class="mb-8 overflow-x-auto w-full border border-[#d9dbc7] rounded-xl shadow bg-white">
-    <!-- Debug temporal -->
     <h3 class="text-lg font-semibold text-[#4b6b1c] mb-2">
       {{ empleado.key }} -
       {{ getEmpleadosById(+empleado.key)?.nombre || "Sin nombre" }}
       {{ getEmpleadosById(+empleado.key)?.apellidos || "Sin apellidos" }}
     </h3>
-    <table class="min-w-[800px] w-full border-collapse">
+    <table class="min-w-[800px] w-full border-collapse rounded-xl bg-white">
       <thead class="bg-[#e9ebdd]">
         <tr>
-          <th
-            class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]"
-          >
-            Título
-          </th>
-          <th
-            class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]"
-          >
-            Descripción
-          </th>
-          <th
-            class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]"
-          >
-            Fecha Inicio
-          </th>
-          <th
-            class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]"
-          >
-            Fecha Finalización
-          </th>
-          <th
-            class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]"
-          >
-            Hora Inicio
-          </th>
-          <th
-            class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]"
-          >
-            Hora Finalización
-          </th>
-          <th
-            class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]"
-          >
-            Estado
-          </th>
+          <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Título</th>
+          <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Descripción</th>
+          <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Fecha Inicio</th>
+          <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Fecha Finalización</th>
+          <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Hora Inicio</th>
+          <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Hora Finalización</th>
+          <th class="px-4 py-2 border-b border-[#d9dbc7] text-center text-[#4b6b1c]">Estado</th>
+          <th class="w-12 px-4 py-2 border-b border-[#d9dbc7] text-center"></th>
         </tr>
       </thead>
       <tbody>
         @for (tarea of empleado.value; track tarea.id) {
         <tr class="hover:bg-[#f3f3ec]">
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">
-            {{ tarea.titulo }}
-          </td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">
-            {{ tarea.descripcion }}
-          </td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">
-            {{ tarea.fecha_inicio | date : "dd-MM-yyyy" }}
-          </td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">
-            {{ tarea.fecha_finalizacion | date : "dd-MM-yyyy" }}
-          </td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">
-            {{ tarea.hora_inicio }}
-          </td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">
-            {{ tarea.hora_finalizacion }}
-          </td>
-          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">
-            {{ getEstadoTarea(tarea) }}
-          </td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.titulo }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.descripcion }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.fecha_inicio | date : "dd-MM-yyyy" }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.fecha_finalizacion | date : "dd-MM-yyyy" }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.hora_inicio }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.hora_finalizacion }}</td>
+          <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ getEstadoTarea(tarea) }}</td>
           <td class="w-12 px-4 py-2 border-b border-[#d9dbc7] text-center">
             <button
               (click)="eliminarTarea(tarea.id)"
               class="text-red-600 hover:text-red-800"
               title="Eliminar"
             >
-              <!-- Icono SVG de papelera -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5 inline"
@@ -332,3 +298,4 @@
   </div>
   }
 </div>
+<!-- ----------------------------------------------------------------------- -->
