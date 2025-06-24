@@ -25,6 +25,7 @@ export class TurnosEmpleadosComponent {
   currentUserRole: any = '';
   empleadoId: string = '';
   turnosEmpleado: any[] = [];
+  turnosPorDia: { [fecha: string]: ITurnos[] } = {};
   
 
   /** Array completo de turnos cargado desde la API */
