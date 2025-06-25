@@ -717,7 +717,7 @@
           <div class="flex h-16 items-center justify-between px-4 w-full">
             <div class="flex items-center gap-2">
               <button (click)="mobileMenuOpen = !mobileMenuOpen"
-                class="test inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-7 w-7 text-[#556B2F]"
+                class="test inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm  md:hidden font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-7 w-7 text-[#556B2F]"
                 data-sidebar="trigger">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -745,6 +745,7 @@
               class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Tareas</a>
           </div>
           <div>
+            <hr style="border: 2px solid lightcoral; width: 6rem; margin: 0 auto;">
             <a [routerLink]="['/']"
               (click)="cerrarSesion()"
               class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors py-2">Cerrar Sesion</a>
