@@ -22,6 +22,7 @@
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",
+    "dialogflow": "^1.2.0",
     "dotenv": "^16.3.1",
     "express": "^5.0.0",
     "fs": "^0.0.1-security",
@@ -31,7 +32,8 @@
     "path": "^0.12.7",
     "pdfkit": "^0.17.1",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

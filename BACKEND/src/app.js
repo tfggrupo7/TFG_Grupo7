@@ -9,7 +9,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const tareasRoutes = require("./routes/api/tareas.routes");
+const dialogflowRoutes = require("./routes/api/dialogflow.routes");
 app.use('/api/tareas', tareasRoutes);
+app.use('/api/dialogflow', dialogflowRoutes);
 
 // Middleware
 
