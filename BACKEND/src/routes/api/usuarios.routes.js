@@ -163,7 +163,34 @@ router.get('/perfil', perfil);
  *         description: Error en la solicitud o token inválido
  */
 router.post('/cambiar-contrasena/:token', cambiarContraseña); 
-
+/**
+ * @swagger
+ * /:
+ *   put:
+ *     summary: Actualiza los datos del usuario autenticado
+ *     tags: [Autenticación y Perfil]
+ *     requestBody:
+ *       description: Datos para actualizar el usuario
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Juan Pérez"
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "juan.perez@example.com"
+ *               
+ *     responses:
+ *       200:
+ *         description: Datos actualizados exitosamente
+ *       400:
+ *         description: Error en la solicitud o datos inválidos
+ */
 router.put('/',actualizarDatos);
 /**
  * @swagger
