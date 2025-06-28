@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../sendEmail");
 const {sendHtmlEmail} = require("../helper/welcome-email");
-const { get } = require("../routes/api/usuarios.routes");
+
 
 
 

@@ -58,6 +58,7 @@ function agruparPorEmpleado(tareas) {
 }
 
 function generateTareasPDF(tareas, filePath) {
+  console.log("Tareas recibidas para PDF:", JSON.stringify(tareas, null, 2));
   return new Promise((resolve, reject) => {
     const tareasFlat = Array.isArray(tareas[0]) ? tareas.flat() : tareas;
 
@@ -65,7 +66,6 @@ function generateTareasPDF(tareas, filePath) {
       (tarea) =>
         tarea &&
         typeof tarea === "object" &&
-        tarea.hasOwnProperty("id") &&
         tarea.hasOwnProperty("empleado_id") &&
         tarea.empleado_id !== null &&
         tarea.empleado_id !== undefined

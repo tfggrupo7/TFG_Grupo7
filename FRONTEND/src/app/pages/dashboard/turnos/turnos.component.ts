@@ -345,7 +345,7 @@ export class TurnosComponent implements OnInit {
           toast.error('Error al enviar las tareas por correo electrónico');
         });
     }
-    descargarTareas() {
+    descargarTurnos() {
       this.turnosService
       .downloadTurnos()
       .then((respuesta: any) => {

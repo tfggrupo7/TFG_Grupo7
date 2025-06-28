@@ -87,7 +87,8 @@ async loadCurrentUser() {
       const usuarioActualizado: IUsuario = { ...this.datosForm.value };
       await this.usuariosService.updateUsuario(usuarioActualizado);
       toast.success('Empleado actualizado correctamente');
-      this.router.navigate(['/dashboard', 'personal']);
+      await this.loadCurrentUser(); // Recargar el usuario actualizado
+      this.router.navigate(['/dashboard']);
     } catch (error) {
       toast.error('Fallo al actualizar el empleado');
     }

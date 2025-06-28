@@ -177,8 +177,10 @@ const exportTareasEmpleadoPDF = async (req, res) => {
 
   try {
     const tareas = await Tarea.selectAllTareasAndEmpleadoRaw(
+      
       Number(empleadoId)
     );
+    console.log("Tareas obtenidas:", tareas);
 
     if (!tareas || tareas.length === 0) {
       return res
