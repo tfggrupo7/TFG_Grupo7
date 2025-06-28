@@ -162,18 +162,21 @@
           </div>
 
           <!-- Turnos para este día -->
-          <ng-container *ngFor="let turno of turnos">
-            <div *ngIf="(turno.fecha | date:'yyyy-MM-dd') === day"
-              class="absolute text-white p-2 rounded cursor-move shift-card" [ngClass]="turno.color"
-              [style.top.px]="turno.hora * 60" [style.height.px]="turno.duracion * 60" draggable="true"
-              (dragstart)="onDragStart(turno)" (click)="onTurnoClick(turno)">
-              <div class="font-medium text-sm">
-                {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
-              </div>
-              <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
-              <div class="text-xs">{{ turno.estado | titlecase }}</div>
-            </div>
-          </ng-container>
+          <ng-container *ngFor="let turno of turnosPorDia[day]">
+  <div
+    class="absolute text-white p-2 rounded cursor-move shift-card"
+    [ngClass]="turno.color"
+    [style.top.px]="getTurnoTop(turno.hora_inicio)"
+    [style.height.px]="getTurnoHeight(turno.hora_inicio, turno.hora_fin)"
+    draggable="true"
+    (dragstart)="onDragStart(turno)" (click)="onTurnoClick(turno)">
+    <div class="font-medium text-sm">
+      {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
+    </div>
+    <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
+    <div class="text-xs">{{ turno.estado | titlecase }}</div>
+  </div>
+</ng-container>
         </div>
       </div>
     </div>

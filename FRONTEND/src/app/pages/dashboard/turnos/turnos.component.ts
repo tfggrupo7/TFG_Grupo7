@@ -173,23 +173,25 @@ export class TurnosComponent implements OnInit {
 /**
  * Alta de un turno (llamado por output del modal).
  * Envía el nuevo turno al backend, refresca la cuadrícula y cierra el modal.
- */  async createTurno(turno: ITurnos) {
-    await this.turnosService.createTurno(turno);
-    await this.cargarTurnos(); // refresh grid
-    await this.cargarTurnosHoy();
-    this.closeModal();
-  }
+ */ async createTurno(turno: ITurnos) {
+  await this.turnosService.createTurno(turno);
+  await this.cargarTurnos(); // refresca array general
+  await this.cargarTurnosHoy(); // refresca turnos de hoy
+  await this.cargarTurnosSemana(); // <-- añade esta línea para refrescar el calendario semanal
+  this.closeModal();
+}
 
 /**
  * Edición de turno existente.
  * Actualiza el turno en el backend, refresca la cuadrícula y cierra el modal.
  */  async updateTurno(turno: ITurnos) {
-    if (!turno.id) return;
-    await this.turnosService.updateTurno(turno.id, turno);
-    await this.cargarTurnos();
-    await this.cargarTurnosHoy();
-    this.closeModal();
-  }
+  if (!turno.id) return;
+  await this.turnosService.updateTurno(turno.id, turno);
+  await this.cargarTurnos();
+  await this.cargarTurnosHoy();
+  await this.cargarTurnosSemana();
+  this.closeModal();
+}
 
 /**
  * Borrado hard de turno seleccionado.
@@ -199,6 +201,7 @@ export class TurnosComponent implements OnInit {
     await this.turnosService.deleteTurno(this.selectedTurno.id);
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
+    await this.cargarTurnosSemana();
     this.closeModal();
   }
 
@@ -264,20 +267,33 @@ export class TurnosComponent implements OnInit {
    * Reutiliza `updateTurno` para persistir el cambio.
    */
   async onDrop(event: DragEvent, dayIndex: number, hour: number) {
-    event.preventDefault();
-    if (this.draggedTurno) {
-      this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
-      this.draggedTurno.hora = hour;
-      this.draggedTurno.hora_inicio = `${hour.toString().padStart(2, '0')}:00`;
-      const endHour = hour + this.draggedTurno.duracion;
-      this.draggedTurno.hora_fin = `${endHour.toString().padStart(2, '0')}:00`;
+  event.preventDefault();
+  if (this.draggedTurno) {
+    // Cambia la fecha al nuevo día
+    this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
+    this.draggedTurno.hora = hour;
 
-      // Actualiza en backend
-      await this.updateTurno(this.draggedTurno);
+    const [origH, origM] = this.draggedTurno.hora_inicio.split(':').map(Number);
 
-      this.draggedTurno = null;
-    }
+    // Fuerza la duración a número y nunca la recalcula
+    let dur = Number(this.draggedTurno.duracion);
+    if (!dur || dur <= 0) dur = 1;
+
+    const newHoraInicio = `${hour.toString().padStart(2, '0')}:${(origM || 0).toString().padStart(2, '0')}`;
+    this.draggedTurno.hora_inicio = newHoraInicio;
+
+    const totalMin = hour * 60 + (origM || 0) + dur * 60;
+    let finH = Math.floor(totalMin / 60);
+    let finM = Math.floor(totalMin % 60);
+    if (finM === 60) { finH += 1; finM = 0; }
+    this.draggedTurno.hora_fin = `${finH.toString().padStart(2, '0')}:${finM.toString().padStart(2, '0')}`;
+
+    // Actualiza en backend
+    await this.updateTurno(this.draggedTurno);
+
+    this.draggedTurno = null;
   }
+}
 
   /**
    * Devuelve el nombre completo del día de la semana dado su índice (0=Lunes).
@@ -345,36 +361,54 @@ export class TurnosComponent implements OnInit {
           toast.error('Error al enviar las tareas por correo electrónico');
         });
     }
-    descargarTurnos() {
-      this.turnosService
-      .downloadTurnos()
-      .then((respuesta: any) => {
-        const blob = new Blob([respuesta], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'turnos.pdf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      })
-      .catch((err: unknown) => {
-        console.error('Error al descargar los turnos:', err);
-        toast.error('Error al descargar los turnos');
-      });
-    }
-
-    async cargarTurnosSemana() {
-  this.turnosPorDia = {};
-  for (const fecha of this.currentWeekDates) {
-    try {
-      this.turnosPorDia[fecha] = await this.turnosService.getTurnosByDate(fecha);
-    } catch (err) {
-      this.turnosPorDia[fecha] = [];
-      console.error('Error cargando turnos para', fecha, err);
-    }
+  descargarTurnos() {
+    this.turnosService
+    .downloadTurnos()
+    .then((respuesta: any) => {
+      const blob = new Blob([respuesta], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'turnos.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    })
+    .catch((err: unknown) => {
+      console.error('Error al descargar los turnos:', err);
+      toast.error('Error al descargar los turnos');
+    });
   }
 
-}
+  async cargarTurnosSemana() {
+    this.turnosPorDia = {};
+    for (const fecha of this.currentWeekDates) {
+      try {
+        this.turnosPorDia[fecha] = await this.turnosService.getTurnosByDate(fecha);
+      } catch (err) {
+        this.turnosPorDia[fecha] = [];
+        console.error('Error cargando turnos para', fecha, err);
+      }
+    }
+  }
+  /**
+   * Devuelve la posición (en px) desde arriba según la hora de inicio.
+   * Ejemplo: "08:30" => 510 si cada hora son 60px.
+   */
+  getTurnoTop(hora_inicio: string): number {
+    const [h, m] = hora_inicio.split(':').map(Number);
+    return h * 60 + (m || 0); // 1px = 1minuto (ajusta el factor si quieres)
+  }
+
+  /**
+   * Devuelve la altura (en px) según la duración del turno.
+   * Ejemplo: "08:00" a "10:30" => 150 si cada minuto es 1px.
+   */
+  getTurnoHeight(hora_inicio: string, hora_fin: string): number {
+    const [h1, m1] = hora_inicio.split(':').map(Number);
+    const [h2, m2] = hora_fin.split(':').map(Number);
+    return ((h2 * 60 + (m2 || 0)) - (h1 * 60 + (m1 || 0)));
+  }
+
 }

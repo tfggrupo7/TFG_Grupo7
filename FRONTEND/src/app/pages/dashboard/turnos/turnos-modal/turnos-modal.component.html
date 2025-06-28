@@ -32,22 +32,6 @@
           </select>
         </div>
 
-        <!-- Rol -->
-        <div class="space-y-2">
-          <label for="roles_id" class="text-sm font-medium text-[#1C1C1C]">Rol</label>
-          <select
-            id="roles_id"
-            formControlName="roles_id"
-            class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]"
-            required
-          >
-            <option value="" disabled>Selecciona rol</option>
-            <option *ngFor="let rol of roles" [value]="rol.id">
-              {{ rol.nombre }}
-            </option>
-          </select>
-        </div>
-
         <!-- Fecha -->
         <div class="space-y-2">
           <label for="fecha" class="text-sm font-medium text-[#1C1C1C]">Fecha</label>
