@@ -168,19 +168,17 @@
       <li class="text-muted text-center mt-8">No se encontraron empleados</li>
     }
   </ul>
-</div>
-    
- 
+
+
 <h2 class="text-lg font-semibold text-[#556B2F] mt-8">Lista de Empleados</h2>
- 
-  <!-- Lista de empleados -->
-  <div class="grid gap-4 grid-cols-2 md:grid-cols-3">
-    <!-- Tarjeta de empleado -->
-    @for (empleado of arrEmpleados; track empleado.id) {
-    <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 hover:border-[#556B2F]/30 transition-all duration-200"
+<!-- Lista de empleados -->
+<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+  <!-- Tarjeta de empleados -->
+  @for (empleado of arrEmpleados; track empleado.id) {
+      <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 hover:border-[#556B2F]/30 transition-all duration-200 w-full min-h-[250px]"
       data-v0-t="card">
       <div class="flex flex-col space-y-1.5 p-6 pb-3">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-3">
             <div class="relative h-12 w-12 rounded-full overflow-hidden border-2 border-[#556B2F]/20">
               <img alt="{{empleado.nombre}}" loading="lazy" decoding="async" data-nimg="fill" class="object-cover"
@@ -188,16 +186,14 @@
                 style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;">
             </div>
             <div>
-              <h3 class="font-semibold tracking-tight text-[#556B2F] text-lg">{{empleado.nombre}} {{empleado.apellidos}}</h3>
-             
+              <h3 class="font-semibold tracking-tight text-[#556B2F] text-base sm:text-lg">{{empleado.nombre}} {{empleado.apellidos}}</h3>
               <p class="text-muted-foreground text-sm">{{getNombreRol(empleado.rol_id)}}</p>
-            
             </div>
           </div>
-          <div class="inline-flex text-center items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
+          <div class="inline-flex text-center items-center rounded-full px-2 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
             ID:{{empleado.id}}
           </div>
-          <div class="inline-flex text-center items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
+          <div class="inline-flex text-center items-center rounded-full px-2 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 bg-[#556B2F]/20 text-[#556B2F]">
             {{empleado.activo}}
           </div>
         </div>
@@ -211,8 +207,9 @@
               <rect width="20" height="16" x="2" y="4" rx="2"></rect>
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
             </svg>
-            <span>{{empleado.email}}</span>
+            <p class="break-words max-w-full">{{empleado.email}}</p>
           </div>
+
           <div class="flex items-center gap-2 text-sm text-[#1C1C1C]/70">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -259,6 +256,7 @@
         <h2 class="text-center text-muted">NO HAY EMPLEADOS</h2>
       }
 </div>
+
 <!-- Modal Crear Empleado -->
 @if(modalEmpleadoAbierto) {
 <div id="modal-empleado" data-modal-content="empleado">
