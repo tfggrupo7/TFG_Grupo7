@@ -185,12 +185,13 @@ export class TurnosComponent implements OnInit {
  * Edición de turno existente.
  * Actualiza el turno en el backend, refresca la cuadrícula y cierra el modal.
  */  async updateTurno(turno: ITurnos) {
-    if (!turno.id) return;
-    await this.turnosService.updateTurno(turno.id, turno);
-    await this.cargarTurnos();
-    await this.cargarTurnosHoy();
-    this.closeModal();
-  }
+  if (!turno.id) return;
+  await this.turnosService.updateTurno(turno.id, turno);
+  await this.cargarTurnos();
+  await this.cargarTurnosHoy();
+  await this.cargarTurnosSemana();
+  this.closeModal();
+}
 
 /**
  * Borrado hard de turno seleccionado.
@@ -200,6 +201,7 @@ export class TurnosComponent implements OnInit {
     await this.turnosService.deleteTurno(this.selectedTurno.id);
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
+    await this.cargarTurnosSemana();
     this.closeModal();
   }
 
@@ -267,32 +269,24 @@ export class TurnosComponent implements OnInit {
   async onDrop(event: DragEvent, dayIndex: number, hour: number) {
   event.preventDefault();
   if (this.draggedTurno) {
+    // Cambia la fecha al nuevo día
     this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
     this.draggedTurno.hora = hour;
 
-    // Mantén los minutos originales si el turno tiene minutos en la hora de inicio
     const [origH, origM] = this.draggedTurno.hora_inicio.split(':').map(Number);
 
-    // Si la duración no está bien definida, calcúlala a partir de las horas actuales
-    let dur = this.draggedTurno.duracion;
-    if (!dur || dur <= 0) {
-      dur = this.calcularDuracion(this.draggedTurno.hora_inicio, this.draggedTurno.hora_fin);
-      // Si sigue sin ser válida, por defecto 1 hora
-      if (!dur || dur <= 0) dur = 1;
-      this.draggedTurno.duracion = dur;
-    }
+    // Fuerza la duración a número y nunca la recalcula
+    let dur = Number(this.draggedTurno.duracion);
+    if (!dur || dur <= 0) dur = 1;
 
-    // Nueva hora de inicio
     const newHoraInicio = `${hour.toString().padStart(2, '0')}:${(origM || 0).toString().padStart(2, '0')}`;
     this.draggedTurno.hora_inicio = newHoraInicio;
 
-    // Calcula la nueva hora_fin sumando la duración exacta
     const totalMin = hour * 60 + (origM || 0) + dur * 60;
     let finH = Math.floor(totalMin / 60);
-    let finM = Math.round(totalMin % 60);
+    let finM = Math.floor(totalMin % 60);
     if (finM === 60) { finH += 1; finM = 0; }
     this.draggedTurno.hora_fin = `${finH.toString().padStart(2, '0')}:${finM.toString().padStart(2, '0')}`;
-
 
     // Actualiza en backend
     await this.updateTurno(this.draggedTurno);

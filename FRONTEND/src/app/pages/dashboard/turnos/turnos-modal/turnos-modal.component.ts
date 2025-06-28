@@ -54,7 +54,6 @@ export class TurnosModalComponent implements OnInit, OnChanges {
     // Construcción del formulario con validaciones mínimas
     this.shiftForm = this.fb.group({
       empleado_id: ['', Validators.required],
-      roles_id: ['', Validators.required],
       fecha: ['', Validators.required],
       dia: ['', Validators.required],
       estado: ['', Validators.required],
