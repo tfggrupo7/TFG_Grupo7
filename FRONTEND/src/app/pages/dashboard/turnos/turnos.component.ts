@@ -59,7 +59,7 @@ export class TurnosComponent implements OnInit {
   constructor(private turnosService: TurnosService, private empleadosService: EmpleadosService, private rolesService: RolesService) { }
 
   /**
-   * Ciclo de vida — al inicializar:
+   * Ciclo de vida — al inicializar:
    *   1. Calcula las fechas de la semana actual.
    *   2. Descarga turnos desde el backend.
    */
@@ -267,33 +267,44 @@ export class TurnosComponent implements OnInit {
    * Reutiliza `updateTurno` para persistir el cambio.
    */
   async onDrop(event: DragEvent, dayIndex: number, hour: number) {
-  event.preventDefault();
-  if (this.draggedTurno) {
-    // Cambia la fecha al nuevo día
-    this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
-    this.draggedTurno.hora = hour;
+    event.preventDefault();
+    if (this.draggedTurno) {
+      // Guardamos la duración original calculada desde hora_inicio y hora_fin
+      const duracionOriginal = this.calcularDuracion(this.draggedTurno.hora_inicio, this.draggedTurno.hora_fin);
 
-    const [origH, origM] = this.draggedTurno.hora_inicio.split(':').map(Number);
+      // Cambia la fecha al nuevo día
+      this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
+      this.draggedTurno.hora = hour;
 
-    // Fuerza la duración a número y nunca la recalcula
-    let dur = Number(this.draggedTurno.duracion);
-    if (!dur || dur <= 0) dur = 1;
+      // Preservamos los minutos originales del turno
+      const [origH, origM] = this.draggedTurno.hora_inicio.split(':').map(Number);
 
-    const newHoraInicio = `${hour.toString().padStart(2, '0')}:${(origM || 0).toString().padStart(2, '0')}`;
-    this.draggedTurno.hora_inicio = newHoraInicio;
+      // Nueva hora de inicio con la hora de destino pero manteniendo los minutos originales
+      const newHoraInicio = `${hour.toString().padStart(2, '0')}:${(origM || 0).toString().padStart(2, '0')}`;
+      this.draggedTurno.hora_inicio = newHoraInicio;
 
-    const totalMin = hour * 60 + (origM || 0) + dur * 60;
-    let finH = Math.floor(totalMin / 60);
-    let finM = Math.floor(totalMin % 60);
-    if (finM === 60) { finH += 1; finM = 0; }
-    this.draggedTurno.hora_fin = `${finH.toString().padStart(2, '0')}:${finM.toString().padStart(2, '0')}`;
+      // Calculamos la nueva hora de fin basándonos en la duración original
+      const totalMin = hour * 60 + (origM || 0) + (duracionOriginal * 60);
+      let finH = Math.floor(totalMin / 60);
+      let finM = Math.floor(totalMin % 60);
 
-    // Actualiza en backend
-    await this.updateTurno(this.draggedTurno);
+      // Manejo de casos especiales
+      if (finM === 60) {
+        finH += 1;
+        finM = 0;
+      }
 
-    this.draggedTurno = null;
+      this.draggedTurno.hora_fin = `${finH.toString().padStart(2, '0')}:${finM.toString().padStart(2, '0')}`;
+
+      // Actualizamos la duración para mantener consistencia
+      this.draggedTurno.duracion = duracionOriginal;
+
+      // Actualiza en backend
+      await this.updateTurno(this.draggedTurno);
+
+      this.draggedTurno = null;
+    }
   }
-}
 
   /**
    * Devuelve el nombre completo del día de la semana dado su índice (0=Lunes).
