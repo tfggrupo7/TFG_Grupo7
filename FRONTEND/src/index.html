@@ -173,11 +173,28 @@
         });
 
         const data = await response.json();
-        appendMessage(data.reply || '[Sin respuesta del bot]', false);
+
+        const fallbackReplies = [
+          'Disculpa, no tengo una respuesta para tu mensaje, pero trabajaremos en ello.',
+          'Lo siento, todavía no estoy preparado para responder eso.',
+          'Esa pregunta me supera por ahora. ¡Gracias por tu paciencia!',
+          'No tengo una respuesta clara para eso, pero puedes contactar con soporte si lo deseas.',
+          'Estoy aprendiendo... aún no sé cómo ayudarte con eso.'
+        ];
+
+        const reply = data.reply?.trim();
+        if (!reply) {
+          const randomFallback = fallbackReplies[Math.floor(Math.random() * fallbackReplies.length)];
+          appendMessage(randomFallback, false);
+        } else {
+          appendMessage(reply, false);
+        }
+
       } catch (err) {
         appendMessage('[Error de conexión]', false);
       }
     }
+
 
     input.addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
