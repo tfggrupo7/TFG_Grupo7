@@ -27,7 +27,7 @@
           >
             <option value="" disabled>Selecciona empleado</option>
             <option *ngFor="let emp of employees" [value]="emp.id">
-              {{ emp.nombre }}
+              {{ emp.nombre }} {{ emp.apellidos }}
             </option>
           </select>
         </div>
