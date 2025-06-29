@@ -74,9 +74,7 @@
           <div class="font-medium text-[#1C1C1C]">
             {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
           </div>
-          <div class="text-sm text-[#1C1C1C]/70">
-            {{ rolesMap.get(turno.roles_id) || 'Rol ' + turno.roles_id }}
-          </div>
+         
         </div>
         <div class="text-right">
           <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>

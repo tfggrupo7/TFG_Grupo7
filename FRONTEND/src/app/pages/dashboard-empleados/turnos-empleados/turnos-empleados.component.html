@@ -95,7 +95,6 @@
         <thead class="bg-[#556B2F]/10">
           <tr>
             <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Nombre</th>
-            <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Rol</th>
             <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Fecha</th>
             <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Hora Inicio</th>
             <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Hora Fin</th>
@@ -117,9 +116,7 @@
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#1C1C1C]">
               {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
             </td>
-            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
-              {{ rolesMap.get(turno.roles_id) || 'Rol ' + turno.roles_id }}
-            </td>
+            
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
               {{ turno.fecha | date:'dd/MM/yyyy' }}
             </td>

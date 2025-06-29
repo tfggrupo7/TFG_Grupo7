@@ -14,6 +14,7 @@ import { TurnosModalComponent } from './turnos-modal/turnos-modal.component';
 import { EmpleadosService } from '../../../core/services/empleados.service';
 import { RolesService } from '../../../core/services/roles.service';
 import { toast } from 'ngx-sonner';
+import { IEmpleados } from '../../../interfaces/iempleados.interfaces';
 @Component({
   selector: 'app-turnos',
   standalone: true,
@@ -77,6 +78,7 @@ export class TurnosComponent implements OnInit {
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
   }
+
 
   /** Descarga la lista de turnos y actualiza `this.turnos` */
   async cargarTurnos() {
