@@ -219,9 +219,6 @@
           <div class="font-medium text-[#1C1C1C]">
             {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
           </div>
-          <div class="text-xs text-[#1C1C1C]/70">
-            {{ (rolesMap.get(turno.roles_id) || ('Rol ' + turno.roles_id)) | titlecase }}
-          </div>
           <div class="text-xs text-[#556B2F] font-medium">
             {{ turno.hora_inicio }} - {{ turno.hora_fin }}
           </div>
