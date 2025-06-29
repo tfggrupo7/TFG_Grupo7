@@ -1,15 +1,16 @@
 <div
-  class="bg-[#f3f3ec] border border-[#d9dbc7] rounded-xl p-6 mb-6 flex items-center justify-between"
+  class="bg-[#f3f3ec] border border-[#d9dbc7] rounded-xl p-6 mb-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4"
 >
   <div>
     <h1 class="text-2xl font-bold text-[#4b6b1c]">Gestión de Tareas</h1>
     <p class="text-[#7a7a5c] text-sm">Organiza las tareas de tu equipo</p>
   </div>
-  <div class="flex gap-2">
+
+  <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 w-full lg:w-auto">
     <!-- Botón de descarga -->
     <button
       (click)="descargarTareas()"
-      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center"
+      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center w-full sm:w-auto"
       title="Descargar tareas"
     >
       <svg
@@ -28,10 +29,11 @@
       </svg>
       Descargar
     </button>
+
     <!-- Botón de enviar por email -->
     <button
       (click)="enviarTareasPorEmail()"
-      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center"
+      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center w-full sm:w-auto"
       title="Enviar tareas por email"
     >
       <svg
@@ -50,9 +52,10 @@
       </svg>
       Enviar Email
     </button>
-    <!-- Botón de asignar tarea (ya existente) -->
+
+    <!-- Botón de asignar tarea -->
     <button
-      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow"
+      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow w-full sm:w-auto"
       (click)="openModal()"
     >
       + Asignar Tarea
