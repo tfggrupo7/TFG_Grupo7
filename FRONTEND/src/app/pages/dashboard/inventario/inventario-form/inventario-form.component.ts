@@ -17,7 +17,7 @@ export class InventarioFormComponent {
   ingredientForm: FormGroup  = new FormGroup({
       nombre: new FormControl('', [Validators.required]),
       categoria: new FormControl('', [Validators.required]),
-      cantidad: new FormControl('', [Validators.required]),
+      cantidad: new FormControl(0, [Validators.required, Validators.min(0)]),
       proveedor: new FormControl('', [Validators.required]),
       estado: new FormControl('', [Validators.required]),
       alergenos: new FormControl('', [Validators.required]),
@@ -43,15 +43,16 @@ export class InventarioFormComponent {
     this.closeEvent.emit();
   }
 
-  ngOnInit() {
-    if(this.ingrediente?.id){
-      this.btnDescription = 'Actualizar'
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['ingrediente'] && changes['ingrediente'].currentValue) {
-      this.updateForm(changes['ingrediente'].currentValue);
+    if (changes['ingrediente']) {
+      const current = changes['ingrediente'].currentValue;
+      if (current) {
+        this.updateForm(current);
+        this.btnDescription = 'Actualizar';
+      } else {
+        this.ingredientForm.reset();
+        this.btnDescription = 'Añadir';
+      }
     }
   }
 }

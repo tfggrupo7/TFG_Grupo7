@@ -1,10 +1,16 @@
 const db = require("../config/db");
 
-const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", direction="", userId) => {
+const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", direction="", id, tipo) => {
   const offset = (page - 1) * limit;
   const term = `%${search}%`;
   orderBy = orderBy.replace(/['"`]/g, '');
   direction = direction.replace(/['"`]/g, '');
+  let condicion = '';
+  if(tipo==='empleado'){
+    condicion = '(i.empleados_id = ? OR i.usuario_id = (SELECT usuario_id from empleados where id=?))'
+  } else {
+    condicion = '(i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?))'
+  }
   /* 1) datos paginados */
   const [rows] = await db.query(
     `SELECT DISTINCT i.id, i.nombre, i.alergenos, i.categoria, i.cantidad, i.unidad,
@@ -12,34 +18,20 @@ const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", d
             i.created_at AS createdAt,
             i.updated_at AS updatedAt
       FROM ingredientes i
-      LEFT JOIN empleados e ON i.empleados_id = e.id
-      WHERE
-        ( ? IN (SELECT id FROM usuarios) AND 
-        (i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?)))
-        OR
-        ( ? IN (SELECT id FROM empleados) AND 
-        (i.empleados_id = ? OR i.usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))
+      WHERE  ${condicion}
       AND CONCAT_WS(' ', i.nombre, i.alergenos, i.categoria, i.cantidad, i.unidad, i.proveedor, i.estado) LIKE ?
       ORDER BY ${orderBy} ${direction}
       LIMIT ? OFFSET ?`,
-    [userId, userId, userId, userId, userId, userId, term, limit, offset]
+    [id, id, term, limit, offset]
   );
 
     /* 2) total para la paginación */
   const [[{ total }]] = await db.query(
     `SELECT COUNT(*) AS total
     FROM ingredientes i
-    LEFT JOIN empleados e ON i.empleados_id = e.id
-    WHERE 
-    (? IN (SELECT id FROM usuarios) AND 
-      (i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?)))
-    OR
-    (? IN (SELECT id FROM empleados) AND 
-      (i.empleados_id = ? OR i.usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))
-    AND
-    CONCAT_WS(' ', i.nombre, i.alergenos, i.categoria, i.cantidad,
-        i.unidad, i.proveedor, i.estado) LIKE ?`,
-    [userId, userId, userId, userId, userId, userId, term]
+    WHERE ${condicion}
+    AND CONCAT_WS(' ', i.nombre, i.alergenos, i.categoria, i.cantidad, i.unidad, i.proveedor, i.estado) LIKE ?`,
+    [id, id,term]
   );
 
   return { rows, total };
@@ -72,7 +64,13 @@ const selectById = async (ingredienteId) => {
   return result[0] ?? null;
 };
 
-const selectSummary = async (userId) => {
+const selectSummary = async (tipo, id) => {
+  let condicion = '';
+  if(tipo==='empleado'){
+    condicion = 'empleados_id = ? OR usuario_id = (SELECT usuario_id from empleados where id=?)'
+  } else {
+    condicion = 'usuario_id = ? OR empleados_id in (SELECT id from empleados where usuario_id=?)'
+  }
   const [result] = await db.query(`SELECT 
     COUNT(*) AS total_productos,
     SUM(CASE WHEN estado = 'Bajo stock' THEN 1 ELSE 0 END) AS productos_bajo_stock,
@@ -82,25 +80,14 @@ const selectSummary = async (userId) => {
     (
         SELECT categoria
         FROM ingredientes
-        WHERE 
-            (EXISTS (SELECT 1 FROM usuarios WHERE id = ?) AND
-            (usuario_id = ? OR empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?))
-            )
-          OR
-            (EXISTS (SELECT 1 FROM empleados WHERE id = ?) AND
-             empleados_id = ? OR usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?))
+        WHERE ${condicion}            
         GROUP BY categoria
         ORDER BY COUNT(*) DESC
         LIMIT 1
     ) AS categoria_mas_usada
-    FROM ingredientes i
-    WHERE 
-    (EXISTS (SELECT 1 FROM usuarios WHERE id = ?) AND
-     (i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?)))
-    OR
-    (EXISTS (SELECT 1 FROM empleados WHERE id = ?) AND
-     (i.empleados_id = ? OR i.usuario_id = (SELECT usuario_id FROM empleados WHERE id = ?)))`,
-    [userId,userId,userId,userId,userId,userId, userId,userId,userId,userId,userId,userId])
+    FROM ingredientes
+    WHERE ${condicion}`,
+    [id,id,id,id])
   if (result.length === 0) return null;
 
   return result[0];

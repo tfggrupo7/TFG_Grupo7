@@ -12,7 +12,6 @@ import { IInventarioResumen } from '../../../interfaces/iinventarioresumen.inter
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { AuthService } from '../../../core/services/auth.service';
-import { IEmpleados } from '../../../interfaces/iempleados.interfaces';
 
 @Component({
   selector: 'app-inventario',
@@ -64,17 +63,22 @@ export class InventarioComponent implements OnInit {
     this.cargarIngredientes()
   }
 
+  get userId(): string {
+    return this.user?.id ?? this.user?.usuario_id;
+  }
+
+  get tipo(): string {
+    return this.user.id ? 'empleado' : 'usuario'
+  }
   
   async cargarResumen() {
-    const id = this.user.id = this.user.id ? this.user.id: this.user.usuario_id
-    this.summary = await this.ingredientesService.getResumen(id);
+    this.summary = await this.ingredientesService.getResumen(this.tipo,this.userId);
   }
 
   async cargarIngredientes() {
-    const id = this.user.id = this.user.id ? this.user.id: this.user.usuario_id
     const search = this.searchTerm.value ?? '';
     this.ingredientes = await this.ingredientesService.getIngredientes(
-      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion, id
+      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion, this.userId, this.tipo
     );
 
     this.ingredientesFiltrados = this.ingredientes;
@@ -90,7 +94,7 @@ export class InventarioComponent implements OnInit {
 
 
   abrirModal(ingrediente?: IIngredientes) {
-    this.ingrediente = ingrediente ? ingrediente : null;
+    this.ingrediente = ingrediente ?? null;
     this.modalIngredienteAbierto = true;
   }
 

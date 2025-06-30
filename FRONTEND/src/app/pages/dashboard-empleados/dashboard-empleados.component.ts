@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, Signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
@@ -21,6 +21,7 @@ mobileMenuOpen = false;
   // Propiedad para controlar la visibilidad del menú de perfil
   
 showProfileMenu = false;
+showInventarioOpt!: Signal<boolean>;
 currentEmpleado: any = null;
 
 usuario = {
@@ -41,6 +42,7 @@ closeProfileMenu() {
 async loadCurrentEmpleado() {
   try {
     this.currentEmpleado = await this.empleadosService.getCurrentUser();
+    this.showInventarioOpt = computed(() => this.currentEmpleado?.rol.nombre === 'encargado' || this.currentEmpleado?.rol.nombre === 'jefe cocina' ? true : false);
      } catch (error: any) {
     
     
