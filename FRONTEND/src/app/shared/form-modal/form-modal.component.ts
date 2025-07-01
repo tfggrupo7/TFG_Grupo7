@@ -15,6 +15,7 @@ export class FormModalComponent {
   @Input() submitLabel = 'Guardar';
   @Input() isEditMode = false;
   @Input() showDelete = false;
+  @Input() isSubmitting = false;
   @Output() close = new EventEmitter<void>();
   @Output() submit = new EventEmitter<void>();
   @Output() delete = new EventEmitter<void>();

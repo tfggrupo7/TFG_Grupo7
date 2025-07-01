@@ -28,12 +28,14 @@ export class TareasComponent {
     contraseña: '',
   };
  empleados: any[] = [];
-  
+  tareaSeleccionada: ITareas | null = null;
+  isSubmitting = false;
 
   constructor(private fb: FormBuilder, private empleadoService: EmpleadosService) {}
 
   async ngOnInit() {
     this.tareasForm = this.fb.group({
+      id: [null],
       titulo: ['', Validators.required],
       descripcion: ['', Validators.required],
       fecha_inicio: ['', Validators.required],
@@ -66,7 +68,14 @@ export class TareasComponent {
   }
 
 
-  openModal() {
+  openModal(tarea?: ITareas) {
+    if (tarea) {
+      this.tareaSeleccionada = tarea;
+      this.tareasForm.patchValue(tarea);
+    } else {
+      this.tareaSeleccionada = null;
+      this.tareasForm.reset();
+    }
     this.showModal = true;
   }
 
@@ -99,15 +108,42 @@ export class TareasComponent {
     });
   }
 
+  private formatDate(date: any): string {
+    if (!date) return '';
+    // Si ya es string YYYY-MM-DD, devuélvelo
+    if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
+    // Si es string ISO, recorta
+    if (typeof date === 'string' && date.includes('T')) return date.split('T')[0];
+    // Si es Date
+    if (date instanceof Date) return date.toISOString().split('T')[0];
+    return date;
+  }
+
   async insertarTarea() {
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
     try {
-     
-      await this.tareasService.createTarea(this.tareasForm.value);
+      // Formatea fechas antes de enviar
+      const formValue = {
+        ...this.tareasForm.value,
+        fecha_inicio: this.formatDate(this.tareasForm.value.fecha_inicio),
+        fecha_finalizacion: this.formatDate(this.tareasForm.value.fecha_finalizacion)
+      };
+      if (this.tareaSeleccionada && this.tareaSeleccionada.id) {
+        await this.tareasService.updateTarea(this.tareaSeleccionada.id, {
+          ...formValue,
+          id: this.tareaSeleccionada.id
+        });
+        toast.success('Tarea actualizada correctamente');
+      } else {
+        const { id, ...tareaSinId } = formValue;
+        await this.tareasService.createTarea(tareaSinId);
+        toast.success('Tarea creada correctamente');
+      }
       this.closeModal();
       this.obtenerTareas();
-    } catch (err: unknown) {
-      console.log('Error al insertar la tarea:', err);
-      toast.error('Error al insertar la tarea');
+    } finally {
+      this.isSubmitting = false;
     }
   }
 

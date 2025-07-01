@@ -47,6 +47,7 @@
     [title]="'Asignar Nueva Tarea'"
     [formGroup]="tareasForm"
     [submitLabel]="'Guardar'"
+    [isSubmitting]="isSubmitting"
     (close)="closeModal()"
     (submit)="insertarTarea()"
   >

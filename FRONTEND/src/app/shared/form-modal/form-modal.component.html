@@ -20,7 +20,7 @@
           class="rounded-md text-sm font-medium h-10 px-4 border border-[#556B2F] text-[#556B2F] hover:bg-[#556B2F]/10 w-full sm:w-auto">
           Cancelar
         </button>
-        <button type="submit" [disabled]="!formGroup.valid"
+        <button type="submit" [disabled]="!formGroup.valid || isSubmitting"
           class="rounded-md text-sm font-medium h-10 px-4 bg-[#D4AF37] hover:bg-[#EBCB64] text-white w-full sm:w-auto">
           {{ submitLabel }}
         </button>
