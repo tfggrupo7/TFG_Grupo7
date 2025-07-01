@@ -19,6 +19,11 @@ ChefDesk es una plataforma web todo-en-uno para la gestión eficiente de cocinas
 
 ---
 
+## Wiki
+https://deepwiki.com/tfggrupo7/TFG_Grupo7
+
+---
+
 ## Tecnologías Utilizadas
 
 ### Backend
