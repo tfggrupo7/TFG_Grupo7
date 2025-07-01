@@ -31,6 +31,7 @@ export class PersonalComponent {
   userForm: FormGroup = new FormGroup({});
   busqueda = new FormControl('');
   empleadoId!: number;
+  isSubmitting = false;
   loaderService = inject(LoaderService);
 
   constructor(
@@ -50,16 +51,16 @@ export class PersonalComponent {
       id: new FormControl(null),
       nombre: new FormControl('', Validators.required),
       apellidos: new FormControl('', Validators.required),
-      rol_id: new FormControl<number | null>(null, Validators.required),
+      rol_id: new FormControl(3, Validators.required), // Valor por defecto: Empleado
       telefono: new FormControl('', [
         Validators.required,
         Validators.pattern('^[0-9]+$'),
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      fecha_inicio: new FormControl('', Validators.required),
+      fecha_inicio: new FormControl(this.getTodayDate(), Validators.required), // Valor por defecto: hoy
       salario: new FormControl('', Validators.required),
       usuario_id: new FormControl(userId),
-      activo: new FormControl('', Validators.required),
+      activo: new FormControl('Activo', Validators.required), // Valor por defecto
     });
 
     this.empleadosFiltrados = [];
@@ -124,15 +125,33 @@ export class PersonalComponent {
   }
 
   abrirModal() {
+    const userId = this.getUserIdFromToken();
+    this.userForm.reset({
+      id: null,
+      nombre: '',
+      apellidos: '',
+      rol_id: 3, // Valor por defecto: Empleado
+      telefono: '',
+      email: '',
+      fecha_inicio: this.getTodayDate(),
+      salario: '',
+      usuario_id: userId,
+      activo: 'Activo',
+    });
     this.modalEmpleadoAbierto = true;
+    this.isSubmitting = false;
   }
 
   cerrarModal() {
     this.modalEmpleadoAbierto = false;
+    this.userForm.reset();
+    this.isSubmitting = false;
   }
 
   cerrarModalUpdate() {
     this.modalUpdateEmpleadoAbierto = false;
+    this.userForm.reset();
+    this.isSubmitting = false;
   }
 
   abrirModalUpdate(empleado: IEmpleados) {
@@ -170,62 +189,87 @@ export class PersonalComponent {
       toast.error('Por favor, completa todos los campos obligatorios.');
       return;
     }
+    if (this.isSubmitting) {
+      return;
+    }
+    this.isSubmitting = true;
+    // Formatear fecha_inicio a YYYY-MM-DD
+    const formValue = { ...this.userForm.value };
+    if (formValue.fecha_inicio) {
+      formValue.fecha_inicio = this.formatDateForMySQL(formValue.fecha_inicio);
+    }
     try {
-      await this.empleadoService.createEmpleado(this.userForm.value);
+      await this.empleadoService.createEmpleado(formValue);
       toast.success('Empleado registrado correctamente');
       setTimeout(() => {
         this.router.navigate(['/dashboard', 'personal']).then(() => {
           window.location.reload();
           this.cerrarModal();
+          this.isSubmitting = false;
         });
       }, 3000);
-    } catch {
-      toast.error('Fallo en el registro');
+    } catch (error: any) {
+      toast.error(error?.error || 'Fallo en el registro');
+      this.isSubmitting = false;
     }
   }
 
   async updateDataForm() {
-  console.log('=== INICIO UPDATE ===');
-  console.log('empleadoId original:', this.empleadoId);
-  console.log('Formulario válido:', this.userForm.valid);
-  console.log('Valores del formulario:', this.userForm.value);
-
-  if (this.userForm.invalid) {
-    toast.error('Por favor, completa todos los campos obligatorios.');
-    return;
+    if (this.userForm.invalid) {
+      toast.error('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
+    if (this.isSubmitting) {
+      return;
+    }
+    this.isSubmitting = true;
+    const empleadoId = Number(this.empleadoId);
+    if (!empleadoId || isNaN(empleadoId)) {
+      toast.error('ID de empleado inválido');
+      this.isSubmitting = false;
+      return;
+    }
+    // Formatear fecha_inicio a YYYY-MM-DD
+    const formValue = { ...this.userForm.value };
+    if (formValue.fecha_inicio) {
+      formValue.fecha_inicio = this.formatDateForMySQL(formValue.fecha_inicio);
+    }
+    try {
+      const empleadoActualizado: IEmpleados = {
+        ...formValue,
+        id: empleadoId,
+      };
+      await this.empleadoService.updateEmpleado(empleadoActualizado);
+      toast.success('Empleado Actualizado correctamente');
+      this.router.navigate(['/dashboard', 'personal']).then(() => {
+        setTimeout(() => {
+          this.cargarEmpleados();
+          this.cerrarModalUpdate();
+          this.isSubmitting = false;
+        }, 1000);
+      });
+    } catch (error) {
+      toast.error('Fallo al actualizar el empleado');
+      this.isSubmitting = false;
+    }
   }
 
-  const empleadoId = Number(this.empleadoId);
-  console.log('empleadoId convertido:', empleadoId);
-  
-  if (!empleadoId || isNaN(empleadoId)) {
-    toast.error('ID de empleado inválido');
-    return;
+  // Utilidad para formatear fechas a YYYY-MM-DD
+  formatDateForMySQL(date: string | Date): string {
+    const d = new Date(date);
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const day = d.getDate().toString().padStart(2, '0');
+    return `${d.getFullYear()}-${month}-${day}`;
   }
 
-  try {
-    const empleadoActualizado: IEmpleados = {
-      ...this.userForm.value,
-      id: empleadoId,
-    };
-    
-    console.log('Objeto final a enviar:', empleadoActualizado);
-    
-    const resultado = await this.empleadoService.updateEmpleado(empleadoActualizado);
-    console.log('Resultado del servicio:', resultado);
-    
-    toast.success('Empleado Actualizado correctamente');
-    this.router.navigate(['/dashboard', 'personal']).then(() => {
-      setTimeout(() => {
-        this.cargarEmpleados();;
-        this.cerrarModalUpdate();
-      }, 1000);
-    });
-  } catch (error) {
-    console.error('Error completo:', error);
-    toast.error('Fallo al actualizar el empleado');
+  // Utilidad para obtener la fecha de hoy en formato YYYY-MM-DD
+  getTodayDate(): string {
+    const d = new Date();
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const day = d.getDate().toString().padStart(2, '0');
+    return `${d.getFullYear()}-${month}-${day}`;
   }
-}
+
   async delete(id: number) {
     const empleado = this.arrEmpleados.find((e) => e.id === id);
     const nombreEmpleado = empleado ? empleado.nombre : 'Empleado';

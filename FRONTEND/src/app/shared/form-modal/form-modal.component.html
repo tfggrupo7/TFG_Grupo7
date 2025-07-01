@@ -1,37 +1,43 @@
 <!-- Modal genérico reutilizable para formularios -->
-<div *ngIf="isOpen" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-  <div
-    role="dialog"
-    class="bg-white fixed left-1/2 top-1/2 z-50 grid w-[95vw] max-w-lg max-h-[95vh] translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-4 sm:p-6 shadow-lg duration-200 sm:rounded-lg sm:max-w-[600px] border-[#D4AF37]/30 overflow-y-auto"
-  >
-    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
-      <h2 class="font-semibold tracking-tight text-[#556B2F] text-xl">
-        {{ title }}
-      </h2>
-    </div>
-    <form *ngIf="formGroup" [formGroup]="formGroup" (ngSubmit)="submit.emit()" class="space-y-4">
-      <ng-content></ng-content>
-      <div class="flex flex-col sm:flex-row justify-end gap-2 pt-4">
-        <button *ngIf="showDelete && isEditMode" type="button" (click)="delete.emit()"
-          class="rounded-md text-sm font-medium h-10 px-4 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto">
-          Eliminar
-        </button>
-        <button type="button" (click)="close.emit()"
-          class="rounded-md text-sm font-medium h-10 px-4 border border-[#556B2F] text-[#556B2F] hover:bg-[#556B2F]/10 w-full sm:w-auto">
-          Cancelar
-        </button>
-        <button type="submit" [disabled]="!formGroup.valid || isSubmitting"
-          class="rounded-md text-sm font-medium h-10 px-4 bg-[#D4AF37] hover:bg-[#EBCB64] text-white w-full sm:w-auto">
-          {{ submitLabel }}
-        </button>
+@if (isOpen) {
+  <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div
+      role="dialog"
+      class="bg-white fixed left-1/2 top-1/2 z-50 grid w-[95vw] max-w-lg max-h-[95vh] translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-4 sm:p-6 shadow-lg duration-200 sm:rounded-lg sm:max-w-[600px] border-[#D4AF37]/30 overflow-y-auto"
+    >
+      <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+        <h2 class="font-semibold tracking-tight text-[#556B2F] text-xl">
+          {{ title }}
+        </h2>
       </div>
-    </form>
-    <button type="button" (click)="close.emit()"
-      class="absolute right-4 top-4 opacity-70 hover:opacity-100">
-      <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-x h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-      </svg>
-      <span class="sr-only">Cerrar</span>
-    </button>
+      @if (formGroup) {
+        <form [formGroup]="formGroup" (ngSubmit)="submit.emit()" class="space-y-4">
+          <ng-content></ng-content>
+          <div class="flex flex-col sm:flex-row justify-end gap-2 pt-4">
+            @if (showDelete && isEditMode) {
+              <button type="button" (click)="delete.emit()"
+                class="rounded-md text-sm font-medium h-10 px-4 bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto">
+                Eliminar
+              </button>
+            }
+            <button type="button" (click)="close.emit()"
+              class="rounded-md text-sm font-medium h-10 px-4 border border-[#556B2F] text-[#556B2F] hover:bg-[#556B2F]/10 w-full sm:w-auto">
+              Cancelar
+            </button>
+            <button type="submit" [disabled]="!formGroup.valid || isSubmitting"
+              class="rounded-md text-sm font-medium h-10 px-4 bg-[#D4AF37] hover:bg-[#EBCB64] text-white w-full sm:w-auto">
+              {{ submitLabel }}
+            </button>
+          </div>
+        </form>
+      }
+      <button type="button" (click)="close.emit()"
+        class="absolute right-4 top-4 opacity-70 hover:opacity-100">
+        <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-x h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+        </svg>
+        <span class="sr-only">Cerrar</span>
+      </button>
+    </div>
   </div>
-</div>
+}

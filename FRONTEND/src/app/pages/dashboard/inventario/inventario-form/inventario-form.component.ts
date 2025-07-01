@@ -15,6 +15,7 @@ export class InventarioFormComponent {
   @Input() ingrediente: IIngredientes | null = null;
 
   ingredientForm: FormGroup  = new FormGroup({
+      id: new FormControl(null), // Añadido para edición
       nombre: new FormControl('', [Validators.required]),
       categoria: new FormControl('', [Validators.required]),
       cantidad: new FormControl(0, [Validators.required, Validators.min(0)]),
@@ -30,11 +31,14 @@ export class InventarioFormComponent {
 
   updateForm(ingrediente: IIngredientes) {
     this.ingredientForm.patchValue(ingrediente)
+    if (ingrediente.id) {
+      this.ingredientForm.get('id')?.setValue(ingrediente.id);
+    }
   }
 
   getDataForm() {
     if (this.ingredientForm.valid) {
-      const data = {...this.ingredientForm.value, id: this.ingrediente?.id};
+      const data = {...this.ingredientForm.value};
       this.sendData.emit(data);
     }
   }

@@ -261,6 +261,7 @@
     [title]="'Añadir Empleado'"
     [formGroup]="userForm"
     [submitLabel]="'Añadir Empleado'"
+    [isSubmitting]="isSubmitting"
     (close)="cerrarModal()"
     (submit)="getDataForm()"
   >
@@ -287,6 +288,7 @@
     [title]="'Modificar Empleado'"
     [formGroup]="userForm"
     [submitLabel]="'Modificar Empleado'"
+    [isSubmitting]="isSubmitting"
     (close)="cerrarModalUpdate()"
     (submit)="updateDataForm()"
   >

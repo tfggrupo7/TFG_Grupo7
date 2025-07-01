@@ -92,7 +92,7 @@
       <p class="text-sm text-muted-foreground">{{ todayFormatted }}</p>
     </div>
     <div class="p-6 pt-3">
-      <ng-container *ngIf="todayTurnos.length; else noShifts">
+      <ng-container @if (todayTurnos.length; else noShifts)>
         <div *ngFor="let turno of todayTurnos; let i = index"
           class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
           [ngClass]="i < todayTurnos.length - 1 ? 'mb-[5px]' : ''">
@@ -186,7 +186,7 @@
   <div class="rounded-lg border shadow-sm border-[#D4AF37]/20 block md:hidden mt-6">
   <div *ngFor="let day of currentWeekDates; let i = index" class="mb-6" >
   <div class="font-bold text-[#556B2F] mb-2">{{ getDayName(i) }}</div>
-  <ng-container *ngIf="turnosPorDia[day]?.length; else noTurnosMobile">
+  <ng-container @if (turnosPorDia[day]?.length; else noTurnosMobile)>
     <div *ngFor="let turno of turnosPorDia[day]"
      class="mb-2 p-3 rounded-lg bg-[#556B2F]/10 border border-[#D4AF37]/20 cursor-pointer"
      (click)="onTurnoClick(turno)">

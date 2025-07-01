@@ -1,0 +1,48 @@
+<form [formGroup]="empleadoForm" (ngSubmit)="getDataForm()">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="space-y-2">
+      <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="nombre">Nombre</label>
+      <input id="nombre" formControlName="nombre" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" placeholder="Ej: Ana García" required name="nombre">
+    </div>
+    <div class="space-y-2">
+      <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="apellidos">Apellidos</label>
+      <input id="apellidos" formControlName="apellidos" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" placeholder="Ej: García" required name="apellidos">
+    </div>
+    <div class="space-y-2">
+      <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="rol_id">Cargo</label>
+      <select id="rol_id" formControlName="rol_id" name="role" class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:ring-[#D4AF37]" required>
+        <option value="">Seleccionar cargo</option>
+        <option value="1">Jefe Cocina</option>
+        <option value="2">Encargado</option>
+        <option value="3">Empleado</option>
+      </select>
+    </div>
+    <div class="space-y-2">
+      <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="email">Email</label>
+      <input id="email" formControlName="email" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" placeholder="ana.garcia@email.com" required type="email" name="email">
+    </div>
+    <div class="space-y-2">
+      <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="telefono">Teléfono</label>
+      <input id="telefono" formControlName="telefono" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" placeholder="612345678" required name="telefono">
+    </div>
+    <div class="space-y-2">
+      <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="fecha_inicio">Fecha de inicio</label>
+      <input id="fecha_inicio" formControlName="fecha_inicio" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" required type="date" name="fecha_inicio">
+    </div>
+    <div class="space-y-2">
+      <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="salario">Salario (€)</label>
+      <input id="salario" formControlName="salario" class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" min="0" step="50" placeholder="2500" required type="number" name="salario">
+    </div>
+    <div class="space-y-2">
+      <input id="usuario_id" formControlName="usuario_id" type="hidden" name="usuario_id">
+    </div>
+    <div class="space-y-2 md:col-span-2">
+      <label class="text-sm font-medium leading-none text-[#1C1C1C]" for="activo">Estado</label>
+      <select id="activo" formControlName="activo" name="activo" class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:ring-[#D4AF37]" required>
+        <option value="Activo">Activo</option>
+        <option value="Inactivo">Inactivo</option>
+        <option value="Vacaciones">Vacaciones</option>
+      </select>
+    </div>
+  </div>
+</form>
