@@ -45,7 +45,6 @@ export class ChatbotWidgetComponent implements OnInit, AfterViewInit, AfterViewC
 
   ngAfterViewInit(): void {
     this.scrollToBottom();
-    this.cdRef.detectChanges();
   }
 
   ngAfterViewChecked(): void {
@@ -69,28 +68,14 @@ export class ChatbotWidgetComponent implements OnInit, AfterViewInit, AfterViewC
   toggleChat(): void {
     this.isOpen = !this.isOpen;
 
-    setTimeout(() => {
-      if (!this.chatContainer || !this.chatToggle) return;
-
-      const chat = this.chatContainer.nativeElement;
-
-      if (this.isOpen) {
-        this.positionChat();
-        chat.style.display = 'flex';
-
-        setTimeout(() => {
-          chat.style.transform = 'scale(1)';
-          chat.style.opacity = '1';
-          this.adjustArrow();
-          this.shouldScroll = true;
-        }, 10);
-      } else {
-        chat.style.transform = 'scale(0.8)';
-        chat.style.opacity = '0';
-        setTimeout(() => (chat.style.display = 'none'), 300);
-      }
-    }, 0);
+    if (this.isOpen) {
+      this.positionChat();
+      this.adjustArrow();
+      this.shouldScroll = true; // 🔄 Asegura que se haga scroll al reabrir
+    }
   }
+
+
 
   @HostListener('window:resize')
   onResize(): void {

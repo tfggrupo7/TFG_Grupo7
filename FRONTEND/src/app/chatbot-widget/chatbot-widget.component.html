@@ -5,9 +5,11 @@
 </button>
 
 <!-- Contenedor del chat -->
-<div *ngIf="isOpen" #chatContainer
-    class="flex flex-col fixed w-72 h-96 rounded-xl shadow-xl bg-white z-40 font-sans p-2 bottom-20 right-5 animate-fade-in transition-all duration-300 ease-in-out">
-
+<div *ngIf="isOpen" #chatContainer [ngClass]="{
+    'opacity-100 scale-100 pointer-events-auto': isOpen,
+    'opacity-0 scale-90 pointer-events-none': !isOpen
+  }"
+    class="flex flex-col fixed w-72 h-96 rounded-xl shadow-xl bg-white z-40 font-sans p-2 bottom-20 right-5 transform transition-all duration-300 ease-in-out origin-bottom-right">
     <!-- Encabezado del chat -->
     <div class="text-white py-2 px-3 font-bold rounded-t-xl" style="background-color: rgb(85 107 47);">
         ChefDesk Soporte
