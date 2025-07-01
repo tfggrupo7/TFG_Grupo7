@@ -5,7 +5,7 @@
 </button>
 
 <!-- Contenedor del chat -->
-<div *ngIf="isOpen" id="chat-container"
+<div *ngIf="isOpen" #chatContainer
     class="flex flex-col fixed w-72 h-96 rounded-xl shadow-xl bg-white z-40 font-sans p-2 bottom-20 right-5 animate-fade-in transition-all duration-300 ease-in-out">
 
     <!-- Encabezado del chat -->
@@ -14,7 +14,7 @@
     </div>
 
     <!-- Cuerpo del chat -->
-    <div id="chat-body" class="flex-1 overflow-y-auto p-2 bg-gray-50 space-y-2">
+    <div #chatBody class="flex-1 overflow-y-auto p-2 bg-gray-50 space-y-2">
         <div *ngFor="let msg of messages" [ngClass]="{
        'bg-green-100 text-right ml-auto': msg.user,
        'bg-gray-200 text-left mr-auto': !msg.user

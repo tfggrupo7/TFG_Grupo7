@@ -1,4 +1,13 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  AfterViewChecked,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -9,20 +18,20 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule]
 })
-
-export class ChatbotWidgetComponent implements OnInit {
+export class ChatbotWidgetComponent implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('chatContainer') chatContainer!: ElementRef;
   @ViewChild('chatToggle') chatToggle!: ElementRef;
-  @ViewChild('chatBody') chatBody!: ElementRef;
+  @ViewChild('chatBody', { static: false }) chatBody!: ElementRef;
   @ViewChild('messageInput') messageInput!: ElementRef;
   @ViewChild('sendButton') sendButton!: ElementRef;
   @ViewChild('chatArrow') chatArrow!: ElementRef;
 
   isOpen = false;
-  inputText: string = '';
-  messages: { text: string, user: boolean }[] = [];
+  inputText = '';
+  messages: { text: string; user: boolean }[] = [];
+  private shouldScroll = false;
 
-  fallbackReplies: string[] = [
+  readonly fallbackReplies: string[] = [
     'Disculpa, no tengo una respuesta para tu mensaje, pero trabajaremos en ello.',
     'Lo siento, todavía no estoy preparado para responder eso.',
     'Esa pregunta me supera por ahora. ¡Gracias por tu paciencia!',
@@ -30,79 +39,101 @@ export class ChatbotWidgetComponent implements OnInit {
     'Estoy aprendiendo... aún no sé cómo ayudarte con eso.'
   ];
 
+  constructor(private cdRef: ChangeDetectorRef) { }
+
   ngOnInit(): void { }
+
+  ngAfterViewInit(): void {
+    this.scrollToBottom();
+    this.cdRef.detectChanges();
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.shouldScroll) {
+      this.scrollToBottom();
+      this.shouldScroll = false;
+    }
+  }
+
+  scrollToBottom(): void {
+    if (!this.chatBody?.nativeElement) return;
+
+    try {
+      this.chatBody.nativeElement.scrollTop = this.chatBody.nativeElement.scrollHeight;
+      // console.log('[scrollToBottom] Ejecutado');
+    } catch (err) {
+      console.warn('[scrollToBottom] Fallo al hacer scroll:', err);
+    }
+  }
 
   toggleChat(): void {
     this.isOpen = !this.isOpen;
-    const chat = this.chatContainer.nativeElement;
 
-    if (this.isOpen) {
-      this.positionChat();
-      chat.style.display = 'flex';
-      setTimeout(() => {
-        chat.style.transform = 'scale(1)';
-        chat.style.opacity = '1';
-        this.adjustArrow();
-      }, 10);
-    } else {
-      chat.style.transform = 'scale(0.8)';
-      chat.style.opacity = '0';
-      setTimeout(() => {
-        chat.style.display = 'none';
-      }, 300);
-    }
+    setTimeout(() => {
+      if (!this.chatContainer || !this.chatToggle) return;
+
+      const chat = this.chatContainer.nativeElement;
+
+      if (this.isOpen) {
+        this.positionChat();
+        chat.style.display = 'flex';
+
+        setTimeout(() => {
+          chat.style.transform = 'scale(1)';
+          chat.style.opacity = '1';
+          this.adjustArrow();
+          this.shouldScroll = true;
+        }, 10);
+      } else {
+        chat.style.transform = 'scale(0.8)';
+        chat.style.opacity = '0';
+        setTimeout(() => (chat.style.display = 'none'), 300);
+      }
+    }, 0);
   }
 
   @HostListener('window:resize')
   onResize(): void {
-    if (this.isOpen) {
+    if (this.isOpen && this.chatToggle?.nativeElement) {
       this.positionChat();
       this.adjustArrow();
     }
   }
 
   positionChat(): void {
-    const toggleRect = this.chatToggle.nativeElement.getBoundingClientRect();
-    const chatWidth = 300;
-    const chatHeight = 400;
-    const marginBottom = 10;
+    const toggle = this.chatToggle?.nativeElement;
+    const container = this.chatContainer?.nativeElement;
+    if (!toggle || !container) return;
 
-    const left = toggleRect.left + toggleRect.width / 2 - chatWidth;
-    const top = toggleRect.top - chatHeight - marginBottom;
+    const rect = toggle.getBoundingClientRect();
+    const width = 300;
+    const height = 400;
+    const margin = 10;
 
-    const chat = this.chatContainer.nativeElement;
-    chat.style.left = `${left}px`;
-    chat.style.top = `${top}px`;
+    container.style.left = `${rect.left + rect.width / 2 - width}px`;
+    container.style.top = `${rect.top - height - margin}px`;
   }
 
   adjustArrow(): void {
-    const button = this.sendButton.nativeElement;
-    const arrow = this.chatArrow.nativeElement;
-
+    const button = this.sendButton?.nativeElement;
+    const arrow = this.chatArrow?.nativeElement;
     if (!button || !arrow) return;
 
-    const ancho = button.offsetWidth;
-    arrow.style.borderLeftWidth = `${ancho / 2}px`;
-    arrow.style.borderRightWidth = `${ancho / 2}px`;
+    const width = button.offsetWidth;
+    const offsetLeft = button.offsetLeft;
+    const center = offsetLeft + width / 2;
 
-    const botonOffsetLeft = button.offsetLeft;
-    const botonWidth = button.offsetWidth;
-    const flechaCenter = botonOffsetLeft + botonWidth / 2;
-    const flechaWidth = ancho;
-
-    arrow.style.left = `${flechaCenter - flechaWidth / 2}px`;
+    arrow.style.borderLeftWidth = `${width / 2}px`;
+    arrow.style.borderRightWidth = `${width / 2}px`;
+    arrow.style.left = `${center - width / 2}px`;
   }
 
   appendMessage(text: string, isUser: boolean): void {
     this.messages.push({ text, user: isUser });
-    setTimeout(() => {
-      this.chatBody.nativeElement.scrollTop = this.chatBody.nativeElement.scrollHeight;
-    }, 0);
+    this.shouldScroll = true;
   }
 
-
   async sendMessage(): Promise<void> {
-    const input = this.messageInput.nativeElement;
     const text = this.inputText.trim();
     if (!text) return;
 
@@ -119,8 +150,15 @@ export class ChatbotWidgetComponent implements OnInit {
       const data = await response.json();
       const reply = data.reply?.trim();
       const fallback = this.fallbackReplies[Math.floor(Math.random() * this.fallbackReplies.length)];
+
       this.appendMessage(reply || fallback, false);
 
+      if (data.endConversation) {
+        setTimeout(() => {
+          this.isOpen = false;
+          this.messages = [];
+        }, 1000);
+      }
     } catch (err) {
       this.appendMessage('[Error de conexión]', false);
     }
