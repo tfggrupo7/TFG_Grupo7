@@ -1,4 +1,4 @@
-const Inventario = require('../models/inventario.model')
+const Inventario = require("../models/inventario.model");
 
 const getAll = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
@@ -15,14 +15,13 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   const { inventarioId } = req.params;
   const inventario = await Inventario.selectById(inventarioId);
- 
+
   res.json(inventario);
-  
 };
 
 const create = async (req, res) => {
   const result = await Inventario.insert(req.body);
-  const { ingrediente_id, cantidad , fecha_actualizacion } = req.body;
+  const { ingrediente_id, cantidad, fecha_actualizacion } = req.body;
   const inventario = await Inventario.selectById(result.insertId);
 
   res.json(inventario);
@@ -31,7 +30,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   const { inventarioId } = req.params;
   const result = await Inventario.update(inventarioId, req.body);
-  const { ingrediente_id, cantidad , fecha_actualizacion } = req.body;
+  const { ingrediente_id, cantidad, fecha_actualizacion } = req.body;
   const inventario = await Inventario.selectById(inventarioId);
 
   res.json(inventario);
@@ -44,4 +43,4 @@ const remove = async (req, res) => {
 
   res.json({ message: "inventario eliminado", data: inventarios });
 };
-module.exports = { getAll , getById, create, update, remove };
+module.exports = { getAll, getById, create, update, remove };

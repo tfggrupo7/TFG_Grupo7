@@ -26,7 +26,12 @@ router.post('/chat', async (req, res) => {
   try {
     const responses = await sessionClient.detectIntent(request);
     const result = responses[0].queryResult;
-    res.json({ reply: result.fulfillmentText });
+
+    const intentName = result.intent?.displayName || '';
+    const endConversation = intentName.toLowerCase().includes('despedida');
+
+
+    res.json({ reply: result.fulfillmentText, endConversation: endConversation });
   } catch (error) {
     console.error('Error al conectar con Dialogflow:', error);
     res.status(500).json({ error: 'Fallo al conectar con Dialogflow' });

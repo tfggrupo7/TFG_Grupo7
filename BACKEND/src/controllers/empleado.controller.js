@@ -5,26 +5,21 @@ const CryptoJS = require("crypto-js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../sendEmail");
-const {sendHtmlEmail} = require("../helper/welcome-email");
-
-
-
+const { sendHtmlEmail } = require("../helper/welcome-email");
 
 // Login
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("Intentando login con email:", email);
+
   const empleado = await Empleado.getByEmail(email);
   if (!empleado) {
-    console.log("Empleado no encontrado para email:", email);
     return res
       .status(401)
       .json({ message: "Usuario y/o contraseña incorrectos" });
   }
   const validPassword = bcrypt.compareSync(password, empleado.password);
   if (!validPassword) {
-    console.log("Contraseña incorrecta para email:", email);
     return res
       .status(401)
       .json({ message: "Usuario y/o contraseña incorrectos" });
@@ -32,7 +27,6 @@ const login = async (req, res) => {
 
   // Obtener el nombre del rol
   const rol = await Role.selectById(empleado.rol_id); // Ajusta esto según tu modelo
- 
 
   res.json({
     message: "Login exitoso",
@@ -184,7 +178,6 @@ const restablecerContraseña = async (req, res) => {
   }
 };
 
-
 const getAll = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const offset = (page - 1) * limit;
@@ -219,9 +212,9 @@ const getByEmpleadoId = async (req, res) => {
     if (!empleado) {
       return res.status(404).json({ message: "Empleado no encontrado" });
     }
-    const rol = await Role.selectById(empleado.rol_id)
+    const rol = await Role.selectById(empleado.rol_id);
     if (rol) {
-      empleado.rol = rol
+      empleado.rol = rol;
     }
     const { password, ...empleadoSinPassword } = empleado;
     return res.status(200).json(empleadoSinPassword);
@@ -241,8 +234,6 @@ const getEmpleadosAndTarea = async (req, res) => {
   res.json(empleados);
 };
 
-
-
 const create = async (req, res) => {
   try {
     // Crear el empleado en la base de datos
@@ -258,12 +249,12 @@ const create = async (req, res) => {
       fecha_inicio,
       usuario_id,
     } = req.body;
-    
+
     // Obtener el empleado recién creado
     const empleado = await Empleado.selectById(result.insertId);
 
     // Contenido HTML del email
-    const emailSubject = 'Bienvenido - Configura tu contraseña';
+    const emailSubject = "Bienvenido - Configura tu contraseña";
     const emailHtml = `
     <div style="width:80px; height:80px; margin-right:16px;">
                    <img src="cid:logo" width="60" height="60" style="margin-right:16px;">
@@ -283,18 +274,17 @@ const create = async (req, res) => {
     Ir a login
   </a>
 </div>`;
-    
+
     // Enviar email con HTML
     await sendHtmlEmail(email, emailSubject, emailHtml);
 
     // Responder con el empleado creado y confirmación del email
     res.status(201).json({
       empleado,
-      message: 'Empleado registrado. Email de bienvenida enviado.'
+      message: "Empleado registrado. Email de bienvenida enviado.",
     });
-
   } catch (error) {
-    console.error('Error al crear empleado:', error);
+    console.error("Error al crear empleado:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -414,5 +404,4 @@ module.exports = {
   restablecerContraseña,
   generarYGuardarToken,
   cambiarContraseña,
-  
 };
