@@ -16,47 +16,56 @@
       • Usa un layout flex que se adapta de columna (mobile) a fila (>= sm).
       • El botón llama a openModal con día = lunes (0) y hora = 8.
   -->
-  <div
-    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
+  <div class="space-y-6">
+  <!-- CABECERA -->
+  <div class="flex flex-col gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
+    <!-- Título y subtítulo -->
     <div>
       <h1 class="text-2xl font-bold text-[#556B2F]">Gestión de Turnos</h1>
       <p class="text-[#1C1C1C]/70">Organiza los horarios de tu equipo</p>
     </div>
-    <!-- Botón principal (+) -->
-    <button
+
+    <!-- Botones en grid responsivo -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 w-full">
+      <!-- Descargar -->
+      <button
       (click)="descargarTareas()"
        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
       title="Descargar turnos"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
-      </svg>
-      Descargar
-    </button>
-    <!-- Botón de enviar por email -->
-    <button
-      (click)="enviarTurnosPorEmail()"
-       class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
-      title="Enviar turnos por email"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M16 12h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v4a2 2 0 002 2h2m4 0v6m0 0l-3-3m3 3l3-3" />
-      </svg>
-      Enviar Email
-    </button>
-    <button
-      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
-      (click)="openModal(0, 8)">
-      <!-- Icono plus (Lucide) -->
-      <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-plus h-4 w-4" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor">
-        <path d="M5 12h14M12 5v14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-      </svg>
-      Programar Turno
-    </button>
-  </div>
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+        </svg>
+        Descargar
+      </button>
+
+      <!-- Enviar Email -->
+      <button
+        (click)="enviarTurnosPorEmail()"
+        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white justify-center"
+        title="Enviar turnos por email"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M16 12h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v4a2 2 0 002 2h2m4 0v6m0 0l-3-3m3 3l3-3" />
+        </svg>
+        Enviar Email
+      </button>
+
+      <!-- Programar Turno -->
+      <button
+        (click)="openModal(0, 8)"
+        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white justify-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-plus h-4 w-4" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path d="M5 12h14M12 5v14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+        </svg>
+        Programar Turno
+      </button>
+    </div>
+     </div>
 
   <!-- 🟠 ESTADÍSTICAS ------------------------------------------------------ -->
   <!-- Cuatro tarjetas con KPI de la semana/día. -->
