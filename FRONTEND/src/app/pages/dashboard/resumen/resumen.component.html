@@ -5,8 +5,9 @@
   <p class="text-[#1C1C1C]/70">Resumen general de tu cocina</p>
 </div>
 
-<div class="grid gap-6 lg:grid-cols-2">
-  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20"
+<div class="grid gap-6 lg:grid-cols-2 mb-4">
+  <!-- Tarjeta Inventario Crítico -->
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 flex flex-col h-full"
     data-v0-t="card">
     <div class="flex flex-col space-y-1.5 p-6">
       <h3
@@ -26,7 +27,7 @@
         Productos que requieren atención inmediata
       </p>
     </div>
-    <div class="p-6 pt-0 space-y-3">
+    <div class="flex-1 p-6 pt-0 space-y-3 flex flex-col">
       @for(ingrediente of arrIngredientes | slice:0:5; track ingrediente.id) {
         <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
           <div>
@@ -36,17 +37,22 @@
             <p class="text-sm text-[#1C1C1C]/70">{{ingrediente.cantidad}} {{ingrediente.unidad}} restantes</p>
           </div>
           <span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">{{ingrediente.estado}}</span>
-        
         </div>
       }
-        
+      <!-- Si no hay ingredientes críticos, muestra mensaje -->
+      @if(!(arrIngredientes && arrIngredientes.length)) {
+        <div class="text-center text-[#1C1C1C]/70">No hay productos críticos</div>
+      }
+    </div>
+    <div class="p-6 pt-0 mt-auto">
       <button
         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 w-full bg-[#556B2F] hover:bg-[#556B2F]/90">
         <a href="/dashboard/inventory">Ver Todo el Inventario</a>
       </button>
     </div>
   </div>
-  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20"
+  <!-- Tarjeta Turnos de Hoy -->
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 flex flex-col h-full"
     data-v0-t="card">
     <div class="flex flex-col space-y-1.5 p-6">
       <h3
@@ -61,44 +67,43 @@
         </svg>Turnos de Hoy
       </h3>
       <p class="text-sm text-muted-foreground">{{ todayFormatted }}</p>
-     
     </div>
-    <div class="p-6 pt-0 space-y-3">
-    @if(todayTurnos.length ) {
-    @for (turno of todayTurnos | slice:0:5; let i = $index; track turno.id) {
-      <div 
-        class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
-        [ngClass]="i < todayTurnos.length - 1 ? 'mb-[5px]' : ''">
-        <div>
-          <div class="font-medium text-[#1C1C1C]">
-            {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
+    <div class="flex-1 p-6 pt-0 space-y-3 flex flex-col">
+      @if(todayTurnos.length ) {
+        @for (turno of todayTurnos | slice:0:5; let i = $index; track turno.id) {
+          <div 
+            class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
+            [ngClass]="i < todayTurnos.length - 1 ? 'mb-[5px]' : ''">
+            <div>
+              <div class="font-medium text-[#1C1C1C]">
+                {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
+              <p class="text-sm text-[#1C1C1C]/70">
+                {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
+              </p>
+            </div>
+            <div class="text-xs rounded-full px-2 py-1 font-medium" [ngClass]="getEstadoClase(getEstadoAutomatico(turno))">
+              {{ getEstadoAutomatico(turno) | titlecase }}
+            </div>
           </div>
+        }
+      } @else {
+        <div class="text-center text-[#1C1C1C]/70">No hay turnos programados para hoy</div>
+      }
+      <div class="mt-4">
+        <p class="text-sm text-muted-foreground">Total de Turnos: {{ todayTurnos.length }}</p>
       </div>
-        <div class="text-right">
-          <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
-          <p class="text-sm text-[#1C1C1C]/70">
-            {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
-          </p>
-        </div>
-        <div class="text-xs rounded-full px-2 py-1 font-medium" [ngClass]="getEstadoClase(getEstadoAutomatico(turno))">
-          {{ getEstadoAutomatico(turno) | titlecase }}
-        </div>
-      </div>
-    }
-    } @else {
-      <div class="text-center text-[#1C1C1C]/70">No hay turnos programados para hoy</div>
-    }
-         <div class="mt-4">
-           <p class="text-sm text-muted-foreground">Total de Turnos: {{ todayTurnos.length }}</p>
-         </div>
-  
-
-         <button
+    </div>
+    <div class="p-6 pt-0 mt-auto">
+      <button
         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 w-full bg-[#556B2F] hover:bg-[#556B2F]/90">
         <a href="/dashboard/turnos">Gestionar Turnos</a>
       </button>
     </div>
-</div>
+  </div>
 </div>
 <div class="rounded-lg border bg-card text-card-foreground mb-4 shadow-sm border-[#D4AF37]/20"
   data-v0-t="card">

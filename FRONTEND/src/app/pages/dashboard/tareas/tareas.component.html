@@ -1,5 +1,5 @@
 <div
-  class="bg-[#f3f3ec] border border-[#d9dbc7] rounded-xl p-6 mb-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4"
+  class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]"
 >
   <div>
     <h1 class="text-2xl font-bold text-[#4b6b1c]">Gestión de Tareas</h1>
@@ -10,7 +10,7 @@
     <!-- Botón de descarga -->
     <button
       (click)="descargarTareas()"
-      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center w-full sm:w-auto"
+      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
       title="Descargar tareas"
     >
       <svg
@@ -33,7 +33,7 @@
     <!-- Botón de enviar por email -->
     <button
       (click)="enviarTareasPorEmail()"
-      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center w-full sm:w-auto"
+      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
       title="Enviar tareas por email"
     >
       <svg
@@ -55,7 +55,7 @@
 
     <!-- Botón de asignar tarea -->
     <button
-      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow w-full sm:w-auto"
+      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
       (click)="openModal()"
     >
       + Asignar Tarea
