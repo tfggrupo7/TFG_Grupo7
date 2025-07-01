@@ -79,9 +79,9 @@ const createTarea = async (req, res) => {
     hora_finalizacion,
   } = req.body;
   const empleadoIdNum = Number(empleado_id);
-if (!empleado_id || isNaN(empleadoIdNum)) {
-  return res.status(400).json({ error: "empleado_id inválido" });
-}
+  if (!empleado_id || isNaN(empleadoIdNum)) {
+    return res.status(400).json({ error: "empleado_id inválido" });
+  }
   const empleado = await Empleado.selectById(empleadoIdNum);
   if (!empleado) {
     return res.status(404).json({ error: "El usuario no existe" });
@@ -133,7 +133,6 @@ const getAllTareasRaw = async () => {
 };
 
 const exportTareasPDF = async (req, res) => {
-  console.log("Entrando a exportTareasPDF");
   try {
     const tareas = await Tarea.selectAllTareasRaw();
     const pdfDir = path.join(__dirname, "pdfs");
@@ -142,9 +141,9 @@ const exportTareasPDF = async (req, res) => {
       fs.mkdirSync(pdfDir);
     }
     // Generar el PDF
-    console.log("Generando PDF en:", filePath);
+
     await generateTareasPDF(tareas, filePath);
-    console.log("PDF generado");
+
     res.download(filePath, "tareas.pdf", (err) => {
       if (err) {
         console.error("Error al enviar el PDF:", err);
@@ -167,9 +166,7 @@ const getAllTareasEmpleadoRaw = async (empleadoId) => {
 };
 
 const exportTareasEmpleadoPDF = async (req, res) => {
-  console.log("req.params:", req.params);
   const empleadoId = Number(req.params.empleadoId);
-  console.log("empleadoId recibido y convertido:", empleadoId);
 
   if (isNaN(empleadoId)) {
     return res.status(400).json({ error: "ID de empleado inválido" });
@@ -177,10 +174,8 @@ const exportTareasEmpleadoPDF = async (req, res) => {
 
   try {
     const tareas = await Tarea.selectAllTareasAndEmpleadoRaw(
-      
       Number(empleadoId)
     );
-    console.log("Tareas obtenidas:", tareas);
 
     if (!tareas || tareas.length === 0) {
       return res
@@ -197,7 +192,6 @@ const exportTareasEmpleadoPDF = async (req, res) => {
 
     console.log("Generando PDF en:", filePath);
     await generateTareasPDF(tareas, filePath);
-    console.log("PDF generado");
 
     res.download(filePath, `empleado_${empleadoId}_tareas.pdf`, (err) => {
       if (err) {
@@ -227,9 +221,9 @@ const sendTareaPDF = async (req, res) => {
 
   try {
     const tareas = await Tarea.selectAllTareasRaw();
-    console.log("Tareas obtenidas:", tareas.length);
+
     const filePath = path.join(__dirname, "tareas.pdf");
-    console.log("PDF generado en:", filePath);
+
     await generateTareasPDF(tareas, filePath);
     await sendTareasEmail(
       email,
@@ -264,7 +258,6 @@ const sendAllTareaEmpleadoPDF = async (req, res) => {
     }
 
     const filePath = path.join(__dirname, `tareas_emp_${empleadoId}.pdf`);
-    console.log("Generando PDF en:", filePath);
 
     await generateTareasPDF(tareas, filePath);
 
@@ -274,8 +267,6 @@ const sendAllTareaEmpleadoPDF = async (req, res) => {
       "Adjunto encontrarás el PDF con las tareas.",
       filePath
     );
-
-    console.log("Email enviado a:", email);
 
     fs.unlinkSync(filePath);
 
