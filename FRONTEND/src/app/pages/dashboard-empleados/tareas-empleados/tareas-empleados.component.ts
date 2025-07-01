@@ -8,12 +8,13 @@ import { EmpleadosService } from '../../../core/services/empleados.service';
 import { jwtDecode } from 'jwt-decode';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormModalComponent } from '../../../shared/form-modal/form-modal.component';
 
 @Component({
   selector: 'app-tareas',
   templateUrl: './tareas-empleados.component.html',
   styleUrls: ['./tareas-empleados.component.css'],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, FormModalComponent],
 })
 export class TareasEmpleadosComponent {
   empleados: any[] = [];

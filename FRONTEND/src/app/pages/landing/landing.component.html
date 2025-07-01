@@ -28,7 +28,15 @@
             
             <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-[#1C1C1C]">
               <span class="block">Gestión</span>
-              <span class="block text-[#556B2F] typewriter">Inteligente</span>
+              <span class="typewriter text-[#556B2F]">
+                @if(typewriterText && typewriterText.length > 0) {
+                  {{ typewriterText }}
+                } @else if(lastNonEmptyText && lastNonEmptyText.length > 0) {
+                  {{ lastNonEmptyText }}
+                } @else {
+                  &nbsp;
+                }
+              </span>
               <span class="block">para Cocinas</span>
               <span class="block text-[#D4AF37]">Modernas</span>
             </h1>
@@ -51,7 +59,7 @@
                 <div class="absolute inset-0 bg-gradient-to-r from-[#D4AF37] to-[#556B2F] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
               
-              <button class="group border-2 border-[#556B2F] text-[#556B2F] px-8 py-4 rounded-xl font-semibold text-lg hover:bg-[#556B2F] hover:text-white transition-all duration-300 transform hover:scale-105">
+              <button class="group border-2 border-[#556B2F] text-[#556B2F] px-4 py-2 rounded-xl font-bold text-lg h-12 hover:bg-white hover:text-[#556B2F] transition-all duration-300 transform hover:scale-105">
                 <i class="fas fa-play mr-2"></i>
                 <a [routerLink]="['/video-demo']">Ver Demo</a>
               </button>
@@ -354,7 +362,7 @@
     data-aos-anchor-placement="top-center">
             <div class="flex flex-col space-y-1.5 p-6">
               <div class="flex items-center gap-4">
-                <div class="rounded-full overflow-hidden h-12 w-12 flex-shrink-0 border-2 border-[#556B2F]/20 bg-gradient-to-br from-[#556B2F] to-[#D4AF37] flex items-center justify-center text-white font-bold">
+                <div class="rounded-full overflow-hidden h-12 w-12 flex-shrink-0 border-2 border-[#556B2F]/20 bg-gradient-to-br from-[#D4AF37] to-[#556B2F] flex items-center justify-center text-white font-bold">
                   AG
                 </div>
                 <div>
@@ -530,7 +538,7 @@
               </span>
             </button>
             
-            <button class="group border-2 border-white text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-[#556B2F] transition-all duration-300 transform hover:scale-105">
+            <button class="group border-2 border-white text-white px-4 py-2 rounded-xl font-bold text-lg h-12 hover:bg-white hover:text-[#556B2F] transition-all duration-300 transform hover:scale-105">
               <i class="fas fa-phone mr-2"></i>
               Contactar Ventas
             </button>

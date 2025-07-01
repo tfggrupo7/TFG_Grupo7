@@ -8,12 +8,13 @@ import { inject } from '@angular/core';
 import { toast } from 'ngx-sonner';
 import { IUsuario } from '../../../interfaces/iusuario.interfaces';
 import { EmpleadosService } from '../../../core/services/empleados.service';
+import { FormModalComponent } from '../../../shared/form-modal/form-modal.component';
 
 @Component({
   selector: 'app-tareas',
   templateUrl: './tareas.component.html',
   styleUrls: ['./tareas.component.css'],
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, FormModalComponent],
 })
 export class TareasComponent {
   showModal = false;

@@ -359,7 +359,15 @@ border-[#556B2F] mb-4">
 
 <!-- Modal Crear Ingrediente -->
 @if(modalIngredienteAbierto) {
-<app-modal (closeEvent)="cerrarModal()">
-  <app-inventario-form (closeEvent)="cerrarModal()" (sendData)="agregarActualizarIngrediente($event)" [ingrediente]="ingrediente"></app-inventario-form>
-</app-modal>
+  <app-form-modal
+    [isOpen]="modalIngredienteAbierto"
+    [title]="ingrediente ? 'Editar producto' : 'Añadir producto'"
+    [formGroup]="inventarioFormComponent?.ingredientForm || emptyFormGroup"
+    [submitLabel]="ingrediente ? 'Actualizar' : 'Añadir'"
+    [isEditMode]="!!ingrediente"
+    (close)="cerrarModal()"
+    (submit)="agregarActualizarIngrediente(inventarioFormComponent!.ingredientForm.value)"
+  >
+    <app-inventario-form #inventarioFormComponent [ingrediente]="ingrediente"></app-inventario-form>
+  </app-form-modal>
 }

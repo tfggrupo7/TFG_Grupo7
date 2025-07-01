@@ -99,9 +99,18 @@ html {
   
   .typewriter {
     overflow: hidden;
+    line-height: 5rem;
+    min-height: 5rem;
     border-right: 3px solid #556B2F;
     white-space: nowrap;
     animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
+  
+  @media (max-width: 640px) {
+    .typewriter {
+      line-height: 2.5rem;
+      min-height: 2.5rem;
+    }
   }
   
   @keyframes typing {

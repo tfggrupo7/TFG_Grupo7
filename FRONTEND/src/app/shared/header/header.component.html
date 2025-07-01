@@ -1,4 +1,4 @@
- <header
+<header
     class="fixed top-0 left-0 right-0 z-50 w-full border-b transition-all duration-200 border-[#D4AF37]/10 bg-[#FDFBF8]/95 backdrop-blur-sm shadow-sm">
     <div class="container flex h-16 items-center justify-between py-4  mx-auto">
       <a [routerLink]="['/']" class="flex items-center gap-2 z-10">
@@ -6,7 +6,7 @@
           style="color: transparent" />
         <span class="font-bold text-xl text-[#1C1C1C]">ChefDesk</span>
       </a>
-      <nav class="hidden md:flex gap-6">
+      <nav class="hidden md:hidden lg:flex gap-6">
         <a href="#features" class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors">Características</a>
         <a href="#testimonials" class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors">Testimonios</a>
         <a href="#partners" class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors">Partners</a>
@@ -14,14 +14,14 @@
       </nav>
       <div class="flex items-center gap-4">
         <a [routerLink]="['/login']"
-          class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors hidden sm:block">Iniciar
+          class="text-[#1C1C1C] hover:text-[#556B2F] text-sm font-medium transition-colors hidden lg:block">Iniciar
           Sesión</a>
         <button
-          class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white hidden sm:inline-flex">
+          class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white hidden lg:inline-flex">
           <a [routerLink]="['/login']">Regístrate</a>
         </button>
         <button
-          class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#00AAE4] hover:bg-[#00AAE4]/90 text-white hidden sm:inline-flex">
+          class="items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-white hidden lg:inline-flex">
           <a [routerLink]="['/empleados', 'login']">Area Empleados</a>
         </button>
         <button (click)="mobileMenuOpen = !mobileMenuOpen"

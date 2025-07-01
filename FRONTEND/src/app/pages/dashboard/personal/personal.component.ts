@@ -13,11 +13,12 @@ import {
 import { Router } from '@angular/router';
 import { LoaderService } from '../../../core/services/loader.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { FormModalComponent } from '../../../shared/form-modal/form-modal.component';
 
 @Component({
   selector: 'app-personal',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormModalComponent],
   templateUrl: './personal.component.html',
   styleUrls: ['./personal.component.css'],
 })
