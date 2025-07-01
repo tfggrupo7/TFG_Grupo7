@@ -167,3 +167,5 @@ FRONTEND/
 ---
 
 ¡Gracias por usar ChefDesk!
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tfggrupo7/TFG_Grupo7)
