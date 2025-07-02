@@ -16,18 +16,22 @@
       • Usa un layout flex que se adapta de columna (mobile) a fila (>= sm).
       • El botón llama a openModal con día = lunes (0) y hora = 8.
   -->
-  <div
-    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
+  <div class="space-y-6">
+  <!-- CABECERA -->
+  <div class="flex flex-col gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
+    <!-- Título y subtítulo -->
     <div>
       <h1 class="text-2xl font-bold text-[#556B2F]">Gestión de Turnos</h1>
       <p class="text-[#1C1C1C]/70">Organiza los horarios de tu equipo</p>
     </div>
-    <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 w-full lg:w-auto">
-      <!-- Botón principal (+) -->
+
+    <!-- Botones en grid responsivo -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 w-full">
+      <!-- Descargar -->
       <button
-        (click)="descargarTurnos()"
-        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
-        title="Descargar turnos"
+      (click)="descargarTareas()"
+       class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
+      title="Descargar turnos"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -35,10 +39,11 @@
         </svg>
         Descargar
       </button>
-      <!-- Botón de enviar por email -->
+
+      <!-- Enviar Email -->
       <button
         (click)="enviarTurnosPorEmail()"
-        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
+        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white justify-center"
         title="Enviar turnos por email"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -47,10 +52,12 @@
         </svg>
         Enviar Email
       </button>
+
+      <!-- Programar Turno -->
       <button
-        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
-        (click)="openModal(0, 8)">
-        <!-- Icono plus (Lucide) -->
+        (click)="openModal(0, 8)"
+        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white justify-center"
+      >
         <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-plus h-4 w-4" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
           <path d="M5 12h14M12 5v14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
@@ -58,7 +65,7 @@
         Programar Turno
       </button>
     </div>
-  </div>
+     </div>
 
   <!-- 🟠 ESTADÍSTICAS ------------------------------------------------------ -->
   <!-- Cuatro tarjetas con KPI de la semana/día. -->
@@ -92,14 +99,15 @@
       <p class="text-sm text-muted-foreground">{{ todayFormatted }}</p>
     </div>
     <div class="p-6 pt-3">
-      <ng-container @if (todayTurnos.length; else noShifts)>
+      <ng-container *ngIf="todayTurnos.length; else noShifts">
         <div *ngFor="let turno of todayTurnos; let i = index"
           class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
           [ngClass]="i < todayTurnos.length - 1 ? 'mb-[5px]' : ''">
           <div>
             <div class="font-medium text-[#1C1C1C]">Empleado {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' +
               turno.empleado_id }}</div>
-                        
+            <div class="text-sm text-[#1C1C1C]/70"> {{ rolesMap.get(turno.roles_id) || 'Rol ' + turno.roles_id }}
+            </div>
           </div>
           <div class="text-right">
             <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
@@ -163,21 +171,18 @@
           </div>
 
           <!-- Turnos para este día -->
-          <ng-container *ngFor="let turno of turnosPorDia[day]">
-  <div
-    class="absolute text-white p-2 rounded cursor-move shift-card"
-    [ngClass]="turno.color"
-    [style.top.px]="getTurnoTop(turno.hora_inicio)"
-    [style.height.px]="getTurnoHeight(turno.hora_inicio, turno.hora_fin)"
-    draggable="true"
-    (dragstart)="onDragStart(turno)" (click)="onTurnoClick(turno)">
-    <div class="font-medium text-sm">
-      {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
-    </div>
-    <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
-    <div class="text-xs">{{ turno.estado | titlecase }}</div>
-  </div>
-</ng-container>
+          <ng-container *ngFor="let turno of turnos">
+            <div *ngIf="(turno.fecha | date:'yyyy-MM-dd') === day"
+              class="absolute text-white p-2 rounded cursor-move shift-card" [ngClass]="turno.color"
+              [style.top.px]="turno.hora * 60" [style.height.px]="turno.duracion * 60" draggable="true"
+              (dragstart)="onDragStart(turno)" (click)="onTurnoClick(turno)">
+              <div class="font-medium text-sm">
+                {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
+              </div>
+              <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
+              <div class="text-xs">{{ turno.estado | titlecase }}</div>
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>
@@ -186,7 +191,7 @@
   <div class="rounded-lg border shadow-sm border-[#D4AF37]/20 block md:hidden mt-6">
   <div *ngFor="let day of currentWeekDates; let i = index" class="mb-6" >
   <div class="font-bold text-[#556B2F] mb-2">{{ getDayName(i) }}</div>
-  <ng-container @if (turnosPorDia[day]?.length; else noTurnosMobile)>
+  <ng-container *ngIf="turnosPorDia[day]?.length; else noTurnosMobile">
     <div *ngFor="let turno of turnosPorDia[day]"
      class="mb-2 p-3 rounded-lg bg-[#556B2F]/10 border border-[#D4AF37]/20 cursor-pointer"
      (click)="onTurnoClick(turno)">

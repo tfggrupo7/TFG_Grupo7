@@ -1,16 +1,18 @@
 <div
-  class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]"
+  class="bg-[#f3f3ec] border border-[#d9dbc7] rounded-xl p-6 mb-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4"
 >
+  <!-- Título y subtítulo -->
   <div>
     <h1 class="text-2xl font-bold text-[#4b6b1c]">Gestión de Tareas</h1>
     <p class="text-[#7a7a5c] text-sm">Organiza las tareas de tu equipo</p>
   </div>
 
-  <div class="flex flex-col sm:flex-row sm:flex-wrap gap-2 w-full lg:w-auto">
+  <!-- Botones -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
     <!-- Botón de descarga -->
     <button
       (click)="descargarTareas()"
-      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
+      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
       title="Descargar tareas"
     >
       <svg
@@ -33,7 +35,7 @@
     <!-- Botón de enviar por email -->
     <button
       (click)="enviarTareasPorEmail()"
-      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
+      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
       title="Enviar tareas por email"
     >
       <svg
@@ -55,8 +57,8 @@
 
     <!-- Botón de asignar tarea -->
     <button
-      class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
       (click)="openModal()"
+      class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
     >
       + Asignar Tarea
     </button>
@@ -65,59 +67,171 @@
 
 <!-- Modal -->
 @if (showModal) {
-  <app-form-modal
-    [isOpen]="showModal"
-    [title]="'Asignar Nueva Tarea'"
-    [formGroup]="tareasForm"
-    [submitLabel]="'Guardar'"
-    [isSubmitting]="isSubmitting"
-    (close)="closeModal()"
-    (submit)="insertarTarea()"
+<div
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50"
+>
+  <div
+    class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md border border-[#d9dbc7]"
   >
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="space-y-2">
-        <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="titulo">Titulo</label>
-        <input class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" id="titulo" formControlName="titulo" placeholder="" required name="titulo" />
+    <h2 class="text-xl font-bold text-[#4b6b1c] mb-4">Asignar Nueva Tarea</h2>
+    <form
+      [formGroup]="tareasForm"
+      (ngSubmit)="insertarTarea()"
+      class="space-y-4"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="titulo"
+            >Titulo</label
+          >
+          <input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="titulo"
+            formControlName="titulo"
+            placeholder=""
+            required
+            name="titulo"
+          />
+        </div>
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="descripcion"
+            >Descripcion</label
+          >
+          <input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="descripcion"
+            formControlName="descripcion"
+            placeholder=""
+            required
+            name="descripcion"
+          />
+        </div>
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="fecha_inicio"
+            >Fecha Inicio</label
+          >
+          <input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="fecha_inicio"
+            formControlName="fecha_inicio"
+            placeholder=""
+            required
+            type="date"
+            name="fecha_inicio"
+          />
+        </div>
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="fecha_finalizacion"
+            >Fecha Finalizacion</label
+          >
+          <input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="fecha_finalizacion"
+            formControlName="fecha_finalizacion"
+            placeholder=""
+            required
+            type="date"
+            name="fecha_finalizacion"
+          />
+        </div>
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="hora_inicio"
+            >Hora de inicio</label
+          >
+          <input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="hora_inicio"
+            formControlName="hora_inicio"
+            required
+            type="time"
+            name="hora_inicio"
+          />
+        </div>
+        <div class="space-y-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="hora_finalizacion"
+            >Hora Finalizacion</label
+          >
+          <input
+            class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+            id="hora_finalizacion"
+            formControlName="hora_finalizacion"
+            placeholder=""
+            required
+            type="time"
+            name="hora_finalizacion"
+          />
+        </div>
+        <div class="space-y-2 md:col-span-2">
+          <label
+            class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            for="activo"
+            >Estado</label
+          >
+          <select
+            id="estado"
+            formControlName="estado"
+            name="estado"
+            class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
+            required
+          >
+            <option value="Completada">Completada</option>
+            <option value="En Curso">En Curso</option>
+            <option value="Pendiente">Pendiente</option>
+          </select>
+        </div>
       </div>
       <div class="space-y-2">
-        <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="descripcion">Descripcion</label>
-        <input class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" id="descripcion" formControlName="descripcion" placeholder="" required name="descripcion" />
-      </div>
-      <div class="space-y-2">
-        <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="fecha_inicio">Fecha Inicio</label>
-        <input class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" id="fecha_inicio" formControlName="fecha_inicio" placeholder="" required type="date" name="fecha_inicio" />
-      </div>
-      <div class="space-y-2">
-        <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="fecha_finalizacion">Fecha Finalizacion</label>
-        <input class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" id="fecha_finalizacion" formControlName="fecha_finalizacion" placeholder="" required type="date" name="fecha_finalizacion" />
-      </div>
-      <div class="space-y-2">
-        <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="hora_inicio">Hora de inicio</label>
-        <input class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" id="hora_inicio" formControlName="hora_inicio" required type="time" name="hora_inicio" />
-      </div>
-      <div class="space-y-2">
-        <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="hora_finalizacion">Hora Finalizacion</label>
-        <input class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" id="hora_finalizacion" formControlName="hora_finalizacion" placeholder="" required type="time" name="hora_finalizacion" />
-      </div>
-      <div class="space-y-2 md:col-span-2">
-        <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="estado">Estado</label>
-        <select id="estado" formControlName="estado" name="estado" class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]" required>
-          <option value="Completada">Completada</option>
-          <option value="En Curso">En Curso</option>
-          <option value="Pendiente">Pendiente</option>
-        </select>
-      </div>
-    </div>
-    <div class="space-y-2">
-      <label class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="empleado_id">Empleado</label>
-      <select class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]" id="empleado_id" formControlName="empleado_id" required>
+        <label
+          class="text-sm font-medium leading-none text-[#1C1C1C] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          for="empleado_id"
+          >Empleado</label
+        >
+
+        <select
+          class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
+          id="empleado_id"
+          formControlName="empleado_id"
+          required
+        >
         <option value="" disabled>Selecciona un empleado</option>
         @for (empleado of empleados; track empleado.id) {
-          <option [value]="empleado.id">{{ empleado.nombre }} {{ empleado.apellidos }}</option>
+          <option [value]="empleado.id">
+            {{ empleado.nombre }} {{ empleado.apellidos }}
+          </option>
         }
-      </select>
-    </div>
-  </app-form-modal>
+        </select>
+    
+      </div>
+      <div class="flex justify-end pt-4">
+        <button
+          type="submit"
+          class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow"
+        >
+          Guardar
+        </button>
+        <button
+          type="button"
+          class="ml-2 px-5 py-2 rounded-lg font-semibold border border-[#d9dbc7] text-[#4b6b1c] bg-white hover:bg-[#f3f3ec]"
+          (click)="closeModal()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 }
 <!-- 🟤 TAREAS POR EMPLEADO ------------------------------------------------- -->
 <!--
@@ -160,32 +274,25 @@
           <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.hora_inicio }}</td>
           <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ tarea.hora_finalizacion }}</td>
           <td class="px-4 py-2 border-b text-center border-[#d9dbc7]">{{ getEstadoTarea(tarea) }}</td>
-          <td class="flex justify-between items-center flex gap-2 pt-2 border-t border-[#D4AF37]/10">
+          <td class="w-12 px-4 py-2 border-b border-[#d9dbc7] text-center">
             <button
               (click)="eliminarTarea(tarea.id)"
               class="text-red-600 hover:text-red-800"
               title="Eliminar"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-trash2 h-4 w-4">
-                <path d="M3 6h18"></path>
-                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                <line x1="10" x2="10" y1="11" y2="17"></line>
-                <line x1="14" x2="14" y1="11" y2="17"></line>
-              </svg>
-            </button>
-            <button
-              class="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none hover:text-[#556B2F] h-8 px-3 text-xs text-[#556B2F] hover:bg-[#556B2F]/10"
-              (click)="openModal(tarea)"
-              title="Editar tarea"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-square-pen h-4 w-4">
-                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"></path>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 inline"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 18M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2m2 0h-10m2 0v12a2 2 0 002 2h4a2 2 0 002-2V6"
+                />
               </svg>
             </button>
           </td>
