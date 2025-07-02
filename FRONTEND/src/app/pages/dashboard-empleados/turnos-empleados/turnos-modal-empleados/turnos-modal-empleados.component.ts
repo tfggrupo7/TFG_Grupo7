@@ -49,6 +49,9 @@ export class TurnosModalEmpleadosComponent implements OnInit, OnChanges {
 
   employees: IEmpleados[] = [];
   roles: IRoles[] = [];
+hour: any;
+emp: any;
+rol: any;
 
   constructor(private fb: FormBuilder, private empleadosService: EmpleadosService, private rolesService: RolesService) {
     // Construcción del formulario con validaciones mínimas

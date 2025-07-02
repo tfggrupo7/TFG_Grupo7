@@ -10,7 +10,6 @@ const getByUsuarioId = async (req, res) => {
     const usuarioId = req.params.usuarioId;
 
     if (!usuarioId) {
-      console.log("ID no existe");
       return res.status(400).json({ message: "ID de usuario requerido" });
     }
 

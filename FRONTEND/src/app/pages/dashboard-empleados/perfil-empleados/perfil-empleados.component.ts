@@ -99,6 +99,7 @@ currentUser: any = null;
 
       await this.empleadosService.updateEmpleadoPerfil(empleadoActualizado);
       toast.success('Empleado actualizado correctamente');
+      await this.loadCurrentEmpleado(); 
       this.router.navigate(['/dashboard-empleados']);
     } catch (error) {
       toast.error('Fallo al actualizar el empleado');

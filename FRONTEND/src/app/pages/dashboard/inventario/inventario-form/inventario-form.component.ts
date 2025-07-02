@@ -15,9 +15,10 @@ export class InventarioFormComponent {
   @Input() ingrediente: IIngredientes | null = null;
 
   ingredientForm: FormGroup  = new FormGroup({
+      id: new FormControl(null), // Añadido para edición
       nombre: new FormControl('', [Validators.required]),
       categoria: new FormControl('', [Validators.required]),
-      cantidad: new FormControl('', [Validators.required]),
+      cantidad: new FormControl(0, [Validators.required, Validators.min(0)]),
       proveedor: new FormControl('', [Validators.required]),
       estado: new FormControl('', [Validators.required]),
       alergenos: new FormControl('', [Validators.required]),
@@ -30,11 +31,14 @@ export class InventarioFormComponent {
 
   updateForm(ingrediente: IIngredientes) {
     this.ingredientForm.patchValue(ingrediente)
+    if (ingrediente.id) {
+      this.ingredientForm.get('id')?.setValue(ingrediente.id);
+    }
   }
 
   getDataForm() {
     if (this.ingredientForm.valid) {
-      const data = {...this.ingredientForm.value, id: this.ingrediente?.id};
+      const data = {...this.ingredientForm.value};
       this.sendData.emit(data);
     }
   }
@@ -43,15 +47,16 @@ export class InventarioFormComponent {
     this.closeEvent.emit();
   }
 
-  ngOnInit() {
-    if(this.ingrediente?.id){
-      this.btnDescription = 'Actualizar'
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['ingrediente'] && changes['ingrediente'].currentValue) {
-      this.updateForm(changes['ingrediente'].currentValue);
+    if (changes['ingrediente']) {
+      const current = changes['ingrediente'].currentValue;
+      if (current) {
+        this.updateForm(current);
+        this.btnDescription = 'Actualizar';
+      } else {
+        this.ingredientForm.reset();
+        this.btnDescription = 'Añadir';
+      }
     }
   }
 }

@@ -8,12 +8,13 @@ import { EmpleadosService } from '../../../core/services/empleados.service';
 import { jwtDecode } from 'jwt-decode';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormModalComponent } from '../../../shared/form-modal/form-modal.component';
 
 @Component({
   selector: 'app-tareas',
   templateUrl: './tareas-empleados.component.html',
   styleUrls: ['./tareas-empleados.component.css'],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, FormModalComponent],
 })
 export class TareasEmpleadosComponent {
   empleados: any[] = [];
@@ -22,6 +23,7 @@ export class TareasEmpleadosComponent {
    showModal = false;
     tareasForm!: FormGroup;
     role: string[] = [];
+    isSubmitting = false;
 
 constructor(private fb: FormBuilder, private empleadoService: EmpleadosService) {}
 
@@ -111,12 +113,15 @@ console.log('Rol del empleado:', this.role);
     return this.role.includes('encargado');
   }
 async insertarTarea() {
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
     try {
       console.log('Insertando tarea:', this.tareasForm.value);
       console.log('ID del empleado obtenido del token:', this.getEmpleadoIdFromToken());
       const empleadoId = this.getEmpleadoIdFromToken();
       if (!empleadoId) {
         toast.error('No se pudo obtener el ID del empleado');
+        this.isSubmitting = false;
         return;
       }
       await this.tareasService.createTarea({
@@ -128,6 +133,8 @@ async insertarTarea() {
     } catch (err: unknown) {
       console.log('Error al insertar la tarea:', err);
       toast.error('Error al insertar la tarea');
+    } finally {
+      this.isSubmitting = false;
     }
   }
 

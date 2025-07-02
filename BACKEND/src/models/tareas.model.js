@@ -72,7 +72,7 @@ const update = async (
   }
 ) => {
   const [result] = await db.query(
-    "update tareas set descripcion = ?, empleado_id = ?,fecha_finalizacion =?, fehca_inicio=?, estado=?, titulo=?, hora_inicio=?, hora_finalizacion=? where id = ?",
+    "update tareas set descripcion = ?, empleado_id = ?,fecha_finalizacion =?, fecha_inicio=?, estado=?, titulo=?, hora_inicio=?, hora_finalizacion=? where id = ?",
     [
       descripcion,
       empleado_id,

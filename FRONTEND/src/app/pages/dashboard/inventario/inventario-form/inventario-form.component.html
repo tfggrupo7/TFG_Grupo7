@@ -1,4 +1,4 @@
-<form class="space-y-4" [formGroup]="ingredientForm" (ngSubmit)="getDataForm()">
+<form [formGroup]="ingredientForm" (ngSubmit)="getDataForm()">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div class="space-y-2">
       <label
@@ -6,7 +6,7 @@
         for="name">Nombre</label>
       <input formControlName="nombre"
         class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
-        id="name" placeholder="Ej: Tomates" required="" value="" name="name">
+        id="name" placeholder="Ej: Tomates" required value="" name="name">
     </div>
     <div class="space-y-2">
       <label
@@ -14,7 +14,7 @@
         for="category">Categoría</label>
       <select id="category" name="category" formControlName="categoria"
         class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-        required="">
+        required>
         <option value="">Seleccionar categoría</option>
         <option value="Frutas y Verduras">Frutas y Verduras</option>
         <option value="Carnes">Carnes</option>
@@ -32,7 +32,7 @@
         for="quantity">Cantidad</label>
       <input formControlName="cantidad"
         class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
-        id="quantity" min="0" step="0.01" required="" type="number" value="0" name="quantity">
+        id="quantity" min="0" step="0.01" required type="number" value="0" name="quantity">
     </div>
     <div class="space-y-2">
       <label
@@ -40,7 +40,7 @@
         for="unit">Unidad</label>
       <select id="unit" name="unit" formControlName="unidad"
         class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-        required="">
+        required>
         <option value="unidades">Unidades</option>
         <option value="kg">Kilogramos (kg)</option>
         <option value="g">Gramos (g)</option>
@@ -72,19 +72,11 @@
         for="status">Estado</label>
       <select id="status" name="status" formControlName="estado"
         class="flex h-10 w-full rounded-md border border-[#D4AF37]/30 bg-white px-3 py-2 text-sm text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-        required="">
+        required>
         <option value="En stock">En stock</option>
         <option value="Bajo stock">Bajo stock</option>
         <option value="Sin stock">Sin stock</option>
       </select>
     </div>
-  </div>
-  <div class="close-modal flex justify-end gap-2 pt-4">
-    <button
-      class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 h-10 py-2 px-4 border-[#556B2F] text-[#556B2F]"
-      type="button" (click)="cerrarModal()">Cancelar</button>
-    <button [disabled]="ingredientForm.invalid"
-      class="close-modal inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 bg-[#D4AF37] hover:bg-[#EBCB64]"
-      type="submit">{{btnDescription}}</button>
   </div>
 </form>

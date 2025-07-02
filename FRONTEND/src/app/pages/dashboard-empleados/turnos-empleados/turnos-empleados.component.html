@@ -95,7 +95,6 @@
         <thead class="bg-[#556B2F]/10">
           <tr>
             <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Nombre</th>
-            <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Rol</th>
             <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Fecha</th>
             <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Hora Inicio</th>
             <th class="px-4 py-3 border-b border-[#D4AF37]/20 text-center text-[#556B2F] font-semibold">Hora Fin</th>
@@ -117,9 +116,7 @@
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#1C1C1C]">
               {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
             </td>
-            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
-              {{ rolesMap.get(turno.roles_id) || 'Rol ' + turno.roles_id }}
-            </td>
+            
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
               {{ turno.fecha | date:'dd/MM/yyyy' }}
             </td>
@@ -222,9 +219,6 @@
           <div class="font-medium text-[#1C1C1C]">
             {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
           </div>
-          <div class="text-xs text-[#1C1C1C]/70">
-            {{ (rolesMap.get(turno.roles_id) || ('Rol ' + turno.roles_id)) | titlecase }}
-          </div>
           <div class="text-xs text-[#556B2F] font-medium">
             {{ turno.hora_inicio }} - {{ turno.hora_fin }}
           </div>
@@ -244,9 +238,58 @@
   }
 
   <!-- 🔘 MODAL ------------------------------------------------------------- -->
-  <!-- Componente hijo autónomo para creación/edición de turnos -->
-  <app-turnos-modal-empleados [isOpen]="isModalOpen" [selectedDayIndex]="selectedDayIndex" [selectedHour]="selectedHour"
-    [currentWeekDates]="currentWeekDates" [shiftToEdit]="selectedTurno" (close)="closeModal()"
-    (create)="createTurno($event)" (update)="updateTurno($event)" (delete)="deleteTurno()">
-  </app-turnos-modal-empleados>
+  @if (isModalOpen) {
+  <app-form-modal
+    [isOpen]="isModalOpen"
+    [title]="isEditMode ? 'Editar Turno' : 'Programar Turno'"
+    [formGroup]="shiftForm"
+    [submitLabel]="isEditMode ? 'Guardar Cambios' : 'Programar Turno'"
+    [isEditMode]="isEditMode"
+    [showDelete]="isEditMode"
+    (close)="closeModal()"
+    (submit)="onSubmit()"
+    (delete)="onDelete()"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="space-y-2">
+        <label for="empleado_id" class="text-sm font-medium text-[#1C1C1C]">Empleado</label>
+        <select id="empleado_id" formControlName="empleado_id" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]" required>
+          <option value="" disabled>Selecciona empleado</option>
+          <option *ngFor="let emp of employees" [value]="emp.id">{{ emp.nombre }}</option>
+        </select>
+      </div>
+      <div class="space-y-2">
+        <label for="roles_id" class="text-sm font-medium text-[#1C1C1C]">Rol</label>
+        <select id="roles_id" formControlName="roles_id" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]" required>
+          <option value="" disabled>Selecciona rol</option>
+          <option *ngFor="let rol of roles" [value]="rol.id">{{ rol.nombre }}</option>
+        </select>
+      </div>
+      <div class="space-y-2">
+        <label for="fecha" class="text-sm font-medium text-[#1C1C1C]">Fecha</label>
+        <input id="fecha" type="date" formControlName="fecha" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]" required />
+      </div>
+      <div class="space-y-2">
+        <label for="estado" class="text-sm font-medium text-[#1C1C1C]">Estado</label>
+        <select id="estado" formControlName="estado" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]" required>
+          <option value="pendiente">Pendiente</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="completado">Completado</option>
+        </select>
+      </div>
+      <div class="space-y-2">
+        <label for="hora_inicio" class="text-sm font-medium text-[#1C1C1C]">Hora de inicio</label>
+        <select id="hora_inicio" formControlName="hora_inicio" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]">
+          <option *ngFor="let hour of halfHourOptions" [value]="hour">{{ hour }}</option>
+        </select>
+      </div>
+      <div class="space-y-2">
+        <label for="hora_fin" class="text-sm font-medium text-[#1C1C1C]">Hora de fin</label>
+        <select id="hora_fin" formControlName="hora_fin" class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]">
+          <option *ngFor="let hour of halfHourOptions" [value]="hour">{{ hour }}</option>
+        </select>
+      </div>
+    </div>
+  </app-form-modal>
+  }
 </div>

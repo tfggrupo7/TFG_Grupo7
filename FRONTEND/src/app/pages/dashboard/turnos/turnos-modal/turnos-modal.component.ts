@@ -54,7 +54,6 @@ export class TurnosModalComponent implements OnInit, OnChanges {
     // Construcción del formulario con validaciones mínimas
     this.shiftForm = this.fb.group({
       empleado_id: ['', Validators.required],
-      roles_id: ['', Validators.required],
       fecha: ['', Validators.required],
       dia: ['', Validators.required],
       estado: ['', Validators.required],
@@ -171,17 +170,27 @@ export class TurnosModalComponent implements OnInit, OnChanges {
    * Evita emitir eventos para no provocar bucles de actualización.
    */
   private updateDuration() {
-    const ini = this.shiftForm.value.hora_inicio;
-    const fin = this.shiftForm.value.hora_fin;
-    if (!ini || !fin) return;
-
-    const [ih, im] = ini.split(':').map(Number);
-    const [fh, fm] = fin.split(':').map(Number);
-    const dur = (fh + fm / 60) - (ih + im / 60); // Horas decimales
-
-    // Evitamos emitir otro change (emitEvent false) para no causar bucles
-    this.shiftForm.get('duracion')!.setValue(dur > 0 ? dur : null, { emitEvent: false });
+  const ini = this.shiftForm.value.hora_inicio;
+  const fin = this.shiftForm.value.hora_fin;
+  if (!ini || !fin) {
+    this.shiftForm.get('duracion')!.setValue(null, { emitEvent: false });
+    return;
   }
+
+  // Parseo seguro de horas y minutos
+  const [ih, im] = ini.split(':').map(Number);
+  const [fh, fm] = fin.split(':').map(Number);
+
+  // Calcula minutos totales desde medianoche
+  const inicioMin = (ih * 60) + (im || 0);
+  const finMin = (fh * 60) + (fm || 0);
+
+  // Duración en horas decimales
+  const dur = (finMin - inicioMin) / 60;
+
+  // Si la duración es válida (>0), actualiza el campo; si no, pon null
+  this.shiftForm.get('duracion')!.setValue(dur > 0 ? dur : null, { emitEvent: false });
+}
 
   /* -----------------------------------------------------------------------
      * Acciones del usuario (botones dentro del modal)
@@ -224,29 +233,26 @@ export class TurnosModalComponent implements OnInit, OnChanges {
       return;
     }
 
+
     formValue.dia = this.getDayName(dayIndex);
 
     // 3. Campo «hora» numérico derivado de hora_inicio (HH:mm)
     const horaNum = parseInt(formValue.hora_inicio.split(':')[0], 10);
 
-    // 4. Validar duración y forzar valor por defecto si es null o <= 0
-    if (!formValue.duracion || formValue.duracion <= 0) {
-      alert('La duración del turno debe ser mayor que 0');
-      formValue.duracion = 1; // Valor por defecto para evitar null
-      // return; // Si quieres evitar guardar, descomenta esta línea
-    }
 
-    // 5. Construir ITurnos completo
+    formValue.duracion = Number(formValue.duracion);
+
+    // 4. Construir ITurnos completo
     const turno: ITurnos = {
       ...formValue,
       hora: horaNum,
       id: this.shiftToEdit?.id ?? 0
     } as ITurnos;
 
-    // 6. Enviar acción al padre
+    // 5. Enviar acción al padre
     this.isEditMode ? this.update.emit(turno) : this.create.emit(turno);
 
-    // 7. Limpieza local
+    // 6. Limpieza local
     this.shiftForm.reset();
     this.isEditMode = false;
   }

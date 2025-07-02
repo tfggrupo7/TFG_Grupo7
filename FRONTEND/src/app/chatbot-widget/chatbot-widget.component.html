@@ -1,0 +1,37 @@
+<!-- Botón flotante para abrir/cerrar el chat -->
+<button (click)="toggleChat()" class="fixed bottom-5 right-5 z-50 text-white rounded-full w-12 h-12 text-xl shadow-lg"
+    style="background-color: rgb(85 107 47);">
+    💬
+</button>
+
+<!-- Contenedor del chat -->
+<div *ngIf="isOpen" #chatContainer [ngClass]="{
+    'opacity-100 scale-100 pointer-events-auto': isOpen,
+    'opacity-0 scale-90 pointer-events-none': !isOpen
+  }"
+    class="flex flex-col fixed w-72 h-96 rounded-xl shadow-xl bg-white z-40 font-sans p-2 bottom-20 right-5 transform transition-all duration-300 ease-in-out origin-bottom-right">
+    <!-- Encabezado del chat -->
+    <div class="text-white py-2 px-3 font-bold rounded-t-xl" style="background-color: rgb(85 107 47);">
+        ChefDesk Soporte
+    </div>
+
+    <!-- Cuerpo del chat -->
+    <div #chatBody class="flex-1 overflow-y-auto p-2 bg-gray-50 space-y-2">
+        <div *ngFor="let msg of messages" [ngClass]="{
+       'bg-green-100 text-right ml-auto': msg.user,
+       'bg-gray-200 text-left mr-auto': !msg.user
+     }" class="p-2 rounded-lg max-w-[80%] w-fit break-words">
+            {{ msg.text }}
+        </div>
+    </div>
+
+    <!-- Entrada de mensaje -->
+    <div class="flex border-t border-gray-300">
+        <input #messageInput [(ngModel)]="inputText" (keydown.enter)="sendMessage()" placeholder="Escribe un mensaje..."
+            class="flex-1 p-2 outline-none border-none text-sm" />
+        <button #sendButton (click)="sendMessage()" style="background-color: rgb(85 107 47);"
+            class="px-4 text-white text-sm">
+            ➤
+        </button>
+    </div>
+</div>

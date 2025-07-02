@@ -5,8 +5,8 @@
   <p class="text-[#1C1C1C]/70">Resumen general de tu cocina</p>
 </div>
 
-<div class="grid gap-6 lg:grid-cols-2">
-  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20"
+<div class="grid gap-6 lg:grid-cols-2 mb-4">
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 flex flex-col h-full"
     data-v0-t="card">
     <div class="flex flex-col space-y-1.5 p-6">
       <h3
@@ -46,7 +46,7 @@
       </button>
     </div>
   </div>
-  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20"
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20  flex flex-col h-full"
     data-v0-t="card">
     <div class="flex flex-col space-y-1.5 p-6">
       <h3
@@ -74,9 +74,7 @@
           <div class="font-medium text-[#1C1C1C]">
             {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
           </div>
-          <div class="text-sm text-[#1C1C1C]/70">
-            {{ rolesMap.get(turno.roles_id) || 'Rol ' + turno.roles_id }}
-          </div>
+         
         </div>
         <div class="text-right">
           <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
@@ -119,7 +117,7 @@
     <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
       <button
         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 py-2 px-4 h-20 flex-col gap-2 border-[#556B2F] text-[#556B2F]">
-        <a href="/dashboard-empleados/inventario-empleados"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+        <a href="/dashboard-empleados/inventario-empleados" class="inline-flex flex-col gap-2 items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" class="lucide lucide-package h-6 w-6">
             <path d="m7.5 4.27 9 5.15"></path>
@@ -130,7 +128,7 @@
             <path d="M12 22V12"></path>
           </svg><span>Ver Inventario</span></a></button><button
          class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 py-2 px-4 h-20 flex-col gap-2 border-[#556B2F] text-[#556B2F]">
-        <a href="/dashboard-empleados/turnos-empleados"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+        <a href="/dashboard-empleados/turnos-empleados" class="inline-flex flex-col gap-2 items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" class="lucide lucide-calendar h-6 w-6">
             <path d="M8 2v4"></path>
@@ -139,7 +137,7 @@
             <path d="M3 10h18"></path>
           </svg><span>Ver Turnos</span></a></button><button
         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 py-2 px-4 h-20 flex-col gap-2 border-[#556B2F] text-[#556B2F]">
-        <a href="/dashboard-empleados/tareas-empleados"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+        <a href="/dashboard-empleados/tareas-empleados" class="inline-flex flex-col gap-2 items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" class="lucide lucide-bar-chart3 h-6 w-6">
             <path d="M3 3v18h18"></path>

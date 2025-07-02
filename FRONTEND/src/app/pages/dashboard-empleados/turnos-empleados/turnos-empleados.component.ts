@@ -2,23 +2,21 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TurnosService } from '../../../core/services/turnos.service';
 import { ITurnos } from '../../../interfaces/iturnos.interfaces';
-import { TurnosModalEmpleadosComponent } from './turnos-modal-empleados/turnos-modal-empleados.component';
 import { EmpleadosService } from '../../../core/services/empleados.service';
 import { RolesService } from '../../../core/services/roles.service';
 import { toast } from 'ngx-sonner';
 import { jwtDecode } from 'jwt-decode';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormModalComponent } from '../../../shared/form-modal/form-modal.component';
 
 @Component({
   selector: 'app-turnos-empleados',
-  imports: [CommonModule, TurnosModalEmpleadosComponent],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, FormModalComponent],
   templateUrl: './turnos-empleados.component.html',
   styleUrl: './turnos-empleados.component.css',
 })
-export class TurnosEmpleadosComponent {
-  // Accedemos al componente hijo (modal) para abrir/cerrar desde el padre
-  @ViewChild(TurnosModalEmpleadosComponent)
-  modalRef!: TurnosModalEmpleadosComponent;
-
+export class TurnosEmpleadosComponent implements OnInit {
   empleadosMap = new Map<number, string>();
   rolesMap = new Map<number, string>();
   rolesArray: any[] = [];
@@ -26,41 +24,47 @@ export class TurnosEmpleadosComponent {
   empleadoId: string = '';
   turnosEmpleado: any[] = [];
   turnosPorDia: { [fecha: string]: ITurnos[] } = {};
-  
-
-  /** Array completo de turnos cargado desde la API */
   turnos: ITurnos[] = [];
-
   draggedTurno: ITurnos | null = null;
-
   turnosHoy: ITurnos[] = [];
-
-  /** Fechas (YYYY‑MM‑DD) de la semana actual, lunes → domingo */
   currentWeekDates: string[] = [];
-
-  /** Array [0..23] para renderizar filas de la cuadrícula horaria */
   hours = Array.from({ length: 24 }, (_, i) => i);
-
-  /** Índice de día seleccionado (0=Lunes, 6=Domingo) al abrir el modal */
   selectedDayIndex = 0;
-
-  /** Hora seleccionada al abrir el modal (0‑23) */
   selectedHour = 0;
-
-  /** Turno actualmente seleccionado (para editar) */
   selectedTurno: ITurnos | null = null;
-
-  /** Flag que controla la visibilidad del modal */
   isModalOpen = false;
   cdr: any;
 
-  // + maps
+  // Para el modal genérico
+  shiftForm: FormGroup;
+  employees: any[] = [];
+  roles: any[] = [];
+  halfHourOptions: string[] = Array.from({ length: 48 }, (_, i) => {
+    const hour = Math.floor(i / 2);
+    const minute = i % 2 === 0 ? '00' : '30';
+    return `${hour.toString().padStart(2, '0')}:${minute}`;
+  });
+  isEditMode = false;
 
   constructor(
     private turnosService: TurnosService,
     private empleadosService: EmpleadosService,
-    private rolesService: RolesService
-  ) {}
+    private rolesService: RolesService,
+    private fb: FormBuilder
+  ) {
+    this.shiftForm = this.fb.group({
+      empleado_id: ['', Validators.required],
+      roles_id: ['', Validators.required],
+      fecha: ['', Validators.required],
+      estado: ['', Validators.required],
+      hora_inicio: ['', Validators.required],
+      hora_fin: ['', Validators.required],
+      duracion: [1],
+      dia: [''],
+      titulo: [''],
+      color: ['bg-[#D4AF37]/90']
+    });
+  }
 
   /**
    * Ciclo de vida — al inicializar:
@@ -78,14 +82,15 @@ export class TurnosEmpleadosComponent {
     emps.forEach((e) => this.empleadosMap.set(e.id, e.nombre));
     roles.forEach((r) => this.rolesMap.set(r.id, r.nombre));
     this.rolesArray = roles;
+    this.employees = emps;
+    this.roles = roles;
 
     this.setCurrentWeekDates();
     const empleadoIdFromToken = this.getEmpleadoIdFromToken();
     this.empleadoId = empleadoIdFromToken !== null ? String(empleadoIdFromToken) : '';
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
-  this.turnos = await this.turnosService.getTurnos();
- 
+    this.turnos = await this.turnosService.getTurnos();
   }
 
   getRoleIdByName(roleName: string): number | null {
@@ -325,7 +330,40 @@ async cargarTurnos() {
     this.selectedDayIndex = dayIndex;
     this.selectedHour = hour;
     this.selectedTurno = turno ?? null;
+    this.isEditMode = !!turno;
     this.isModalOpen = true;
+    if (turno) {
+      // Modo edición
+      this.shiftForm.reset({ ...turno });
+      // Normaliza fecha y horas
+      if (turno.fecha) {
+        this.shiftForm.patchValue({ fecha: this.toLocalDateString(turno.fecha) });
+      }
+      if (turno.hora_inicio) {
+        this.shiftForm.patchValue({ hora_inicio: turno.hora_inicio.slice(0, 5) });
+      }
+      if (turno.hora_fin) {
+        this.shiftForm.patchValue({ hora_fin: turno.hora_fin.slice(0, 5) });
+      }
+    } else {
+      // Modo creación
+      const fecha = this.currentWeekDates[dayIndex] ?? '';
+      const inicioH = hour;
+      const finH = inicioH + 1;
+      this.shiftForm.reset({
+        empleado_id: '',
+        roles_id: '',
+        dia: this.getDayName(dayIndex),
+        fecha,
+        estado: 'pendiente',
+        hora_inicio: `${inicioH.toString().padStart(2, '0')}:00`,
+        hora_fin: `${finH.toString().padStart(2, '0')}:00`,
+        duracion: 1,
+        titulo: '',
+        color: 'bg-[#D4AF37]/90'
+      });
+    }
+    this.updateDuration();
   }
 
   /**
@@ -334,6 +372,8 @@ async cargarTurnos() {
    */ closeModal() {
     this.isModalOpen = false;
     this.selectedTurno = null;
+    this.isEditMode = false;
+    this.shiftForm.reset();
   }
 
   /**
@@ -568,4 +608,42 @@ async cargarTurnos() {
           toast.error('Error al descargar las tareas');
         });
     }
+    updateDuration() {
+    const ini = this.shiftForm.value.hora_inicio;
+    const fin = this.shiftForm.value.hora_fin;
+    if (!ini || !fin) return;
+    const [ih, im] = ini.split(':').map(Number);
+    const [fh, fm] = fin.split(':').map(Number);
+    const dur = (fh + fm / 60) - (ih + im / 60);
+    this.shiftForm.get('duracion')!.setValue(dur > 0 ? dur : null, { emitEvent: false });
+  }
+
+  toLocalDateString(fecha: string): string {
+    const d = new Date(fecha);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 10);
+  }
+
+  /**
+   * Handler para el submit del modal de turnos.
+   * Si está en modo edición, actualiza el turno; si no, crea uno nuevo.
+   */
+  async onSubmit() {
+    if (this.shiftForm.invalid) return;
+    const turno = this.shiftForm.value;
+    if (this.isEditMode) {
+      turno.id = this.selectedTurno?.id;
+      await this.updateTurno(turno);
+    } else {
+      await this.createTurno(turno);
+    }
+  }
+
+  /**
+   * Handler para el delete del modal de turnos.
+   * Elimina el turno seleccionado.
+   */
+  async onDelete() {
+    await this.deleteTurno();
+  }
 }

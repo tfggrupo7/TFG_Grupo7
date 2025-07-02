@@ -19,6 +19,11 @@ ChefDesk es una plataforma web todo-en-uno para la gestión eficiente de cocinas
 
 ---
 
+## Wiki
+https://deepwiki.com/tfggrupo7/TFG_Grupo7
+
+---
+
 ## Tecnologías Utilizadas
 
 ### Backend
@@ -33,6 +38,56 @@ ChefDesk es una plataforma web todo-en-uno para la gestión eficiente de cocinas
 - **PWA**: Soporte para Aplicación Web Progresiva (manifest, service worker, iconos).
 - **ngx-sonner**: Notificaciones.
 
+---
+
+## 💬 Integración del Chatbot de Soporte
+
+Este proyecto incluye un **chatbot de soporte** desarrollado e integrado como **componente standalone en Angular 19**, permitiendo comunicación en tiempo real con un backend (basado en Node.js + Dialogflow).
+
+### 🧩 Estructura
+
+El componente está definido en:
+```
+src/app/chatbot-widget/
+├── chatbot-widget.component.ts
+├── chatbot-widget.component.html
+├── chatbot-widget.component.css
+```
+
+Se importa en el componente raíz `AppComponent` usando la propiedad `standalone`.
+
+### ⚙️ Funcionamiento
+
+- Botón flotante con icono de chat para abrir/cerrar el contenedor.
+- Animación suave con transición.
+- Los mensajes del usuario y las respuestas se renderizan como *bocadillos ajustados* al texto.
+- Soporte para:
+  - Envío con tecla `Enter`.
+  - Botón de enviar.
+- Peticiones `POST` al backend en `/api/chat` incluyendo un `sessionId`.
+
+### 🎨 Estilo personalizado
+
+- Colores adaptados a la marca (`rgb(85 107 47)`).
+- Diseño responsivo.
+- Eliminación de decoraciones innecesarias (flecha, bordes excesivos).
+- Uso de **Tailwind CSS** para una estética limpia y controlada.
+
+### 📡 Requisitos de backend
+
+El backend debe exponer una ruta:
+```
+POST /api/chat
+Body: { message: string, sessionId: string }
+Response: { reply: string }
+```
+
+### 🚀 Ejemplo de uso
+
+El chatbot se encuentra activo en toda la aplicación, renderizado en `app.component.html` mediante:
+```html
+<chatbot-widget></chatbot-widget>
+```
 ---
 
 ## Estructura del Proyecto
@@ -117,3 +172,5 @@ FRONTEND/
 ---
 
 ¡Gracias por usar ChefDesk!
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tfggrupo7/TFG_Grupo7)

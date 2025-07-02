@@ -2,3 +2,123 @@ html {
 
     scroll-behavior: smooth;
 }
+.gradient-bg {
+    background: linear-gradient(135deg, #FDFBF8 0%, #F8F6F0 50%, #FDFBF8 100%);
+  }
+  
+  .floating {
+    animation: floating 6s ease-in-out infinite;
+  }
+  
+  @keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes pulse-glow {
+    from { box-shadow: 0 0 20px rgba(85, 107, 47, 0.3); }
+    to { box-shadow: 0 0 40px rgba(85, 107, 47, 0.6); }
+  }
+  
+  .slide-in-left {
+    animation: slideInLeft 1s ease-out;
+  }
+  
+  .slide-in-right {
+    animation: slideInRight 1s ease-out;
+  }
+  
+  @keyframes slideInLeft {
+    from { transform: translateX(-100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes slideInRight {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  .fade-in-up {
+    animation: fadeInUp 1s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .scale-on-hover {
+    transition: transform 0.3s ease;
+  }
+  
+  .scale-on-hover:hover {
+    transform: scale(1.05);
+  }
+  
+  .glow-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .glow-effect::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+    transform: rotate(45deg);
+    animation: shine 3s infinite;
+  }
+  
+  @keyframes shine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  }
+  
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #D4AF37;
+    border-radius: 50%;
+    animation: particle-float 8s infinite linear;
+  }
+  
+  @keyframes particle-float {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+  }
+  
+  .typewriter {
+    overflow: hidden;
+    line-height: 5rem;
+    min-height: 5rem;
+    border-right: 3px solid #556B2F;
+    white-space: nowrap;
+    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
+  
+  @media (max-width: 640px) {
+    .typewriter {
+      line-height: 2.5rem;
+      min-height: 2.5rem;
+    }
+  }
+  
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  
+  @keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: #556B2F; }
+  }

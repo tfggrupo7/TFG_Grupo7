@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-// Ahora la función espera un array de tareas, no de empleados
+
 async function sendTurnosEmail(to, subject, text, attachmentPath) {
   // Configura tu transporte SMTP
   const transporter = nodemailer.createTransport({

@@ -23,6 +23,7 @@ import { PerfilEmpleadosComponent } from './pages/dashboard-empleados/perfil-emp
 import { ResumenEmpleadosComponent } from './pages/dashboard-empleados/resumen-empleados/resumen-empleados.component';
 import { TareasEmpleadosComponent } from './pages/dashboard-empleados/tareas-empleados/tareas-empleados.component';
 import { TareasComponent } from './pages/dashboard/tareas/tareas.component';
+import { VideoDemoComponent } from './pages/video-demo/video-demo.component';
 
 
 export const routes: Routes = [
@@ -50,5 +51,6 @@ export const routes: Routes = [
   { path:'empleados/restablecer-contrasena/:token',component: RestablecerContrasenaEmpleadosComponent},
   { path: 'recuperacion-contrasena', component: RecuperarContrasenaComponent},
   { path: 'restablecer-contrasena/:token', component: RestablecerContrasenaComponent  },
+  { path: 'video-demo', component: VideoDemoComponent},
   { path: '**', component: Error404Component }
 ];

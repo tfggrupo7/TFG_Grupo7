@@ -26,7 +26,7 @@
             required
           >
             <option value="" disabled>Selecciona empleado</option>
-            <option *ngFor="let emp of employees" [value]="emp.id">
+            <option @for (emp of employees; track emp.id) [value]="emp.id">
               {{ emp.nombre }}
             </option>
           </select>
@@ -42,7 +42,7 @@
             required
           >
             <option value="" disabled>Selecciona rol</option>
-            <option *ngFor="let rol of roles" [value]="rol.id">
+            <option @for (rol of roles; track rol.id) [value]="rol.id">
               {{ rol.nombre }}
             </option>
           </select>
@@ -83,7 +83,7 @@
             formControlName="hora_inicio"
             class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]"
           >
-            <option *ngFor="let hour of halfHourOptions" [value]="hour">{{ hour }}</option>
+            <option @for (hour of halfHourOptions) [value]="hour">{{ hour }}</option>
           </select>
         </div>
 
@@ -95,7 +95,7 @@
             formControlName="hora_fin"
             class="h-10 w-full rounded-md border border-[#D4AF37]/30 px-3 py-2 text-sm text-[#1C1C1C]"
           >
-            <option *ngFor="let hour of halfHourOptions" [value]="hour">{{ hour }}</option>
+            <option @for (hour of halfHourOptions) [value]="hour">{{ hour }}</option>
           </select>
         </div>
       </div>

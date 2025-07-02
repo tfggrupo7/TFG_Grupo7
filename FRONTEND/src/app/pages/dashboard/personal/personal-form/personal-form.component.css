@@ -1,0 +1,12 @@
+/* Estilos básicos para el formulario de personal */
+:host {
+  display: block;
+}
+
+input.ng-invalid.ng-touched, select.ng-invalid.ng-touched {
+  border-color: #e53e3e;
+}
+
+label {
+  font-weight: 500;
+}

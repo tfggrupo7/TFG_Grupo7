@@ -1,152 +1,186 @@
-  <app-header></app-header>
+<app-header></app-header>
 
-  <section class="mt-8 md:mt-20 mx-auto">
-    <nav class="bg-white shadow-md p-4  justify-between items-center hidden">
-  <ul class="flex justify-center space-x-4 mt-4 mx-auto">
-  
-  <li>
-    <button id="login" class="text-[#556B2F] border-4 border-green-500 px-3 py-1 rounded hover:text-green-600 transition-colors duration-300 bg-green-200" (click)="mostrarRegistro($event)">
-      Iniciar Sesión
-    </button>
-  </li>
-  <li>
-    <button id="register" class="text-[#556B2F] border-4 border-green-500 px-3 py-1 rounded hover:text-green-600 transition-colors duration-300 bg-green-200" (click)="mostrarLogin($event)">
-      Registrarse
-    </button>
-  </li>
-
-</ul>
-</nav>
-  <div class="container" id="container" [class.right-panel-active]="rightPanelActive">
-  <!-- Sign Up Form -->
-  <div class="form-container sign-up-container">
-    <div class="flex flex-col justify-center items-center px-8 my-8">
-      <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-10 mb-4 md:hidden" />
-      <h1 class="text-xl font-bold text-[#556B2F] mb-2">Regístrate</h1>
-      <p class="text-gray-500 mb-6">
-        Crea una cuenta para empezar a optimizar tu cocina
-      </p>
-      <form [formGroup]="registerForm" (ngSubmit)="registrar()"  class="w-full max-w-sm">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-        <input type="text" formControlName="nombre" class="w-full p-2 border rounded mb-4" />
-        @if(registerForm.get('nombre')?.errors?.['minlength'] && registerForm.get('nombre')?.touched) {
-          <p class="text-red-500 text-sm">El nombre es obligatorio.</p>
-        }
-        <label class="block text-sm font-medium text-gray-700 mb-1">Apellidos</label>
-        <input type="text" formControlName="apellidos" class="w-full p-2 border rounded mb-4" />
-        @if(registerForm.get('apellidos')?.errors?.['minlength'] && registerForm.get('apellidos')?.touched) {
-          <p class="text-red-500 text-sm">Los apellidos son obligatorios.</p>
-        }
-        <label class="block text-sm font-medium text-gray-700 mb-1" >Correo electrónico</label>
-        <input type="email" placeholder="tu@email.com" formControlName="email" class="w-full p-2 border rounded mb-4" />
-        @if(registerForm.get('email')?.errors?.['email'] && registerForm.get('email')?.touched) {
-          <p class="text-red-500 text-sm">El correo electrónico no es válido.</p>
-        }
-        <label class="block text-sm font-medium text-gray-700 mb-1" >Contraseña</label>
-        <input type="password" formControlName="contraseña" class="w-full p-2 border rounded mb-4" />
-        @if(registerForm.get('contraseña')?.errors?.['minlength'] && registerForm.get('contraseña')?.touched) {
-          <p class="text-red-500 text-sm">La contraseña debe tener al menos 6 caracteres.</p>
-        }
-        <button type="submit" class="w-full bg-[#556B2F] text-white py-2 rounded">
-          Crear cuenta
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Sign In Form -->
-  <div #login class="form-container sign-in-container mt-20">
-    <div class="flex flex-col justify-center items-center px-8 mt-8 md:mt-0">
-      <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-10 mb-4 md:hidden" />
-      <h1 class="text-xl font-bold text-[#556B2F] mb-2">Iniciar Sesión</h1>
-      <p class="text-gray-500 mb-6">
-        Ingresa tus credenciales para acceder a tu cuenta
-      </p>
-      <form [formGroup]="loginForm" (ngSubmit)="ingresar()" class="w-full max-w-sm">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
-        <input type="email" placeholder="tu@email.com" class="w-full p-2 border rounded mb-4" formControlName="email" />
-        @if(loginForm.get('email')?.errors?.['email'] && loginForm.get('email')?.touched) {
-          <p class="text-red-500 text-sm">El correo electrónico no es válido.</p>
-        }
-        <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-        <input type="password" class="w-full p-2 border rounded mb-4" formControlName="contraseña" />
-        @if(registerForm.get('contraseña')?.errors?.['minlength'] && registerForm.get('contraseña')?.touched) {
-          <p class="text-red-500 text-sm">La contraseña debe tener al menos 6 caracteres.</p>
-        }
-        <div class="flex justify-between items-center mb-4">
-          <label class="flex items-center">
-            <input type="checkbox" class="mr-2" /> Recordarme
-          </label>
-          <a routerLink="/recuperacion-contrasena" class="text-sm text-[#556B2F] hover:underline">¿Olvidaste tu contraseña?</a>
-        </div>
-        <button type="submit" class="w-full bg-[#556B2F] text-white py-2 rounded">
+<section class="mt-8 md:mt-20 mx-auto">
+  <nav class="bg-white shadow p-2 mt-20 md:p-4 rounded-lg flex justify-center items-center mb-4 hidden">
+    <ul class="flex flex-col gap-2 w-full max-w-md mx-auto">
+      <li class="w-full">
+        <button id="login"
+          class="w-full items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white"
+          (click)="mostrarRegistro($event)">
           Iniciar Sesión
         </button>
-      </form>
+      </li>
+      <li class="w-full">
+        <button id="register"
+          class="w-full items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-white"
+          (click)="mostrarLogin($event)">
+          Registrarse
+        </button>
+      </li>
+    </ul>
+  </nav>
+  <div class="container" id="container" [class.right-panel-active]="rightPanelActive">
+    <!-- Sign Up Form -->
+    <div class="form-container sign-up-container">
+      <div class="flex flex-col justify-center items-center px-8 my-8">
+        <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-10 mb-4 md:hidden" />
+        <h1 class="text-xl font-bold text-[#556B2F] mb-2">Regístrate</h1>
+        <p class="text-gray-500 mb-6">
+          Crea una cuenta para empezar a optimizar tu cocina
+        </p>
+        <form [formGroup]="registerForm" (ngSubmit)="registrar()" class="w-full max-w-sm">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+          <input type="text" formControlName="nombre" class="w-full p-2 border rounded mb-4" />
+          @if(registerForm.get('nombre')?.errors?.['minlength'] && registerForm.get('nombre')?.touched) {
+          <p class="text-red-500 text-sm">El nombre es obligatorio.</p>
+          }
+          <label class="block text-sm font-medium text-gray-700 mb-1">Apellidos</label>
+          <input type="text" formControlName="apellidos" class="w-full p-2 border rounded mb-4" />
+          @if(registerForm.get('apellidos')?.errors?.['minlength'] && registerForm.get('apellidos')?.touched) {
+          <p class="text-red-500 text-sm">Los apellidos son obligatorios.</p>
+          }
+          <label class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
+          <input type="email" placeholder="tu@email.com" formControlName="email"
+            class="w-full p-2 border rounded mb-4" />
+          @if(registerForm.get('email')?.errors?.['email'] && registerForm.get('email')?.touched) {
+          <p class="text-red-500 text-sm">El correo electrónico no es válido.</p>
+          }
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+          <input type="password" formControlName="contraseña" class="w-full p-2 border rounded mb-4" />
+          @if(registerForm.get('contraseña')?.errors?.['minlength'] && registerForm.get('contraseña')?.touched) {
+          <p class="text-red-500 text-sm">La contraseña debe tener al menos 6 caracteres.</p>
+          }
+          <button type="submit" class="w-full bg-[#556B2F] hover:bg-[#556B2F]/90 text-white py-2 rounded">
+            Crear cuenta
+          </button>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <!-- Overlay -->
-  <div class="overlay-container active">
-    <div class="overlay">
-      <div class="overlay-panel overlay-left">
-        <h2>¡Bienvenido de nuevo!</h2>
-        <p class="mb-2">Para mantenerse conectado con nosotros, por favor inicia sesión con tu información personal</p>
-        <div class="bg-gray-100 flex flex-col justify-center p-5  md:mt-0">
-    <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-12 mb-6">
-    <h2 class="text-3xl font-bold text-[#556B2F] mb-4">Optimiza la gestión de tu cocina profesional</h2>
-    <p class="text-gray-700 mb-2">Accede a tu cuenta para gestionar inventario, personal, turnos y reportes desde un solo lugar.</p>
-    
-    <div class="grid grid-cols-2 gap-2">
-      <div class="bg-green-400 p-1 rounded shadow">
-        <p class="text-xl font-bold text-[#556B2F]">+30%</p>
-        <p class="text-sm text-gray-500">Reducción de desperdicio</p>
+    <!-- Sign In Form -->
+    <div #login class="form-container sign-in-container mt-20">
+      <div class="flex flex-col justify-center items-center px-8 mt-8 md:mt-0">
+        <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-10 mb-4 md:hidden" />
+        <h1 class="text-xl font-bold text-[#556B2F] mb-2">Iniciar Sesión</h1>
+        <p class="text-gray-500 mb-6">
+          Ingresa tus credenciales para acceder a tu cuenta
+        </p>
+        <form [formGroup]="loginForm" (ngSubmit)="ingresar()" class="w-full max-w-sm">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
+          <input type="email" placeholder="tu@email.com" class="w-full p-2 border rounded mb-4"
+            formControlName="email" />
+          @if(loginForm.get('email')?.errors?.['email'] && loginForm.get('email')?.touched) {
+          <p class="text-red-500 text-sm">El correo electrónico no es válido.</p>
+          }
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+          <input type="password" class="w-full p-2 border rounded mb-4" formControlName="contraseña" />
+          @if(registerForm.get('contraseña')?.errors?.['minlength'] && registerForm.get('contraseña')?.touched) {
+          <p class="text-red-500 text-sm">La contraseña debe tener al menos 6 caracteres.</p>
+          }
+          <div class="flex justify-between items-center mb-4">
+            <label class="flex items-center">
+              <input type="checkbox" class="mr-2" /> Recordarme
+            </label>
+            <a routerLink="/recuperacion-contrasena" class="text-sm text-[#556B2F] hover:underline">¿Olvidaste tu
+              contraseña?</a>
+          </div>
+          <button type="submit" class="w-full bg-[#556B2F] hover:bg-[#556B2F]/90 text-white py-2 rounded">
+            Iniciar Sesión
+          </button>
+        </form>
       </div>
-      <div class="bg-green-400 p-1 rounded shadow">
-        <p class="text-xl font-bold text-[#556B2F]">+25%</p>
-        <p class="text-sm text-gray-500">Eficiencia operativa</p>
-      </div>
-      <div class="bg-green-400 p-1 rounded shadow">
-        <p class="text-xl font-bold text-[#556B2F]">+1000</p>
-        <p class="text-sm text-gray-500">Restaurantes activos</p>
-      </div>
-      <div class="bg-green-400 p-1 rounded shadow">
-        <p class="text-xl font-bold text-[#556B2F]">+20%</p>
-        <p class="text-sm text-gray-500">Ahorro de costes</p>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay-container active">
+      <div class="overlay">
+        <div class="overlay-panel overlay-left">
+          <h2>¡Bienvenido de nuevo!</h2>
+          <p class="mb-2">Para mantenerse conectado con nosotros, por favor inicia sesión con tu información personal
+          </p>
+          <div class="bg-gray-100 flex flex-col justify-center p-5  md:mt-0">
+            <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-12 mb-6">
+            <h2 class="text-3xl font-bold text-[#556B2F] mb-4">Optimiza la gestión de tu cocina profesional</h2>
+            <p class="text-gray-700 mb-2">Accede a tu cuenta para gestionar inventario, personal, turnos y reportes
+              desde un solo lugar.</p>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div
+                class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect">
+                <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+30%
+                </p>
+                <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Reducción de
+                  desperdicio</p>
+              </div>
+              <div
+                class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect">
+                <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+25%
+                </p>
+                <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Eficiencia
+                  operativa</p>
+              </div>
+              <div
+                class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect md:hidden">
+                <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+1000
+                </p>
+                <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Restaurantes
+                  activos</p>
+              </div>
+              <div
+                class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect md:hidden">
+                <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+20%
+                </p>
+                <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Ahorro de costes
+                </p>
+              </div>
+            </div>
+          </div>
+          <button class="bg-[#1C1C1C] hover:bg-[#1C1C1C]/90 text-white font-bold mt-3 py-2 px-4 rounded ghost"
+            (click)="onSignIn()">Iniciar Sesión</button>
+        </div>
+        <div class="overlay-panel overlay-right">
+          <h2>¡Hola, Chef!</h2>
+          <p class="mb-2">Introduce tus datos personales y comienza tu viaje con nosotros</p>
+          <div class="flex flex-col justify-center p-5 bg-gray-200">
+            <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-12 mb-6">
+            <h2 class="text-3xl font-bold text-[#556B2F] mb-4">Optimiza la gestión de tu cocina profesional</h2>
+            <p class="text-gray-700 mb-8">Gestión integral de inventario, personal, turnos y más.</p>
+            <div class="grid grid-cols-2 gap-4">
+              <div
+                class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect">
+                <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+30%
+                </p>
+                <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Reducción de
+                  desperdicio</p>
+              </div>
+              <div
+                class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect">
+                <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+25%
+                </p>
+                <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Eficiencia
+                  operativa</p>
+              </div>
+              <div
+                class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect md:hidden">
+                <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+1000
+                </p>
+                <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Restaurantes
+                  activos</p>
+              </div>
+              <div
+                class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect md:hidden">
+                <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+20%
+                </p>
+                <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Ahorro de costes
+                </p>
+              </div>
+            </div>
+          </div>
+          <button class="bg-[#1C1C1C] hover:bg-[#1C1C1C]/90 text-white font-bold mt-3 py-2 px-4 rounded ghost"
+            (click)="onSignUp()">Regístrate</button>
+        </div>
       </div>
     </div>
   </div>
-        <button class="bg-orange-600 hover:bg-li-400 text-white font-bold mt-3 py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded ghost" (click)="onSignIn()">Iniciar Sesión</button>
-      </div>
-      <div class="overlay-panel overlay-right">
-        <h2>¡Hola, Chef!</h2>
-        <p class="mb-2">Introduce tus datos personales y comienza tu viaje con nosotros</p>
-        <div class= "flex flex-col justify-center p-5 bg-gray-200">
-    <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-12 mb-6">
-    <h2 class="text-3xl font-bold text-[#556B2F] mb-4">Optimiza la gestión de tu cocina profesional</h2>
-    <p class="text-gray-700 mb-8">Gestión integral de inventario, personal, turnos y más.</p>
-    <div class="grid grid-cols-2 gap-4">
-      <div class="bg-green-400 p-1 rounded shadow">
-        <p class="text-xl font-bold text-[#556B2F]">+30%</p>
-        <p class="text-sm text-gray-500">Reducción de desperdicio</p>
-      </div>
-      <div class="bg-green-400 p-1 rounded shadow">
-        <p class="text-xl font-bold text-[#556B2F]">+25%</p>
-        <p class="text-sm text-gray-500">Eficiencia operativa</p>
-      </div>
-      <div class="bg-green-400 p-1 rounded shadow">
-        <p class="text-xl font-bold text-[#556B2F]">+1000</p>
-        <p class="text-sm text-gray-500">Restaurantes activos</p>
-      </div>
-      <div class="bg-green-400 p-1 rounded shadow">
-        <p class="text-xl font-bold text-[#556B2F]">+20%</p>
-        <p class="text-sm text-gray-500">Ahorro de costes</p>
-      </div>
-    </div>
-  </div>
-        <button class="bg-orange-600 hover:bg-li-400 text-white font-bold mt-3 py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded ghost" (click)="onSignUp()">Regístrate</button>
-      </div>
-    </div>
-  </div>
-</div>
 </section>
+<app-footer class="mt-6"></app-footer>

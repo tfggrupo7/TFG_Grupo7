@@ -1,25 +1,24 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IIngredientes } from '../../../interfaces/iingredientes.interfaces';
 import { IngredientesService } from '../../../core/services/ingredientes.service';
 import { toast } from 'ngx-sonner';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { InventarioFormComponent } from "./inventario-form/inventario-form.component";
-import { ModalComponent } from "../../../shared/components/modal/modal.component";
 import { IInventarioResumen } from '../../../interfaces/iinventarioresumen.interface';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { AuthService } from '../../../core/services/auth.service';
-import { IEmpleados } from '../../../interfaces/iempleados.interfaces';
+import { FormModalComponent } from '../../../shared/form-modal/form-modal.component';
 
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, InventarioFormComponent, ModalComponent],
+  imports: [ReactiveFormsModule, CommonModule, InventarioFormComponent, FormModalComponent],
 })
 export class InventarioComponent implements OnInit {
   ingredientes: IIngredientes[] = [];
@@ -44,8 +43,11 @@ export class InventarioComponent implements OnInit {
   authService = inject(AuthService)
   router = inject(Router)
 
+  emptyFormGroup: FormGroup;
+
   constructor() {
     registerLocaleData(localeEs, 'es-ES');
+    this.emptyFormGroup = new FormGroup({});
   }
 
   async ngOnInit() {
@@ -64,17 +66,22 @@ export class InventarioComponent implements OnInit {
     this.cargarIngredientes()
   }
 
+  get userId(): string {
+    return this.user?.id ?? this.user?.usuario_id;
+  }
+
+  get tipo(): string {
+    return this.user.id ? 'empleado' : 'usuario'
+  }
   
   async cargarResumen() {
-    const id = this.user.id = this.user.id ? this.user.id: this.user.usuario_id
-    this.summary = await this.ingredientesService.getResumen(id);
+    this.summary = await this.ingredientesService.getResumen(this.tipo,this.userId);
   }
 
   async cargarIngredientes() {
-    const id = this.user.id = this.user.id ? this.user.id: this.user.usuario_id
     const search = this.searchTerm.value ?? '';
     this.ingredientes = await this.ingredientesService.getIngredientes(
-      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion, id
+      this.currentPage, this.pageSize, search, this.sort.campo, this.sort.direccion, this.userId, this.tipo
     );
 
     this.ingredientesFiltrados = this.ingredientes;
@@ -90,7 +97,7 @@ export class InventarioComponent implements OnInit {
 
 
   abrirModal(ingrediente?: IIngredientes) {
-    this.ingrediente = ingrediente ? ingrediente : null;
+    this.ingrediente = ingrediente ?? null;
     this.modalIngredienteAbierto = true;
   }
 

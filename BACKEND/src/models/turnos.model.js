@@ -72,12 +72,12 @@ const selectByDate = async (date) => {
  * @param {Object} payload - Campos del turno (ver interfaz ITurnos)
  * @returns {Promise<Object>} Resultado MySQL con insertId, etc.
  */
-const insert = async ({dia,hora,duracion,titulo,empleado_id,roles_id,fecha,estado,hora_inicio,hora_fin,color}) => {
+const insert = async ({dia,hora,duracion,titulo,empleado_id,fecha,estado,hora_inicio,hora_fin,color}) => {
   const [result] = await db.query(
     `INSERT INTO turnos
-     (dia, hora, duracion, titulo, empleado_id, roles_id, fecha, estado, hora_inicio, hora_fin, color)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [dia, hora, duracion, titulo, empleado_id, roles_id, fecha, estado, hora_inicio, hora_fin, color]
+     (dia, hora, duracion, titulo, empleado_id, fecha, estado, hora_inicio, hora_fin, color)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [dia, hora, duracion, titulo, empleado_id, fecha, estado, hora_inicio, hora_fin, color]
   );
   return result;
 };
@@ -89,13 +89,13 @@ const insert = async ({dia,hora,duracion,titulo,empleado_id,roles_id,fecha,estad
  * @returns {Promise<Object>} Resultado MySQL (affectedRows, …)
  */
 const update = async (
-  turnoId, {dia,hora,duracion,titulo,empleado_id,roles_id,fecha,estado,hora_inicio,hora_fin,color}
+  turnoId, {dia,hora,duracion,titulo,empleado_id,fecha,estado,hora_inicio,hora_fin,color}
 ) => {
   const [result] = await db.query(
     `UPDATE turnos SET
-       dia = ?, hora = ?, duracion = ?, titulo = ?, empleado_id = ?, roles_id = ?, fecha = ?, estado = ?, hora_inicio = ?, hora_fin = ?, color = ?
+       dia = ?, hora = ?, duracion = ?, titulo = ?, empleado_id = ?, fecha = ?, estado = ?, hora_inicio = ?, hora_fin = ?, color = ?
      WHERE id = ?`,
-    [dia, hora, duracion, titulo, empleado_id, roles_id, fecha, estado, hora_inicio, hora_fin, color, turnoId]
+    [dia, hora, duracion, titulo, empleado_id, fecha, estado, hora_inicio, hora_fin, color, turnoId]
   );
   return result; // { insertId, affectedRows, … }
 };
@@ -138,7 +138,6 @@ const selectAllTurnosAndEmpleadoRaw = async (empleadoId) => {
       turnos.fecha,
       turnos.estado, 
       turnos.empleado_id,
-      turnos.roles_id,
       empleados.nombre AS empleado_nombre,
       empleados.apellidos AS empleado_apellidos
     FROM turnos
