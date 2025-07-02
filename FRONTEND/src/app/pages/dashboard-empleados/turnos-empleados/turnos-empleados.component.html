@@ -22,10 +22,10 @@
       <h1 class="text-2xl font-bold text-[#556B2F]">Gestión de Turnos</h1>
       <p class="text-[#1C1C1C]/70">Organiza los horarios de tu equipo</p>
     </div>
-    <div class="flex gap-2">
+    <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
       <!-- Botón de descarga -->
       <button (click)="descargarTurnos()"
-        class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center"
+        class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
         title="Descargar tareas">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
@@ -36,7 +36,7 @@
       </button>
       <!-- Botón de enviar por email -->
       <button (click)="enviarTurnosPorEmail()"
-        class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center"
+        class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
         title="Enviar tareas por email">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
@@ -48,7 +48,7 @@
 
       <!-- Botón de asignar tarea (ya existente) -->
       @if(currentUserRole === 'encargado') {
-      <button class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-5 py-2 rounded-lg font-semibold shadow"
+      <button class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
         (click)="openModal(0,8)">
 
         Programar Turno
@@ -121,10 +121,10 @@
               {{ turno.fecha | date:'dd/MM/yyyy' }}
             </td>
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#556B2F]">
-              {{ turno.hora_inicio }}
+              {{ turno.hora_inicio | slice:0:5}}
             </td>
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#556B2F]">
-              {{ turno.hora_fin }}
+              {{ turno.hora_fin | slice:0:5}}
             </td>
             <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
               {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
@@ -193,7 +193,7 @@
               <div class="font-medium text-sm">
                 {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
               </div>
-              <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
+              <div class="text-xs">{{ turno.hora_inicio | slice:0:5}} - {{ turno.hora_fin | slice:0:5 }}</div>
               <div class="text-xs">{{ turno.estado | titlecase }}</div>
             </div>
           </ng-container>
@@ -220,7 +220,7 @@
           {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
         </div>
         <div class="text-xs text-[#556B2F] font-medium">
-          {{ turno.hora_inicio }} - {{ turno.hora_fin }}
+          {{ turno.hora_inicio | slice:0:5}} - {{ turno.hora_fin | slice:0:5}}
         </div>
         <div class="text-xs">
           {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas

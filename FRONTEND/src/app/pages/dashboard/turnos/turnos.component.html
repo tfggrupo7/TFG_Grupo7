@@ -18,19 +18,17 @@
   -->
   <div class="space-y-6">
   <!-- CABECERA -->
-  <div class="flex flex-col gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
-    <!-- Título y subtítulo -->
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F]">
     <div>
       <h1 class="text-2xl font-bold text-[#556B2F]">Gestión de Turnos</h1>
       <p class="text-[#1C1C1C]/70">Organiza los horarios de tu equipo</p>
     </div>
-
-    <!-- Botones en grid responsivo -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 w-full">
+    <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
       <!-- Descargar -->
       <button
       (click)="descargarTurnos()"
-       class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white w-full sm:w-auto justify-center"
+       class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
       title="Descargar turnos"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,7 +41,7 @@
       <!-- Enviar Email -->
       <button
         (click)="enviarTurnosPorEmail()"
-        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white justify-center"
+        class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
         title="Enviar turnos por email"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -56,7 +54,7 @@
       <!-- Programar Turno -->
       <button
         (click)="openModal(0, 8)"
-        class="rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none h-10 py-2 px-4 flex items-center gap-2 bg-[#556B2F] hover:bg-[#556B2F]/90 text-white justify-center"
+        class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-plus h-4 w-4" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
@@ -99,32 +97,33 @@
       <p class="text-sm text-muted-foreground">{{ todayFormatted }}</p>
     </div>
     <div class="p-6 pt-3">
-      <ng-container *ngIf="todayTurnos.length; else noShifts">
-        <div *ngFor="let turno of todayTurnos; let i = index"
-          class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
-          [ngClass]="i < todayTurnos.length - 1 ? 'mb-[5px]' : ''">
-          <div>
-            <div class="font-medium text-[#1C1C1C]">Empleado {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' +
-              turno.empleado_id }}</div>
-           
-          </div>
-          <div class="text-right">
-            <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
-            <p class="text-sm text-[#1C1C1C]/70">
-              {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
-            </p>
-          </div>
-          <div class="text-xs rounded-full px-2 py-1 font-medium" [ngClass]="getEstadoClase(turno.estado)">
-            {{ turno.estado | titlecase }}
-          </div>
+  <ng-container *ngIf="todayTurnos.length; else noShifts">
+    <div *ngFor="let turno of todayTurnos; let i = index"
+      class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
+      [ngClass]="i < todayTurnos.length - 1 ? 'mb-[5px]' : ''">
+      <div>
+        <div class="font-medium text-[#1C1C1C]">
+          Empleado {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
         </div>
-      </ng-container>
-      <!-- Estado vacío -->
-      <ng-template #noShifts>
-        <div class="text-center text-[#1C1C1C]/60 py-8">No hay turnos programados para hoy.</div>
-      </ng-template>
+      </div>
+      <div class="text-right flex flex-col items-end">
+        <div class="font-medium text-[#556B2F]">
+          {{ turno.hora_inicio | slice:0:5 }} - {{ turno.hora_fin | slice:0:5 }}
+        </div>
+        <p class="text-sm text-[#1C1C1C]/70">
+          {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
+        </p>
+        <div class="text-xs rounded-full px-2 py-1 font-medium mt-1" [ngClass]="getEstadoClase(turno.estado)">
+          {{ turno.estado | titlecase }}
+        </div>
+      </div>
     </div>
-  </div>
+  </ng-container>
+  <!-- Estado vacío -->
+  <ng-template #noShifts>
+    <div class="text-center text-[#1C1C1C]/60 py-8">No hay turnos programados para hoy.</div>
+  </ng-template>
+</div>
 
   <!-- 🟣 VISTA SEMANAL ------------------------------------------------------ -->
   <div class="rounded-lg border shadow-sm border-[#D4AF37]/20 hidden md:block">
@@ -197,11 +196,9 @@
   <div class="font-medium text-[#1C1C1C]">
     {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
   </div>
-  <div class="text-xs text-[#1C1C1C]/70">
-    {{ (rolesMap.get(turno.roles_id) || ('Rol ' + turno.roles_id)) | titlecase }}
-  </div>
+  
   <div class="text-xs text-[#556B2F] font-medium">
-    {{ turno.hora_inicio }} - {{ turno.hora_fin }}
+    {{ turno.hora_inicio | slice:0:5}} - {{ turno.hora_fin | slice:0:5}}
   </div>
   <div class="text-xs">
     {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
