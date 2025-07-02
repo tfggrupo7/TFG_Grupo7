@@ -24,6 +24,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, FrontEnd');
+    // The app component contains router-outlet, spinner, toaster, and chatbot components
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });

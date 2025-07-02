@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { IEmpleados } from '../interfaces/iempleados.interfaces';
+import { IEmpleados } from '../../interfaces/iempleados.interfaces';
 import { toast } from 'ngx-sonner';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../core/services/auth.service';
-import { HeaderComponent } from '../shared/header/header.component';
-import { FooterComponent } from '../shared/footer/footer.component';
+import { AuthService } from '../../core/services/auth.service';
+import { HeaderComponent } from '../../shared/header/header.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 
 
 
