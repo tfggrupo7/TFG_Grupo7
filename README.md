@@ -1,3 +1,4 @@
+
 # ChefDesk
 
 <p align="center">
@@ -14,25 +15,44 @@
   <img src="https://img.shields.io/badge/JWT-Auth-orange?logo=jsonwebtokens" alt="JWT">
 </p>
 
+---
+
+## 📚 Índice
+
+- [Descripción](#descripción)
+- [Wiki](#wiki)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [💬 Integración del Chatbot de Soporte](#💬-integración-del-chatbot-de-soporte)
+- [Galería Multimedia](#galería-multimedia)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Cómo ejecutar el proyecto](#cómo-ejecutar-el-proyecto)
+- [Integrantes del Proyecto](#integrantes-del-proyecto)
+
+---
+
 ## Descripción
+
 ChefDesk es una plataforma web todo-en-uno para la gestión eficiente de cocinas profesionales. Permite administrar inventario, personal, turnos, finanzas y mucho más, facilitando la digitalización y optimización de los procesos en restaurantes y negocios gastronómicos.
 
 ---
 
 ## Wiki
-https://deepwiki.com/tfggrupo7/TFG_Grupo7
+
+👉 [https://deepwiki.com/tfggrupo7/TFG_Grupo7](https://deepwiki.com/tfggrupo7/TFG_Grupo7)
 
 ---
 
 ## Tecnologías Utilizadas
 
 ### Backend
+
 - **Node.js** y **Express.js**: Servidor y API REST.
 - **Base de datos**: SQLite (archivos `.sqlite`, `.db`).
 - **JWT**: Autenticación y autorización.
 - **Módulos propios**: Controladores, modelos, rutas y middlewares para la gestión de usuarios, empleados, inventario, menús, pedidos, roles, tareas, etc.
 
 ### Frontend
+
 - **Angular 19**: Framework principal para la SPA.
 - **Tailwind CSS**: Estilizado moderno y utilidades CSS.
 - **PWA**: Soporte para Aplicación Web Progresiva (manifest, service worker, iconos).
@@ -47,6 +67,7 @@ Este proyecto incluye un **chatbot de soporte** desarrollado e integrado como **
 ### 🧩 Estructura
 
 El componente está definido en:
+
 ```
 src/app/chatbot-widget/
 ├── chatbot-widget.component.ts
@@ -76,6 +97,7 @@ Se importa en el componente raíz `AppComponent` usando la propiedad `standalone
 ### 📡 Requisitos de backend
 
 El backend debe exponer una ruta:
+
 ```
 POST /api/chat
 Body: { message: string, sessionId: string }
@@ -85,9 +107,30 @@ Response: { reply: string }
 ### 🚀 Ejemplo de uso
 
 El chatbot se encuentra activo en toda la aplicación, renderizado en `app.component.html` mediante:
+
 ```html
 <chatbot-widget></chatbot-widget>
 ```
+
+---
+
+## 🎞️ Galería Multimedia
+
+### Logo
+![Logo](https://drive.google.com/uc?export=view&id=1DLTCfcHc8cIvldjxtFYurIRLKNMRU_D-)
+
+### Promo 1
+![Promo 1](https://drive.google.com/uc?export=view&id=1GZS_o_mEc2N6rrbjTK06tKpAEFQqEW9a)
+
+### Promo 2
+![Promo 2](https://drive.google.com/uc?export=view&id=1IxBAtNfzxRcVAF4dPsZGIn1Wxlbv3CWs)
+
+### Login
+![Login](https://drive.google.com/uc?export=view&id=1uQmoGik0UqJJfBkxp60KrMBb8I-xv1zT)
+
+### Dashboard
+![Dashboard](https://drive.google.com/uc?export=view&id=1LqN-CmxJpk0Y4TqXnMFDzIbBdIazJyDv)
+
 ---
 
 ## Estructura del Proyecto
@@ -122,52 +165,61 @@ FRONTEND/
 ## Cómo ejecutar el proyecto
 
 ### Backend
+
 1. Ve a la carpeta `BACKEND`:
    ```sh
    cd BACKEND
    ```
+
 2. Instala las dependencias:
    ```sh
    npm install
    ```
+
 3. Inicia el servidor:
    ```sh
-   npm start o npm run dev(desarrollo)
+   npm start     # o: npm run dev (modo desarrollo)
    ```
-   El backend estará disponible normalmente en `http://localhost:3000`.
+
+   El backend estará disponible en `http://localhost:3000`.
 
 ### Frontend
+
 1. Ve a la carpeta `FRONTEND`:
    ```sh
    cd FRONTEND
    ```
+
 2. Instala las dependencias:
    ```sh
    npm install
    ```
+
 3. Inicia la aplicación Angular:
    ```sh
-   npm start o ng s(desarrollo)
+   npm start     # o: ng serve
    ```
-   La aplicación estará disponible en `http://localhost:4200`.
+
+   La app estará disponible en `http://localhost:4200`.
 
 #### PWA
+
 - Puedes instalar la app como PWA desde el navegador.
 - El manifiesto y los iconos están en `public/`.
-
 
 ---
 
 ## Integrantes del Proyecto
-- Bartolomé Miranda, Laura
-- Donoso Escalona, David
-- González Parra, Francisco
-- Ibañez Escribano, César
-- Mesa Gonzalez, Marcos
-- Moreno Vaz, Gilson Jorge
-- Pérez Mateos, Carlos
-- Rodríguez Hernández, Himar
-- Sendino Sanz, Rodrigo
+
+- Bartolomé Miranda, Laura  
+- Donoso Escalona, David  
+- González Parra, Francisco  
+- Ibañez Escribano, César  
+- Mesa Gonzalez, Marcos  
+- Moreno Vaz, Gilson Jorge  
+- Pérez Mateos, Carlos  
+- Rodríguez Hernández, Himar  
+- Sendino Sanz, Rodrigo  
 
 ---
 
