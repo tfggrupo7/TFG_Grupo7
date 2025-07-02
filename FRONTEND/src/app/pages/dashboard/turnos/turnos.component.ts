@@ -14,7 +14,7 @@ import { TurnosModalComponent } from './turnos-modal/turnos-modal.component';
 import { EmpleadosService } from '../../../core/services/empleados.service';
 import { RolesService } from '../../../core/services/roles.service';
 import { toast } from 'ngx-sonner';
-import { IEmpleados } from '../../../interfaces/iempleados.interfaces';
+
 
 @Component({
   selector: 'app-turnos',
