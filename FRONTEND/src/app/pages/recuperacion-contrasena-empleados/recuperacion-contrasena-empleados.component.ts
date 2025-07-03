@@ -24,15 +24,12 @@ form: FormGroup;
   async enviar() {
     this.mensaje = '';
     this.error = '';
-    console.log('Formulario enviado:', this.form.value);
     if (this.form.invalid) {
-      console.log('Formulario inválido');
       return;
     }
     try {
       await this.authService.recuperarContrasena(this.form.value.email);
       this.mensaje = 'Si el correo existe, se ha enviado un enlace para restablecer la contraseña.';
-      console.log('Enlace de recuperación enviado');
       setTimeout(() => {
         this.router.navigate(['/login']);
       }, 3000); 

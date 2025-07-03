@@ -586,7 +586,6 @@ async cargarTurnos() {
     }
     descargarTurnos() {
       const empleadoId = this.getEmpleadoIdFromToken();
-      console.log('EmpleadoId obtenido del token:', empleadoId);
       if (!empleadoId) {
         alert('No se pudo obtener el ID del empleado');
         return;

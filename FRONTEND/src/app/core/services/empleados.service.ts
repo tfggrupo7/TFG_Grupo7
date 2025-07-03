@@ -19,26 +19,17 @@ export class EmpleadosService {
   private authService = inject(AuthService);
 
   getEmpleados(): Promise<IEmpleados[]> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
+   
     return lastValueFrom(
-      this.httpClient.get<IEmpleados[]>(this.url, { headers })
+      this.httpClient.get<IEmpleados[]>(this.url)
     );
   }
 
   async cargarEmpleados(page: number): Promise<IResponse> {
     const url = `${this.url}?page=${page}&limit=${this.limit}`;
-    const token = localStorage.getItem('token'); // Recupera el token del localStorage
+ 
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
-
-    return lastValueFrom(this.httpClient.get<IResponse>(url, { headers }));
+    return lastValueFrom(this.httpClient.get<IResponse>(url));
   }
 
   getEmpledosAndTareas(): Promise<IEmpleados[]> {
@@ -47,11 +38,7 @@ export class EmpleadosService {
     );
   }
   getEmpleadoById(id: number): Promise<IEmpleados> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
+   
     return lastValueFrom(this.httpClient.get<IEmpleados>(`${this.url}/${id}`));
   }
   createEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
@@ -64,39 +51,24 @@ export class EmpleadosService {
     if (!id || isNaN(id)) {
       return Promise.reject('ID de empleado inválido');
     }
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
+ 
     return lastValueFrom(
-      this.httpClient.put<IEmpleados>(`${this.url}/updateEmpleado/${id}`, empleadoBody, {
-        headers,
-      })
+      this.httpClient.put<IEmpleados>(`${this.url}/updateEmpleado/${id}`, empleadoBody)
     );
   }
 
   updateEmpleado(empleado: IEmpleados): Promise<IEmpleados> {
     let { id, ...empleadoBody } = empleado;
     id = Number(id);
-    console.log('URL base:', this.url);
-  console.log('URL completa:', `${this.url}/${id}`);
-  console.log('ID:', id);
-  console.log('Body:', empleadoBody);
 
     if (!id || isNaN(id)) {
       return Promise.reject('ID de empleado inválido');
     }
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
+ 
     return lastValueFrom(
       this.httpClient.put<IEmpleados>(
         `${this.url}/${id}`,
-        empleadoBody,
-        { headers }
+        empleadoBody
       )
     );
   }
@@ -119,11 +91,7 @@ export class EmpleadosService {
   }
 
   getCurrentUser(): Promise<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
+
     const userId = this.authService.getEmpleadoId();
 
     if (!userId) {
@@ -131,6 +99,6 @@ export class EmpleadosService {
     }
 
     const url = `http://localhost:3000/api/empleados/${userId}`;
-    return lastValueFrom(this.httpClient.get(url, { headers }));
+    return lastValueFrom(this.httpClient.get(url));
   }
 }

@@ -9,6 +9,7 @@ import { IIngredientes } from '../../../interfaces/iingredientes.interfaces';
 import { IngredientesService } from '../../../core/services/ingredientes.service';
 import { TurnosService } from '../../../core/services/turnos.service';
 import { RolesService } from '../../../core/services/roles.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class ResumenComponent  {
   empleadosService = inject(EmpleadosService);
   turnosService = inject(TurnosService);
   rolesService = inject(RolesService);
-
+  authService = inject(AuthService)
   constructor() {
     // Inicializar los mapas
     this.empleadosMap = new Map<number, string>();
@@ -42,13 +43,11 @@ export class ResumenComponent  {
   }
 
 async ngOnInit(){
-  this.IngredientesService.getAllIngredientes()
+  let id = this.authService.getUserId()
+  this.IngredientesService.getAllIngredientes('usuario', id)
     .then((data: IIngredientes[]) => {
       // Filtrar solo ingredientes con stock bajo o sin stock
-      this.arrIngredientes = data.filter(ingrediente => 
-        ingrediente.estado === 'Bajo stock' || 
-        ingrediente.estado === 'Sin stock'
-      );
+      this.arrIngredientes = data
     })
     .catch((error: any) => {
       toast.error(error?.error || 'Error al cargar ingredientes');

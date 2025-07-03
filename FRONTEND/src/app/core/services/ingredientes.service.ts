@@ -33,11 +33,6 @@ export class IngredientesService {
       .set('direction', direction)
       .set('id', userId)
       .set('tipo', tipo);
-      const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
 
     return lastValueFrom(this.httpClient.get<any>(this.url, { params })).then(
       (resp) => {
@@ -47,63 +42,31 @@ export class IngredientesService {
     );
   }
 
-getAllIngredientes(): Promise<IIngredientes[]> {
-  const token = localStorage.getItem('token'); // Asegúrate de obtener el token
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
-
-  return lastValueFrom(this.httpClient.get<IIngredientes[]>(`${this.url}/all`, { headers }));
-}
-
-
-
+  getAllIngredientes(tipo: string, userId: any): Promise<IIngredientes[]> {
+    const params = new HttpParams()
+      .set('tipo', tipo)
+      .set('id', userId);
+    return lastValueFrom(this.httpClient.get<IIngredientes[]>(`${this.url}/all`, {params}));
+  }
 
   getIngredienteById(id: number): Promise<IIngredientes> {
-    const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
     return lastValueFrom(this.httpClient.get<IIngredientes>(`${this.url}/${id}`));
   }
 
   getResumen(tipo: string, userId: string): Promise<IInventarioResumen> {
     const params = new HttpParams()
-    .set('id', userId)
-    .set('tipo', tipo);
-    const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
-    return lastValueFrom(this.httpClient.get<IInventarioResumen>(`${this.url}/summary`, {params}));
+      .set('id', userId)
+      .set('tipo', tipo);
+    return lastValueFrom(this.httpClient.get<IInventarioResumen>(`${this.url}/summary`, { params }));
   }
 
   createIngrediente(ingrediente: IIngredientes): Promise<IIngredientes> {
-    const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
     return lastValueFrom(this.httpClient.post<IIngredientes>(this.url, ingrediente));
   }
   updateIngrediente(id: number, ingrediente: IIngredientes): Promise<IIngredientes> {
-    const token = localStorage.getItem('token');
-    console.log("ID: ",[id, ingrediente])
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
     return lastValueFrom(this.httpClient.put<IIngredientes>(`${this.url}/${id}`, ingrediente));
   }
   deleteIngrediente(id: number): Promise<void> {
-    const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-  });
     return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
   }
 }

@@ -43,7 +43,6 @@ export class AjusteRestauranteComponent implements OnInit {
 
   onSubmit(): void {
     if (this.restaurantForm.valid) {
-      console.log('Form submitted:', this.restaurantForm.value);
       // Aquí iría la lógica para guardar los cambios
       // Por ejemplo, llamar a un servicio que actualice los datos en el backend
     } else {

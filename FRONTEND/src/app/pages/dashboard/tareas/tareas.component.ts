@@ -57,7 +57,6 @@ export class TareasComponent {
   async cargarEmpleados() {
     try {
       this.empleados = await this.empleadoService.getEmpleados()
-      console.log('Empleados cargados:', this.empleados);
     } catch (error) {
       console.error('Error cargando empleados:', error);
     }

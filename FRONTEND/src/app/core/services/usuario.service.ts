@@ -54,27 +54,16 @@ cambiarContraseña (token: string, nuevaContraseña: string): Promise<any> {
 }
 
 updateUsuario(usuario: IUsuario): Promise<IUsuario> {
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { 'Authorization': `${token}` } : {})
-    });
   return lastValueFrom(
     this.httpClient.put<IUsuario>(
       'http://localhost:3000/api/usuarios',
-      usuario,
-      { headers }
+      usuario
     )
   );
 }
 deleteUsuario(id: string): Promise<void> {
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',   
-    ...(token ? { 'Authorization': `${token}` } : {})
-  });
   return lastValueFrom(
-    this.httpClient.delete<void>(`http://localhost:3000/api/usuarios/${id}`, { headers })
+    this.httpClient.delete<void>(`http://localhost:3000/api/usuarios/${id}`)
   );
 }
 

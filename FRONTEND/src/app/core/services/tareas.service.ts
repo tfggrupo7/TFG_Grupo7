@@ -12,37 +12,17 @@ export class TareasService {
   private url: string = 'http://localhost:3000/api/tareas';
 
   getTareas(): Promise<ITareas[]> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(this.httpClient.get<ITareas[]>(this.url));
   }
   getTareasAndEmpleadoById(id: number): Promise<ITareas[]> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(
       this.httpClient.get<ITareas[]>(`${this.url}/empleado/${id}`)
     );
   }
   getTareaById(id: number): Promise<ITareas> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(this.httpClient.get<ITareas>(`${this.url}/${id}`));
   }
   createTarea(tarea: ITareas): Promise<ITareas> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(this.httpClient.post<ITareas>(this.url, tarea));
   }
   updateTarea(id: number, tarea: ITareas): Promise<ITareas> {
@@ -54,58 +34,33 @@ export class TareasService {
     return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
   }
   sendTareasByEmail(tareas: ITareas[]): Promise<void> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(
       this.httpClient.post<void>(
         `${this.url}/send/pdf`,
-        { tareas },
-        { headers }
+        { tareas }
       )
     );
   }
   sendTareasEmpleadoByEmail(empleadoId: number, email: string): Promise<void> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(
       this.httpClient.post<void>(
         `${this.url}/empleado/${empleadoId}/send/pdf`,
-        { empleadoId, email },
-        { headers }
+        { empleadoId, email }
       )
     );
   }
   downloadTareas(): Promise<Blob> {
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(
       this.httpClient.get(`${this.url}/export/pdf`, {
-        responseType: 'blob',
-        headers: headers,
+        responseType: 'blob'
       })
     );
   }
   downloadTareasPorId(empleadoId: number): Promise<Blob> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(
       this.httpClient.get(`${this.url}/empleado/${empleadoId}/pdf`, {
-        responseType: 'blob',
-        headers: headers,
+        responseType: 'blob'
       })
     );
   }
