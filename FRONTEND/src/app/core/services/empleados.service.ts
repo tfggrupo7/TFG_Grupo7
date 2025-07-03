@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { IEmpleados } from '../../interfaces/iempleados.interfaces';
 import { lastValueFrom } from 'rxjs';
 import { IResponse } from '../../interfaces/iresponse.interfaces';
-import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 

@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { IIngredientes } from '../../interfaces/iingredientes.interfaces';
 import { lastValueFrom } from 'rxjs';
 import { IInventarioResumen } from '../../interfaces/iinventarioresumen.interface';
-import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'

@@ -33,12 +33,7 @@ export class UsuarioService {
   recuperarContrasena(email: string): Promise<void> {
     return lastValueFrom(this.httpClient.post<void>('http://localhost:3000/api/usuarios/recuperar-contrasena', { email }));
   }
-  /*actualizarContrasena(token: string, nuevaContrasena: string): Promise<void> {
-    const url = `http://localhost:3000/api/usuarios/restablecer-contrasena/${token}`;
-    return lastValueFrom(
-      this.httpClient.post<void>(url, { nuevaContrasena })
-    );
-  }*/
+
   actualizarContrasena(token: string, nuevaContrasena: string): Promise<any> {
   const headers = new HttpHeaders({
     'Content-Type': 'application/json'

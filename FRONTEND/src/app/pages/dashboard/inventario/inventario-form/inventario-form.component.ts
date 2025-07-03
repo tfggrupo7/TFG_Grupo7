@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, Input, input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IIngredientes } from '../../../../interfaces/iingredientes.interfaces';
 
