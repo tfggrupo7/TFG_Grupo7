@@ -77,7 +77,6 @@ initializeLoginFormWithUsuario() {
   try {
      // Suponiendo que el backend responde { token: '...', usuario: {...} }
     const response = await this.usuarioService.login(usuario);
-    console.log('Respuesta del backend:', response); // <-- AQUÍ
     const token = response.token;
 if (token) {
   localStorage.setItem('token', token);
@@ -109,11 +108,9 @@ async registrar() {
   }
 
   const usuario = this.registerForm.value;
-  console.log('Datos de registro enviados:', usuario);
 
   try {
     const response = await this.usuarioService.register(usuario);
-    console.log('Respuesta del backend al registrar:', response);
     toast.success("Usuario registrado correctamente");
     setTimeout(() => {
       this.router.navigate(['/']);

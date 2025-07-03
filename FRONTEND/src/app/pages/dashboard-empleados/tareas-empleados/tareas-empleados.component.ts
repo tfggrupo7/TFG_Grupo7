@@ -29,7 +29,6 @@ constructor(private fb: FormBuilder, private empleadoService: EmpleadosService) 
 
   async ngOnInit() {
     const empleadoId = this.getEmpleadoIdFromToken();
-    console.log('ID del empleado obtenido del token:', empleadoId);
     if (empleadoId) {
       this.getTareasPorEmpleadoId(empleadoId);
     } else {
@@ -54,7 +53,6 @@ await this.cargarEmpleados();
   async cargarEmpleados() {
     try {
       this.empleados = await this.empleadoService.getEmpleados()
-      console.log('Empleados cargados:', this.empleados);
     } catch (error) {
       console.error('Error cargando empleados:', error);
     }
@@ -102,7 +100,6 @@ if (typeof roles === 'string') {
   roles = [roles];
 }
 this.role = roles;
-console.log('Rol del empleado:', this.role);
     } catch (e) {
       console.error('Error al decodificar el token:', e);
       toast.error('Error al obtener el rol del empleado');
@@ -116,8 +113,6 @@ async insertarTarea() {
     if (this.isSubmitting) return;
     this.isSubmitting = true;
     try {
-      console.log('Insertando tarea:', this.tareasForm.value);
-      console.log('ID del empleado obtenido del token:', this.getEmpleadoIdFromToken());
       const empleadoId = this.getEmpleadoIdFromToken();
       if (!empleadoId) {
         toast.error('No se pudo obtener el ID del empleado');
@@ -131,7 +126,6 @@ async insertarTarea() {
       this.closeModal();
       this.getTareasPorEmpleadoId(empleadoId);
     } catch (err: unknown) {
-      console.log('Error al insertar la tarea:', err);
       toast.error('Error al insertar la tarea');
     } finally {
       this.isSubmitting = false;
@@ -201,7 +195,6 @@ async insertarTarea() {
   }
   descargarTareas() {
     const empleadoId = this.getEmpleadoIdFromToken();
-    console.log('EmpleadoId obtenido del token:', empleadoId);
     if (!empleadoId) {
       alert('No se pudo obtener el ID del empleado');
       return;

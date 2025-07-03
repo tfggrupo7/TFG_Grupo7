@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormGroup,
   Validators,
@@ -127,7 +127,6 @@ currentUser: any = null;
       toast.success('Contraseña cambiada correctamente');
       this.passwordForm.reset();
     } catch (error) {
-      console.log('Error al cambiar la contraseña:', error);
       // Si quieres ver el mensaje exacto del backend:
       if (
         typeof error === 'object' &&
@@ -137,7 +136,6 @@ currentUser: any = null;
         (error as any).error !== null &&
         'message' in (error as any).error
       ) {
-        console.log('Mensaje del backend:', (error as any).error.message);
       }
       toast.error(
         'Error al cambiar la contraseña. Verifica tu contraseña actual.'

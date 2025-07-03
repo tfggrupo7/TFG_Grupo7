@@ -97,28 +97,32 @@
       <p class="text-sm text-muted-foreground">{{ todayFormatted }}</p>
     </div>
     <div class="p-6 pt-3">
-  <ng-container *ngIf="todayTurnos.length; else noShifts">
-    <div *ngFor="let turno of todayTurnos; let i = index"
-      class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
-      [ngClass]="i < todayTurnos.length - 1 ? 'mb-[5px]' : ''">
-      <div>
-        <div class="font-medium text-[#1C1C1C]">
-          Empleado {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
+  @if (todayTurnos.length > 0) {
+    @for (turno of todayTurnos; track turno.id; let i = $index) {
+      <div
+        class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
+        [ngClass]="i < todayTurnos.length - 1 ? 'mb-[5px]' : ''">
+        <div>
+          <div class="font-medium text-[#1C1C1C]">
+            Empleado {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
+          </div>
+        </div>
+        <div class="text-right flex flex-col items-end">
+          <div class="font-medium text-[#556B2F]">
+            {{ turno.hora_inicio | slice:0:5 }} - {{ turno.hora_fin | slice:0:5 }}
+          </div>
+          <p class="text-sm text-[#1C1C1C]/70">
+            {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
+          </p>
+          <div class="text-xs rounded-full px-2 py-1 font-medium mt-1" [ngClass]="getEstadoClase(turno.estado)">
+            {{ turno.estado | titlecase }}
+          </div>
         </div>
       </div>
-      <div class="text-right flex flex-col items-end">
-        <div class="font-medium text-[#556B2F]">
-          {{ turno.hora_inicio | slice:0:5 }} - {{ turno.hora_fin | slice:0:5 }}
-        </div>
-        <p class="text-sm text-[#1C1C1C]/70">
-          {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
-        </p>
-        <div class="text-xs rounded-full px-2 py-1 font-medium mt-1" [ngClass]="getEstadoClase(turno.estado)">
-          {{ turno.estado | titlecase }}
-        </div>
-      </div>
-    </div>
-  </ng-container>
+    }
+  } @else {
+    <div class="text-center text-[#1C1C1C]/60 py-8">No hay turnos programados para hoy.</div>
+  }
   <!-- Estado vacío -->
   <ng-template #noShifts>
     <div class="text-center text-[#1C1C1C]/60 py-8">No hay turnos programados para hoy.</div>
@@ -148,74 +152,85 @@
     <div class="p-6 pt-0 grid grid-cols-8 gap-4">
       <!-- Columna vacía para rotular horas -->
       <div class="col-span-1"></div>
-      <div *ngFor="let day of currentWeekDates; let i = index" class="text-center font-medium text-[#556B2F]">
-        {{ getDayName(i) }}
-      </div>
+      @for (day of currentWeekDates; track day; let i = $index) {
+        <div class="text-center font-medium text-[#556B2F]">
+          {{ getDayName(i) }}
+        </div>
+      }
 
       <!-- Líneas de tiempo -->
       <div class="col-span-8 grid grid-cols-8 gap-4 relative">
         <!-- Línea de horas -->
         <div class="col-span-1">
-          <div *ngFor="let hour of hours" class="h-[60px] text-sm text-gray-500">
-            {{hour}}:00
-          </div>
-        </div>
+      @for (hour of hours; track hour) {
+      <div class="h-[60px] text-sm text-gray-500">
+        {{hour}}:00
+      </div>
+      }
+      </div>
 
         <!-- Celdas de turnos -->
-        <div *ngFor="let day of currentWeekDates; let dayIndex = index" class="relative">
-          <div *ngFor="let hour of hours"
-            class="h-[60px] border border-[#D4AF37]/30 hover:bg-[#D4AF37]/10 cursor-pointer"
-            (click)="openModal(dayIndex, hour)" (dragover)="allowDrop($event)" (drop)="onDrop($event, dayIndex, hour)">
-          </div>
-
+         @for (day of currentWeekDates; track day; let dayIndex = $index) {
+          <div class="relative">
+            @for (hour of hours; track hour) {
+              <div
+                class="h-[60px] border border-[#D4AF37]/30 hover:bg-[#D4AF37]/10 cursor-pointer"
+                (click)="openModal(dayIndex, hour)"
+                (dragover)="allowDrop($event)"
+                (drop)="onDrop($event, dayIndex, hour)">
+              </div>
+            }
           <!-- Turnos para este día -->
-          <ng-container *ngFor="let turno of turnosPorDia[day]">
-  <div
-    class="absolute text-white p-2 rounded cursor-move shift-card" [ngClass]="turno.color"
-    [style.top.px]="getTurnoTop(turno.hora_inicio)"
-    [style.height.px]="getTurnoHeight(turno.hora_inicio, turno.hora_fin)"
-    draggable="true"
-    (dragstart)="onDragStart(turno)" (click)="onTurnoClick(turno)">
-    <div class="font-medium text-sm">
-      {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
-    </div>
-    <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
-    <div class="text-xs">{{ turno.estado | titlecase }}</div>
-  </div>
-</ng-container>
+          @for (turno of turnosPorDia[day]; track turno.id) {
+            <div
+              class="absolute text-white p-2 rounded cursor-move shift-card"
+              [ngClass]="turno.color"
+              [style.top.px]="getTurnoTop(turno.hora_inicio)"
+              [style.height.px]="getTurnoHeight(turno.hora_inicio, turno.hora_fin)"
+              draggable="true"
+              (dragstart)="onDragStart(turno)"
+              (click)="onTurnoClick(turno)">
+              <div class="font-medium text-sm">
+                {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
+              </div>
+              <div class="text-xs">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
+              <div class="text-xs">{{ turno.estado | titlecase }}</div>
+            </div>
+          }
         </div>
+        }
       </div>
     </div>
 
   </div>
   <div class="rounded-lg border shadow-sm border-[#D4AF37]/20 block md:hidden mt-6">
-  <div *ngFor="let day of currentWeekDates; let i = index" class="mb-6" >
-  <div class="font-bold text-[#556B2F] mb-2">{{ getDayName(i) }}</div>
-  <ng-container *ngIf="turnosPorDia[day]?.length; else noTurnosMobile">
-    <div *ngFor="let turno of turnosPorDia[day]"
-     class="mb-2 p-3 rounded-lg bg-[#556B2F]/10 border border-[#D4AF37]/20 cursor-pointer"
-     (click)="onTurnoClick(turno)">
-  <div class="font-medium text-[#1C1C1C]">
-    {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
-  </div>
-
-  <div class="text-xs text-[#556B2F] font-medium">
-    {{ turno.hora_inicio | slice:0:5}} - {{ turno.hora_fin | slice:0:5}}
-  </div>
-  <div class="text-xs">
-    {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
-  </div>
-  <div class="text-xs rounded-full px-2 py-1 font-medium mt-1" [ngClass]="getEstadoClase(turno.estado)">
-    {{ turno.estado | titlecase }}
-  </div>
+  @for (day of currentWeekDates; track day; let i = $index) {
+    <div class="mb-6">
+      <div class="font-bold text-[#556B2F] mb-2">{{ getDayName(i) }}</div>
+      @if (turnosPorDia[day] && turnosPorDia[day].length > 0){
+        @for (turno of turnosPorDia[day]; track turno.id) {
+          <div class="mb-2 p-3 rounded-lg bg-[#556B2F]/10 border border-[#D4AF37]/20 cursor-pointer"
+               (click)="onTurnoClick(turno)">
+            <div class="font-medium text-[#1C1C1C]">
+              {{ (empleadosMap.get(turno.empleado_id) || ('Empleado ' + turno.empleado_id)) | titlecase }}
+            </div>
+            <div class="text-xs text-[#556B2F] font-medium">
+              {{ turno.hora_inicio | slice:0:5}} - {{ turno.hora_fin | slice:0:5}}
+            </div>
+            <div class="text-xs">
+              {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
+            </div>
+            <div class="text-xs rounded-full px-2 py-1 font-medium mt-1" [ngClass]="getEstadoClase(turno.estado)">
+              {{ turno.estado | titlecase }}
+            </div>
+          </div>
+        }
+      } @else {
+        <div class="text-xs text-[#1C1C1C]/60">Sin turnos para este día.</div>
+      }
+    </div>
+  }
 </div>
-  </ng-container>
-  <ng-template #noTurnosMobile>
-    <div class="text-xs text-[#1C1C1C]/60">Sin turnos para este día.</div>
-  </ng-template>
-  </div>
-</div>
-
   <!-- 🔘 MODAL ------------------------------------------------------------- -->
   <!-- Componente hijo autónomo para creación/edición de turnos -->
   <app-turnos-modal [isOpen]="isModalOpen" [selectedDayIndex]="selectedDayIndex" [selectedHour]="selectedHour"

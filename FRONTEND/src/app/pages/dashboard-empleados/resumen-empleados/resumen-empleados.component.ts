@@ -40,13 +40,11 @@ constructor(
 ) {}
 
 ngOnInit(){
-  this.IngredientesService.getAllIngredientes()
+  let id = this.authService.getEmpleadoId()
+  this.IngredientesService.getAllIngredientes('empleado', id)
     .then((data: IIngredientes[]) => {
       // Filtrar solo ingredientes con stock bajo o sin stock
-      this.arrIngredientes = data.filter(ingrediente => 
-        ingrediente.estado === 'Bajo stock' || 
-        ingrediente.estado === 'Sin stock'
-      );
+      this.arrIngredientes = data;
     })
     .catch((error: any) => {
       toast.error(error?.error || 'Error al cargar ingredientes');

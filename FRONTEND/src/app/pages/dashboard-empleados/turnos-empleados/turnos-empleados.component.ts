@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TurnosService } from '../../../core/services/turnos.service';
 import { ITurnos } from '../../../interfaces/iturnos.interfaces';
@@ -54,7 +54,6 @@ export class TurnosEmpleadosComponent implements OnInit {
   ) {
     this.shiftForm = this.fb.group({
       empleado_id: ['', Validators.required],
-      roles_id: ['', Validators.required],
       fecha: ['', Validators.required],
       estado: ['', Validators.required],
       hora_inicio: ['', Validators.required],
@@ -90,6 +89,7 @@ export class TurnosEmpleadosComponent implements OnInit {
     this.empleadoId = empleadoIdFromToken !== null ? String(empleadoIdFromToken) : '';
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
+    await this.cargarTurnosSemana();
     this.turnos = await this.turnosService.getTurnos();
   }
 
@@ -109,10 +109,10 @@ export class TurnosEmpleadosComponent implements OnInit {
       return '';
     }
   }
-  
+
   // Opción 2: Si tienes un servicio de auth
   // return this.authService.getCurrentUserRole();
-  
+
   return '';
 }
   /**
@@ -148,23 +148,23 @@ async cargarTurnos() {
       const empleadoIdFromToken = this.getEmpleadoIdFromToken();
       this.empleadoId = empleadoIdFromToken !== null ? String(empleadoIdFromToken) : '';
       const empleadoIdNumber = Number(this.empleadoId);
-      
-      
+
+
       const todosTurnos = await this.turnosService.getTurnos();
-      
+
       // Usar la nueva propiedad (NO readonly)
       this.turnosEmpleado = todosTurnos.filter((turno, index) => {
         const coincide = turno.empleado_id === empleadoIdNumber;
         return coincide;
       });
-      
-      
-      
+
+
+
     } catch (error) {
       console.error('Error cargando turnos:', error);
     }
   }
-  
+
 
   async cargarTurnosHoy() {
     try {
@@ -352,7 +352,6 @@ async cargarTurnos() {
       const finH = inicioH + 1;
       this.shiftForm.reset({
         empleado_id: '',
-        roles_id: '',
         dia: this.getDayName(dayIndex),
         fecha,
         estado: 'pendiente',
@@ -383,6 +382,7 @@ async cargarTurnos() {
     await this.turnosService.createTurno(turno);
     await this.cargarTurnos(); // refresh grid
     await this.cargarTurnosHoy();
+    await this.cargarTurnosSemana();
     this.closeModal();
   }
 
@@ -394,6 +394,7 @@ async cargarTurnos() {
     await this.turnosService.updateTurno(turno.id, turno);
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
+    await this.cargarTurnosSemana();
     this.closeModal();
   }
 
@@ -405,6 +406,7 @@ async cargarTurnos() {
     await this.turnosService.deleteTurno(this.selectedTurno.id);
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
+    await this.cargarTurnosSemana();
     this.closeModal();
   }
 
@@ -430,7 +432,7 @@ async cargarTurnos() {
   /** Métricas KPI mostradas en la cabecera */
   get activeShiftsCount(): number {
     const count = this.turnos.filter((t) => t.estado.toLowerCase() === 'confirmado').length;
-    
+
     return count;
   }
 
@@ -470,20 +472,44 @@ async cargarTurnos() {
    * Reutiliza `updateTurno` para persistir el cambio.
    */
   async onDrop(event: DragEvent, dayIndex: number, hour: number) {
-    event.preventDefault();
-    if (this.draggedTurno) {
-      this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
-      this.draggedTurno.hora = hour;
-      this.draggedTurno.hora_inicio = `${hour.toString().padStart(2, '0')}:00`;
-      const endHour = hour + this.draggedTurno.duracion;
-      this.draggedTurno.hora_fin = `${endHour.toString().padStart(2, '0')}:00`;
+  event.preventDefault();
+  if (this.draggedTurno) {
+    // Calcula la duración original en horas decimales
+    const duracionOriginal = this.calcularDuracion(this.draggedTurno.hora_inicio, this.draggedTurno.hora_fin);
 
-      // Actualiza en backend
-      await this.updateTurno(this.draggedTurno);
+    // Cambia la fecha al nuevo día
+    this.draggedTurno.fecha = this.currentWeekDates[dayIndex];
+    this.draggedTurno.hora = hour;
 
-      this.draggedTurno = null;
+    // Preserva los minutos originales del turno
+    const [origH, origM] = this.draggedTurno.hora_inicio.split(':').map(Number);
+
+    // Nueva hora de inicio con la hora de destino pero manteniendo los minutos originales
+    const newHoraInicio = `${hour.toString().padStart(2, '0')}:${(origM || 0).toString().padStart(2, '0')}`;
+    this.draggedTurno.hora_inicio = newHoraInicio;
+
+    // Calcula la nueva hora de fin basándose en la duración original
+    const totalMin = hour * 60 + (origM || 0) + (duracionOriginal * 60);
+    let finH = Math.floor(totalMin / 60);
+    let finM = Math.floor(totalMin % 60);
+
+    // Manejo de casos especiales
+    if (finM === 60) {
+      finH += 1;
+      finM = 0;
     }
+
+    this.draggedTurno.hora_fin = `${finH.toString().padStart(2, '0')}:${finM.toString().padStart(2, '0')}`;
+
+    // Actualiza la duración para mantener consistencia
+    this.draggedTurno.duracion = duracionOriginal;
+
+    // Actualiza en backend y refresca cuadrícula
+    await this.updateTurno(this.draggedTurno);
+
+    this.draggedTurno = null;
   }
+}
 
   /**
    * Devuelve el nombre completo del día de la semana dado su índice (0=Lunes).
@@ -537,7 +563,7 @@ async cargarTurnos() {
         return 'bg-gray-100 text-gray-700 border border-gray-300';
     }
   }
-  
+
     getEmpleadoIdFromToken(): number | null {
       const token = localStorage.getItem('token');
       if (!token) return null;
@@ -547,9 +573,9 @@ async cargarTurnos() {
       } catch (e) {
         return null;
       }
-      
+
     }
-  
+
     enviarTurnosPorEmail() {
       const empleadoId = this.getEmpleadoIdFromToken();
       if (!empleadoId) {
@@ -586,7 +612,6 @@ async cargarTurnos() {
     }
     descargarTurnos() {
       const empleadoId = this.getEmpleadoIdFromToken();
-      console.log('EmpleadoId obtenido del token:', empleadoId);
       if (!empleadoId) {
         alert('No se pudo obtener el ID del empleado');
         return;
@@ -629,15 +654,18 @@ async cargarTurnos() {
    * Si está en modo edición, actualiza el turno; si no, crea uno nuevo.
    */
   async onSubmit() {
-    if (this.shiftForm.invalid) return;
-    const turno = this.shiftForm.value;
-    if (this.isEditMode) {
-      turno.id = this.selectedTurno?.id;
-      await this.updateTurno(turno);
-    } else {
-      await this.createTurno(turno);
-    }
+  if (this.shiftForm.invalid) return;
+  const turno = this.shiftForm.value;
+  // Añade la hora numérica
+  turno.hora = parseInt(turno.hora_inicio.split(':')[0], 10);
+
+  if (this.isEditMode) {
+    turno.id = this.selectedTurno?.id;
+    await this.updateTurno(turno);
+  } else {
+    await this.createTurno(turno);
   }
+}
 
   /**
    * Handler para el delete del modal de turnos.
@@ -646,4 +674,38 @@ async cargarTurnos() {
   async onDelete() {
     await this.deleteTurno();
   }
+
+  /**
+   * Devuelve la posición (en px) desde arriba según la hora de inicio.
+   * Ejemplo: "08:30" => 510 si cada hora son 60px.
+   */
+  getTurnoTop(hora_inicio: string): number {
+    const [h, m] = hora_inicio.split(':').map(Number);
+    return h * 60 + (m || 0); // 1px = 1minuto (ajusta el factor si quieres)
+  }
+  /**
+   * Devuelve la altura (en px) según la duración del turno.
+   * Ejemplo: "08:00" a "10:30" => 150 si cada minuto es 1px.
+   */
+  getTurnoHeight(hora_inicio: string, hora_fin: string): number {
+    const [h1, m1] = hora_inicio.split(':').map(Number);
+    const [h2, m2] = hora_fin.split(':').map(Number);
+    return ((h2 * 60 + (m2 || 0)) - (h1 * 60 + (m1 || 0)));
+  }
+
+  async cargarTurnosSemana() {
+  this.turnosPorDia = {};
+  for (const fecha of this.currentWeekDates) {
+    try {
+      // Solo los turnos del empleado logueado para ese día
+      const todosTurnos = await this.turnosService.getTurnosByDate(fecha);
+      const empleadoId = this.getEmpleadoIdFromToken();
+      this.turnosPorDia[fecha] = todosTurnos.filter(t => t.empleado_id === empleadoId);
+    } catch (err) {
+      this.turnosPorDia[fecha] = [];
+      console.error('Error cargando turnos para', fecha, err);
+    }
+  }
+}
+
 }

@@ -5,11 +5,9 @@ const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", d
   const term = `%${search}%`;
   orderBy = orderBy.replace(/['"`]/g, '');
   direction = direction.replace(/['"`]/g, '');
-  let condicion = '';
+  let condicion = '(i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?))'
   if(tipo==='empleado'){
     condicion = '(i.empleados_id = ? OR i.usuario_id = (SELECT usuario_id from empleados where id=?))'
-  } else {
-    condicion = '(i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?))'
   }
   /* 1) datos paginados */
   const [rows] = await db.query(
@@ -37,15 +35,15 @@ const selectAll = async (page = 1, limit = 10, search = "", orderBy= "nombre", d
   return { rows, total };
 };
 
-const selectIngredientesConProblemasDeStock = async () => {
+const selectIngredientesConProblemasDeStock = async (tipo, id) => {
+  let condicion = '(i.usuario_id = ? OR i.empleados_id IN (SELECT id FROM empleados WHERE usuario_id = ?))'
+  if(tipo==='empleado'){
+    condicion = '(i.empleados_id = ? OR i.usuario_id = (SELECT usuario_id from empleados where id=?))'
+  }
   try {
-    const [result] = await db.query(`
-      SELECT * FROM ingredientes 
-      WHERE estado IN ('Bajo stock', 'Sin stock')
-    `);
+    const [result] = await db.query(`SELECT * FROM ingredientes i WHERE i.estado IN ('Bajo stock', 'Sin stock') AND ${condicion}`, [id, id]);
     return result || [];
   } catch (error) {
-    console.error("Error al obtener ingredientes con problemas de stock:", error);
     throw new Error("Error al consultar ingredientes filtrados");
   }
 };
@@ -65,11 +63,9 @@ const selectById = async (ingredienteId) => {
 };
 
 const selectSummary = async (tipo, id) => {
-  let condicion = '';
+  let condicion = 'usuario_id = ? OR empleados_id in (SELECT id from empleados where usuario_id=?)';
   if(tipo==='empleado'){
     condicion = 'empleados_id = ? OR usuario_id = (SELECT usuario_id from empleados where id=?)'
-  } else {
-    condicion = 'usuario_id = ? OR empleados_id in (SELECT id from empleados where usuario_id=?)'
   }
   const [result] = await db.query(`SELECT 
     COUNT(*) AS total_productos,
