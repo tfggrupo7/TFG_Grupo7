@@ -25,7 +25,7 @@
     <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
       <!-- Botón de descarga -->
       <button (click)="descargarTurnos()"
-        class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
+        class="bg-[#556B2F] hover:bg-[#556B2F] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
         title="Descargar tareas">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
@@ -36,7 +36,7 @@
       </button>
       <!-- Botón de enviar por email -->
       <button (click)="enviarTurnosPorEmail()"
-        class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
+        class="bg-[#556B2F] hover:bg-[#556B2F] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
         title="Enviar tareas por email">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
@@ -48,9 +48,8 @@
 
       <!-- Botón de asignar tarea (ya existente) -->
       @if(currentUserRole === 'encargado') {
-      <button class="bg-[#6b8e23] hover:bg-[#4b6b1c] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
+      <button class="bg-[#556B2F] hover:bg-[#556B2F] text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center justify-center"
         (click)="openModal(0,8)">
-
         Programar Turno
       </button>
       }
