@@ -1,8 +1,8 @@
 const Ingrediente = require("../models/ingrediente.model");
 
 const AllIngredientes = async (req, res) => {
-  const ingredientes =
-    await Ingrediente.selectIngredientesConProblemasDeStock();
+  const {tipo, id=""} = req.query;
+  const ingredientes = await Ingrediente.selectIngredientesConProblemasDeStock(tipo, id);
   res.json(ingredientes);
 };
 

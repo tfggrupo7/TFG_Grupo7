@@ -5,7 +5,7 @@
  * `/api/turnos`.
  */
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ITurnos } from '../../interfaces/iturnos.interfaces';
 import { lastValueFrom } from 'rxjs';
 
@@ -27,21 +27,10 @@ export class TurnosService {
    * @returns Promise<ITurnos[]> Resuelve con el array recibido
    */
   getTurnos(): Promise<ITurnos[]> {
-    const token = localStorage.getItem('token')?.trim();
-
-    if (!token) {
-      // Bloqueamos la llamada si no hay autenticación
-      throw new Error('No hay token disponible');
-    }
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
+   
     // lastValueFrom convierte Observable en Promise<response>
     return lastValueFrom(
-      this.httpClient.get<{ data: ITurnos[] }>(this.url, { headers })
+      this.httpClient.get<{ data: ITurnos[] }>(this.url)
     ).then(r => r.data);
   }
 
@@ -53,16 +42,9 @@ export class TurnosService {
    * @returns Promise<ITurnos[]> Array de turnos para la fecha indicada
    */
   getTurnosByDate(date: string): Promise<ITurnos[]> {
-    const token = localStorage.getItem('token')?.trim();
-    if (!token) throw new Error('No hay token disponible');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
 
     return lastValueFrom(
-      this.httpClient.get<ITurnos[]>(`${this.url}/date/${date}`, { headers })
+      this.httpClient.get<ITurnos[]>(`${this.url}/date/${date}`)
     );
   }
 
@@ -121,89 +103,44 @@ export class TurnosService {
   }
 
   getTurnosByEmpleado(empleadoId: number): Promise<ITurnos[]> {
-    const token = localStorage.getItem('token')?.trim();
-    if (!token) throw new Error('No hay token disponible');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-  return lastValueFrom (this.httpClient.get<ITurnos[]>(`${this.url}/empleado/${empleadoId}`, { headers }));
+  return lastValueFrom (this.httpClient.get<ITurnos[]>(`${this.url}/empleado/${empleadoId}`));
 }
 
   // En tu turnosService
 getTurnosByDateAndEmpleado(fecha: string, empleadoId: number): Promise<ITurnos[]> {
-  const token = localStorage.getItem('token')?.trim();
-    if (!token) throw new Error('No hay token disponible');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-  return lastValueFrom(this.httpClient.get<ITurnos[]>(`${this.url}/fecha/${fecha}/empleado/${empleadoId}`, { headers }));
+  return lastValueFrom(this.httpClient.get<ITurnos[]>(`${this.url}/fecha/${fecha}/empleado/${empleadoId}`));
 }
  sendTurnosByEmail(turnos: ITurnos[]): Promise<void> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(
       this.httpClient.post<void>(
         `${this.url}/send/pdf`,
-        { turnos },
-        { headers }
+        { turnos }
       )
     );
   }
   sendTurnosEmpleadoByEmail(empleadoId: number, email: string): Promise<void> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(
       this.httpClient.post<void>(
         `${this.url}/empleado/${empleadoId}/send/pdf`,
-        { empleadoId, email },
-        { headers }
+        { empleadoId, email }
       )
     );
   }
   downloadTurnos(): Promise<Blob> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(
       this.httpClient.get(`${this.url}/export/pdf`, {
-        responseType: 'blob',
-        headers: headers,
+        responseType: 'blob'
       })
     );
   }
   downloadTurnosPorId(empleadoId: number): Promise<Blob> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    });
     return lastValueFrom(
       this.httpClient.get(`${this.url}/empleado/${empleadoId}/pdf`, {
-        responseType: 'blob',
-        headers: headers,
+        responseType: 'blob'
       })
     );
   }
   getTurnosAndEmpleadoById(id: number): Promise<ITurnos[]> {
-      const token = localStorage.getItem('token');
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      });
       return lastValueFrom(
         this.httpClient.get<ITurnos[]>(`${this.url}/empleado/${id}`)
       );

@@ -59,7 +59,6 @@ export class ChatbotWidgetComponent implements OnInit, AfterViewInit, AfterViewC
 
     try {
       this.chatBody.nativeElement.scrollTop = this.chatBody.nativeElement.scrollHeight;
-      // console.log('[scrollToBottom] Ejecutado');
     } catch (err) {
       console.warn('[scrollToBottom] Fallo al hacer scroll:', err);
     }

@@ -60,12 +60,10 @@ export class ReportesComponent implements OnInit {
   // Método para exportar reportes
   exportarReporte(): void {
     // Implementar lógica de exportación
-    console.log('Exportando reporte...');
   }
 
   // Método para cambiar el período
   cambiarPeriodo(): void {
     // Implementar lógica de cambio de período
-    console.log('Cambiando período...');
   }
 }

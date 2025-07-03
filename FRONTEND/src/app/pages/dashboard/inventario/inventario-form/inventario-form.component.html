@@ -7,6 +7,11 @@
       <input formControlName="nombre"
         class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
         id="name" placeholder="Ej: Tomates" required value="" name="name">
+        @if (ingredientForm.get('nombre')?.touched && ingredientForm.get('nombre')?.invalid) {
+          <div class="text-red-600 text-xs mt-1">
+            El campo nombre es obligatorio.
+          </div>
+        }
     </div>
     <div class="space-y-2">
       <label
@@ -25,6 +30,11 @@
         <option value="Bebidas">Bebidas</option>
         <option value="Otros">Otros</option>
       </select>
+      @if (ingredientForm.get('categoria')?.touched && ingredientForm.get('categoria')?.invalid) {
+        <div class="text-red-600 text-xs mt-1">
+          El campo categoría es obligatorio.
+        </div>
+      }
     </div>
     <div class="space-y-2">
       <label
@@ -33,6 +43,11 @@
       <input formControlName="cantidad"
         class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
         id="quantity" min="0" step="0.01" required type="number" value="0" name="quantity">
+        @if (ingredientForm.get('cantidad')?.touched && ingredientForm.get('cantidad')?.invalid) {
+          <div class="text-red-600 text-xs mt-1">
+            El campo cantidad es obligatorio y debe ser mayor a 0
+          </div>
+        }
     </div>
     <div class="space-y-2">
       <label
@@ -49,6 +64,11 @@
         <option value="cajas">Cajas</option>
         <option value="paquetes">Paquetes</option>
       </select>
+      @if (ingredientForm.get('unidad')?.touched && ingredientForm.get('unidad')?.invalid) {
+        <div class="text-red-600 text-xs mt-1">
+          El campo unidad es obligatorio
+        </div>
+      }
     </div>
     <div class="space-y-2">
       <label
@@ -57,6 +77,11 @@
       <input formControlName="proveedor"
         class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
         id="supplier" placeholder="Ej: Distribuidora Alimentos S.L." value="" name="supplier">
+        @if (ingredientForm.get('proveedor')?.touched && ingredientForm.get('proveedor')?.invalid) {
+          <div class="text-red-600 text-xs mt-1">
+            El campo proveedor es obligatorio.
+          </div>
+        }
     </div>
     <div class="space-y-2">
       <label
@@ -65,6 +90,11 @@
       <input formControlName="alergenos"
         class="flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-[#1C1C1C] placeholder:text-[#1C1C1C]/50 focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 border-[#D4AF37]/30 focus-visible:ring-[#D4AF37]"
         id="alergenos" placeholder="gluten, lactosa,..." value="" name="alergenos">
+        @if (ingredientForm.get('alergenos')?.touched && ingredientForm.get('alergenos')?.invalid) {
+          <div class="text-red-600 text-xs mt-1">
+            El campo alérgenos es obligatorio.
+          </div>
+        }
     </div>
     <div class="space-y-2">
       <label
@@ -77,6 +107,11 @@
         <option value="Bajo stock">Bajo stock</option>
         <option value="Sin stock">Sin stock</option>
       </select>
+      @if (ingredientForm.get('estado')?.touched && ingredientForm.get('estado')?.invalid) {
+        <div class="text-red-600 text-xs mt-1">
+          El campo estado es obligatorio.
+        </div>
+      }
     </div>
   </div>
 </form>

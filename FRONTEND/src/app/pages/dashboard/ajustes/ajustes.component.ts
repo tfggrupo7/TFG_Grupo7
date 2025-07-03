@@ -46,26 +46,21 @@ export class AjustesComponent implements OnInit {
 
   saveRestaurantInfo(): void {
     // Implement save logic
-    console.log('Saving restaurant information...');
   }
 
   updateProfile(): void {
     // Implement profile update logic
-    console.log('Updating profile...');
   }
 
   saveNotificationPreferences(): void {
     // Implement notification preferences save logic
-    console.log('Saving notification preferences...');
   }
 
   changePassword(): void {
     // Implement password change logic
-    console.log('Changing password...');
   }
 
   applyThemeChanges(): void {
     // Implement theme changes logic
-    console.log('Applying theme changes...');
   }
 }

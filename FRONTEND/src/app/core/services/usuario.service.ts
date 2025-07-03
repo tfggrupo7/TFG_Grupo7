@@ -33,12 +33,7 @@ export class UsuarioService {
   recuperarContrasena(email: string): Promise<void> {
     return lastValueFrom(this.httpClient.post<void>('http://localhost:3000/api/usuarios/recuperar-contrasena', { email }));
   }
-  /*actualizarContrasena(token: string, nuevaContrasena: string): Promise<void> {
-    const url = `http://localhost:3000/api/usuarios/restablecer-contrasena/${token}`;
-    return lastValueFrom(
-      this.httpClient.post<void>(url, { nuevaContrasena })
-    );
-  }*/
+
   actualizarContrasena(token: string, nuevaContrasena: string): Promise<any> {
   const headers = new HttpHeaders({
     'Content-Type': 'application/json'
@@ -54,27 +49,16 @@ cambiarContraseña (token: string, nuevaContraseña: string): Promise<any> {
 }
 
 updateUsuario(usuario: IUsuario): Promise<IUsuario> {
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      ...(token ? { 'Authorization': `${token}` } : {})
-    });
   return lastValueFrom(
     this.httpClient.put<IUsuario>(
       'http://localhost:3000/api/usuarios',
-      usuario,
-      { headers }
+      usuario
     )
   );
 }
 deleteUsuario(id: string): Promise<void> {
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',   
-    ...(token ? { 'Authorization': `${token}` } : {})
-  });
   return lastValueFrom(
-    this.httpClient.delete<void>(`http://localhost:3000/api/usuarios/${id}`, { headers })
+    this.httpClient.delete<void>(`http://localhost:3000/api/usuarios/${id}`)
   );
 }
 
