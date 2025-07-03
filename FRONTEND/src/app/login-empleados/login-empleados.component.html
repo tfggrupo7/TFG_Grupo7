@@ -30,7 +30,7 @@
   </section>
 
   <!-- Panel overlay: oculto en móvil, visible en md+ con altura reducida -->
-<section class="hidden md:flex md:w-1/2 bg-gradient-to-r from-[#ff4b2b] to-[#ff416c] text-white p-6 flex-col justify-center items-center max-h-[600px] mx-auto rounded-lg mb-3 mt-10">
+<section class="hidden md:flex md:w-1/2 login-gradient-animated text-white p-6 flex-col justify-center items-center max-h-[600px] mx-auto rounded-lg mb-3 mt-10">
   <img src="/assets/logo/logoSVG.svg" alt="ChefDesk Logo" class="h-10 mb-4" />
   <h2 class="text-2xl font-bold mb-3">¡Bienvenido de nuevo!</h2>
   <p class="mb-4 max-w-md text-center text-sm">
@@ -42,24 +42,28 @@
   <p class="mb-4 max-w-md text-center text-white text-sm">
     Accede a tu cuenta para gestionar inventario, personal, turnos y reportes desde un solo lugar.
   </p>
-  <div class="grid grid-cols-2 gap-3 max-w-md w-full">
-    <div class="bg-green-400 p-3 rounded shadow text-center text-[#556B2F] font-bold">
-      <p class="text-lg">+30%</p>
-      <p class="text-xs font-normal">Reducción de desperdicio</p>
-    </div>
-    <div class="bg-green-400 p-3 rounded shadow text-center text-[#556B2F] font-bold">
-      <p class="text-lg">+25%</p>
-      <p class="text-xs font-normal">Eficiencia operativa</p>
-    </div>
-    <div class="bg-green-400 p-3 rounded shadow text-center text-[#556B2F] font-bold">
-      <p class="text-lg">+1000</p>
-      <p class="text-xs font-normal">Restaurantes activos</p>
-    </div>
-    <div class="bg-green-400 p-3 rounded shadow text-center text-[#556B2F] font-bold">
-      <p class="text-lg">+20%</p>
-      <p class="text-xs font-normal">Ahorro de costes</p>
-    </div>
+  <div class="grid grid-cols-2 gap-2">
+  <div
+    class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect">
+    <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+30%</p>
+    <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Reducción de desperdicio</p>
   </div>
+  <div
+    class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect">
+    <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+25%</p>
+    <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Eficiencia operativa</p>
+  </div>
+  <div
+    class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect md:hidden">
+    <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+1000</p>
+    <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Restaurantes activos</p>
+  </div>
+  <div
+    class="group flex flex-col items-center justify-center gap-2 p-2 w-full min-w-0 rounded-lg bg-white shadow-sm border border-[#D4AF37]/10 hover:border-[#556B2F]/30 hover:shadow-md transition-all duration-200 scale-on-hover glow-effect md:hidden">
+    <p class="text-xl font-bold text-[#556B2F] text-center w-full break-words md:text-xl sm:text-lg">+20%</p>
+    <p class="text-sm text-gray-500 text-center w-full break-words md:text-base sm:text-sm">Ahorro de costes</p>
+  </div>
+</div>
 </section>
 
   <!-- Panel overlay para móvil: visible solo en móvil, debajo del formulario -->

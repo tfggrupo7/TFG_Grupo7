@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TurnosService } from '../../../core/services/turnos.service';
 import { ITurnos } from '../../../interfaces/iturnos.interfaces';
@@ -109,10 +109,10 @@ export class TurnosEmpleadosComponent implements OnInit {
       return '';
     }
   }
-  
+
   // Opción 2: Si tienes un servicio de auth
   // return this.authService.getCurrentUserRole();
-  
+
   return '';
 }
   /**
@@ -148,23 +148,23 @@ async cargarTurnos() {
       const empleadoIdFromToken = this.getEmpleadoIdFromToken();
       this.empleadoId = empleadoIdFromToken !== null ? String(empleadoIdFromToken) : '';
       const empleadoIdNumber = Number(this.empleadoId);
-      
-      
+
+
       const todosTurnos = await this.turnosService.getTurnos();
-      
+
       // Usar la nueva propiedad (NO readonly)
       this.turnosEmpleado = todosTurnos.filter((turno, index) => {
         const coincide = turno.empleado_id === empleadoIdNumber;
         return coincide;
       });
-      
-      
-      
+
+
+
     } catch (error) {
       console.error('Error cargando turnos:', error);
     }
   }
-  
+
 
   async cargarTurnosHoy() {
     try {
@@ -430,7 +430,7 @@ async cargarTurnos() {
   /** Métricas KPI mostradas en la cabecera */
   get activeShiftsCount(): number {
     const count = this.turnos.filter((t) => t.estado.toLowerCase() === 'confirmado').length;
-    
+
     return count;
   }
 
@@ -537,7 +537,7 @@ async cargarTurnos() {
         return 'bg-gray-100 text-gray-700 border border-gray-300';
     }
   }
-  
+
     getEmpleadoIdFromToken(): number | null {
       const token = localStorage.getItem('token');
       if (!token) return null;
@@ -547,9 +547,9 @@ async cargarTurnos() {
       } catch (e) {
         return null;
       }
-      
+
     }
-  
+
     enviarTurnosPorEmail() {
       const empleadoId = this.getEmpleadoIdFromToken();
       if (!empleadoId) {
@@ -645,4 +645,23 @@ async cargarTurnos() {
   async onDelete() {
     await this.deleteTurno();
   }
+
+  /**
+   * Devuelve la posición (en px) desde arriba según la hora de inicio.
+   * Ejemplo: "08:30" => 510 si cada hora son 60px.
+   */
+  getTurnoTop(hora_inicio: string): number {
+    const [h, m] = hora_inicio.split(':').map(Number);
+    return h * 60 + (m || 0); // 1px = 1minuto (ajusta el factor si quieres)
+  }
+  /**
+   * Devuelve la altura (en px) según la duración del turno.
+   * Ejemplo: "08:00" a "10:30" => 150 si cada minuto es 1px.
+   */
+  getTurnoHeight(hora_inicio: string, hora_fin: string): number {
+    const [h1, m1] = hora_inicio.split(':').map(Number);
+    const [h2, m2] = hora_fin.split(':').map(Number);
+    return ((h2 * 60 + (m2 || 0)) - (h1 * 60 + (m1 || 0)));
+  }
+
 }

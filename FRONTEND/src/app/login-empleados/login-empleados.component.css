@@ -1,0 +1,20 @@
+/* Fondo animado para el overlay derecho en login empleados */
+.login-gradient-animated {
+  background: linear-gradient(310deg, #556B2F, #D4AF37, #556B2F);
+  color: #fff;
+  transform: translateX(0);
+  transition: none;
+  animation: gradientMoveBg 20s ease-in-out infinite;
+}
+
+@keyframes gradientMoveBg {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
