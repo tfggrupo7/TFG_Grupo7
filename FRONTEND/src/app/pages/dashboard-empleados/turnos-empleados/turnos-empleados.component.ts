@@ -17,7 +17,7 @@ import { FormModalComponent } from '../../../shared/form-modal/form-modal.compon
   styleUrl: './turnos-empleados.component.css',
 })
 export class TurnosEmpleadosComponent implements OnInit {
-  empleadosMap = new Map<number, string>();
+  empleadosMap = new Map<number, { nombre: string, apellidos: string }>();
   rolesMap = new Map<number, string>();
   rolesArray: any[] = [];
   currentUserRole: any = '';
@@ -78,7 +78,7 @@ export class TurnosEmpleadosComponent implements OnInit {
       this.rolesService.getRoles(),
     ]);
 
-    emps.forEach((e) => this.empleadosMap.set(e.id, e.nombre));
+    emps.forEach((e) => this.empleadosMap.set(e.id, { nombre: e.nombre, apellidos: e.apellidos }));
     roles.forEach((r) => this.rolesMap.set(r.id, r.nombre));
     this.rolesArray = roles;
     this.employees = emps;
@@ -87,9 +87,6 @@ export class TurnosEmpleadosComponent implements OnInit {
     this.setCurrentWeekDates();
     const empleadoIdFromToken = this.getEmpleadoIdFromToken();
     this.empleadoId = empleadoIdFromToken !== null ? String(empleadoIdFromToken) : '';
-    if (empleadoIdFromToken) {
-      this.getTurnosPorEmpleadoId(Number(empleadoIdFromToken));
-    }
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
     await this.cargarTurnosSemana();
@@ -707,25 +704,6 @@ async cargarTurnos() {
     }
   }
 }
-
-  /**
-   * Obtiene todos los turnos asignados a un empleado y muestra un toast si no hay ninguno.
-   * Rellena this.turnosEmpleado para mostrar en la vista.
-   */
-  getTurnosPorEmpleadoId(empleadoId: number) {
-    this.turnosService
-      .getTurnosByEmpleado(empleadoId)
-      .then((respuesta: ITurnos[]) => {
-        this.turnosEmpleado = Array.isArray(respuesta) ? respuesta : [];
-        if (this.turnosEmpleado.length === 0) {
-          toast.info('No hay turnos asignados a este empleado');
-        }
-      })
-      .catch((err: unknown) => {
-        console.error('Error al obtener los turnos:', err);
-        toast.error('Error al obtener los turnos');
-      });
-  }
 
 noHayTurnosSemana(): boolean {
   return this.currentWeekDates.every(day => !this.turnosPorDia[day] || this.turnosPorDia[day].length === 0);

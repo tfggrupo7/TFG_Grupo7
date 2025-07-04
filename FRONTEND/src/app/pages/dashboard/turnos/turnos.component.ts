@@ -55,7 +55,7 @@ export class TurnosComponent implements OnInit {
   isModalOpen = false;
 
   // + maps
-  empleadosMap = new Map<number, string>();
+  empleadosMap = new Map<number, { nombre: string, apellidos: string }>();
   rolesMap = new Map<number, string>();
 
   constructor(private turnosService: TurnosService, private empleadosService: EmpleadosService, private rolesService: RolesService) { }
@@ -71,8 +71,9 @@ export class TurnosComponent implements OnInit {
       this.empleadosService.getEmpleados(),
       this.rolesService.getRoles()
     ]);
-    emps.forEach(e => this.empleadosMap.set(e.id, e.nombre));
-    roles.forEach(r => this.rolesMap.set(r.id, r.nombre));
+    emps.forEach((e) => this.empleadosMap.set(e.id, { nombre: e.nombre, apellidos: e.apellidos }));
+    roles.forEach((r) => this.rolesMap.set(r.id, r.nombre));
+    
 
     this.setCurrentWeekDates();
     await this.cargarTurnosSemana();
