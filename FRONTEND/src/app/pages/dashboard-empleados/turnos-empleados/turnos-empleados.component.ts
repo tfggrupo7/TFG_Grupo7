@@ -310,17 +310,19 @@ async cargarTurnos() {
    * Calcula y rellena `currentWeekDates` con las 7 fechas (YYYY‑MM‑DD) de la semana corriente.
    * El primer día es lunes y el último domingo, siguiendo la convención española.
    */ setCurrentWeekDates() {
-    const today = new Date();
-    const firstDayOfWeek = new Date(today);
-    // Ajustar a lunes (Intl API: week starts Monday en ES)
-    firstDayOfWeek.setDate(today.getDate() - today.getDay() + 1);
-    this.currentWeekDates = Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(firstDayOfWeek); // lunes base
-      d.setDate(d.getDate() + i); // +0…6 días
-      d.setHours(12, 0, 0, 0); // ← fija a 12:00 local
-      return d.toISOString().slice(0, 10); // YYYY-MM-DD correcto
-    });
-  }
+  const today = new Date();
+  // getDay(): 0=domingo, 1=lunes, ..., 6=sábado
+  const dayOfWeek = today.getDay() === 0 ? 7 : today.getDay(); // 1=lunes, ..., 7=domingo
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - dayOfWeek + 1);
+  monday.setHours(12, 0, 0, 0); // Evita problemas de zona horaria
+
+  this.currentWeekDates = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return d.toISOString().slice(0, 10);
+  });
+}
 
   /**
    * Abre el modal para crear o editar un turno.
@@ -706,6 +708,10 @@ async cargarTurnos() {
       console.error('Error cargando turnos para', fecha, err);
     }
   }
+}
+
+noHayTurnosSemana(): boolean {
+  return this.currentWeekDates.every(day => !this.turnosPorDia[day] || this.turnosPorDia[day].length === 0);
 }
 
 }
