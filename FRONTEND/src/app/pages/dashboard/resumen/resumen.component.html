@@ -80,7 +80,7 @@
               </div>
             </div>
             <div class="text-right">
-              <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio }} - {{ turno.hora_fin }}</div>
+              <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio | slice:0:5 }} - {{ turno.hora_fin | slice:0:5 }}</div>
               <p class="text-sm text-[#1C1C1C]/70">
                 {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
               </p>

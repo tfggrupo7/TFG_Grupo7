@@ -26,7 +26,7 @@ export class ResumenEmpleadosComponent {
   arrRoles: any[] = [];
   empleadoService = inject(EmpleadosService);
   IngredientesService = inject(IngredientesService)
-  turnosHoy: ITurnos[] = [];
+ 
      todayStr: string = new Date().toISOString().split('T')[0]; 
      turnos: ITurnos[] = [];
     empleadosMap = new Map<number, string>();
@@ -120,11 +120,7 @@ getEstadoAutomatico(turno: any): string {
     } catch (err) {
       console.error('Error cargando roles:', err);
     }
-  }
-get todayTurnos(): ITurnos[] {
-  if (this.turnosHoy.length) {
-    return this.turnosHoy;
-  }
+  
   
   // Fecha actual en España
   const today = new Intl.DateTimeFormat('sv-SE', {
