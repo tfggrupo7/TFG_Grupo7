@@ -1,4 +1,3 @@
-
 # ChefDesk
 
 <p align="center">
@@ -13,20 +12,41 @@
   <img src="https://img.shields.io/badge/SQLite-3-blue?logo=sqlite" alt="SQLite">
   <img src="https://img.shields.io/badge/PWA-yes-blueviolet?logo=pwa" alt="PWA">
   <img src="https://img.shields.io/badge/JWT-Auth-orange?logo=jsonwebtokens" alt="JWT">
+  <img src="https://img.shields.io/badge/Karma%20%2B%20Jasmine-Unit%20Tests-brightgreen?logo=Jasmine" alt="Karma Jasmine">
+  <img src="https://img.shields.io/badge/Cypress-E2E%20Tests-6e5494?logo=cypress" alt="Cypress">
 </p>
 
 ---
 
 ## 📚 Índice
 
-- [Descripción](#descripción)
-- [Wiki](#wiki)
-- [Tecnologías Utilizadas](#tecnologías-utilizadas)
-- [💬 Integración del Chatbot de Soporte](#💬-integración-del-chatbot-de-soporte)
-- [Galería Multimedia](#galería-multimedia)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Cómo ejecutar el proyecto](#cómo-ejecutar-el-proyecto)
-- [Integrantes del Proyecto](#integrantes-del-proyecto)
+- [ChefDesk](#chefdesk)
+  - [📚 Índice](#-índice)
+  - [Descripción](#descripción)
+  - [Wiki](#wiki)
+  - [Tecnologías Utilizadas](#tecnologías-utilizadas)
+    - [Backend](#backend)
+    - [Frontend](#frontend)
+  - [💬 Integración del Chatbot de Soporte](#-integración-del-chatbot-de-soporte)
+    - [🧩 Estructura](#-estructura)
+    - [⚙️ Funcionamiento](#️-funcionamiento)
+    - [🎨 Estilo personalizado](#-estilo-personalizado)
+    - [📡 Requisitos de backend](#-requisitos-de-backend)
+    - [🚀 Ejemplo de uso](#-ejemplo-de-uso)
+  - [🎞️ Galería Multimedia](#️-galería-multimedia)
+    - [Logo](#logo)
+    - [Promo 1](#promo-1)
+    - [Promo 2](#promo-2)
+    - [Login](#login)
+    - [Dashboard](#dashboard)
+  - [Estructura del Proyecto](#estructura-del-proyecto)
+  - [Cómo ejecutar el proyecto](#cómo-ejecutar-el-proyecto)
+    - [Backend](#backend-1)
+    - [Frontend](#frontend-1)
+      - [PWA](#pwa)
+  - [🧪 Tests automatizados](#-tests-automatizados)
+    - [Comandos útiles](#comandos-útiles)
+  - [Integrantes del Proyecto](#integrantes-del-proyecto)
 
 ---
 
@@ -206,6 +226,26 @@ FRONTEND/
 
 - Puedes instalar la app como PWA desde el navegador.
 - El manifiesto y los iconos están en `public/`.
+
+---
+
+## 🧪 Tests automatizados
+
+- **Unitarios:** con Karma + Jasmine (`ng test`)
+- **End-to-End (E2E):** con Cypress (`npm run cypress:open`)
+
+### Comandos útiles
+
+```sh
+# Ejecutar tests unitarios (Karma + Jasmine)
+ng test
+
+# Ejecutar tests E2E interactivos (Cypress)
+npm run cypress:open
+```
+
+- Los tests unitarios cubren componentes, servicios y lógica de negocio Angular.
+- Los tests E2E cubren flujos completos de usuario, login y vistas principales.
 
 ---
 
