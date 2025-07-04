@@ -102,40 +102,41 @@
           </tr>
         </thead>
         <tbody>
-          @if (turnosEmpleado.length === 0) {
+        @if (noHayTurnosSemana()) {
           <tr>
             <td colspan="6" class="text-center py-8 text-[#1C1C1C]/60 font-medium">
               No hay turnos programados para esta semana.
             </td>
           </tr>
-          }
+        }
 
-          @for (turno of turnosEmpleado; track $index) {
-          <tr class="hover:bg-[#556B2F]/5 transition-colors duration-200">
-            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#1C1C1C]">
-              {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
-            </td>
-
-            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
-              {{ turno.fecha | date:'dd/MM/yyyy' }}
-            </td>
-            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#556B2F]">
-              {{ turno.hora_inicio | slice:0:5}}
-            </td>
-            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#556B2F]">
-              {{ turno.hora_fin | slice:0:5}}
-            </td>
-            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
-              {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
-            </td>
-            <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10">
-              <span class="text-xs rounded-full px-3 py-1 font-medium" [ngClass]="getEstadoClase(turno.estado)">
-                {{ turno.estado | titlecase }}
-              </span>
-            </td>
-          </tr>
-          }
-        </tbody>
+        @for (day of currentWeekDates; track day) {
+          @for (turno of turnosPorDia[day]; track turno.id) {
+            <tr class="hover:bg-[#556B2F]/5 transition-colors duration-200">
+              <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#1C1C1C]">
+                {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
+              </td>
+              <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
+                {{ turno.fecha | date:'dd/MM/yyyy' }}
+              </td>
+              <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#556B2F]">
+                {{ turno.hora_inicio | slice:0:5}}
+              </td>
+              <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 font-medium text-[#556B2F]">
+                {{ turno.hora_fin | slice:0:5}}
+              </td>
+              <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10 text-[#1C1C1C]/70">
+                {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
+              </td>
+              <td class="px-4 py-3 border-b text-center border-[#D4AF37]/10">
+                <span class="text-xs rounded-full px-3 py-1 font-medium" [ngClass]="getEstadoClase(turno.estado)">
+                  {{ turno.estado | titlecase }}
+                </span>
+        </td>
+      </tr>
+    }
+  }
+</tbody>
       </table>
     </div>
   </div>
