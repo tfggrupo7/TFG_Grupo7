@@ -90,7 +90,6 @@ export class TurnosEmpleadosComponent implements OnInit {
     await this.cargarTurnos();
     await this.cargarTurnosHoy();
     await this.cargarTurnosSemana();
-    this.turnos = await this.turnosService.getTurnos();
   }
 
   getRoleIdByName(roleName: string): number | null {
@@ -144,26 +143,20 @@ export class TurnosEmpleadosComponent implements OnInit {
     }
   }
 async cargarTurnos() {
-    try {
-      const empleadoIdFromToken = this.getEmpleadoIdFromToken();
-      this.empleadoId = empleadoIdFromToken !== null ? String(empleadoIdFromToken) : '';
-      const empleadoIdNumber = Number(this.empleadoId);
+  try {
+    const empleadoIdFromToken = this.getEmpleadoIdFromToken();
+    this.empleadoId = empleadoIdFromToken !== null ? String(empleadoIdFromToken) : '';
+    const empleadoIdNumber = Number(this.empleadoId);
 
+    const todosTurnos = await this.turnosService.getTurnos();
 
-      const todosTurnos = await this.turnosService.getTurnos();
+    this.turnosEmpleado = todosTurnos.filter((turno) => turno.empleado_id === empleadoIdNumber);
+    this.turnos = todosTurnos; // <-- AÑADE ESTA LÍNEA
 
-      // Usar la nueva propiedad (NO readonly)
-      this.turnosEmpleado = todosTurnos.filter((turno, index) => {
-        const coincide = turno.empleado_id === empleadoIdNumber;
-        return coincide;
-      });
-
-
-
-    } catch (error) {
-      console.error('Error cargando turnos:', error);
-    }
+  } catch (error) {
+    console.error('Error cargando turnos:', error);
   }
+}
 
 
   async cargarTurnosHoy() {
@@ -656,6 +649,8 @@ async cargarTurnos() {
    * Si está en modo edición, actualiza el turno; si no, crea uno nuevo.
    */
   async onSubmit() {
+    console.log('Submit');
+
   if (this.shiftForm.invalid) return;
   const turno = this.shiftForm.value;
   // Añade la hora numérica
