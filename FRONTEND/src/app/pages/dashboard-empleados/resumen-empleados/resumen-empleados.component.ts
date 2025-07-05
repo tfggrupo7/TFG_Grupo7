@@ -56,11 +56,20 @@ ngOnInit(){
 
 
   async cargarTurnos() {
-    
     try {
       const data = await this.turnosService.getTurnos();
-      
-      this.turnos = data;
+      // Filtrar solo los turnos de hoy (en zona horaria de España)
+      const today = new Intl.DateTimeFormat('sv-SE', {
+        timeZone: 'Europe/Madrid'
+      }).format(new Date());
+
+      this.turnos = data.filter((t: ITurnos) => {
+        const turnoDate = new Date(t.fecha);
+        const fechaStr = new Intl.DateTimeFormat('sv-SE', {
+          timeZone: 'Europe/Madrid'
+        }).format(turnoDate);
+        return fechaStr === today;
+      });
     } catch (error) {
       console.error('Error cargando turnos:', error);
     }
