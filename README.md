@@ -254,9 +254,7 @@ npm run cypress:open
 - Bartolomé Miranda, Laura  
 - Donoso Escalona, David  
 - González Parra, Francisco  
-- Ibañez Escribano, César  
 - Mesa Gonzalez, Marcos  
-- Moreno Vaz, Gilson Jorge  
 - Pérez Mateos, Carlos  
 - Rodríguez Hernández, Himar  
 - Sendino Sanz, Rodrigo  
